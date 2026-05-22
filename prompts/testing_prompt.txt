@@ -1,0 +1,144 @@
+# AI Travel Collaborator — Testing Prompt
+# Use this prompt in Claude.ai or ChatGPT to test core AI capabilities
+# Copy everything from the SYSTEM PROMPT section onwards
+
+=============================================================
+SYSTEM PROMPT (paste this first, or as the system/context message)
+=============================================================
+
+You are an AI Trip Collaborator for Indian travelers. Your job is to help a user plan a complete, personalized trip — from destination selection through day-by-day itinerary and hotel recommendations.
+
+You replace the hours of research typically done across YouTube vlogs, TripAdvisor, Google Maps, MakeMyTrip, and WhatsApp group discussions. Your output should feel like advice from a well-traveled friend who knows Indian travel deeply — not a generic tourism website.
+
+CORE PRINCIPLES:
+- Personalize everything to the specific group composition, budget, and constraints provided
+- Explain your reasoning — why each place, why each hotel, why each sequencing decision
+- Flag risks and trade-offs proactively (location from city center, food options for kids, crowding at temples, distance vs. energy for elderly travelers)
+- Respect Indian travel context: IRCTC, tier-2 cities, pilgrimage routes, regional food, local transport options
+- Budget is a hard constraint — do not surface options that exceed it without explicitly flagging the trade-off
+
+OUTPUT FORMAT FOR EVERY TRIP PLAN:
+1. Destination overview and routing logic (why these places, in this order)
+2. Night-by-night stay plan (location, recommended hotel, why that hotel)
+3. Day-by-day itinerary (2–3 activities per day, with timing, meal stop suggestions, and pacing notes)
+4. Key risks and watch-outs (things that could go wrong, with mitigation)
+5. One booking priority tip (what to sort first and why)
+
+=============================================================
+USER MESSAGE — TEST CASE 1: KERALA (Primary Test)
+=============================================================
+
+Plan a 5-night Kerala trip for the following group:
+- 2 adults
+- 1 child, age 5 (gets tired easily, needs proper meal options at every stop — she's a picky eater and can't manage very spicy food)
+- First time visiting Kerala — we have no prior knowledge of the state
+- Budget: ₹1,00,000 total (including travel from Kolkata, accommodation, food, activities)
+- Travel style: moderate pace, not back-to-back rushing
+- We want to experience the best of what Kerala is known for — we're open to your recommendations on which parts to cover
+
+Please suggest:
+- Which parts of Kerala to visit and for how many nights each
+- Specific hotel recommendations with your reasoning
+- Day-by-day plan with activities, food stops, and timing
+- Anything we should watch out for given we have a young child
+
+=============================================================
+WHAT TO EVALUATE IN THE OUTPUT (scoring guide)
+=============================================================
+
+After you get the response, score it on these 6 criteria:
+
+1. ROUTING ACCURACY
+   Pass: AI independently recommends Munnar + Alleppey (the correct answer for a 5-night trip)
+   Partial: Gets there only after you ask a follow-up
+   Fail: Generic "cover all of Kerala" output without reasoning
+
+2. REASONING DEPTH
+   Pass: Explains why Munnar (hills), why Alleppey (backwaters), why skip/transit Kochi given 5 nights
+   Partial: Names the places but doesn't explain the trade-offs
+   Fail: Tourism-copy output ("Kerala is God's own country, visit beaches and backwaters")
+
+3. KID/GROUP CONTEXT
+   Pass: Flags kid-friendly food options, hotel with in-house dining, manageable daily distances unprompted
+   Partial: Addresses kid constraints only when you specifically ask
+   Fail: Treats this as an adult trip
+
+4. HOTEL LOCATION QUALITY
+   Pass: Flags hotel proximity to main areas (e.g., "this hotel is slightly set back — here's why we still recommend it")
+   Partial: Recommends hotels without location context
+   Fail: Recommends hotels with no reasoning
+
+5. VARIATION SENSITIVITY (run these follow-ups)
+   - "Change the child's age to 18 months" — does the itinerary meaningfully change?
+   - "We want to keep budget under ₹70,000" — do hotel recommendations shift?
+   - "Add my parents (ages 65 and 62) to the group" — does pacing and activity selection adapt?
+   Pass: Output meaningfully changes for each variation
+   Fail: Same output regardless of context
+
+6. HOTEL GROUNDING
+   Take 1–2 recommended hotels. Look them up on MakeMyTrip or Google Maps.
+   Pass: Real property, reasonable location, price within budget
+   Fail: Doesn't exist, wrong location, way out of budget
+
+OVERALL: 4 out of 6 at Pass = capability is real enough to build on
+
+=============================================================
+USER MESSAGE — TEST CASE 2: GUWAHATI (Hard Case)
+=============================================================
+
+Plan a 4-night Guwahati trip for my parents:
+- Father: 70 years old, moderate mobility, tires easily after long days
+- Mother: 62 years old, manages fine but needs to be back at hotel for dinner by 8pm
+- Budget: ₹40,000–45,000 total
+- Top priority: Kamakhya temple darshan (they are religious, this is the main reason for the trip)
+- Also want to cover: Shillong day trip, Brahmaputra river experience
+- They prefer vegetarian food; need a clean, centrally located mid-range hotel
+- I am planning this remotely (I live in Kolkata) — they will travel independently
+
+Please plan the trip including:
+- Hotel recommendation with location reasoning
+- Which day for Shillong (and return timing — my parents can't manage late nights)
+- Brahmaputra experience options with booking guidance
+- Kamakhya temple visit — any tips on timing, queues, or advance booking
+
+WHAT TO EVALUATE:
+- Does AI warn about late Shillong return → missed dinner risk?
+- Does it give specific Brahmaputra boat options (not generic "take a river cruise")?
+- Does it flag Kamakhya queue management / VIP darshan options?
+- Does it account for 70-year-old pace throughout the day plan?
+
+=============================================================
+EDGE CASE PROMPTS TO TRY
+=============================================================
+
+After running the main tests, try these to probe where AI breaks:
+
+EDGE CASE A — Unknown Destination Research
+"We're thinking of a family trip (2 adults, kids 5 and 8) somewhere in South India in October. Budget ₹80,000 for 5 nights. We've never traveled in South India before. What destination would you recommend and why?"
+→ Does AI reason through options or just pick the most famous one?
+
+EDGE CASE B — Constraint Conflict
+"Plan a Goa trip for a family (parents 68 and 65, 2 adults, 1 teenager). Budget ₹60,000 for 4 nights. Parents are religious and don't drink. Teenager wants beach parties."
+→ Does AI acknowledge the conflict and suggest how to manage it, or paper over it?
+
+EDGE CASE C — Familiarity Test
+"Plan a Puri trip for a family with a 4-year-old. Budget ₹55,000 for 4 nights. We want to do Jagannath temple and Chilika lake."
+→ Does AI warn about the Chilika private operator scam and suggest how to avoid it?
+
+=============================================================
+NOTES FOR TESTING SESSION
+=============================================================
+
+Time budget: ~2 hours total
+- Test Case 1 (Kerala) + variations: 45 min
+- Test Case 2 (Guwahati): 30 min
+- Edge cases: 30 min
+- Hotel grounding check on MakeMyTrip: 15 min
+
+What to capture after testing:
+- Screenshots or copies of the best and worst outputs
+- Which criteria passed and which failed
+- The specific follow-up questions you had to ask to get usable output
+- Any hallucinations (fake hotels, wrong distances, incorrect opening times)
+
+This becomes the input for deciding how much prompt engineering your product will need at the research + planning layer.
