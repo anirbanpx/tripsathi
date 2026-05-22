@@ -272,3 +272,100 @@ If we build a collaborative AI trip planner with persona-aware onboarding and sh
 - Booking recommendations with one-tap confirmation
 - Pre-trip briefing document
 - In-trip query responses
+
+---
+
+## Experiment Design
+
+### Core Assumption
+
+Given rich family travel context for an **unknown destination**, AI can replace the multi-source research phase (YouTube vlogs + TripAdvisor cross-referencing) and produce a hotel shortlist + day-by-day itinerary that a real Indian family would use with minimal editing.
+
+This is the foundational capability of H2. If it fails here, the rest of the product doesn't matter.
+
+**Scope:** Research + planning phase only (pre-planning → research → itinerary logistics). Booking and in-trip phases require live integrations and are not testable via prompt experiment.
+
+---
+
+### Test Approach
+
+Manual prompt-based testing in Claude.ai or ChatGPT. No code, no integrations. ~2 hours total. Three real trip scenarios used as inputs — judged against what actually happened.
+
+---
+
+### Mock Data Examples
+
+Three real trips from the product owner — used as ground truth for evaluation:
+
+**Scenario 1 — Kerala (primary test case)**
+- Group: 2 adults + 1 child (age 5)
+- Duration: 5 nights
+- Budget: ₹1L+
+- First time visiting Kerala — no prior knowledge
+- Constraints: kid-friendly meal options required at every stop; moderate activity pace
+- What actually happened: Munnar + Alleppey routing (bypassing Kochi); houseboat skipped due to trust gap, Shikara booked via hotel operator; hotel was 4-star but inconveniently located from city center
+
+**Scenario 2 — Puri (edge case: mixed group, religious + leisure)**
+- Group: 2 adults + 2 elderly parents (70/60) + 1 child (age 4)
+- Duration: ~4 nights
+- Budget: ₹60k
+- Destination known to parents (frequent religious visits); unknown to planner for kid-specific needs
+- Constraints: child (age 4) can't eat most local food; religious itinerary (Jagannath temple); Chilika lake visit
+- What actually happened: over-budget hotel booked specifically for kid-friendly food; Chilika cab driver routed to private operator with inflated charges; temple slot booking unknown/unplanned
+
+**Scenario 3 — Guwahati (edge case: elderly parents, no kids, religious + touristy)**
+- Group: 2 elderly parents (father 70, mother 60), planned remotely by son
+- Duration: 4 nights
+- Budget: ₹40k+
+- Constraints: religious priority (Kamakhya temple), slower pace, early dinners, no strenuous activity
+- What actually happened: Kamakhya online booking failed, premium agent used; parents missed dinner after late Shillong return; Brahmaputra boating — less exciting option taken as better one was fully booked; lunch coordination on Guwahati–Kaziranga route managed via WhatsApp live location while planner was at work
+
+---
+
+### Test Scenarios
+
+**Test 1 — Base capability (Kerala, 30 min)**
+Prompt: *"Plan a 5-night Kerala trip for 2 adults and a 5-year-old. Budget ₹1 lakh. First time visiting Kerala. Want to cover the best of what Kerala offers. Kid gets tired easily and needs proper meal options at every stop. Suggest where to stay each night, how many days per location, 2–3 activities per day, and specific hotel recommendations with reasoning."*
+
+Evaluate: Does AI independently arrive at Munnar + Alleppey routing? Does it explain *why* those places with destination-specific reasoning (not generic tourism copy)? Does it flag kid-food and hotel-location concerns unprompted?
+
+**Test 2 — Variation stress test (Kerala, 45 min)**
+Run 3 variations of the same prompt:
+- Change kid age to 2 (toddler constraints) — does output change meaningfully?
+- Add "budget-conscious, avoid tourist traps" — does hotel quality reasoning shift?
+- Add elderly parents to the group — does pacing and activity selection adapt?
+
+Evaluate: Does AI adapt output based on context, or produce the same generic Kerala itinerary with words swapped?
+
+**Test 3 — Hard case: elderly parents, religious (Guwahati, 30 min)**
+Prompt: *"Plan a 4-night Guwahati trip for elderly parents (father 70, mother 60). Budget ₹40,000. Priority is Kamakhya temple darshan. Also want to cover Shillong day trip and Brahmaputra river experience. Parents need early dinners, no strenuous walking, and a comfortable mid-range hotel in a central location."*
+
+Evaluate: Does AI warn about late Shillong return → missed dinner risk? Does it suggest specific Brahmaputra boat options with booking guidance? Does it flag Kamakhya darshan complexity and queue management?
+
+**Test 4 — Hotel grounding check (30 min)**
+Take 2–3 hotel recommendations from Test 1 output. Look each up on MakeMyTrip or Google Maps. Check: Is it a real property? Is the location actually convenient? Does the price match the stated budget? Would you have booked it?
+
+---
+
+### Success Criteria
+
+| Criterion | Pass | Partial | Fail |
+|---|---|---|---|
+| Routing accuracy | AI arrives at Munnar + Alleppey independently | Gets there with 1 follow-up question | Produces generic Kerala list without reasoning |
+| Reasoning depth | Explains *why* each place — destination-specific logic | Generic reasoning, no tradeoffs | Tourism-copy output |
+| Kid/group context | Flags kid-food and hotel-location concerns unprompted | Addresses constraints only when explicitly asked | Ignores group context entirely |
+| Variation sensitivity | Output meaningfully changes with toddler/elderly context | Minor surface changes | Same output regardless of context |
+| Hotel grounding | 2/3 recommendations are real, locatable, budget-appropriate | 1/3 are usable | No real properties or completely off-budget |
+| "Would I book it?" | Planner confirms output beats or matches actual booking decisions | Would use with significant edits | Would not use |
+
+**Overall pass bar:** 4 out of 6 criteria at Pass level = capability is real enough to build on.
+
+---
+
+### Learning Goals
+
+- Does AI know Indian destinations (Munnar, Alleppey, Kamakhya, Chilika) well enough to replace YouTube vlog research for a first-time visitor?
+- Can it surface unstated family needs (kid-specific food, elderly pace, prayer timing) without being prompted?
+- How much hand-holding is needed — one prompt or multiple follow-ups to reach usable output?
+- Where does AI confidently hallucinate — fake hotels, wrong opening hours, overestimated distances?
+- What prompt structure produces the best output — persona-first, constraint-first, or destination-first?
