@@ -16,3 +16,11 @@ node_modules/
 # Temp
 temp/
 *.log
+
+# Sibling project folders (not part of this repo)
+../ai-analyst-plus/
+../ai-analyst-starter/
+../playbox/
+
+# Export artifacts
+export/
