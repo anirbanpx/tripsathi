@@ -1,0 +1,97 @@
+{
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Munnar",
+        "activities": [
+          { "name": "Tea estate walk at Lockhart Tea Estate", "bookable": false, "approx_cost": null },
+          { "name": "Eravikulam NP entry (optional — check terrain suitability)", "bookable": true, "approx_cost": 500 }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Saravana Bhavan", "dinner": "Hotel" },
+        "notes": "Drive day — leave Kochi airport by 11 AM; expect 4–5 hr drive"
+      },
+      {
+        "day_number": 2,
+        "location": "Munnar",
+        "activities": [
+          { "name": "Mattupetty Dam & Echo Point", "bookable": false, "approx_cost": null },
+          { "name": "Top Station viewpoint (4WD jeep)", "bookable": true, "approx_cost": 800 }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Local restaurant near dam", "dinner": "Hotel" },
+        "notes": "Full day in Munnar hills; carry jackets for evening"
+      },
+      {
+        "day_number": 3,
+        "location": "Alleppey",
+        "activities": [
+          { "name": "Houseboat overnight stay — Alleppey backwaters", "bookable": true, "approx_cost": 12000 },
+          { "name": "Village canoe tour (morning)", "bookable": false, "approx_cost": null }
+        ],
+        "meals": { "breakfast": "Houseboat", "lunch": "Houseboat (included)", "dinner": "Houseboat (included)" },
+        "notes": "Book houseboat through hotel operator — do not approach direct cold. Early check-in at 11 AM."
+      },
+      {
+        "day_number": 4,
+        "location": "Kovalam",
+        "activities": [
+          { "name": "Lighthouse Beach — swimming & kids' sandcastle", "bookable": false, "approx_cost": null },
+          { "name": "Kathakali performance (evening)", "bookable": true, "approx_cost": 600 }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Beach shack", "dinner": "Seafood restaurant on beach road" },
+        "notes": "2.5 hr drive from Alleppey; check in early to settle kids"
+      },
+      {
+        "day_number": 5,
+        "location": "Trivandrum",
+        "activities": [
+          { "name": "Napier Museum & Zoo (kids favourite)", "bookable": false, "approx_cost": null },
+          { "name": "Padmanabhaswamy Temple visit (dress code required)", "bookable": false, "approx_cost": null }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Ariya Nivaas — vegetarian thali", "dinner": "Airport area" },
+        "notes": "Departure day — check-out by noon, drop bags at hotel, sightseeing before evening flight"
+      }
+    ],
+    "hotels": [
+      {
+        "location": "Munnar",
+        "name": "Windermere Estate",
+        "reasoning": "Lift access + ground-floor rooms available; in-house restaurant; central location near tea estates",
+        "approx_cost_per_night": 5500,
+        "content_source": "rag",
+        "bookable": true
+      },
+      {
+        "location": "Alleppey",
+        "name": "Lake Palace Houseboat",
+        "reasoning": "Family-rated houseboat with separate kids' sleeping area; cook on board; life jackets provided",
+        "approx_cost_per_night": 12000,
+        "content_source": "rag",
+        "bookable": true
+      },
+      {
+        "location": "Kovalam",
+        "name": "Uday Samudra Leisure Beach Hotel",
+        "reasoning": "Beachfront; children's pool; on-site ayurveda — parents can relax while kids swim",
+        "approx_cost_per_night": 7000,
+        "content_source": "general",
+        "bookable": true
+      }
+    ],
+    "budget_breakdown": {
+      "accommodation": 27500,
+      "transport": 18000,
+      "activities": 13900,
+      "food": 12000,
+      "total": 71400
+    },
+    "warnings": [
+      "Houseboat booking: route through hotel operator, not direct cold-approach",
+      "Eravikulam NP terrain — confirm accessibility before booking with a 5-year-old",
+      "Padmanabhaswamy Temple: non-Hindus may not be allowed in inner sanctum — check policy"
+    ]
+  },
+  "thread_id": "thread_demo_001",
+  "status": "awaiting_feedback",
+  "stage_label": "Review your plan"
+}
