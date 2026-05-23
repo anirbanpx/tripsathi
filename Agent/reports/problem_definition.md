@@ -23,6 +23,7 @@ A typical trip planning journey looks like this:
 3. **Itinerary logistics** — Plan inter-destination commutes, food stops, local attractions. Cross-reference Google Maps, TripAdvisor, Zomato, Facebook groups manually.
 4. **Booking** — Book flights first (expensive, time-sensitive), then hotels, then activities, then local transport. Each has its own platform, its own friction.
 5. **In-trip** — Execute the plan. When reality diverges (place closed, food bad, cab late, time miscalculated) — adapt manually with no system support.
+6. **Post-trip** — Memories are scattered across phone camera rolls and WhatsApp threads. Sharing happens manually — individual Instagram posts, no coherent story. No tool helps create a trip narrative or preserve the experience for the group.
 
 ### User Existing Tools
 
@@ -33,6 +34,7 @@ A typical trip planning journey looks like this:
 | Logistics | Google Maps, TripAdvisor, Zomato/Swiggy, Facebook/WhatsApp groups |
 | Booking | MakeMyTrip, IRCTC, OYO/hotel sites, Airbnb, local cab apps |
 | In-trip | Google Maps, ad-hoc search |
+| Post-trip | Instagram (manual posting), Google Photos, WhatsApp |
 | Coordination | WhatsApp (across all phases) |
 
 ### Trigger
@@ -197,15 +199,18 @@ If we build a collaborative AI trip planner with persona-aware onboarding and sh
 ### Autonomous Capabilities
 **What the AI does without being asked:**
 - Detects persona from onboarding (travel companions, kid ages, budget range, planning style) and sets autonomy mode
+- Infers traveler profile from Gmail booking history — scans OTA confirmation emails (MakeMyTrip, IRCTC, OYO, Airbnb, airline confirmations) to build travel history, budget tier, group composition, and preferences without requiring OTA API access
 - Pulls and synthesizes research across Google Maps, TripAdvisor, MakeMyTrip, Instagram signals, YouTube sentiment — filtered by persona context
 - Sequences day-by-day itinerary factoring in travel time, kid age/energy, opening hours, meal stops
 - Surfaces hotel options ranked by family-friendliness, location, in-house dining, budget fit — with reasoning
 - Generates pre-trip briefing: closures, weather, local tips, highway vs. city hotel trade-offs
 - Monitors prices and alerts admin when flight/hotel hits threshold (H3 lite)
 - Remembers preferences across trips — builds a persistent traveler profile over time
+- Responds in user's preferred language — Hindi, regional languages, or English; voice input and output for accessibility (pilgrimage travelers, older users)
 
 **Data sources it can access:**
 - Google Maps, TripAdvisor, MakeMyTrip, Zomato, IRCTC, weather APIs
+- Gmail API (OTA booking confirmation emails — personalization signal, read-only)
 - Instagram trending signals (via scraping — untested, flagged as risk)
 - Temple/darshan booking sites (via scraping — untested, flagged as risk)
 - User's own trip history and preference profile
@@ -222,8 +227,9 @@ If we build a collaborative AI trip planner with persona-aware onboarding and sh
 - **Planning phase:** Conversational chat (Chainlit UI) — admin queries, agent drafts, admin refines
 - **Group phase:** Shared persistent plan — admin shares link, participants view + comment + react
 - **Pre-trip:** Agent-initiated briefing pushed to admin (and optionally to group via WhatsApp)
-- **In-trip:** Agent available on-demand for real-time queries ("food place near me that works for kids", "alternative to Kedarnath if weather is bad")
-- **Voice:** Available for older/pilgrimage travelers who prefer speaking over typing
+- **In-trip:** Agent available on-demand for real-time queries ("food place near me that works for kids", "alternative to Kedarnath if weather is bad") — voice-first for hands-free use during travel
+- **Post-trip:** Agent generates trip story/memento — stitches photos, places visited, and highlights into a shareable narrative; auto-drafts Instagram captions and stories for key moments
+- **Voice + language:** Full voice interface (Whisper STT + ElevenLabs/Deepgram TTS) with multilingual support (Hindi, regional languages) — primary interface for pilgrimage and older travelers
 
 ### Success Metrics
 | Metric | Target |
@@ -252,10 +258,15 @@ If we build a collaborative AI trip planner with persona-aware onboarding and sh
 **Excluded (out of scope for now):**
 - Full autonomous booking without human confirmation
 - Expense splitting and settlement (separate product problem)
-- Post-trip reviews or content creation
-- Instagram social validation (untested API access — deferred)
 - Darshan/temple slot booking (untested scraping — deferred)
 - Real-time live traffic or transport tracking
+
+**Deferred to later sprints:**
+- Post-trip memento and Instagram story generation (Sprint 3+)
+- Gmail-based personalization (Sprint 3 — requires OAuth flow + email parsing pipeline)
+- Social validation via Instagram signals (Sprint 3 — API access risk unresolved)
+- Multilingual + voice interface (Sprint 3 — Whisper + ElevenLabs)
+- Upselling and monetization layer (post-MVP)
 
 ### Process Requirements
 
@@ -369,3 +380,69 @@ Take 2–3 hotel recommendations from Test 1 output. Look each up on MakeMyTrip 
 - How much hand-holding is needed — one prompt or multiple follow-ups to reach usable output?
 - Where does AI confidently hallucinate — fake hotels, wrong opening hours, overestimated distances?
 - What prompt structure produces the best output — persona-first, constraint-first, or destination-first?
+
+---
+
+## Extended Product Vision
+
+Features beyond the Sprint 2 MVP, captured here for architecture awareness. These inform design decisions even if not built immediately.
+
+### Personalization via Gmail
+
+**Approach:** OAuth Gmail read-only access to scan OTA booking confirmation emails (MakeMyTrip, IRCTC, OYO, Airbnb, airline bookings). Extract: destinations visited, travel frequency, budget tier (from hotel/flight prices), group composition (adults + children), preferred airlines and hotel chains.
+
+**Why this matters:** Direct OTA API integration is unlikely (MakeMyTrip/IRCTC don't offer consumer-facing APIs). Gmail is the common denominator — every booking generates a confirmation email. This gives the agent a rich prior without requiring users to manually fill a preference profile.
+
+**Technical requirements:** Gmail OAuth (read-only), email parsing pipeline (booking confirmation templates vary by OTA), profile store (vector DB or structured DB).
+
+**Risk:** User trust — Gmail access feels invasive. Mitigation: be explicit about what's read and why; show the inferred profile before first use; allow corrections.
+
+---
+
+### Post-Trip: Memento & Social Sharing
+
+**Concept:** After the trip, the agent generates a shareable trip story — stitching together places visited (from itinerary), user photos (from Google Photos or manual upload), and highlights into a narrative. Auto-drafts Instagram captions, Reels descriptions, and a trip summary card for the group.
+
+**Integration targets:** Google Photos API (photo access), Instagram Graph API (post drafting — publishing requires business account), Memento-style collage generation.
+
+**Why it matters:** Post-trip sharing is a natural viral loop — every shared story is product discovery for new users. The "memento" becomes a portfolio of trips that deepens the traveler profile over time.
+
+**Technical risk:** Instagram Graph API restricts posting for personal accounts; business account or creator account required. May need to generate content for copy-paste rather than direct publish initially.
+
+---
+
+### Upselling & Monetization Layer
+
+**Model:** Freemium with feature-gated upsells.
+
+| Feature | Tier |
+|---|---|
+| Basic research + itinerary | Free |
+| Shared group planning | Free |
+| Social validation signals (Instagram trending, peer reviews) | Premium |
+| Price monitoring + alerts | Premium |
+| Gmail personalization | Premium |
+| Post-trip memento generation | Premium |
+| OTA partner deals (affiliate or white-label) | Revenue share |
+
+**Social validation as upsell:** Surface "trending among people like you" signals — destinations/restaurants/hotels getting traction among similar traveler profiles (family with kids, budget-conscious, religious travelers). Positioned as "community intelligence" rather than generic ratings.
+
+**OTA partnership angle:** If direct booking integration is achieved with MakeMyTrip or similar, affiliate revenue on bookings made through the platform is a natural revenue stream alongside premium subscriptions.
+
+---
+
+### Social & Group Features
+
+- **Shared trip plan** with admin + participant roles (already in H2 scope)
+- **Group decision engine:** surfaces options with social proof — "3 of 5 people in similar groups chose Munnar over Coorg"
+- **WhatsApp integration:** push updates, booking confirmations, and pre-trip briefings via WhatsApp Business API (preferred communication channel for Indian users)
+- **Peer travel network:** opt-in community where past trip data (anonymised) informs recommendations for similar profiles
+
+---
+
+### Voice & Language
+
+- **Voice-first interaction** via Whisper (STT) + ElevenLabs/Deepgram (TTS)
+- **Hindi + regional language support** — Marathi, Tamil, Bengali, Telugu as priority markets
+- **WhatsApp voice note input** — user sends voice note, agent transcribes and responds (critical for pilgrimage and older traveler segments)
+- **Hands-free in-trip mode** — voice queries while driving, walking, or managing kids
