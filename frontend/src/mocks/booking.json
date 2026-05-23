@@ -1,0 +1,10 @@
+{
+  "confirmation_id": "TRP-DEMO-A3F2B981",
+  "status": "confirmed",
+  "provider": "Booking.com (DEMO)",
+  "item_name": "Windermere Estate",
+  "amount_charged": 11000,
+  "check_in": "2026-06-10",
+  "check_out": "2026-06-12",
+  "is_demo": true
+}

@@ -1,0 +1,13 @@
+{
+  "user_profile": {
+    "name": "Demo Traveller",
+    "age_range": "35–50",
+    "home_city": "Mumbai",
+    "persona_type": "family_with_kids",
+    "constraints": {
+      "kid_ages": [5],
+      "elderly": false,
+      "mobility_limited": false
+    }
+  }
+}
