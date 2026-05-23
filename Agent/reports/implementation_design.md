@@ -428,11 +428,15 @@ Every node in this path directly tests the quality risk. Nothing is decorative.
 
 | What | Hardcoded as | Make dynamic in |
 |---|---|---|
-| Trip parameters input | Structured form fields (destination text, duration number, budget number, group_size number, travel_dates text) | Sprint 3: NLP parsing from conversational input |
+| Trip parameters input | Structured form (stepped chip UI — feels conversational, lands as structured fields) | Sprint 3: NLP parsing from free-text input |
 | RAG corpus | 3 destinations manually seeded (Kerala, Puri, Guwahati) — matching evaluation test cases exactly | Sprint 3: expand to 10+ destinations |
 | Approval detection | Simple keyword list (`{"looks good", "approve", "yes", "done", "perfect"}`) | Sprint 3: LLM-based intent classification |
 | Session persistence | MemorySaver (in-process, lost on restart) | Sprint 3: SqliteSaver for persistent sessions |
-| User identity | No auth, single user | Sprint 3: user accounts |
+| User identity | No auth — single-user demo with "Try Demo" entry path | Sprint 3: WhatsApp OTP / SMS / Google auth |
+| Booking | Hardcoded mock confirmations from `/api/book`; watermarked "DEMO" in UI | Sprint 3: Booking.com Affiliate API |
+| Plan generation progress UI | Frontend `setTimeout` driven fake progress with hardcoded node durations | Sprint 3: real SSE via `graph.astream_events` |
+| Auth provider hierarchy | Designed (WhatsApp primary, SMS/Google secondary) — not implemented Sprint 2 | Sprint 3: actual OAuth + OTP flows |
+| Memory writes | Local JSON/SQLite store via MemoryService — collect only, do not feed back | Sprint 3: Mem0 or Zep + read into Call 1 + Call 4 |
 
 ---
 
@@ -492,9 +496,13 @@ Confirmed from architecture workflow. Already locked in Sprint 2 scope.
 | Backend scaffolding (FastAPI + state + graph) | 4h | Well-defined from architecture spec |
 | Node functions (Calls 1–4) | 6h | Prompts designed; implementation is SDK calls + JSON parse |
 | HITL loop (interrupt + resume) | 3h | LangGraph native; follow the spec exactly |
-| LlamaIndex + Chroma + RAG corpus | 4h | Index build is documented; corpus writing is the main effort |
-| React frontend (2 pages + HITL chat) | 8h | Onboarding form + chat/results page + plan renderer |
-| FastAPI ↔ React wiring | 2h | 3 endpoints, CORS config |
+| Regenerate branch + variation prompt | 1h | New plan_assembly branch + PLAN_REGENERATE_SYSTEM |
+| Mock booking endpoint + memory service writes | 2h | `/api/book` returns demo confirmations; MemoryService writes local JSON |
+| LlamaIndex + Chroma + RAG corpus | 4h | Index build is documented; corpus writing is the main effort (esp. houseboat content) |
+| React frontend (Demo entry + Onboarding + Chat/Booking single-page + mocks) | 10h | Demo path + single-page layout + chip-based trip form + fake progress UI + booking section |
+| FastAPI ↔ React wiring | 2h | 4 endpoints (`/api/plan`, `/api/refine`, `/api/regenerate`, `/api/book`), CORS config |
+| Mock service layer + mock JSON fixtures | 1h | `services/api.ts` + 5 mock files matching real response shapes |
+| Mobile responsive pass | 2h | Tailwind breakpoints (375px / 768px / 1024px) for chat + plan + booking layouts |
 | Testing (eval CSV + manual scoring) | 3h | Run 10 cases, compare to existing scores |
-| **Total** | **~30 hours** | At 3 hours/day = ~10 days → tight but achievable by May 31 |
+| **Total** | **~38 hours** | At 3 hours/day = ~13 days → at risk for May 31; recommend prioritising backend + RAG + chat flow first, booking page can defer |
 

@@ -410,11 +410,17 @@ class TripSathiState(TypedDict):
     user_feedback: str | None      # last change request from user; cleared after each refine
     refinement_count: int          # increments each time generate_plan or refine_plan runs
     refinement_history: list[str]  # log of all user feedback messages in this session
+    regenerate_requested: bool     # True when user taps "Regenerate" — triggers variation prompt
+    previous_plan: dict | None     # snapshot of last plan; given to refine/regenerate for context
 
     # ── Control/meta ─────────────────────────────────────────────────────────
     awaiting_feedback: bool        # True when graph is interrupted, waiting for user
-    current_node: str              # "persona_classification" | "destination_intelligence"
+    current_node: str              # internal id: "persona_classification" | "destination_intelligence"
                                    # | "plan_assembly" | "awaiting_feedback" | "done" | "error"
+    stage_label: str               # human-readable label for React; written by each node
+                                   # e.g. "Understanding your profile", "Researching destination",
+                                   #      "Generating your itinerary", "Review your plan",
+                                   #      "Plan finalised"
     error: str | None
 ```
 
@@ -446,7 +452,14 @@ Initial generation (Call 4): given research_synthesis + user_profile + constrain
 
 Refinement (Call 4 again): given current_plan + user_feedback + user_profile → decide which parts of the plan to modify, which constraints from the original profile still apply, whether the change request introduces new conflicts ("change the hotel" but user_profile has mobility_limited=true → must still pick a ground-floor / lift-access property).
 
-The refinement call receives `refinement_history` so the LLM doesn't regress on earlier approved changes.
+Regenerate (Call 4, variation prompt): given research_synthesis + user_profile + `previous_plan` → produce a notably different plan with different routing, hotel choices, or activity sequencing. Distinct from refinement: user has not specified WHAT to change, only that the previous attempt was wrong. Prompt instructs the LLM to vary substantively, not cosmetically.
+
+The refinement and regenerate calls receive `refinement_history` and `previous_plan` so the LLM doesn't regress on earlier approved changes or repeat the rejected plan.
+
+**Plan JSON output schema additions:**
+- `hotels[].content_source: "rag" | "general"` — was this hotel grounded in RAG content or base model knowledge? Drives "verify before booking" UI cue.
+- `hotels[].bookable: bool` — is this hotel bookable through an OTA partner? Drives whether to show "Book" button.
+- `days[].activities[].bookable: bool` — is this activity bookable (Shikara, organised tour) vs free-form (temple visit, walk)? Drives Book vs "Plan to visit" button.
 
 ---
 
@@ -486,19 +499,22 @@ Pattern summary: **Linear pipeline into a HITL refinement loop, all within one L
 
 **React UI ↔ FastAPI**
 - Onboarding page: POST `/api/onboard` with `{onboarding_answers: [{question, answer}], destination_hint?}`
-- Chat/Results page (start): POST `/api/plan` with `{destination, trip_parameters, onboarding_answers}` → returns `{plan, thread_id, status: "awaiting_feedback"}`
+- Chat/Results page (start): POST `/api/plan` with `{destination, trip_parameters, onboarding_answers}` → returns `{plan, thread_id, status: "awaiting_feedback", stage_label}`
 - Chat/Results page (refine): POST `/api/refine` with `{thread_id, user_feedback}` → returns `{plan, thread_id, status: "awaiting_feedback" | "done"}`
+- Chat/Results page (regenerate): POST `/api/regenerate` with `{thread_id}` → returns `{plan, thread_id, status: "awaiting_feedback"}` (variation prompt produces notably different plan)
 - React renders plan after each response; shows chat input for next feedback until `status: "done"`
-- No WebSocket or streaming in Sprint 2 — request/response per turn
+- No WebSocket or streaming in Sprint 2 — request/response per turn. Frontend uses hardcoded fake-progress UI during the blocking plan generation call (calibrated to typical node durations); replaced with real SSE in Sprint 3
 
 **FastAPI ↔ LangGraph Agent**
 - **Start:** FastAPI generates `thread_id = uuid4()`, calls `graph.invoke(initial_state, config={"configurable": {"thread_id": thread_id}})` with MemorySaver checkpointer
 - Graph runs Nodes 1 and 2/3, then Plan Assembly generates initial plan and hits `interrupt()`
 - FastAPI receives the interrupted state, extracts `state["plan"]`, returns `{plan, thread_id, status: "awaiting_feedback"}` to React
-- **Resume:** FastAPI calls `graph.invoke(Command(resume=user_feedback), config={"configurable": {"thread_id": thread_id}})` with the same thread_id
+- **Resume (refine):** FastAPI calls `graph.invoke(Command(resume=user_feedback), config={"configurable": {"thread_id": thread_id}})` with the same thread_id
+- **Resume (regenerate):** FastAPI calls `graph.invoke(Command(resume={"regenerate": True}), config={"configurable": {"thread_id": thread_id}})` — graph runs Call 4 with the variation prompt, using `previous_plan` from state as anti-repetition context
 - Graph resumes at the interrupt point, checks feedback, refines or terminates
 - Repeats until `state["awaiting_feedback"] == False` (user approved or max refinements reached)
 - FastAPI returns `{plan, status: "done"}` on termination
+- **Stage labels:** Each node writes `state["stage_label"]` to a human-readable string before its main work; FastAPI does not translate `current_node` — React reads `stage_label` directly
 
 **LangGraph Node 1 ↔ Claude API**
 - Anthropic SDK call: `client.messages.create(model, system_prompt, messages=[{role: "user", content: formatted_onboarding}])`
