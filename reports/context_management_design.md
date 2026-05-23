@@ -90,6 +90,21 @@ Both angles are addressed by getting context schemas right.
 **Call 5 — Response Formatting** ❌ Removed
 Call 4 should output structured JSON directly via LangGraph's structured output. Format in the React layer using templates — no additional LLM call needed. Each extra LLM call adds latency, cost, and failure surface.
 
+### Call 4 Variants (added post-UX-review)
+
+Call 4 (Plan Generation) has three distinct prompt variants — all share the same input
+schema but differ in framing and additional context:
+
+| Variant | When Called | Additional Context | Key Difference |
+|---|---|---|---|
+| Initial | Graph runs end-to-end on `/api/plan` | None beyond standard | Fresh plan from research |
+| Refinement | `/api/refine` with feedback text | `previous_plan`, `refinement_history`, `user_feedback` | Apply specific change |
+| Regenerate | `/api/regenerate` (no feedback) | `previous_plan` only | Notably different plan, anti-repetition prompt |
+
+Plan output schema (all variants) extended with two fields:
+- `hotels[].content_source: "rag" | "general"` — RAG-grounded vs base-model knowledge
+- `hotels[].bookable: bool` + `days[].activities[].bookable: bool` — drives UI Book button visibility
+
 ---
 
 ## Context Schemas
