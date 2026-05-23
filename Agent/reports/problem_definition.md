@@ -383,6 +383,133 @@ Take 2–3 hotel recommendations from Test 1 output. Look each up on MakeMyTrip 
 
 ---
 
+## Integration Landscape
+
+A critical architectural distinction: **research integrations** (read prices, surface options) vs. **transactional integrations** (actually execute a booking). These have different technical paths, access requirements, and sprint timelines.
+
+---
+
+### Flights
+
+| Provider | Type | API Access | Notes |
+|---|---|---|---|
+| IndiGo, Air India, SpiceJet | Transactional | No direct consumer API | Requires Amadeus or Sabre (partner-gated) |
+| Amadeus / Sabre | Research + Transactional | Partner approval required | Industry-standard GDS; feasible for later sprints |
+| Google Flights | Research only | No booking API | Redirect only |
+| MakeMyTrip / Cleartrip | Research + Transactional | No public API | Deep-link redirect; affiliate partnership possible |
+
+**Sprint 2 path:** Surface flight options via Google Flights data or MakeMyTrip deep-link. User completes booking on OTA. No transactional API needed for MVP.
+
+---
+
+### Hotels
+
+| Provider | Type | API Access | Notes |
+|---|---|---|---|
+| Booking.com | Research + Transactional | Affiliate API available | Most accessible hotel API; reasonable onboarding |
+| Agoda | Research + Transactional | Partner API | Good India coverage |
+| OYO | Research + Transactional | Partner-gated | Requires OYO partnership |
+| MakeMyTrip | Research + Transactional | No public API | Deep-link redirect only |
+
+**Sprint 2 path:** Booking.com Affiliate API for research (price/availability). User confirms via deep-link redirect. True booking API in Sprint 3+.
+
+---
+
+### Trains (IRCTC)
+
+| Provider | Type | API Access | Notes |
+|---|---|---|---|
+| IRCTC | Research + Transactional | Restricted partner API | Requires IRCTC authorization — govt tie-up; very difficult for new entrants |
+| RailYatri / Confirmtkt | Research only | Some APIs available | Third-party train info aggregators |
+| IRCTC website | Transactional | Scraping (fragile) | Most apps redirect or scrape |
+
+**Sprint 2 path:** Deep-link to IRCTC or redirect via RailYatri for train options. Transactional API requires a partner agreement that is not feasible for MVP.
+
+---
+
+### Food
+
+| Provider | Type | API Access | Notes |
+|---|---|---|---|
+| Zomato | Discovery (research) | API deprecated for new partners | Use Google Maps Places API for restaurant discovery instead |
+| Swiggy | Ordering (transactional) | No public API | Redirect only |
+| Google Maps Places | Discovery | Available | Best realistic path for restaurant discovery during planning and in-trip |
+
+**Sprint 2 path:** Google Maps Places API for restaurant discovery (ratings, hours, cuisine, kid-friendly tags). Food ordering is out of scope — redirect to Zomato/Swiggy app.
+
+---
+
+### Local Transport
+
+| Provider | Type | API Access | Notes |
+|---|---|---|---|
+| Ola | Transactional | Partner API available | Feasible with Ola partnership |
+| Uber | Transactional | Partner API available | More accessible than Ola for developers |
+| Local cab/auto | N/A | No API | Cash/in-person; agent can only advise, not book |
+
+**Sprint 2 path:** Advisory only — agent recommends transport options with estimated costs. Ola/Uber deep-link for in-trip use. Transactional cab booking in Sprint 3+.
+
+---
+
+### Temple & Spiritual Booking
+
+This is the most fragmented category — but a genuine ecosystem has emerged.
+
+**Individual temple portals (each standalone, no unified API):**
+
+| Temple / Site | Booking Portal | What's Bookable Online |
+|---|---|---|
+| Tirupati (TTD) | tirupatibalaji.ap.gov.in | Darshan slots, sevas, accommodation, hundi |
+| Vaishno Devi | Shrine Board portal | Yatra permits, accommodation |
+| Char Dham (Kedarnath, Badrinath, etc.) | chardhamregistration.uksampada.gov.in | Mandatory govt registration + QR permit (compulsory from 2026) |
+| Kashi Vishwanath | Official portal | Darshan, sevas |
+| Jagannath Puri | Official portal | Darshan |
+| Shirdi | sai.org.in | Accommodation, prasad |
+| Kamakhya | Official portal | VIP darshan |
+
+**Aggregator platforms (most relevant for integration):**
+
+| Platform | Coverage | Integration Path |
+|---|---|---|
+| **BookMyMandir** (bookmymandir.co.in) | Tirupati, Kedarnath, Vaishno Devi, Kashi Vishwanath, Somnath, Jagannath Puri — major temples | Most promising aggregator; may have partner API |
+| **DharmikVibes** (dharmikvibes.com) | Char Dham yatra, VIP darshan, NRI yatra, puja booking | App-first; partnership possible |
+| **NamanDarshan** (namandarshan.com) | VIP darshan at major temples | Smaller; redirect feasible |
+| **IRCTC Tourism** | Pilgrimage tour packages (not individual slots) | Packages only — not slot-level booking |
+| **SOTC / Thomas Cook** | Pilgrimage packages | Tour-level, not slot-level |
+
+**Key findings:**
+- No unified government API exists — each temple manages its own system
+- Aggregators (BookMyMandir, DharmikVibes) are the realistic integration layer — partner with one rather than integrating 20 temple portals individually
+- Char Dham now has mandatory govt digital registration (2026) — this is government-enforced digitization, making it more tractable
+- Scraping individual temple portals is fragile (anti-scraping measures, frequent redesigns) — aggregator partnership is strongly preferred
+- Spiritual tourism is 19% of Indian travel in 2026 (highest in Asia) — this segment is material, not niche
+
+**Sprint 2 path:** Surface temple booking requirements (slot type, timing, registration link) as information in the itinerary. Deep-link to BookMyMandir or official portal for actual booking. Direct aggregator partnership in Sprint 3.
+
+---
+
+### Data & Research APIs (non-booking)
+
+| Provider | Use Case | Access |
+|---|---|---|
+| Google Maps Places API | Restaurant discovery, location data, ratings, hours | Available — standard Google Cloud billing |
+| Google Maps Directions API | Route planning, travel time estimation | Available |
+| OpenWeatherMap / Weather API | Weather data for trip planning | Available — free tier sufficient for MVP |
+| TripAdvisor Content API | Destination info, hotel ratings | Partner API — requires application |
+| YouTube Data API | Destination research (video signals) | Available with quota limits |
+
+---
+
+### Integration Priority for Architecture
+
+| Sprint | Integration focus |
+|---|---|
+| Sprint 2 (by May 31) | Google Maps Places, Google Maps Directions, OpenWeatherMap — research + planning only |
+| Sprint 3 (by Jun 14) | Booking.com Affiliate API, BookMyMandir partnership, Ola/Uber deep-link, Gmail OAuth |
+| Post-MVP | Amadeus (flights), IRCTC partner API, transactional hotel booking, Swiggy/Zomato ordering |
+
+---
+
 ## Extended Product Vision
 
 Features beyond the Sprint 2 MVP, captured here for architecture awareness. These inform design decisions even if not built immediately.
