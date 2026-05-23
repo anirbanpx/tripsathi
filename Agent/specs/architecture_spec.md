@@ -161,60 +161,55 @@ Cluster A (Call 1) is cleanly isolated: it consumes raw user input and produces 
 
 ---
 
-**Cluster C — Plan Assembly (Call 4)**
+**Cluster C — Plan Assembly (Call 4 + HITL refinement loop)**
 
 | Question | Answer | Reasoning |
 |---|---|---|
-| Does it need evolving state across multiple steps? | **Sprint 2: No** | Generates plan in one LLM call given full context. No refinement loop. |
-| Does it need to choose between multiple next actions? | **Sprint 2: No** | Always generates the plan. No branching. |
-| Is there a stable object of concern it reasons about over time? | **Yes** | The trip plan is the object — but assembled once, not iterated. |
+| Does it need evolving state across multiple steps? | **Yes** | Plan is generated, shown to user, refined based on feedback, shown again. `plan` and `refinement_history` evolve across multiple steps. |
+| Does it need to choose between multiple next actions? | **Yes** | After generating a plan, the agent chooses: interrupt and wait for user feedback, refine again based on changes, or terminate if user approves. |
+| Is there a stable object of concern it reasons about over time? | **Yes** | The trip plan is the object — it persists across the refinement loop and is iteratively improved. |
 
-**Score: 1/3 → Service for Sprint 2**
-
-*(Sprint 3 candidate: add HITL refinement loop — user can say "change day 3" and the agent iterates. Promotes it to agent.)*
+**Score: 3/3 → Agent**
 
 ---
 
-### Architecture Decision: Single-Agent Pipeline
+### Architecture Decision: Single LangGraph Graph with HITL Agent Loop
 
-All 3 clusters score as services for Sprint 2. But the overall system is not service-less — the LangGraph graph itself IS the agent.
+Clusters A and B score as services. Cluster C scores as an agent (3/3). The LangGraph graph remains the single agent — but it now contains a genuine agentic sub-loop in the Plan Assembly phase rather than a purely linear pipeline.
 
 **The right framing:**
 
-The 4 LLM calls are **service nodes** inside one orchestrated **TripSathi Planning Agent**. The agent is the LangGraph graph — it has session state (`user_profile`, `trip_parameters`, `research_synthesis`), a clear goal (produce a personalised trip plan), and a defined start/end point. The individual nodes don't need their own control loops; the graph is the control structure.
-
-This is a valid single-agent architecture: one agent, three internal service nodes, two external services.
+The overall system is one LangGraph graph. Clusters A and B are service nodes within it (run once, write to state, done). Cluster C is an agentic loop within the same graph — it generates a plan, pauses for user feedback via LangGraph's `interrupt()` mechanism, and iterates until the user approves or the refinement limit is reached.
 
 ---
 
-### Final Architecture Overview: Single-Agent, Service-Node Pipeline
+### Final Architecture Overview: Single-Agent Pipeline with HITL Refinement Loop
 
 **1 Agent: TripSathi Planning Agent** (LangGraph graph)
-- Session state owner: `user_profile`, `trip_parameters`, `destination`, `research_synthesis`
-- Goal: transform onboarding + trip request into personalised itinerary
-- Control structure: linear pipeline with defined state transitions (LangGraph edges)
-- Quality risk owner: the agent is responsible for carrying user_profile through all nodes — if it drops, Context Awareness Failure fires
+- Session state owner: `user_profile`, `trip_parameters`, `destination`, `research_synthesis`, `plan`, `refinement_history`
+- Goal: produce a personalised, user-approved trip plan
+- Control structure: linear pipeline for Nodes 1–3, then HITL refinement loop for Plan Assembly
+- Requires: **LangGraph MemorySaver checkpointer** + **thread_id** to persist state across pause/resume cycles
 
-**3 Internal Service Nodes** (LangGraph nodes, no control loops of their own):
-- Persona Classification Node (Call 1): reads onboarding_answers → writes user_profile to state
-- Destination Intelligence Node (Calls 2+3 + LlamaIndex): reads state → writes research_synthesis to state
-- Plan Assembly Node (Call 4): reads state → writes plan, returns to FastAPI
+**2 Internal Service Nodes** (run once, no loops):
+- Persona Classification Node (Call 1): onboarding_answers → user_profile
+- Destination Intelligence Node (Calls 2+3 + LlamaIndex): destination + user_profile → research_synthesis
+
+**1 Internal Agent Loop** (iterative, HITL-driven):
+- Plan Assembly Agent Loop (Call 4 + refinement calls): research_synthesis + user_profile → plan → `interrupt()` → user feedback → refined plan → repeat until approved or max refinements reached
 
 **2 External Services** (stateless, outside LangGraph graph):
-- RAG Retrieval (LlamaIndex / Chroma): receives queries, returns ranked chunks — no reasoning, no state
-- FastAPI Bridge: receives React request → invokes LangGraph graph → serialises response back to React
+- RAG Retrieval (LlamaIndex / Chroma): query → ranked chunks
+- FastAPI Bridge: HTTP gateway; manages thread_id; routes `/api/plan` (start) and `/api/refine` (continue)
 
 ---
 
 ### Scope Check
 
-**Agent count: 1** — within the bootcamp max-2 guideline, and appropriate for Sprint 2 scope.
+**Agent count: 1** (one LangGraph graph, with one internal HITL loop) — within the bootcamp max-2 guideline.
 
-**Sprint 3 promotions (deferred, YAGNI):**
-- Destination Intelligence Node → Agent: add retrieval quality check + conditional re-query (Angle B quality gate)
-- Plan Assembly Node → Agent: add HITL refinement loop (user modifies plan iteratively)
-
-Neither promotion is needed to validate Context Awareness Failure in Sprint 2.
+**Sprint 3 deferred:**
+- Destination Intelligence Node → Agent: add retrieval quality check + conditional re-query (Angle B quality gate). Not needed for Sprint 2 — the fixed RAG pipeline is sufficient to test Context Awareness Failure.
 
 ---
 
@@ -302,12 +297,12 @@ All handoff paths accounted for:
 
 ### Check 5: Agent/Service Misclassification ✅ Clean
 
-- **TripSathi Planning Agent (LangGraph graph):** Correctly an agent — it owns session state, orchestrates 4 LLM calls, and produces a goal-directed output. LangGraph graph IS the agent.
+- **TripSathi Planning Agent (LangGraph graph):** Correctly an agent — it owns session state across pause/resume cycles, orchestrates 4 LLM calls, and contains a HITL control loop. LangGraph graph IS the agent.
 - **Persona Classification Node:** Stateless transformation (onboarding_answers → user_profile). Correctly a service node.
 - **Destination Intelligence Node:** Fixed 2-call + retrieval sequence. No branching decisions for Sprint 2. Correctly a service node.
-- **Plan Assembly Node:** Stateless transformation (state → plan). Correctly a service node.
+- **Plan Assembly Agent Loop:** Has evolving state (`plan`, `refinement_history`), makes branching decisions (refine vs. approve vs. max-limit), and reasons about the trip plan over multiple iterations. Correctly reclassified as an agent loop.
 - **LlamaIndex/Chroma:** Pure retrieval utility. Correctly an external service.
-- **FastAPI:** Transport layer. Correctly an external service.
+- **FastAPI:** Transport layer + thread_id manager. Correctly an external service.
 
 ---
 
@@ -321,26 +316,31 @@ All handoff paths accounted for:
 
 ### Approved Architecture Snapshot
 
-**TripSathi Planning Agent** — single LangGraph graph, 3 service nodes, 2 external services.
+**TripSathi Planning Agent** — single LangGraph graph, 2 service nodes, 1 HITL agent loop, 2 external services. Requires MemorySaver checkpointer + thread_id.
 
 ```
-LangGraph State: {destination, trip_parameters, user_profile, research_synthesis, plan}
+LangGraph State: {destination, trip_parameters, user_profile, research_synthesis,
+                  plan, user_feedback, refinement_count, refinement_history,
+                  awaiting_feedback, current_node, error}
 
-Node 1: Persona Classification
-  In: onboarding_answers (from initial state)
-  Out: user_profile → LangGraph state
+Node 1: Persona Classification  [service node — runs once]
+  In: onboarding_answers
+  Out: user_profile → state
 
-Node 2/3: Destination Intelligence  
-  In: destination, user_profile, trip_parameters (from state)
+Node 2/3: Destination Intelligence  [service node — runs once]
+  In: destination, user_profile, trip_parameters
   Internal: expanded_queries → LlamaIndex → retrieved_content (local vars)
-  Out: research_synthesis → LangGraph state
+  Out: research_synthesis → state
 
-Node 4: Plan Assembly
-  In: research_synthesis, user_profile, trip_parameters, destination (from state)
-  Out: plan → LangGraph state → FastAPI response
+Node 4+: Plan Assembly Agent Loop  [agent loop — runs 1–N times]
+  generate_plan: research_synthesis + user_profile + trip_parameters → plan → state
+  interrupt(): pause graph, return plan + thread_id to FastAPI → React
+  on resume: read user_feedback from state
+    if "approve" or refinement_count >= 5: → done
+    if change request: re-run generate_plan with (current_plan + user_feedback) → loop
 ```
 
-This architecture is clean, buildable in Sprint 2, and directly tests Context Awareness Failure by requiring user_profile to flow correctly through all 3 nodes.
+This architecture tests Context Awareness Failure via the user_profile propagation AND gives users agency to correct constraint violations they notice in the plan ("the hotel you picked has stairs, can you change it?").
 
 ---
 
@@ -348,37 +348,46 @@ This architecture is clean, buildable in Sprint 2, and directly tests Context Aw
 
 ### TripSathi Planning Agent — Control Loop
 
-The agent is the LangGraph graph. Its "control loop" is the LangGraph state machine: it transitions through nodes, updates shared state, and terminates when the plan is ready or an error occurs.
+The agent is the LangGraph graph. The first two phases (Persona Classification, Destination Intelligence) are linear service nodes. The Plan Assembly phase is a HITL agent loop: generate → interrupt → wait for user → refine or terminate.
 
-Sprint 2 control flow is linear — no iterative reasoning loops. The agentic quality comes from: (1) owning session state across 3 LLM calls, (2) making the user_profile propagation the architectural guarantee against Context Awareness Failure, and (3) handling per-node errors gracefully rather than crashing the whole pipeline.
+LangGraph's `interrupt()` function pauses graph execution and returns control to FastAPI. The graph resumes when FastAPI calls `graph.invoke(Command(resume=user_feedback), config={"configurable": {"thread_id": tid}})`. **MemorySaver checkpointer** persists state between pause and resume.
 
 ```mermaid
 flowchart TD
-    Start([FastAPI invokes graph]) --> Init[Initialize state\ndestination, trip_parameters, onboarding_answers]
+    Start([FastAPI: graph.invoke with thread_id]) --> Init[Initialize state\ndestination, trip_parameters, onboarding_answers]
 
-    Init --> Node1[Node 1: Persona Classification\nCall 1 — claude-sonnet-4-6\nIn: onboarding_answers\nOut: user_profile]
+    Init --> Node1[Node 1: Persona Classification\nCall 1 — claude-sonnet-4-6\nIn: onboarding_answers\nOut: user_profile → state]
 
     Node1 --> Check1{user_profile valid?}
-    Check1 -->|Error| Err1[Set error: persona_classification_failed\nReturn error to FastAPI]
-    Check1 -->|Valid| Node2[Node 2/3: Destination Intelligence\nCall 2: expand queries\nLlamaIndex: retrieve chunks\nCall 3: synthesize\nIn: destination + user_profile + trip_parameters\nOut: research_synthesis]
+    Check1 -->|Error| Err1[Set error: persona_classification_failed\nreturn to FastAPI]
+    Check1 -->|Valid| Node23[Node 2/3: Destination Intelligence\nCall 2: expand queries\nLlamaIndex: retrieve chunks\nCall 3: synthesize\nIn: destination + user_profile + trip_parameters\nOut: research_synthesis → state]
 
-    Node2 --> Check2{research_synthesis valid?}
-    Check2 -->|Error| Err2[Set error: destination_intelligence_failed\nReturn error to FastAPI]
-    Check2 -->|Valid| Node3[Node 4: Plan Assembly\nCall 4 — claude-sonnet-4-6\nIn: research_synthesis + user_profile + trip_parameters + destination\nOut: plan]
+    Node23 --> Check2{research_synthesis valid?}
+    Check2 -->|Error| Err2[Set error: destination_intelligence_failed\nreturn to FastAPI]
+    Check2 -->|Valid| GenPlan[Plan Assembly: generate_plan\nCall 4 — claude-sonnet-4-6\nIn: research_synthesis + user_profile + trip_parameters\nOut: plan → state\nrefinement_count += 1]
 
-    Node3 --> Check3{plan valid?}
-    Check3 -->|Error| Err3[Set error: plan_assembly_failed\nReturn error to FastAPI]
-    Check3 -->|Valid| Done([Return plan to FastAPI])
+    GenPlan --> Interrupt{interrupt — pause graph\nreturn plan + thread_id to FastAPI → React}
+
+    Interrupt -->|User: approve / looks good| Done([Terminate — return final plan])
+    Interrupt -->|User: change request| ReadFeedback[Read user_feedback from state\nAppend to refinement_history]
+
+    ReadFeedback --> MaxCheck{refinement_count >= 5?}
+    MaxCheck -->|Yes — guard| Done
+    MaxCheck -->|No| Refine[Plan Assembly: refine_plan\nCall 4 again — claude-sonnet-4-6\nIn: current plan + user_feedback + user_profile\nOut: updated plan → state\nrefinement_count += 1]
+
+    Refine --> Interrupt
 ```
 
-**What makes this agentic (not just a function chain):**
-- LangGraph state is the agent's working memory — `user_profile` written by Node 1 is available to Nodes 2/3/4 without being passed explicitly through function arguments
-- The graph owns the session context boundary — FastAPI passes inputs in, gets the plan out; everything in between is the agent's responsibility
-- Error handling is per-node: a failure in Node 2/3 doesn't corrupt Node 1's output; the agent reports which stage failed
+**What makes the Plan Assembly loop agentic:**
+- It maintains state across multiple turns (`plan`, `refinement_history`, `refinement_count`)
+- It branches: approve → terminate, change → refine, count limit → force terminate
+- It reasons about the same object (the trip plan) over multiple iterations, incorporating user feedback each time
+- The `interrupt()` call is LangGraph's built-in HITL mechanism — the graph is paused, not polled
 
 **Termination conditions:**
-- Normal: `plan` field is populated and valid → return plan
-- Error: any node sets `error` field → return error message, no partial state exposed to user
+- User sends approval ("looks good", "that's fine", "approve") → graph terminates, returns final plan
+- `refinement_count` reaches 5 → graph auto-terminates with current plan (prevents infinite loop)
+- Any node sets `error` → graph aborts, returns error to FastAPI
 
 ---
 
@@ -393,20 +402,27 @@ class TripSathiState(TypedDict):
     onboarding_answers: list[dict] # [{question: str, answer: str}, ...]
 
     # ── Agent-owned (written progressively by nodes) ─────────────────────────
-    user_profile: dict | None      # written by Node 1
-    research_synthesis: dict | None  # written by Node 2/3
-    plan: dict | None              # written by Node 4
+    user_profile: dict | None      # written by Node 1 — write-once
+    research_synthesis: dict | None  # written by Node 2/3 — write-once
+    plan: dict | None              # written/updated by Plan Assembly loop each iteration
+
+    # ── HITL refinement state (Plan Assembly Agent Loop) ─────────────────────
+    user_feedback: str | None      # last change request from user; cleared after each refine
+    refinement_count: int          # increments each time generate_plan or refine_plan runs
+    refinement_history: list[str]  # log of all user feedback messages in this session
 
     # ── Control/meta ─────────────────────────────────────────────────────────
+    awaiting_feedback: bool        # True when graph is interrupted, waiting for user
     current_node: str              # "persona_classification" | "destination_intelligence"
-                                   # | "plan_assembly" | "done" | "error"
-    error: str | None              # set on failure, None on success
+                                   # | "plan_assembly" | "awaiting_feedback" | "done" | "error"
+    error: str | None
 ```
 
-**Field classification rationale:**
-- `destination`, `trip_parameters`, `onboarding_answers` are input-only: nodes read them, never overwrite them. Immutable session context.
-- `user_profile`, `research_synthesis`, `plan` are agent-owned: each is written exactly once by the node responsible for it, then read by subsequent nodes. Write-once, read-many pattern.
-- `current_node` and `error` are control fields: this is what distinguishes an agent from a function — the graph tracks its own progress and can surface which stage failed.
+**Key design decisions:**
+- `plan` is the only agent-owned field that mutates — updated on every refinement cycle. All others are write-once.
+- `refinement_history` accumulates across the session — the refine_plan prompt receives the full history so the LLM understands the arc of changes requested ("first they wanted more budget hotels, then they wanted to avoid Munnar crowds").
+- `user_feedback` holds only the latest request; the history is in `refinement_history`.
+- `refinement_count` guards against infinite loops — hard cap of 5 refinements.
 
 ---
 
@@ -422,28 +438,47 @@ Node 4 (Plan Assembly): The LLM sequences activities around constraints. When el
 
 ---
 
+### Decision Logic
+
+**Plan Assembly Agent Loop — what the LLM decides on each cycle:**
+
+Initial generation (Call 4): given research_synthesis + user_profile + constraints → decide which activities to include/exclude, which hotel to recommend and why, how to sequence days around elderly/kid pacing, which warnings to surface.
+
+Refinement (Call 4 again): given current_plan + user_feedback + user_profile → decide which parts of the plan to modify, which constraints from the original profile still apply, whether the change request introduces new conflicts ("change the hotel" but user_profile has mobility_limited=true → must still pick a ground-floor / lift-access property).
+
+The refinement call receives `refinement_history` so the LLM doesn't regress on earlier approved changes.
+
+---
+
 ### Error Handling
 
 | Failure point | Behaviour | User-visible message |
 |---|---|---|
 | Node 1 fails (persona classification) | Set `error`, abort | "We couldn't process your preferences. Please try again." |
-| LlamaIndex retrieval returns 0 chunks | Node 2/3 proceeds with empty retrieved_content; Call 3 must flag low-confidence synthesis | Plan includes explicit "Limited local knowledge available" warning |
+| LlamaIndex retrieval returns 0 chunks | Node 2/3 proceeds with empty retrieved_content; Call 3 flags low-confidence synthesis | Plan includes "Limited local knowledge available for this destination" warning |
 | Node 2/3 fails (synthesis error) | Set `error`, abort | "We couldn't research this destination. Please try again." |
-| Node 4 fails (plan generation) | Set `error`, abort | "We couldn't generate your plan. Please try again." |
+| Plan generation fails (initial Call 4) | Set `error`, abort | "We couldn't generate your plan. Please try again." |
+| Refinement call fails (subsequent Call 4) | Keep current plan, set `error` on refinement only | "We couldn't apply that change — here's the current plan. Try rephrasing?" |
+| `refinement_count` reaches 5 | Auto-terminate, return current plan | "You've reached the maximum refinements. Here's your final plan." |
+| FastAPI loses thread_id (server restart etc.) | Cannot resume graph | "Your session expired. Please start a new plan." |
 
-**Important:** LlamaIndex returning empty results is NOT an abort condition — it's a graceful degradation. Call 3 should produce a synthesis that flags the knowledge gap rather than crashing. This is the design choice that prevents a cold-start RAG corpus from breaking the whole pipeline.
+**Refinement failure is non-fatal** — the current plan is preserved and returned to the user with an error message. This is more useful than aborting the whole session because the user already has a valid baseline plan.
+
+**Important:** LlamaIndex returning empty results is NOT an abort condition — graceful degradation keeps the pipeline alive even with a cold-start corpus.
 
 ---
 
 ## Service Composition
 
-### Orchestration Pattern: Agent-Driven Pipeline
+### Orchestration Pattern: Agent-Driven Pipeline with HITL Loop
 
-The LangGraph graph (TripSathi Planning Agent) is the orchestrator. It drives the pipeline; all services are called from within it. FastAPI is the external gateway — it doesn't orchestrate anything, it only routes.
+The LangGraph graph (TripSathi Planning Agent) is the orchestrator. FastAPI is the external gateway — it routes requests and manages the thread_id session lifecycle.
 
-This is **not** a conditional pattern: in Sprint 2, the graph always executes all 3 nodes in the same order. No branches, no node skipping. LlamaIndex is called inside Node 2/3 as a synchronous tool call (not an agent decision point).
+Two distinct patterns within the same graph:
+- **Linear pipeline** (Nodes 1 and 2/3): sequential, no branching, runs once per session
+- **HITL agent loop** (Plan Assembly): conditional, iterates based on user approval, uses LangGraph `interrupt()` + MemorySaver
 
-Pattern summary: **Linear pipeline orchestrated by the LangGraph agent, with a synchronous external service call (LlamaIndex) embedded inside one node.**
+Pattern summary: **Linear pipeline into a HITL refinement loop, all within one LangGraph agent. FastAPI manages the pause/resume cycle via thread_id.**
 
 ---
 
@@ -451,15 +486,19 @@ Pattern summary: **Linear pipeline orchestrated by the LangGraph agent, with a s
 
 **React UI ↔ FastAPI**
 - Onboarding page: POST `/api/onboard` with `{onboarding_answers: [{question, answer}], destination_hint?}`
-- Chat/Results page: POST `/api/plan` with `{destination, trip_parameters, onboarding_answers}`
-- FastAPI returns JSON plan; React renders it into the results view
-- No WebSocket or streaming in Sprint 2 — request/response only
+- Chat/Results page (start): POST `/api/plan` with `{destination, trip_parameters, onboarding_answers}` → returns `{plan, thread_id, status: "awaiting_feedback"}`
+- Chat/Results page (refine): POST `/api/refine` with `{thread_id, user_feedback}` → returns `{plan, thread_id, status: "awaiting_feedback" | "done"}`
+- React renders plan after each response; shows chat input for next feedback until `status: "done"`
+- No WebSocket or streaming in Sprint 2 — request/response per turn
 
 **FastAPI ↔ LangGraph Agent**
-- FastAPI calls `graph.invoke(initial_state)` — synchronous, blocking
-- Initial state: `{destination, trip_parameters, onboarding_answers, current_node: "persona_classification", error: None}`
-- Return: populated `TripSathiState` with `plan` (or `error`)
-- FastAPI extracts `state["plan"]` or `state["error"]` and returns to React
+- **Start:** FastAPI generates `thread_id = uuid4()`, calls `graph.invoke(initial_state, config={"configurable": {"thread_id": thread_id}})` with MemorySaver checkpointer
+- Graph runs Nodes 1 and 2/3, then Plan Assembly generates initial plan and hits `interrupt()`
+- FastAPI receives the interrupted state, extracts `state["plan"]`, returns `{plan, thread_id, status: "awaiting_feedback"}` to React
+- **Resume:** FastAPI calls `graph.invoke(Command(resume=user_feedback), config={"configurable": {"thread_id": thread_id}})` with the same thread_id
+- Graph resumes at the interrupt point, checks feedback, refines or terminates
+- Repeats until `state["awaiting_feedback"] == False` (user approved or max refinements reached)
+- FastAPI returns `{plan, status: "done"}` on termination
 
 **LangGraph Node 1 ↔ Claude API**
 - Anthropic SDK call: `client.messages.create(model, system_prompt, messages=[{role: "user", content: formatted_onboarding}])`
@@ -486,31 +525,38 @@ Pattern summary: **Linear pipeline orchestrated by the LangGraph agent, with a s
 ### System-Wide Data Flow
 
 ```mermaid
-flowchart LR
-    User([User]) -->|onboarding form| React[React UI\nOnboarding Page]
+flowchart TD
+    User([User]) -->|onboarding form| React1[React UI\nOnboarding Page]
+    React1 -->|POST /api/onboard| FastAPI[FastAPI\nBackend]
+
     User -->|trip request| React2[React UI\nChat Page]
+    React2 -->|POST /api/plan + thread_id| FastAPI
 
-    React -->|POST /api/onboard| FastAPI[FastAPI\nBackend]
-    React2 -->|POST /api/plan| FastAPI
-
-    FastAPI -->|graph.invoke initial_state| Agent[TripSathi Planning Agent\nLangGraph Graph]
+    FastAPI -->|graph.invoke initial_state\nconfig: thread_id| Agent[TripSathi Planning Agent\nLangGraph + MemorySaver]
 
     Agent --> N1[Node 1\nPersona Classification\nCall 1 — Claude]
-    N1 -->|writes user_profile| State[(LangGraph State)]
+    N1 -->|user_profile → state| N23
 
-    State -->|reads destination + user_profile + trip_parameters| N23[Node 2/3\nDestination Intelligence\nCall 2 — Claude]
-    N23 -->|expanded_queries| Llama[LlamaIndex\nQuery Engine]
-    Llama -->|queries| Chroma[(Chroma\nVector DB)]
-    Chroma -->|retrieved chunks| Llama
-    Llama -->|retrieved_content local var| N23Call3[Call 3 — Claude\nResearch Synthesis]
-    N23Call3 -->|writes research_synthesis| State
+    N23[Node 2/3\nDestination Intelligence] -->|expanded_queries| Llama[LlamaIndex]
+    Llama -->|queries| Chroma[(Chroma)]
+    Chroma -->|chunks| Llama
+    Llama -->|retrieved_content local var| N23
+    N23 -->|research_synthesis → state| PA
 
-    State -->|reads all fields| N4[Node 4\nPlan Assembly\nCall 4 — Claude]
-    N4 -->|writes plan| State
+    PA[Plan Assembly\nCall 4 — Claude\ngenerate / refine] -->|plan → state| Interrupt{interrupt\nawait feedback}
 
-    State -->|plan| FastAPI
-    FastAPI -->|JSON response| React2
-    React2 -->|renders itinerary| User
+    Interrupt -->|plan + thread_id + status: awaiting_feedback| FastAPI
+    FastAPI -->|plan + thread_id| React2
+    React2 -->|renders plan\nshows chat input| User
+
+    User -->|feedback or approve| React2
+    React2 -->|POST /api/refine\nthread_id + user_feedback| FastAPI
+    FastAPI -->|graph.invoke Command resume\nconfig: thread_id| Agent
+
+    Interrupt -->|user approved or max refinements| FinalPlan[Return final plan\nstatus: done]
+    FinalPlan --> FastAPI
+    FastAPI -->|plan + status: done| React2
+    React2 -->|final plan rendered| User
 ```
 
 ---
@@ -520,25 +566,27 @@ flowchart LR
 | Component | Type | Role | Sprint |
 |---|---|---|---|
 | React UI (Onboarding) | Frontend | Collects onboarding_answers + destination_hint | Sprint 2 |
-| React UI (Chat/Results) | Frontend | Accepts trip request; renders plan | Sprint 2 |
-| FastAPI | External service | HTTP gateway; initialises LangGraph state; serialises response | Sprint 2 |
-| TripSathi Planning Agent | **1 LangGraph Agent** | Orchestrates pipeline; owns session state; carries user_profile to all nodes | Sprint 2 |
-| Persona Classification Node | Service node | Classifies user persona from onboarding answers | Sprint 2 |
-| Destination Intelligence Node | Service node | Expands queries, retrieves, synthesises destination knowledge | Sprint 2 |
-| Plan Assembly Node | Service node | Generates constraint-validated day-by-day itinerary | Sprint 2 |
+| React UI (Chat/Results) | Frontend | Accepts trip request; renders plan; accepts refinement feedback | Sprint 2 |
+| FastAPI | External service | HTTP gateway; generates thread_id; manages pause/resume cycle; routes `/api/plan` and `/api/refine` | Sprint 2 |
+| TripSathi Planning Agent | **1 LangGraph Agent** | Orchestrates pipeline + HITL loop; owns session state via MemorySaver; carries user_profile to all nodes | Sprint 2 |
+| Persona Classification Node | Service node | Classifies user persona from onboarding answers — runs once | Sprint 2 |
+| Destination Intelligence Node | Service node | Expands queries, retrieves, synthesises destination knowledge — runs once | Sprint 2 |
+| Plan Assembly Agent Loop | Agent loop (within graph) | Generates and iteratively refines plan based on user feedback; interrupts for HITL | Sprint 2 |
+| LangGraph MemorySaver | Checkpointer | Persists LangGraph state between interrupt and resume across HTTP requests | Sprint 2 |
 | LlamaIndex Query Engine | External service | Retrieves relevant content chunks given queries | Sprint 2 |
 | Chroma | External service | Local vector store for travel content corpus | Sprint 2 |
-| Claude API (claude-sonnet-4-6) | External service | Powers all 4 LLM calls via Anthropic SDK | Sprint 2 |
+| Claude API (claude-sonnet-4-6) | External service | Powers all 4+ LLM calls (4 base + up to 5 refinement calls) via Anthropic SDK | Sprint 2 |
 | DeepEval | External service | Evaluates plan quality against 10 CSV test cases | Sprint 2 |
 
-**Total: 1 agent, 3 service nodes, 6 external/supporting services**
+**Total: 1 agent (with 2 service nodes + 1 HITL agent loop), 7 external/supporting services**
 
 **Critical integration points:**
-1. FastAPI → LangGraph state initialisation — if trip_parameters are not correctly parsed here, all downstream nodes receive wrong context
-2. Node 1 → LangGraph state → Nodes 2/3/4 — the user_profile propagation. If this wire is broken, Context Awareness Failure fires in every test case
-3. Node 2/3 → LlamaIndex → Node 3 — the RAG retrieval chain. If LlamaIndex returns empty results, Node 3 must still produce a synthesis (graceful degradation)
+1. FastAPI → LangGraph state init — `thread_id` must be generated and stored by FastAPI; lost thread_id = user cannot refine their plan
+2. Node 1 → LangGraph state → all downstream — `user_profile` propagation. If this wire breaks, Context Awareness Failure fires in every test case
+3. Node 2/3 → LlamaIndex → Node 3 — RAG retrieval chain; LlamaIndex returning 0 chunks = graceful degradation, not abort
+4. `interrupt()` → MemorySaver → `graph.invoke(Command(resume=...))` — the HITL resume chain; MemorySaver must use the same `thread_id` on both sides or the state is lost
 
-**No isolated components.** Every service is called by something; every agent node has access to the state it needs.
+**No isolated components.** Every service is called by something; every component has access to the state it needs.
 
 
 
