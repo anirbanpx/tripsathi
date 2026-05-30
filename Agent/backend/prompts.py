@@ -49,10 +49,21 @@ IF kid_ages contains any value <= 3 (toddler/infant):
   - "[destination] activities suitable toddler under 3"
 
 IF kid_ages contains any value 4-10:
-  Include queries about kid-friendly activities, food, and terrain suitability.
+  MUST include:
+  - "[destination] child food options young children picky eater"
+  - "[destination] kid-friendly activities [age] year old"
+  - "[destination] terrain suitability young children"
 
 IF elderly=true OR mobility_limited=true:
-  Include queries about accessibility, terrain, and step counts at key sites.
+  MUST include:
+  - "[destination] accessibility elderly mobility steps terrain"
+  - "[destination] VIP darshan queue bypass elderly"
+  - "[destination] steep steps doli alternative pilgrimage site"
+
+ALWAYS include these regardless of persona:
+  - "[destination] temple entry rules non-Hindu restriction"
+  - "[destination] cab auto taxi pricing tourist inflation"
+  - "[destination] [main attraction, e.g. Chilika, Brahmaputra, backwaters] boat transport options pricing"
 
 Respond ONLY with a JSON array of strings: ["query1", "query2", ...]
 """
@@ -69,6 +80,12 @@ If the retrieved knowledge mentions ANY of the following, you MUST include them 
 - Hotel location relative to backwater/boat access (highway vs central) → include in implicit_warnings with specific area recommendation
 - Terrain unsuitability for the specific kid ages in the profile → include as local_risk
 - Soft food or dietary availability for the group's constraints → include in implicit_warnings
+- Temple entry restrictions (non-Hindu prohibition, VIP darshan options, pricing) → include in local_risks with specific alternative (rooftop view, Raghunandan Library, etc.) and pricing details
+- Cab / auto / boat operator pricing inflation at tourist spots (Chilika, Alleppey, etc.) → include in local_risks with specific inflated price range, fair price range, and booking mitigation
+- Child food scarcity or limited kid-friendly options at the destination → include in implicit_warnings with specific fallbacks (hotel dining, packaged foods, named restaurant types)
+- VIP darshan / queue bypass options at temples → include in local_risks with exact pricing and counter location
+- Steep steps or physical access constraints at pilgrimage sites → include in local_risks with alternative (doli, ramp, skip suggestion)
+- Brahmaputra / lake / river transport options (public ferry vs private cruise) → include in implicit_warnings with price comparison and recommendation
 
 Respond ONLY with valid JSON:
 {

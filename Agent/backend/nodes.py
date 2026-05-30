@@ -40,11 +40,12 @@ HOUSEBOAT_TODDLER_WARNING = (
 )
 
 
-def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None) -> dict:
+def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "") -> dict:
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
-    young_child = any(isinstance(age, int) and 4 <= age <= 10 for age in kid_ages)
     warnings = plan.get("warnings", [])
+    dest_lower = destination.lower()
+    is_kerala = "kerala" in dest_lower or "alleppey" in dest_lower or "munnar" in dest_lower or "kochi" in dest_lower
 
     if toddler:
         # 1. Midday nap block in every day
@@ -53,35 +54,36 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
             if "1:00" not in notes and "nap" not in notes.lower() and "rest" not in notes.lower():
                 day["notes"] = "1:00–2:30 PM: mandatory nap/rest at hotel — no activities scheduled during this window. " + notes
 
-        # 2. Replace overnight houseboat hotel with land hotel
-        for hotel in plan.get("hotels", []):
-            if "houseboat" in hotel.get("name", "").lower():
-                hotel["name"] = "Backwater-side land hotel (book near jetty, not highway)"
-                hotel["reasoning"] = (
-                    "Overnight houseboat not safe for toddlers under 3. "
-                    "Choose a land hotel near the backwater jetty (Finishing Point Road area) "
-                    "for easy day-cruise access without highway detour. High chair: pre-request on booking."
-                )
-                hotel["content_source"] = "rag"
+        # 2. Replace overnight houseboat hotel with land hotel (Kerala only)
+        if is_kerala:
+            for hotel in plan.get("hotels", []):
+                if "houseboat" in hotel.get("name", "").lower():
+                    hotel["name"] = "Backwater-side land hotel (book near jetty, not highway)"
+                    hotel["reasoning"] = (
+                        "Overnight houseboat not safe for toddlers under 3. "
+                        "Choose a land hotel near the backwater jetty (Finishing Point Road area) "
+                        "for easy day-cruise access. High chair: pre-request on booking."
+                    )
+                    hotel["content_source"] = "rag"
 
-        # 3. Add toddler houseboat warning
-        if not any("under 3" in w or "toddler" in w.lower() for w in warnings):
+        # 3. Add toddler houseboat warning (Kerala only)
+        if is_kerala and not any("under 3" in w or "toddler" in w.lower() for w in warnings):
             warnings.insert(0, HOUSEBOAT_TODDLER_WARNING)
 
-    # 4. Surface houseboat trust warning for any Kerala backwater trip
-    if not any("cold-approach" in w or "jetty" in w.lower() or "inflate" in w for w in warnings):
+    # 4. Houseboat trust warning — Kerala only, triggered by RAG synthesis
+    if is_kerala and not any("cold-approach" in w or "inflate" in w for w in warnings):
         if research_synthesis:
             risks = research_synthesis.get("local_risks", []) + research_synthesis.get("implicit_warnings", [])
-            if any("houseboat" in r.lower() or "operator" in r.lower() for r in risks):
+            if any("houseboat" in r.lower() for r in risks):
                 warnings.append(HOUSEBOAT_TRUST_WARNING)
         else:
             warnings.append(HOUSEBOAT_TRUST_WARNING)
 
-    # 5. Surface Alleppey hotel location warning
-    if not any("NH 66" in w or "finishing point" in w.lower() or "jetty" in w.lower() for w in warnings):
+    # 5. Alleppey hotel location warning — Kerala only
+    if is_kerala and not any("NH 66" in w or "finishing point" in w.lower() for w in warnings):
         if research_synthesis:
             all_text = " ".join(research_synthesis.get("implicit_warnings", []) + research_synthesis.get("local_risks", []))
-            if "alleppey" in all_text.lower() or "hotel location" in all_text.lower():
+            if "alleppey" in all_text.lower() or "hotel location" in all_text.lower() or "highway" in all_text.lower():
                 warnings.append(ALLEPPEY_LOCATION_WARNING)
         else:
             warnings.append(ALLEPPEY_LOCATION_WARNING)
@@ -106,7 +108,6 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | 
                 {"role": "user", "content": user_message + extra_instruction},
             ],
             max_tokens=max_tokens,
-            response_format={"type": "json_object"},
         )
         raw = response.choices[0].message.content.strip()
         if raw.startswith("```"):
@@ -210,7 +211,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
         regen_kid_ages = state["trip_parameters"].get("kid_ages") or []
-        new_plan = _enforce_plan_quality(new_plan, regen_kid_ages, state.get("research_synthesis"))
+        new_plan = _enforce_plan_quality(new_plan, regen_kid_ages, state.get("research_synthesis"), state["destination"])
         return {
             "plan": new_plan,
             "previous_plan": state.get("plan"),
@@ -276,18 +277,32 @@ def plan_assembly(state: TripSathiState) -> dict:
             "6. MAX 2 ACTIVITIES per day. No activity requiring more than 20 minutes of continuous walking."
         )
 
+    # Extract explicit must-haves from onboarding answers
+    explicit_reqs = [
+        a["answer"] for a in state.get("onboarding_answers", [])
+        if any(kw in a["answer"].lower() for kw in ["must", "priority", "want to", "need to", "include", "cover"])
+    ]
+    req_block = ""
+    if explicit_reqs:
+        req_block = (
+            "\n\nMANDATORY USER REQUIREMENTS — include every one of these in the plan, "
+            "even if not optimal from a logistics standpoint:\n"
+            + "\n".join(f"- {r}" for r in explicit_reqs)
+        )
+
     generation_prompt = (
         f"Destination: {state['destination']}\n"
         f"Research: {json.dumps(state.get('research_synthesis'))}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+        f"{req_block}"
         f"{toddler_block}"
     )
     try:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt)
     except Exception as e:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
-    plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"))
+    plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"])
     return {
         "plan": plan,
         "refinement_count": 1,
