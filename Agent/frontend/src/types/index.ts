@@ -45,7 +45,7 @@ export interface Plan {
 export interface PlanResponse {
   plan: Plan;
   thread_id: string;
-  status: "awaiting_feedback" | "complete";
+  status: "awaiting_feedback" | "done";
   stage_label: string;
   refinement_count?: number;
   interpreted_change?: string;
