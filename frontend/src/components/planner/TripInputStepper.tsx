@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
   Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
@@ -94,6 +94,18 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
   const canProceed = step < 5
     ? (step === 0 ? !!params.destination : step === 1 ? !!params.start_date : true)
     : true;
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Enter") return;
+      if ((e.target as HTMLElement).tagName === "TEXTAREA") return;
+      if (!canProceed) return;
+      if (step < 5) setStep(s => s + 1);
+      else handleGenerate();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [step, canProceed, params]);
 
   return (
     <div className="screen" style={{ minHeight: "unset" }}>
