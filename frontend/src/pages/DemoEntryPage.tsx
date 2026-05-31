@@ -21,6 +21,7 @@ export default function DemoEntryPage({ onSetContext }: Props) {
 
   return (
     <div className="entry-screen">
+      <div className="cx" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <div className="topbar entry">
         <div className="brand">
           <span className="word">trip<i>sathi</i></span>
@@ -73,6 +74,7 @@ export default function DemoEntryPage({ onSetContext }: Props) {
       </div>
 
       <div className="footer-note">made for Indian trips, in India ✦</div>
+      </div>
     </div>
   );
 }

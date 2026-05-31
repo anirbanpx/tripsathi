@@ -32,6 +32,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
   const [inputMode, setInputMode] = useState<"stepper" | "natural">("stepper");
   const [nlText, setNlText] = useState("");
   const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
+  const [groupType, setGroupType] = useState<string | null>(null);
   const [params, setParams] = useState<TripParameters>(
     ctx.mode === "demo" ? DEMO_PARAMS : {
       destination: "",
@@ -122,8 +123,9 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     if (i === 0) return params.destination;
     if (i === 1) return `${params.start_date} · ${params.duration_days} nights`;
     if (i === 2) {
-      const kids = params.kid_ages.length > 0 ? ` + ${params.kid_ages.length} (${params.kid_ages.join(", ")}y)` : "";
-      return `${params.party_size} adults${kids}`;
+      const base = groupType ? `${groupType} · ` : "";
+      const kids = params.kid_ages.length > 0 ? ` + ${params.kid_ages.length} kid${params.kid_ages.length > 1 ? "s" : ""}` : "";
+      return `${base}${params.party_size} adults${kids}`;
     }
     if (i === 3) return params.budget_bracket;
     if (i === 4) return params.trip_style.join(", ") || "—";
@@ -163,29 +165,28 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         <div style={{ width: 36 }} />
       </div>
 
-      {/* Mode toggle — only in non-demo mode */}
-      {ctx.mode !== "demo" && (
-        <div style={{ display: "flex", gap: 6, padding: "0 20px", marginBottom: 4 }}>
-          {(["stepper", "natural"] as const).map(m => (
-            <button key={m} onClick={() => setInputMode(m)} style={{
-              flex: 1, padding: "8px 0",
-              border: "1.5px solid var(--border-strong)",
-              borderRadius: "var(--radius-pill)",
-              background: inputMode === m ? "var(--accent)" : "transparent",
-              color: inputMode === m ? "var(--paper)" : "var(--fg-2)",
-              fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 12,
-              cursor: "pointer", letterSpacing: "0.04em",
-              transition: "all var(--dur-fast)",
-            }}>
-              {m === "stepper" ? "step by step" : "just tell sathi"}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="cx" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      {/* Mode toggle */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 4 }}>
+        {(["stepper", "natural"] as const).map(m => (
+          <button key={m} onClick={() => setInputMode(m)} style={{
+            flex: 1, padding: "8px 0",
+            border: "1.5px solid var(--border-strong)",
+            borderRadius: "var(--radius-pill)",
+            background: inputMode === m ? "var(--accent)" : "transparent",
+            color: inputMode === m ? "var(--paper)" : "var(--fg-2)",
+            fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 12,
+            cursor: "pointer", letterSpacing: "0.04em",
+            transition: "all var(--dur-fast)",
+          }}>
+            {m === "stepper" ? "step by step" : "just tell sathi"}
+          </button>
+        ))}
+      </div>
 
       {/* Natural language mode */}
-      {inputMode === "natural" && ctx.mode !== "demo" && (
-        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+      {inputMode === "natural" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
           <div className="question" style={{ marginTop: 8 }}>
             <div className="q-eyebrow">
               <Sparkles size={13} strokeWidth={2.5} />
@@ -224,7 +225,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       )}
 
       {/* Stepper mode */}
-      {(inputMode === "stepper" || ctx.mode === "demo") && (<>
+      {inputMode === "stepper" && (<>
       <div className="stepper">
         {STEP_LABELS.map((_, i) => (
           <span
@@ -323,13 +324,11 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                 ].map(({ label, icon, size }) => (
                   <span
                     key={label}
-                    className={`chip ${params.trip_style.includes(label) ? "active" : ""}`}
+                    className={`chip ${groupType === label ? "active" : ""}`}
                     onClick={() => {
-                      const otherTypes = ["solo", "couple", "family", "friends"];
-                      const otherStyles = params.trip_style.filter(s => !otherTypes.includes(s));
+                      setGroupType(label);
                       const isFamily = label === "family";
                       patch({
-                        trip_style: [...otherStyles, label],
                         party_size: size,
                         kid_ages: isFamily && params.kid_ages.length === 0 ? [5] : isFamily ? params.kid_ages : [],
                       });
@@ -465,13 +464,16 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
             <span />
           )}
           {step < 5 ? (
-            <button
-              className="cta-primary"
-              disabled={!canProceed}
-              onClick={() => setStep((s) => s + 1)}
-            >
-              next <ArrowRight size={15} strokeWidth={2.5} />
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {canProceed && <span style={{ fontSize: 10, color: "var(--fg-3)", letterSpacing: "0.02em" }}>↵ enter</span>}
+              <button
+                className="cta-primary"
+                disabled={!canProceed}
+                onClick={() => setStep((s) => s + 1)}
+              >
+                next <ArrowRight size={15} strokeWidth={2.5} />
+              </button>
+            </div>
           ) : (
             <button className="cta-primary" onClick={handleGenerate}>
               sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
@@ -483,6 +485,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       {/* Spacer so content isn't hidden behind sticky bar */}
       <div style={{ height: 90 }} />
       </>)}
+      </div>
     </div>
   );
 }

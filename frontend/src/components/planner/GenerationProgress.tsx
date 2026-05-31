@@ -25,7 +25,8 @@ export default function GenerationProgress({ stageIndex, stageLabel: _stageLabel
         </div>
       </div>
 
-      <div className="stage" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "30px 22px" }}>
+      <div className="stage" style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "30px 0" }}>
+        <div className="cx" style={{ width: "100%" }}>
         <div className="progress-card" style={{ width: "100%" }}>
           {/* Animated route doodle */}
           <div className="doodle-area">
@@ -79,6 +80,7 @@ export default function GenerationProgress({ stageIndex, stageLabel: _stageLabel
             <div className="scribble-note">↑ kerala is a long one, hold tight ✦</div>
           )}
         </div>
+        </div>{/* end .cx */}
       </div>
     </div>
   );

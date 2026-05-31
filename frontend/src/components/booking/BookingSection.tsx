@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Check, MapPin, Zap, AlertCircle, AlertTriangle, Download, Share2, Info, ArrowLeft } from "lucide-react";
+import { Check, MapPin, Zap, AlertCircle, AlertTriangle, Download, Share2, Info, ArrowLeft, BadgeCheck, Bookmark, BookmarkCheck } from "lucide-react";
 import { bookItem } from "../../services/api";
+import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
+import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, BookingResponse } from "../../types";
 
 interface Props {
@@ -31,7 +33,7 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
       type: "hotel",
       approx_cost: h.approx_cost_per_night,
       isGeneral: h.content_source === "general",
-      photoClass: h.location.toLowerCase().includes("alleppey") ? "beach" : h.location.toLowerCase().includes("kovalam") ? "beach" : "",
+      photoClass: h.location.toLowerCase().includes("alleppey") || h.location.toLowerCase().includes("kovalam") ? "beach" : "",
     }));
 
   const bookableActivities: BookableItem[] = plan.days.flatMap((d) =>
@@ -50,12 +52,36 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
   const planToVisit = plan.days.flatMap((d) =>
     d.activities
       .filter((a) => !a.bookable)
-      .map((a, i) => ({ name: a.name, location: d.location, dayNum: d.day_number, idx: i }))
+      .map((a) => ({ name: a.name, location: d.location, dayNum: d.day_number }))
   );
 
   const [bookedItems, setBookedItems] = useState<Record<string, BookingResponse>>({});
   const [skippedItems, setSkippedItems] = useState<Set<string>>(new Set());
   const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
+  const [shareFlash, setShareFlash] = useState(false);
+
+  function handlePrint() {
+    window.print();
+  }
+
+  async function handleShare() {
+    const dest = plan.days[0]?.location.split(",")[0] ?? "trip";
+    const lines = [
+      `🗺 ${dest} trip · ${plan.days.length} nights`,
+      `💰 ~₹${plan.budget_breakdown.total.toLocaleString()} total`,
+      ...Object.entries(bookedItems).map(([name, b]) => `✓ ${name} — ${b.confirmation_id}`),
+      `\nplanned on tripsathi`,
+    ];
+    const text = lines.join("\n");
+    if (navigator.share) {
+      try { await navigator.share({ title: `tripsathi · ${dest}`, text }); return; } catch { /* cancelled */ }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setShareFlash(true);
+      setTimeout(() => setShareFlash(false), 2000);
+    } catch { /* blocked */ }
+  }
 
   const totalBookable = bookableHotels.length + bookableActivities.length;
   const bookedCount = Object.keys(bookedItems).length;
@@ -76,6 +102,10 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
     setSkippedItems((s) => new Set(s).add(name));
   }
 
+  function handleUndo(name: string) {
+    setSkippedItems((s) => { const n = new Set(s); n.delete(name); return n; });
+  }
+
   return (
     <div className="screen" style={{ minHeight: "unset" }}>
       {isDemo && (
@@ -93,6 +123,7 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
         <div style={{ width: 36 }} />
       </div>
 
+      <div className="cx">
       <div className="approved-banner">
         <div className="ic"><Check size={14} strokeWidth={3} /></div>
         <div className="body">
@@ -105,8 +136,8 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
         <h1>let's <span className="sw">book</span><br />your trip.</h1>
         <p className="sub">
           {isDemo
-            ? `tap "book demo" on each. nothing real gets charged — these go through a sandbox.`
-            : `tap "book" on each item to confirm. prices are estimates.`}
+            ? `tap "book demo" on each pass. nothing real gets charged.`
+            : `tap "book" on each pass to confirm. prices are estimates.`}
         </p>
       </div>
 
@@ -139,19 +170,19 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
             <span className="line" />
             <span>{bookableHotels.filter((h) => bookedItems[h.name]).length} booked</span>
           </div>
-          {bookableHotels
-            .filter((item) => !skippedItems.has(item.name))
-            .map((item) => (
-              <ItemCard
-                key={item.name}
-                item={item}
-                isDemo={isDemo}
-                booking={bookedItems[item.name]}
-                loading={loadingItems.has(item.name)}
-                onBook={() => handleBook(item)}
-                onSkip={() => handleSkip(item.name)}
-              />
-            ))}
+          {bookableHotels.map((item) => (
+            <BoardingPass
+              key={item.name}
+              item={item}
+              isDemo={isDemo}
+              booking={bookedItems[item.name]}
+              loading={loadingItems.has(item.name)}
+              skipped={skippedItems.has(item.name)}
+              onBook={() => handleBook(item)}
+              onSkip={() => handleSkip(item.name)}
+              onUndo={() => handleUndo(item.name)}
+            />
+          ))}
         </div>
       )}
 
@@ -163,19 +194,19 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
             <span className="line" />
             <span>{bookableActivities.filter((a) => bookedItems[a.name]).length} booked</span>
           </div>
-          {bookableActivities
-            .filter((item) => !skippedItems.has(item.name))
-            .map((item) => (
-              <ItemCard
-                key={item.name}
-                item={item}
-                isDemo={isDemo}
-                booking={bookedItems[item.name]}
-                loading={loadingItems.has(item.name)}
-                onBook={() => handleBook(item)}
-                onSkip={() => handleSkip(item.name)}
-              />
-            ))}
+          {bookableActivities.map((item) => (
+            <BoardingPass
+              key={item.name}
+              item={item}
+              isDemo={isDemo}
+              booking={bookedItems[item.name]}
+              loading={loadingItems.has(item.name)}
+              skipped={skippedItems.has(item.name)}
+              onBook={() => handleBook(item)}
+              onSkip={() => handleSkip(item.name)}
+              onUndo={() => handleUndo(item.name)}
+            />
+          ))}
         </div>
       )}
 
@@ -203,17 +234,54 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
 
       {/* All done */}
       {allDone && (
-        <div className="done-card">
-          <span className="scrib">all set ✦</span>
-          <h3>your <i>demo</i> trip<br />is stamped. ✦</h3>
+        <div className="done-card-v2">
+          <div className="done-stamp-wrap">
+            <div className="done-stamp">
+              <BadgeCheck size={30} strokeWidth={2} />
+              <span className="done-stamp-label">booked</span>
+            </div>
+          </div>
+          <h2>your trip is <span className="sw">stamped</span>. ✦</h2>
           <p className="lede">
             {isDemo
-              ? "in sprint 3 these will route through real Booking.com and houseboat operator APIs. for now: enjoy the receipt."
+              ? "this was a demo — nothing was charged. your plan is ready to take to real booking."
               : "your bookings are confirmed. check your email for confirmations."}
           </p>
-          <div className="done-actions">
-            <button className="done-btn"><Download size={14} strokeWidth={2.5} />save as PDF</button>
-            <button className="done-btn outline"><Share2 size={14} strokeWidth={2.5} />share</button>
+
+          {Object.keys(bookedItems).length > 0 && (
+            <div className="done-items">
+              {Object.entries(bookedItems).map(([name, booking]) => (
+                <div key={name} className="done-item-row">
+                  <Check size={12} />
+                  <span className="done-item-name">{name}</span>
+                  <span className="done-item-ref">{booking.confirmation_id}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="done-total">
+            total charged <span>₹{bookedTotal.toLocaleString()}</span>
+          </div>
+
+          <div className="done-actions" style={{ marginTop: 20 }}>
+            <button className="done-btn" onClick={handlePrint}>
+              <Download size={14} strokeWidth={2.5} />save as PDF
+            </button>
+            <button className="done-btn outline" onClick={handleShare} style={{ position: "relative" }}>
+              <Share2 size={14} strokeWidth={2.5} />share
+              {shareFlash && (
+                <span style={{
+                  position: "absolute", top: -30, left: "50%", transform: "translateX(-50%)",
+                  whiteSpace: "nowrap", background: "var(--paper)", color: "var(--ink)",
+                  fontSize: 11, fontWeight: 700, padding: "3px 9px",
+                  borderRadius: 6, fontFamily: "var(--font-body)",
+                  pointerEvents: "none",
+                }}>
+                  copied ✦
+                </span>
+              )}
+            </button>
           </div>
         </div>
       )}
@@ -221,76 +289,129 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
       {isDemo && (
         <div className="footer-disc">
           <Info size={14} strokeWidth={2.5} />
-          <span><b>Sprint 2 reminder —</b> all bookings are mocked. confirmation IDs are made up. nothing was charged.</span>
+          <span><b>Demo mode —</b> all bookings are mocked. confirmation IDs are made up. nothing was charged.</span>
         </div>
       )}
 
       <div style={{ height: 40 }} />
+      </div>{/* end .cx */}
     </div>
   );
 }
 
-interface ItemCardProps {
+interface BoardingPassProps {
   item: BookableItem;
   isDemo: boolean;
   booking?: BookingResponse;
   loading: boolean;
+  skipped: boolean;
   onBook: () => void;
   onSkip: () => void;
+  onUndo: () => void;
 }
 
-function ItemCard({ item, isDemo, booking, loading, onBook, onSkip }: ItemCardProps) {
-  return (
-    <div className={`item-card ${booking ? "confirmed" : ""}`}>
-      {booking && isDemo && <div className="demo-watermark">DEMO</div>}
-      <div className="item-head">
-        <div className={`item-photo ${item.photoClass ?? ""}`} />
-        <div>
-          <div className="item-name">{item.name}</div>
-          <div className="item-loc">
-            <MapPin size={12} strokeWidth={2} />{item.location}
+function BoardingPass({ item, isDemo, booking, loading, skipped, onBook, onSkip, onUndo }: BoardingPassProps) {
+  const typeLabel = item.type === "hotel" ? "HOTEL" : "ACTIVITY";
+  const unitLabel = item.type === "hotel" ? "night" : "person";
+  const [bookmarked, setBookmarked] = useState(() => isBookmarked(item.name));
+  const imgUrl = getDestinationImageUrl(item.location);
+
+  function handleBookmark(e: React.MouseEvent) {
+    e.stopPropagation();
+    const added = toggleBookmark({ name: item.name, type: item.type, location: item.location });
+    setBookmarked(added);
+  }
+
+  if (skipped) {
+    return (
+      <div className="bp-card skipped">
+        <div className="bp-top">
+          <div className="bp-eyebrow">
+            <span>{typeLabel} · SKIPPED</span>
           </div>
-          <div className="item-price">
-            ~ ₹{item.approx_cost.toLocaleString()}
-            <span className="per">/ {item.type === "hotel" ? "night" : "person"}</span>
+          <div className="bp-main">
+            <div className={`item-photo ${item.photoClass ?? ""}`} />
+            <div>
+              <div className="bp-name" style={{ textDecoration: "line-through", opacity: 0.6 }}>{item.name}</div>
+              <div className="bp-loc"><MapPin size={11} strokeWidth={2} />{item.location}</div>
+            </div>
           </div>
+        </div>
+        <div className="bp-tear" />
+        <div className="bp-stub">
+          <button className="skip-btn" style={{ width: "100%", textAlign: "center" }} onClick={onUndo}>
+            undo skip
+          </button>
         </div>
       </div>
+    );
+  }
 
-      {item.isGeneral && !booking && (
-        <div className="item-disc">
-          <AlertCircle size={12} strokeWidth={2.5} />
-          <span>general recommendation — verify on Booking.com before confirming.</span>
+  return (
+    <div className={`bp-card ${booking ? "confirmed" : ""}`}>
+      <div className="bp-top">
+        <div className="bp-eyebrow">
+          <span>{typeLabel} · {item.location.toUpperCase()}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button className={`bp-bm-btn ${bookmarked ? "saved" : ""}`} onClick={handleBookmark} title={bookmarked ? "Remove bookmark" : "Bookmark"}>
+              {bookmarked ? <BookmarkCheck size={13} strokeWidth={2} /> : <Bookmark size={13} strokeWidth={2} />}
+            </button>
+            <span className={`bp-type-tag ${booking ? "confirmed-tag" : ""}`}>
+              {booking ? "BOOKED" : item.type === "hotel" ? "STAY" : "EXPERIENCE"}
+            </span>
+          </div>
         </div>
-      )}
-      {item.isHouseboat && !booking && (
-        <div className="item-disc">
-          <AlertTriangle size={12} strokeWidth={2.5} />
-          <span>book through your hotel operator — never direct cold-approach (kerala houseboat trust gap).</span>
-        </div>
-      )}
 
-      {booking ? (
-        <div className="confirm-row">
-          <div className="ic"><Check size={13} strokeWidth={3} /></div>
+        <div className="bp-main">
+          <div className={`item-photo ${item.photoClass ?? ""}`} style={imgUrl ? { backgroundImage: `url(${imgUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : {}} />
           <div>
-            <div className="lab">confirmation</div>
-            <div className="id">{booking.confirmation_id}</div>
-          </div>
-          <div className="right">
-            <div className="small">via</div>
-            <div className="big">{booking.provider}</div>
+            <div className="bp-name">{item.name}</div>
+            <div className="bp-loc"><MapPin size={11} strokeWidth={2} />{item.location}</div>
+            {!booking && (
+              <div className="bp-price">
+                ~ ₹{item.approx_cost.toLocaleString()}
+                <span className="per">/ {unitLabel}</span>
+              </div>
+            )}
           </div>
         </div>
-      ) : (
-        <div className="item-actions">
-          <button className="book-btn" onClick={onBook} disabled={loading}>
-            {loading ? <span className="btn-spinner" /> : <Zap size={14} strokeWidth={2.5} />}
-            {loading ? "booking…" : isDemo ? "book demo" : "book"}
-          </button>
-          <button className="skip-btn" onClick={onSkip}>skip</button>
-        </div>
-      )}
+
+        {item.isGeneral && !booking && (
+          <div className="item-disc" style={{ marginTop: 10 }}>
+            <AlertCircle size={12} strokeWidth={2.5} />
+            <span>general recommendation — verify on Booking.com before confirming.</span>
+          </div>
+        )}
+        {item.isHouseboat && !booking && (
+          <div className="item-disc" style={{ marginTop: 10 }}>
+            <AlertTriangle size={12} strokeWidth={2.5} />
+            <span>book through your hotel operator — never direct cold-approach.</span>
+          </div>
+        )}
+      </div>
+
+      <div className="bp-tear" />
+
+      <div className="bp-stub">
+        {booking ? (
+          <div className="bp-confirm">
+            <div className="bp-confirm-ic"><Check size={13} strokeWidth={3} /></div>
+            <div className="bp-confirm-info">
+              <div className="bp-confirm-ref">{booking.confirmation_id}</div>
+              <div className="bp-confirm-via">via {booking.provider}</div>
+            </div>
+            <div className="bp-confirm-stamp">{isDemo ? "DEMO" : "CONFIRMED"}</div>
+          </div>
+        ) : (
+          <div className="item-actions">
+            <button className="book-btn" onClick={onBook} disabled={loading}>
+              {loading ? <span className="btn-spinner" /> : <Zap size={14} strokeWidth={2.5} />}
+              {loading ? "booking…" : isDemo ? "book demo" : "book"}
+            </button>
+            <button className="skip-btn" onClick={onSkip}>skip</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
