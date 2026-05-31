@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Send, RefreshCw, CheckCircle, CornerDownLeft } from "lucide-react";
 import { refinePlan, regeneratePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import type { UserContext } from "../../types";
@@ -11,6 +12,7 @@ interface Props {
 export default function RefinementInput({ ctx, onSetContext }: Props) {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   async function handleRefine() {
     if (!feedback.trim() || !ctx.thread_id) return;
@@ -56,43 +58,110 @@ export default function RefinementInput({ ctx, onSetContext }: Props) {
     }
   }
 
+  const canSend = !!feedback.trim() && !loading;
+
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-3">
+    <div style={{
+      background: "var(--surface)",
+      border: "1.5px solid var(--border-strong)",
+      borderRadius: "var(--radius-lg)",
+      padding: "14px",
+      display: "flex", flexDirection: "column", gap: 10,
+    }}>
+
       {ctx.refinement_warning_shown && (
-        <p className="text-xs text-slate-400">
-          Heads up: try regenerating for a fresh approach if you're not converging.
+        <p style={{ fontSize: 11, color: "var(--fg-3)", margin: 0, fontFamily: "var(--font-body)" }}>
+          Not converging? Try regenerating for a completely fresh approach.
         </p>
       )}
-      <div className="flex gap-2">
+
+      {/* Input row */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8,
+        background: "var(--paper)",
+        border: `1.5px solid ${focused ? "var(--accent)" : "var(--border-strong)"}`,
+        borderRadius: "var(--radius)",
+        padding: "10px 12px",
+        transition: "border-color var(--dur-fast)",
+      }}>
         <input
-          className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900"
-          placeholder="Suggest a change... (e.g. change day 3 hotel)"
+          style={{
+            flex: 1, border: "none", outline: "none", background: "transparent",
+            fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 14,
+            color: "var(--fg)",
+          }}
+          placeholder="suggest a change… e.g. swap day 3 hotel"
           value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleRefine()}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           disabled={loading}
         />
+
+        {/* Enter hint — shown when focused and has text */}
+        {focused && feedback.trim() && (
+          <span style={{
+            display: "flex", alignItems: "center", gap: 3,
+            fontSize: 10, fontWeight: 800, letterSpacing: "0.06em",
+            color: "var(--accent)", whiteSpace: "nowrap",
+            fontFamily: "var(--font-body)",
+          }}>
+            <CornerDownLeft size={11} strokeWidth={2.5} />
+            enter
+          </span>
+        )}
+
         <button
           onClick={handleRefine}
-          disabled={!feedback.trim() || loading}
-          className="px-4 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-medium disabled:opacity-40"
+          disabled={!canSend}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: 32, height: 32, borderRadius: "var(--radius-sm)",
+            background: canSend ? "var(--accent)" : "var(--border)",
+            border: "none", cursor: canSend ? "pointer" : "default",
+            color: canSend ? "var(--paper)" : "var(--fg-3)",
+            flexShrink: 0, transition: "background var(--dur-fast)",
+          }}
         >
-          Send
+          <Send size={14} strokeWidth={2.5} />
         </button>
       </div>
-      <div className="flex gap-2">
+
+      {/* Action row */}
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
         <button
           onClick={handleRegenerate}
           disabled={loading}
-          className="px-4 py-2 border border-slate-300 text-slate-600 rounded-xl text-sm font-medium disabled:opacity-40"
+          style={{
+            display: "flex", alignItems: "center", gap: 5,
+            padding: "8px 14px",
+            background: "transparent",
+            border: "1.5px solid var(--border-strong)",
+            borderRadius: "var(--radius-pill)",
+            fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
+            color: "var(--fg-2)", cursor: loading ? "default" : "pointer",
+            opacity: loading ? 0.4 : 1,
+          }}
         >
-          Regenerate
+          <RefreshCw size={12} strokeWidth={2.5} />
+          regenerate
         </button>
+
         <button
           onClick={() => onSetContext({ current_stage: "booking" })}
-          className="ml-auto px-5 py-2 bg-green-600 text-white rounded-xl text-sm font-semibold"
+          style={{
+            display: "flex", alignItems: "center", gap: 6,
+            marginLeft: "auto",
+            padding: "8px 18px",
+            background: "var(--secondary)",
+            border: "none", borderRadius: "var(--radius-pill)",
+            fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 13,
+            color: "var(--paper)", cursor: "pointer",
+          }}
         >
-          Approve &amp; Book
+          <CheckCircle size={14} strokeWidth={2.5} />
+          approve & book
         </button>
       </div>
     </div>
