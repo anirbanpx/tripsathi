@@ -69,9 +69,10 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         thread_id: res.thread_id,
         fake_stage_label: "Done",
       });
-    } catch {
+    } catch (err) {
       handle.stop();
       onSetContext({ current_stage: "trip_input", generation_active: false });
+      alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }
   }
 

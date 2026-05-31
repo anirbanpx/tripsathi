@@ -15,8 +15,8 @@ export default function DemoEntryPage({ onSetContext }: Props) {
   }
 
   function handleSignIn() {
-    onSetContext({ mode: "authenticated", current_stage: "onboarding" });
-    navigate("/onboarding");
+    onSetContext({ mode: "authenticated", current_stage: "trip_input" });
+    navigate("/planner");
   }
 
   return (
