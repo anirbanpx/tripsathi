@@ -6,6 +6,7 @@ import {
 import { generatePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import type { UserContext, TripParameters } from "../../types";
+import DatePicker from "./DatePicker";
 
 const DEMO_PARAMS: TripParameters = {
   destination: "Kerala",
@@ -13,6 +14,7 @@ const DEMO_PARAMS: TripParameters = {
   duration_days: 5,
   party_size: 2,
   kid_ages: [5],
+  elderly: false,
   budget_bracket: "mid",
   trip_style: ["nature", "culture"],
   special_needs: "",
@@ -35,6 +37,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       duration_days: 5,
       party_size: 2,
       kid_ages: [],
+      elderly: false,
       budget_bracket: "mid",
       trip_style: [],
       special_needs: "",
@@ -169,12 +172,10 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
             <div className="qsec">
               <div className="qsec-label"><Calendar size={13} strokeWidth={2} />start date</div>
               <div className="chip-row">
-                <input
-                  type="date"
-                  className="age-input"
-                  style={{ width: "auto", padding: "10px 12px" }}
+                <DatePicker
                   value={params.start_date}
-                  onChange={(e) => patch({ start_date: e.target.value })}
+                  onChange={(val) => patch({ start_date: val })}
+                  placeholder="tap to pick a date"
                 />
               </div>
             </div>
@@ -203,18 +204,23 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
               <div className="qsec-label"><User size={13} strokeWidth={2} />type of trip</div>
               <div className="chip-row">
                 {[
-                  { label: "solo", icon: <User size={13} /> },
-                  { label: "couple", icon: <Heart size={13} /> },
-                  { label: "family", icon: <Home size={13} /> },
-                  { label: "friends", icon: <Users size={13} /> },
-                ].map(({ label, icon }) => (
+                  { label: "solo", icon: <User size={13} />, size: 1 },
+                  { label: "couple", icon: <Heart size={13} />, size: 2 },
+                  { label: "family", icon: <Home size={13} />, size: 2 },
+                  { label: "friends", icon: <Users size={13} />, size: 4 },
+                ].map(({ label, icon, size }) => (
                   <span
                     key={label}
-                    className={`chip ${params.trip_style.includes(label) || (label === "family" && params.kid_ages.length > 0) ? "active" : ""}`}
+                    className={`chip ${params.trip_style.includes(label) ? "active" : ""}`}
                     onClick={() => {
-                      if (label === "family") {
-                        if (params.kid_ages.length === 0) patch({ kid_ages: [5] });
-                      }
+                      const otherTypes = ["solo", "couple", "family", "friends"];
+                      const otherStyles = params.trip_style.filter(s => !otherTypes.includes(s));
+                      const isFamily = label === "family";
+                      patch({
+                        trip_style: [...otherStyles, label],
+                        party_size: size,
+                        kid_ages: isFamily && params.kid_ages.length === 0 ? [5] : isFamily ? params.kid_ages : [],
+                      });
                     }}
                   >
                     {icon}{label}
@@ -230,7 +236,12 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                   <span className="v">{params.party_size}</span>
                   <button onClick={() => patch({ party_size: params.party_size + 1 })}>+</button>
                 </div>
-                <span className="chip"><Ear size={13} />any elderly?</span>
+                <span
+                  className={`chip ${params.elderly ? "active" : ""}`}
+                  onClick={() => patch({ elderly: !params.elderly })}
+                >
+                  <Ear size={13} />any elderly?
+                </span>
               </div>
             </div>
             <div className="qsec">
