@@ -40,19 +40,27 @@ HOUSEBOAT_TODDLER_WARNING = (
 )
 
 
-def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "") -> dict:
+def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "", elderly: bool = False) -> dict:
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
     warnings = plan.get("warnings", [])
     dest_lower = destination.lower()
     is_kerala = "kerala" in dest_lower or "alleppey" in dest_lower or "munnar" in dest_lower or "kochi" in dest_lower
 
+    has_young_child = any(isinstance(age, int) and age <= 10 for age in kid_ages)
+
     if toddler:
-        # 1. Midday nap block in every day
+        # 1. Midday nap block in every day (toddler)
         for day in plan.get("days", []):
             notes = day.get("notes", "")
             if "1:00" not in notes and "nap" not in notes.lower() and "rest" not in notes.lower():
                 day["notes"] = "1:00–2:30 PM: mandatory nap/rest at hotel — no activities scheduled during this window. " + notes
+    elif elderly and has_young_child:
+        # 1b. Afternoon rest for elderly + young child combo
+        for day in plan.get("days", []):
+            notes = day.get("notes", "")
+            if "rest" not in notes.lower() and "midday" not in notes.lower() and "afternoon" not in notes.lower():
+                day["notes"] = "1:00–2:00 PM: midday rest — elderly and child benefit from afternoon break before evening activities. " + notes
 
         # 2. Replace overnight houseboat hotel with land hotel (Kerala only)
         if is_kerala:
@@ -70,7 +78,22 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
         if is_kerala and not any("under 3" in w or "toddler" in w.lower() for w in warnings):
             warnings.insert(0, HOUSEBOAT_TODDLER_WARNING)
 
-    # 4. Houseboat trust warning — Kerala only, triggered by RAG synthesis
+    # 4. Carry all synthesis local_risks and implicit_warnings into plan.warnings
+    #    — guarantees RAG-sourced risks reach the user even if plan LLM dropped them
+    if research_synthesis:
+        synthesis_risks = (
+            research_synthesis.get("local_risks", []) +
+            research_synthesis.get("implicit_warnings", [])
+        )
+        existing_lower = " ".join(warnings).lower()
+        for risk in synthesis_risks:
+            # De-duplicate: skip if the key substance is already present (50-char fingerprint)
+            fingerprint = risk[:50].lower()
+            if fingerprint not in existing_lower:
+                warnings.append(risk)
+                existing_lower += " " + risk.lower()
+
+    # 6. Houseboat trust warning — Kerala only, triggered by RAG synthesis
     if is_kerala and not any("cold-approach" in w or "inflate" in w for w in warnings):
         if research_synthesis:
             risks = research_synthesis.get("local_risks", []) + research_synthesis.get("implicit_warnings", [])
@@ -79,7 +102,7 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
         else:
             warnings.append(HOUSEBOAT_TRUST_WARNING)
 
-    # 5. Alleppey hotel location warning — Kerala only
+    # 7. Alleppey hotel location warning — Kerala only
     if is_kerala and not any("NH 66" in w or "finishing point" in w.lower() for w in warnings):
         if research_synthesis:
             all_text = " ".join(research_synthesis.get("implicit_warnings", []) + research_synthesis.get("local_risks", []))
@@ -93,14 +116,14 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
 
 
 def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | list:
-    for attempt in range(2):
+    for attempt in range(3):
         extra_instruction = (
             "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown, no prose, no code fences."
-            if attempt == 1
+            if attempt > 0
             else ""
         )
-        if attempt == 1:
-            time.sleep(2)
+        if attempt > 0:
+            time.sleep(8 * attempt)  # 8s, 16s backoff — rate-limit recovery
         response = _client.chat.completions.create(
             model=_MODEL,
             messages=[
@@ -109,7 +132,9 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | 
             ],
             max_tokens=max_tokens,
         )
-        raw = response.choices[0].message.content.strip()
+        raw = (response.choices[0].message.content or "").strip()
+        if not raw:
+            continue  # empty response — retry with backoff
         if raw.startswith("```"):
             parts = raw.split("```")
             raw = parts[1]
@@ -119,9 +144,9 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | 
         try:
             return json.loads(raw)
         except json.JSONDecodeError:
-            if attempt == 1:
+            if attempt == 2:
                 raise
-    raise RuntimeError("LLM returned unparseable JSON after retry")
+    raise RuntimeError("LLM returned empty or unparseable JSON after 3 attempts")
 
 
 def persona_classification(state: TripSathiState) -> dict:
@@ -154,7 +179,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Trip: {json.dumps(state['trip_parameters'])}"
     )
     try:
-        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=512)
+        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024)
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
@@ -184,7 +209,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Retrieved knowledge:\n{knowledge_block}"
     )
     try:
-        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=2048)
+        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096)
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
@@ -211,7 +236,8 @@ def plan_assembly(state: TripSathiState) -> dict:
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
         regen_kid_ages = state["trip_parameters"].get("kid_ages") or []
-        new_plan = _enforce_plan_quality(new_plan, regen_kid_ages, state.get("research_synthesis"), state["destination"])
+        regen_elderly = bool(state["trip_parameters"].get("elderly"))
+        new_plan = _enforce_plan_quality(new_plan, regen_kid_ages, state.get("research_synthesis"), state["destination"], elderly=regen_elderly)
         return {
             "plan": new_plan,
             "previous_plan": state.get("plan"),
@@ -302,7 +328,8 @@ def plan_assembly(state: TripSathiState) -> dict:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt)
     except Exception as e:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
-    plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"])
+    is_elderly = bool(state["trip_parameters"].get("elderly"))
+    plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
     return {
         "plan": plan,
         "refinement_count": 1,

@@ -83,9 +83,11 @@ If the retrieved knowledge mentions ANY of the following, you MUST include them 
 - Temple entry restrictions (non-Hindu prohibition, VIP darshan options, pricing) → include in local_risks with specific alternative (rooftop view, Raghunandan Library, etc.) and pricing details
 - Cab / auto / boat operator pricing inflation at tourist spots (Chilika, Alleppey, etc.) → include in local_risks with specific inflated price range, fair price range, and booking mitigation
 - Child food scarcity or limited kid-friendly options at the destination → include in implicit_warnings with specific fallbacks (hotel dining, packaged foods, named restaurant types)
-- VIP darshan / queue bypass options at temples → include in local_risks with exact pricing and counter location
-- Steep steps or physical access constraints at pilgrimage sites → include in local_risks with alternative (doli, ramp, skip suggestion)
+- VIP darshan / queue bypass options at temples → include in local_risks with EXACT pricing from retrieved content (e.g. "₹500-700 per person") and counter location; do NOT mark as "knowledge gap" if the retrieved content already provides the price
+- Steep steps or physical access constraints at pilgrimage sites → include in local_risks with alternative (doli, ramp, skip suggestion) and pricing
 - Brahmaputra / lake / river transport options (public ferry vs private cruise) → include in implicit_warnings with price comparison and recommendation
+
+CRITICAL: When retrieved knowledge contains specific prices (e.g. "₹500-700 per person"), queue wait times (e.g. "20-45 minutes"), specific locations (e.g. "counter is on the left side"), or named alternatives (e.g. "Raghunandan Library", "Emar Math", a specific rooftop building), include those exact details verbatim. Do NOT paraphrase named venues into generic descriptions ("outer courtyard") and do NOT describe them as "knowledge gaps" — the retrieved content is authoritative.
 
 Respond ONLY with valid JSON:
 {
