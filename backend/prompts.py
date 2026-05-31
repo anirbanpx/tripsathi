@@ -181,6 +181,7 @@ You have:
 
 Apply the requested change. Keep all other elements unchanged unless the change requires it.
 Maintain all original constraints throughout — do not relax them.
+Preserve every item in the warnings array — do not remove or shorten any warning.
 Add a note in the relevant day's notes field explaining what changed and why.
 
 If the change creates a logistics issue (e.g. dropping Kochi increases airport travel time),

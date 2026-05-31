@@ -108,7 +108,6 @@ async def start_plan(req: PlanRequest):
         "refinement_count": 0,
         "refinement_history": [],
         "regenerate_requested": False,
-        "previous_plan": None,
         "awaiting_feedback": False,
         "current_node": "persona_classification",
         "stage_label": "Understanding your profile",
