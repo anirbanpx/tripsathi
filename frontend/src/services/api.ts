@@ -40,6 +40,7 @@ export async function generatePlan(params: TripParameters): Promise<PlanResponse
         start_date: params.start_date,
         party_size: params.party_size,
         kid_ages: params.kid_ages,
+        elderly: params.elderly,
         budget: params.budget_bracket,
         trip_style: params.trip_style,
       },

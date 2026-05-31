@@ -88,6 +88,7 @@ export interface TripParameters {
   duration_days: number;
   party_size: number;
   kid_ages: number[];
+  elderly: boolean;
   budget_bracket: "budget" | "mid" | "premium";
   trip_style: string[];
   special_needs: string;
