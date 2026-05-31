@@ -279,12 +279,6 @@ def plan_assembly(state: TripSathiState) -> dict:
     if state.get("user_feedback") is not None:
         feedback = state["user_feedback"]
         synthesis = state.get("research_synthesis") or {}
-        rag_risks = synthesis.get("local_risks", []) + synthesis.get("implicit_warnings", [])
-        risk_block = (
-            "\n\nCRITICAL WARNINGS — preserve every item in the warnings array verbatim:\n"
-            + "\n".join(f"- {r}" for r in rag_risks)
-            if rag_risks else ""
-        )
         recent_history = state.get("refinement_history", [])[-3:]
         refinement_prompt = (
             f"Current plan: {json.dumps(state.get('plan'))}\n"
@@ -292,7 +286,6 @@ def plan_assembly(state: TripSathiState) -> dict:
             f"Previous changes: {json.dumps(recent_history)}\n"
             f"User profile: {json.dumps(state.get('user_profile'))}\n"
             f"Trip parameters: {json.dumps(state['trip_parameters'])}"
-            f"{risk_block}"
         )
         try:
             updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt)
