@@ -18,6 +18,7 @@ frontend/.env.local
 # Temp
 temp/
 *.log
+*.db
 
 # Sibling project folders (not part of this repo)
 ../ai-analyst-plus/

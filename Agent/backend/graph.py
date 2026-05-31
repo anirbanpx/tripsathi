@@ -1,5 +1,6 @@
 from langgraph.graph import StateGraph, END
-from langgraph.checkpoint.memory import MemorySaver
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver
 from state import TripSathiState
 from nodes import (
     persona_classification,
@@ -31,7 +32,8 @@ def build_graph():
     })
     builder.add_edge("finalize", END)
 
-    checkpointer = MemorySaver()
+    conn = sqlite3.connect("checkpoints.db", check_same_thread=False)
+    checkpointer = SqliteSaver(conn)
     return builder.compile(checkpointer=checkpointer)
 
 

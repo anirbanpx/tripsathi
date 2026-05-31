@@ -40,6 +40,22 @@ HOUSEBOAT_TODDLER_WARNING = (
 )
 
 
+def _get_kid_ages(state) -> list:
+    """Single source of truth: trip_parameters overrides, user_profile.constraints as fallback."""
+    return (
+        state["trip_parameters"].get("kid_ages")
+        or (state.get("user_profile") or {}).get("constraints", {}).get("kid_ages")
+        or []
+    )
+
+
+def _get_elderly(state) -> bool:
+    return bool(
+        state["trip_parameters"].get("elderly")
+        or (state.get("user_profile") or {}).get("constraints", {}).get("elderly")
+    )
+
+
 def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "", elderly: bool = False) -> dict:
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
@@ -185,6 +201,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
 
     # LlamaIndex retrieval (local variable — not state)
     retrieved_content = []
+    rag_failed = False
     try:
         query_engine = get_query_engine()
         for q in expanded_queries:
@@ -193,7 +210,10 @@ def destination_intelligence(state: TripSathiState) -> dict:
             if text:
                 retrieved_content.append(text)
     except Exception:
-        pass  # Graceful degradation: proceed with empty corpus
+        rag_failed = True  # Graceful degradation: proceed with empty corpus
+
+    if not retrieved_content:
+        rag_failed = True
 
     knowledge_block = (
         "\n\n---\n\n".join(retrieved_content)
@@ -212,6 +232,15 @@ def destination_intelligence(state: TripSathiState) -> dict:
         research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096)
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
+
+    if rag_failed:
+        warnings = research_synthesis.get("implicit_warnings", [])
+        warnings.insert(0, (
+            "Local knowledge base returned no results for this destination — "
+            "recommendations are based on general knowledge only. "
+            "Verify local risks, pricing, and logistics independently before booking."
+        ))
+        research_synthesis["implicit_warnings"] = warnings
 
     return {
         "research_synthesis": research_synthesis,
@@ -235,12 +264,9 @@ def plan_assembly(state: TripSathiState) -> dict:
             new_plan = _call_llm(PLAN_REGENERATE_SYSTEM, regen_prompt)
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
-        regen_kid_ages = state["trip_parameters"].get("kid_ages") or []
-        regen_elderly = bool(state["trip_parameters"].get("elderly"))
-        new_plan = _enforce_plan_quality(new_plan, regen_kid_ages, state.get("research_synthesis"), state["destination"], elderly=regen_elderly)
+        new_plan = _enforce_plan_quality(new_plan, _get_kid_ages(state), state.get("research_synthesis"), state["destination"], elderly=_get_elderly(state))
         return {
             "plan": new_plan,
-            "previous_plan": state.get("plan"),
             "regenerate_requested": False,
             "refinement_count": 0,
             "refinement_history": [],
@@ -252,12 +278,21 @@ def plan_assembly(state: TripSathiState) -> dict:
 
     if state.get("user_feedback") is not None:
         feedback = state["user_feedback"]
+        synthesis = state.get("research_synthesis") or {}
+        rag_risks = synthesis.get("local_risks", []) + synthesis.get("implicit_warnings", [])
+        risk_block = (
+            "\n\nCRITICAL WARNINGS — preserve every item in the warnings array verbatim:\n"
+            + "\n".join(f"- {r}" for r in rag_risks)
+            if rag_risks else ""
+        )
+        recent_history = state.get("refinement_history", [])[-3:]
         refinement_prompt = (
             f"Current plan: {json.dumps(state.get('plan'))}\n"
             f"User change request: {feedback}\n"
-            f"Previous changes: {json.dumps(state.get('refinement_history', []))}\n"
+            f"Previous changes: {json.dumps(recent_history)}\n"
             f"User profile: {json.dumps(state.get('user_profile'))}\n"
             f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+            f"{risk_block}"
         )
         try:
             updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt)
@@ -270,9 +305,9 @@ def plan_assembly(state: TripSathiState) -> dict:
                 "current_node": "awaiting_feedback",
                 "stage_label": "Review your plan",
             }
+        updated_plan = _enforce_plan_quality(updated_plan, _get_kid_ages(state), synthesis or None, state["destination"], elderly=_get_elderly(state))
         return {
             "plan": updated_plan,
-            "previous_plan": state.get("plan"),
             "user_feedback": None,
             "refinement_count": state.get("refinement_count", 0) + 1,
             "refinement_history": state.get("refinement_history", []) + [feedback],
@@ -283,7 +318,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         }
 
     # Initial generation
-    kid_ages = state["trip_parameters"].get("kid_ages") or (state.get("user_profile") or {}).get("constraints", {}).get("kid_ages") or []
+    kid_ages = _get_kid_ages(state)
     toddler_block = ""
     if any(age <= 3 for age in kid_ages if isinstance(age, int)):
         toddler_block = (
@@ -328,7 +363,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt)
     except Exception as e:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
-    is_elderly = bool(state["trip_parameters"].get("elderly"))
+    is_elderly = _get_elderly(state)
     plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
     return {
         "plan": plan,
@@ -374,10 +409,7 @@ def route_after_feedback(state: TripSathiState) -> str:
         return "plan_assembly"
 
     feedback = state.get("user_feedback", "")
-    if feedback and (
-        feedback.lower().strip() in APPROVAL_SIGNALS
-        or state.get("refinement_count", 0) >= 5
-    ):
+    if feedback and feedback.lower().strip() in APPROVAL_SIGNALS:
         return "finalize"
 
     if feedback:

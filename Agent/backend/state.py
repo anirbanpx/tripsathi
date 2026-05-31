@@ -17,7 +17,6 @@ class TripSathiState(TypedDict):
     refinement_count: int               # increments each plan generation
     refinement_history: list[str]       # all feedback messages in session
     regenerate_requested: bool          # True when user taps "Regenerate"
-    previous_plan: Optional[dict]       # snapshot of last plan for refine/regenerate
 
     # Control/meta
     awaiting_feedback: bool

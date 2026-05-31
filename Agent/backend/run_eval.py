@@ -94,7 +94,6 @@ def run_case(case_id: str, case: dict) -> None:
         "user_profile": None,
         "research_synthesis": None,
         "plan": None,
-        "previous_plan": None,
         "user_feedback": None,
         "regenerate_requested": False,
         "refinement_count": 0,
