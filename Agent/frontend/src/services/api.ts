@@ -13,6 +13,16 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export async function parseIntent(text: string): Promise<TripParameters & { onboarding_summary: string }> {
+  const res = await fetch("/api/parse", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  if (!res.ok) throw new Error(`/api/parse failed: ${res.status}`);
+  return res.json();
+}
+
 export async function generatePlan(params: TripParameters): Promise<PlanResponse> {
   if (USE_MOCK) {
     await delay(200);

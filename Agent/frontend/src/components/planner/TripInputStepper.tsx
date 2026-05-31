@@ -3,7 +3,7 @@ import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
   Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
 } from "lucide-react";
-import { generatePlan } from "../../services/api";
+import { generatePlan, parseIntent } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
@@ -29,6 +29,8 @@ const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
+  const [inputMode, setInputMode] = useState<"stepper" | "natural">("stepper");
+  const [nlText, setNlText] = useState("");
   const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
   const [params, setParams] = useState<TripParameters>(
     ctx.mode === "demo" ? DEMO_PARAMS : {
@@ -54,6 +56,43 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         ? params.trip_style.filter((x) => x !== s)
         : [...params.trip_style, s],
     });
+  }
+
+  async function handleNaturalGenerate() {
+    if (!nlText.trim()) return;
+    const handle = startFakeProgress(
+      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
+      () => {}
+    );
+    onSetContext({ current_stage: "generating", generation_active: true });
+    try {
+      const parsed = await parseIntent(nlText);
+      const merged: TripParameters = {
+        destination:     parsed.destination || "",
+        start_date:      parsed.start_date || "",
+        duration_days:   parsed.duration_days || 4,
+        party_size:      parsed.party_size || 2,
+        kid_ages:        parsed.kid_ages || [],
+        elderly:         parsed.elderly || false,
+        budget_bracket:  parsed.budget_bracket || "mid",
+        trip_style:      parsed.trip_style || [],
+        special_needs:   parsed.special_needs || "",
+      };
+      const res = await generatePlan(merged);
+      handle.stop();
+      onSetContext({
+        current_stage: "plan_display",
+        generation_active: false,
+        plan: res.plan,
+        thread_id: res.thread_id,
+        kid_ages: merged.kid_ages,
+        fake_stage_label: "Done",
+      });
+    } catch (err) {
+      handle.stop();
+      onSetContext({ current_stage: "trip_input", generation_active: false });
+      alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
+    }
   }
 
   async function handleGenerate() {
@@ -124,7 +163,68 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         <div style={{ width: 36 }} />
       </div>
 
-      {/* Stepper bar */}
+      {/* Mode toggle — only in non-demo mode */}
+      {ctx.mode !== "demo" && (
+        <div style={{ display: "flex", gap: 6, padding: "0 20px", marginBottom: 4 }}>
+          {(["stepper", "natural"] as const).map(m => (
+            <button key={m} onClick={() => setInputMode(m)} style={{
+              flex: 1, padding: "8px 0",
+              border: "1.5px solid var(--border-strong)",
+              borderRadius: "var(--radius-pill)",
+              background: inputMode === m ? "var(--accent)" : "transparent",
+              color: inputMode === m ? "var(--paper)" : "var(--fg-2)",
+              fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 12,
+              cursor: "pointer", letterSpacing: "0.04em",
+              transition: "all var(--dur-fast)",
+            }}>
+              {m === "stepper" ? "step by step" : "just tell sathi"}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Natural language mode */}
+      {inputMode === "natural" && ctx.mode !== "demo" && (
+        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+          <div className="question" style={{ marginTop: 8 }}>
+            <div className="q-eyebrow">
+              <Sparkles size={13} strokeWidth={2.5} />
+              just describe your trip
+            </div>
+            <h1>tell me everything<br />in <span className="sw">your words.</span></h1>
+            <div className="hint">↓ destination, dates, who's coming, budget, anything special</div>
+          </div>
+          <textarea
+            style={{
+              width: "100%", flex: 1, minHeight: 140,
+              border: "1.5px dashed var(--border-strong)",
+              borderRadius: "var(--radius)", padding: "14px 16px",
+              background: "var(--surface)", fontFamily: "var(--font-body)",
+              fontWeight: 600, fontSize: 14, color: "var(--fg)",
+              resize: "none", outline: "none", lineHeight: 1.6,
+            }}
+            placeholder={"e.g. planning a 5-night Kerala trip with my wife and 2-year-old toddler in mid-June, budget around ₹80k, want backwaters and a bit of nature, nothing too adventurous"}
+            value={nlText}
+            onChange={e => setNlText(e.target.value)}
+            autoFocus
+          />
+          <div className="bottom-bar">
+            <div className="inner">
+              <span />
+              <button
+                className="cta-primary"
+                disabled={!nlText.trim()}
+                onClick={handleNaturalGenerate}
+              >
+                sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stepper mode */}
+      {(inputMode === "stepper" || ctx.mode === "demo") && (<>
       <div className="stepper">
         {STEP_LABELS.map((_, i) => (
           <span
@@ -382,6 +482,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
       {/* Spacer so content isn't hidden behind sticky bar */}
       <div style={{ height: 90 }} />
+      </>)}
     </div>
   );
 }

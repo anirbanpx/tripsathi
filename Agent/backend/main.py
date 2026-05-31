@@ -25,6 +25,10 @@ app.add_middleware(
 
 # ── Request / Response models ────────────────────────────────────────────────
 
+class ParseRequest(BaseModel):
+    text: str
+
+
 class OnboardRequest(BaseModel):
     onboarding_answers: list[dict]
     destination_hint: str = ""
@@ -70,6 +74,18 @@ def _plan_response(state: dict, thread_id: str) -> dict:
 
 
 # ── Endpoints ────────────────────────────────────────────────────────────────
+
+@app.post("/api/parse")
+async def parse_intent(req: ParseRequest):
+    """Extract structured trip parameters from a natural language description."""
+    from nodes import _call_llm
+    from prompts import INTENT_PARSE_SYSTEM
+    try:
+        parsed = _call_llm(INTENT_PARSE_SYSTEM, req.text, max_tokens=512)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"parse_failed: {e}")
+    return parsed
+
 
 @app.post("/api/onboard")
 async def onboard(req: OnboardRequest):
