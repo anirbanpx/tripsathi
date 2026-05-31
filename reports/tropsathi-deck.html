@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tropsathi — Project Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Nunito:wght@500;600;700;800;900&family=Caveat:wght@600&display=swap');
+
+  :root {
+    --bark:    #3E2F23;
+    --bark-2:  #6B5A4A;
+    --bark-3:  #9A8775;
+    --paper:   #F4ECDB;
+    --paper-2: #EFE0C7;
+    --paper-3: #E5D2B0;
+    --surface: #FBF4E2;
+    --rust:    #B0492F;
+    --ochre:   #D89540;
+    --moss:    #4F6B4A;
+    --border:  rgba(62,47,35,0.18);
+    --border-strong: rgba(62,47,35,0.42);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #2a2018;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .deck {
+    position: relative;
+    width: min(900px, 96vw);
+    aspect-ratio: 16/9;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    background: var(--paper);
+    border-radius: 16px;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+  }
+  .slide.active { display: flex; }
+
+  /* ── dot-grid paper texture ── */
+  .slide::before {
+    content: "";
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(rgba(62,47,35,0.07) 1px, transparent 1.5px);
+    background-size: 18px 18px;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ── Nav bar ── */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 28px 0;
+  }
+  .brand {
+    font-family: 'Caprasimo', serif;
+    font-size: 1.1rem; color: var(--rust);
+    letter-spacing: -0.01em;
+  }
+  .brand i { font-style: italic; }
+  .slide-num {
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--bark-3);
+  }
+
+  /* ── Content area ── */
+  .content {
+    flex: 1;
+    display: flex; flex-direction: column;
+    padding: 20px 48px 28px;
+    gap: 16px;
+  }
+
+  .eyebrow {
+    font-size: 0.65rem; font-weight: 800; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--rust);
+  }
+
+  h1 {
+    font-family: 'Caprasimo', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    color: var(--bark); line-height: 1.05;
+    font-weight: 400;
+  }
+
+  h2 {
+    font-family: 'Caprasimo', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    color: var(--bark); font-weight: 400;
+  }
+
+  .sw { color: var(--rust); }
+
+  /* ── Slide 1 — Problem ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .problem-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .problem-card .label {
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--bark-3);
+    margin-bottom: 6px;
+  }
+  .problem-card p {
+    font-size: 0.78rem; font-weight: 600; color: var(--bark-2);
+    line-height: 1.5;
+  }
+
+  .stat-row {
+    display: flex; gap: 10px;
+  }
+  .stat {
+    flex: 1; background: var(--rust);
+    border-radius: 12px; padding: 12px 14px;
+    text-align: center;
+  }
+  .stat .num {
+    font-family: 'Caprasimo', serif;
+    font-size: 1.8rem; color: var(--paper);
+    line-height: 1;
+  }
+  .stat .desc {
+    font-size: 0.62rem; font-weight: 700; color: rgba(244,236,219,0.7);
+    letter-spacing: 0.08em; margin-top: 3px;
+  }
+
+  /* ── Slide 2 — Architecture ── */
+  .arch-wrap {
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 10px;
+  }
+
+  .flow {
+    display: flex; align-items: center;
+    gap: 0; flex-wrap: nowrap;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+  }
+
+  .node {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    min-width: 0; flex: 1;
+  }
+  .node-box {
+    background: var(--paper-2);
+    border: 1.5px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 7px 10px;
+    font-size: 0.62rem; font-weight: 800;
+    text-align: center; color: var(--bark);
+    white-space: nowrap;
+  }
+  .node-box.accent { background: var(--rust); color: var(--paper); border-color: var(--rust); }
+  .node-box.moss   { background: var(--moss); color: var(--paper); border-color: var(--moss); }
+  .node-box.ochre  { background: var(--ochre); color: var(--bark); border-color: var(--ochre); }
+  .node-sub {
+    font-size: 0.52rem; font-weight: 700; color: var(--bark-3);
+    text-align: center;
+  }
+
+  .arrow {
+    font-size: 1rem; color: var(--bark-3);
+    flex-shrink: 0; padding: 0 4px;
+  }
+  .arrow.loop {
+    display: flex; flex-direction: column;
+    align-items: center; font-size: 0.6rem;
+    color: var(--ochre); font-weight: 800;
+  }
+
+  .arch-bottom {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .tech-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .tech-card .tc-label {
+    font-size: 0.55rem; font-weight: 800; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--bark-3);
+    margin-bottom: 5px;
+  }
+  .tech-pill {
+    display: inline-block;
+    background: var(--paper-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 0.62rem; font-weight: 700;
+    color: var(--bark);
+    margin: 2px 2px 0 0;
+  }
+  .tech-pill.rust  { background: rgba(176,73,47,0.12); border-color: var(--rust); color: var(--rust); }
+  .tech-pill.moss  { background: rgba(79,107,74,0.12); border-color: var(--moss); color: var(--moss); }
+  .tech-pill.ochre { background: rgba(216,149,64,0.15); border-color: var(--ochre); color: #8a5e15; }
+
+  /* ── Slide 3 — Next Steps ── */
+  .next-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .sprint-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .sprint-card .sprint-label {
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; padding: 3px 8px;
+    border-radius: 999px; display: inline-flex; align-items: center;
+    width: fit-content;
+  }
+  .sprint-card .sprint-label.s3 { background: rgba(176,73,47,0.12); color: var(--rust); }
+  .sprint-card .sprint-label.demo { background: rgba(79,107,74,0.12); color: var(--moss); }
+
+  .next-item {
+    display: flex; align-items: flex-start; gap: 6px;
+    font-size: 0.72rem; font-weight: 600; color: var(--bark-2);
+    line-height: 1.4;
+  }
+  .next-item::before {
+    content: "✦";
+    color: var(--ochre); font-size: 0.6rem;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* ── Eval badge ── */
+  .eval-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .eval-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(79,107,74,0.1);
+    border: 1px solid var(--moss);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.62rem; font-weight: 800; color: var(--moss);
+  }
+  .eval-badge .score { color: var(--bark); }
+
+  /* ── Nav dots + controls ── */
+  .controls {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; padding: 12px 0 4px;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 999px;
+    background: rgba(244,236,219,0.3);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .dot.active { background: var(--ochre); }
+  .ctrl-btn {
+    background: rgba(244,236,219,0.12); border: 1px solid rgba(244,236,219,0.2);
+    border-radius: 8px; padding: 6px 18px;
+    color: rgba(244,236,219,0.7); font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ctrl-btn:hover { background: rgba(244,236,219,0.2); }
+  .hint {
+    font-size: 0.62rem; font-weight: 600;
+    color: rgba(244,236,219,0.35);
+    text-align: center; padding-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 1 — PROBLEM STATEMENT
+  ══════════════════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="nav">
+      <div class="brand">trip<i>sathi</i></div>
+      <div class="slide-num">01 / 03 · Problem</div>
+    </div>
+    <div class="content">
+      <div class="eyebrow">the problem</div>
+      <h1>Indian trip planning is<br /><span class="sw">broken by design.</span></h1>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="num">8–10</div>
+          <div class="desc">tools used per trip</div>
+        </div>
+        <div class="stat">
+          <div class="num">0</div>
+          <div class="desc">personalised to your group</div>
+        </div>
+        <div class="stat">
+          <div class="num">∞</div>
+          <div class="desc">WhatsApp threads later</div>
+        </div>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="label">who</div>
+          <p>Indian leisure travellers — families with toddlers, pilgrim groups, solo travellers, weekend escapees — planning on mobile, deciding together on WhatsApp.</p>
+        </div>
+        <div class="problem-card">
+          <div class="label">the gap</div>
+          <p>No tool knows you have a 2-year-old, elderly parents with knee issues, a ₹80k budget, and must be back Sunday night. Every plan is generic.</p>
+        </div>
+        <div class="problem-card">
+          <div class="label">the pain</div>
+          <p>Hours of manual cross-referencing across Google, MakeMyTrip, TripAdvisor, Zomato, Facebook groups — with no safety warnings surfaced automatically.</p>
+        </div>
+        <div class="problem-card">
+          <div class="label">the bet</div>
+          <p>An AI agent that knows your exact constraints, retrieves local ground-truth risks, and generates a plan you can actually book — in minutes, not hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 2 — ARCHITECTURE
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="nav">
+      <div class="brand">trip<i>sathi</i></div>
+      <div class="slide-num">02 / 03 · Architecture</div>
+    </div>
+    <div class="content">
+      <div class="eyebrow">current mvp · sprint 2</div>
+      <h2>How the agent thinks</h2>
+
+      <div class="arch-wrap">
+        <!-- Main flow -->
+        <div class="flow">
+          <div class="node">
+            <div class="node-box ochre">React UI</div>
+            <div class="node-sub">6-step input</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <div class="node-box">FastAPI</div>
+            <div class="node-sub">REST + CORS proxy</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <div class="node-box accent">Persona<br/>Classifier</div>
+            <div class="node-sub">kid ages · pace · budget</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <div class="node-box accent">Destination<br/>Intelligence</div>
+            <div class="node-sub">RAG → synthesis</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <div class="node-box accent">Plan<br/>Assembly</div>
+            <div class="node-sub">gen · refine · regen</div>
+          </div>
+          <div class="arrow" style="color:var(--ochre)">⇄</div>
+          <div class="node">
+            <div class="node-box moss">HITL<br/>Feedback</div>
+            <div class="node-sub">interrupt + resume</div>
+          </div>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="arch-bottom">
+          <div class="tech-card">
+            <div class="tc-label">Orchestration</div>
+            <span class="tech-pill rust">LangGraph 1.2</span>
+            <span class="tech-pill">SqliteSaver</span>
+            <span class="tech-pill">StateGraph</span>
+          </div>
+          <div class="tech-card">
+            <div class="tc-label">RAG / Knowledge</div>
+            <span class="tech-pill rust">LlamaIndex</span>
+            <span class="tech-pill">ChromaDB</span>
+            <span class="tech-pill">5-7 expanded queries</span>
+          </div>
+          <div class="tech-card">
+            <div class="tc-label">Evaluation</div>
+            <span class="tech-pill moss">BASE-GW 7/7</span>
+            <span class="tech-pill moss">BASE-PU 5/6</span>
+            <span class="tech-pill moss">A-KL-01 6/6</span>
+          </div>
+          <div class="tech-card">
+            <div class="tc-label">LLM</div>
+            <span class="tech-pill rust">Groq (prod)</span>
+            <span class="tech-pill">LM Studio (dev)</span>
+            <span class="tech-pill">6 system prompts</span>
+          </div>
+          <div class="tech-card">
+            <div class="tc-label">Safety Layer</div>
+            <span class="tech-pill ochre">enforce_plan_quality</span>
+            <span class="tech-pill">toddler rules</span>
+            <span class="tech-pill">RAG warning carry-through</span>
+          </div>
+          <div class="tech-card">
+            <div class="tc-label">Context Management</div>
+            <span class="tech-pill">session SqliteSaver</span>
+            <span class="tech-pill">history window ×3</span>
+            <span class="tech-pill">RAG dedup</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SLIDE 3 — NEXT STEPS
+  ══════════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="nav">
+      <div class="brand">trip<i>sathi</i></div>
+      <div class="slide-num">03 / 03 · Next Steps</div>
+    </div>
+    <div class="content">
+      <div class="eyebrow">what's next</div>
+      <h1>Sprint 3 → <span class="sw">Ship it.</span></h1>
+
+      <div class="next-grid">
+        <div class="sprint-card">
+          <div class="sprint-label s3">Sprint 3 · Jun 1–14</div>
+          <div class="next-item">Deploy to production — Render / Railway with public URL</div>
+          <div class="next-item">Long-term memory via Mem0 — remember user preferences across trips</div>
+          <div class="next-item">Live web search via MCP — Brave/Tavily for real-time destination data</div>
+          <div class="next-item">Voice interface — Whisper (STT) + ElevenLabs (TTS)</div>
+          <div class="next-item">Observability — token usage, RAG hit rate, latency per node</div>
+          <div class="next-item">Scale eval set 3–5× with LLM-as-judge</div>
+        </div>
+
+        <div class="sprint-card">
+          <div class="sprint-label demo">Demo Week · Jun 15–19</div>
+          <div class="next-item">Polish public-facing UI and demo flow</div>
+          <div class="next-item">Cost analysis — token budget per plan, model routing decisions</div>
+          <div class="next-item">Real user feedback — 3–5 sessions with target personas</div>
+          <div class="next-item">Portfolio write-up — architecture decisions, eval results, learnings</div>
+          <div class="next-item">10-min final demo: problem → live demo → eval results → what's next</div>
+
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border)">
+            <div class="tc-label" style="font-size:0.55rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:var(--bark-3);margin-bottom:6px;">current eval baseline</div>
+            <div class="eval-row">
+              <div class="eval-badge">BASE-GW <span class="score">7/7</span></div>
+              <div class="eval-badge">BASE-PU <span class="score">5/6</span></div>
+              <div class="eval-badge">A-KL-01 <span class="score">6/6</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Controls -->
+<div class="controls">
+  <button class="ctrl-btn" onclick="prev()">← prev</button>
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <button class="ctrl-btn" onclick="next()">next →</button>
+</div>
+<div class="hint">← → arrow keys to navigate</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  const total  = slides.length;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  next();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    prev();
+  });
+</script>
+</body>
+</html>
