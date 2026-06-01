@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { generatePlan, parseIntent } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
+import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
 
@@ -454,6 +455,40 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
           </>
         )}
       </div>
+
+      {/* Destination image — fades in once destination is set */}
+      {params.destination && step >= 1 && (() => {
+        const imgUrl = getDestinationImageUrl(params.destination);
+        if (!imgUrl) return null;
+        return (
+          <div style={{
+            margin: "20px 0 0",
+            borderRadius: 18,
+            overflow: "hidden",
+            height: 180,
+            position: "relative",
+            animation: "fadeIn 0.6s ease",
+          }}>
+            <img
+              src={imgUrl}
+              alt={params.destination}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+            />
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(to top, rgba(62,47,35,0.72) 0%, rgba(62,47,35,0.1) 55%, transparent 100%)",
+            }} />
+            <div style={{
+              position: "absolute", bottom: 14, left: 16,
+              fontFamily: "var(--font-display)", fontSize: 22,
+              color: "var(--paper)", letterSpacing: "0.01em",
+              textShadow: "0 2px 8px rgba(0,0,0,0.35)",
+            }}>
+              {params.destination} <span style={{ opacity: 0.7, fontSize: 16 }}>✦</span>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Sticky bottom */}
       <div className="bottom-bar">
