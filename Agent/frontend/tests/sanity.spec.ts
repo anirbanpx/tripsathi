@@ -60,6 +60,33 @@ test("demo button navigates to planner", async ({ page }) => {
   await expect(page).toHaveURL("/planner");
 });
 
+// ── Planner stepper ───────────────────────────────────────────────────────────
+
+test("destination image appears in stepper after step 1", async ({ page }) => {
+  const imageStatuses: number[] = [];
+  page.on("response", (res) => {
+    if (res.url().includes("/images/destinations/")) imageStatuses.push(res.status());
+  });
+
+  await page.goto("/");
+  await page.click("text=Try the demo");
+  await expect(page).toHaveURL("/planner");
+
+  // Demo starts at step 2 (destination=Kerala already set) — image should be visible
+  await expect(page.locator("img[alt='Kerala']")).toBeVisible({ timeout: 5000 });
+
+  // Image request succeeded
+  expect(imageStatuses.some(s => s === 200)).toBeTruthy();
+});
+
+test("destination name label renders on image card", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Try the demo");
+
+  // The overlay label should say "Kerala"
+  await expect(page.locator("text=Kerala ✦")).toBeVisible({ timeout: 5000 });
+});
+
 // ── Itinerary map (PlanDisplay) ───────────────────────────────────────────────
 
 test("itinerary map renders with day markers and hotel pins", async ({ page }) => {

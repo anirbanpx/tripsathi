@@ -117,4 +117,5 @@ export interface UserContext {
   refinement_warning_shown: boolean;
   interpreted_change: string | null;
   kid_ages: number[];
+  destination: string;
 }

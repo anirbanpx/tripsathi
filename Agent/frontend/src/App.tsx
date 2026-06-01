@@ -18,6 +18,7 @@ const INITIAL_CONTEXT: UserContext = {
   refinement_warning_shown: false,
   interpreted_change: null,
   kid_ages: [],
+  destination: "",
 };
 
 export default function App() {

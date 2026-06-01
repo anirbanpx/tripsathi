@@ -66,7 +66,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
       () => {}
     );
-    onSetContext({ current_stage: "generating", generation_active: true });
+    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText });
     try {
       const parsed = await parseIntent(nlText);
       const merged: TripParameters = {
@@ -102,7 +102,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
       () => {}
     );
-    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages });
+    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination });
     try {
       const res = await generatePlan(params);
       handle.stop();
