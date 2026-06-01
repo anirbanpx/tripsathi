@@ -75,7 +75,7 @@ test("regular planner opens in natural language mode by default", async ({ page 
   await page.click("text=Sign in to plan your own");
   await expect(page).toHaveURL("/planner");
   await expect(page.locator("textarea")).toBeVisible();
-  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  await expect(page.getByText("guide me through it")).toBeVisible();
   await expect(page.getByText("Step 1 of 6")).not.toBeVisible();
 });
 
@@ -85,13 +85,13 @@ test("demo planner opens in stepper mode at step 3", async ({ page }) => {
   await expect(page).toHaveURL("/planner");
   await expect(page.getByText("Step 3 of 6")).toBeVisible();
   // Natural language textarea should NOT be the primary view in demo mode
-  await expect(page.getByText("prefer step-by-step?")).not.toBeVisible();
+  await expect(page.getByText("guide me through it")).not.toBeVisible();
 });
 
-test("prefer step-by-step link switches to stepper", async ({ page }) => {
+test("guide me through it link switches to stepper", async ({ page }) => {
   await page.goto("/");
   await page.click("text=Sign in to plan your own");
-  await page.getByText("prefer step-by-step?").click();
+  await page.getByText("guide me through it").click();
   await expect(page.getByText("Step 1 of 6")).toBeVisible();
   await expect(page.getByText("← back to prompt")).toBeVisible();
 });
@@ -99,10 +99,10 @@ test("prefer step-by-step link switches to stepper", async ({ page }) => {
 test("back to prompt link returns to natural mode", async ({ page }) => {
   await page.goto("/");
   await page.click("text=Sign in to plan your own");
-  await page.getByText("prefer step-by-step?").click();
+  await page.getByText("guide me through it").click();
   await page.getByText("← back to prompt").click();
   await expect(page.locator("textarea")).toBeVisible();
-  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  await expect(page.getByText("guide me through it")).toBeVisible();
 });
 
 // ── Stepper destination image ─────────────────────────────────────────────────

@@ -61,7 +61,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
   }
 
   async function handleNaturalGenerate() {
-    if (!nlText.trim()) return;
+    if (!nlText.trim() || ctx.generation_active) return;
     const handle = startFakeProgress(
       (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
       () => {}
@@ -99,6 +99,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
   }
 
   async function handleGenerate() {
+    if (ctx.generation_active) return;
     const handle = startFakeProgress(
       (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
       () => {}
@@ -137,6 +138,16 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
   const canProceed = step < 5
     ? (step === 0 ? !!params.destination : step === 1 ? !!params.start_date : true)
     : true;
+
+  // Scroll on step change — top for most steps, bottom for the last step
+  // so the textarea isn't hidden behind the sticky bar when 5 recap rows stack up.
+  useEffect(() => {
+    if (step === 5) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [step]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -193,20 +204,19 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
             <h1>tell me everything<br />in <span className="sw">your words.</span></h1>
             <div className="hint">↓ destination, dates, who's coming, budget, anything special</div>
           </div>
-          <textarea
-            style={{
-              width: "100%", flex: 1, minHeight: 140,
-              border: "1.5px dashed var(--border-strong)",
-              borderRadius: "var(--radius)", padding: "14px 16px",
-              background: "var(--surface)", fontFamily: "var(--font-body)",
-              fontWeight: 600, fontSize: 14, color: "var(--fg)",
-              resize: "none", outline: "none", lineHeight: 1.6,
-            }}
-            placeholder={"e.g. 5-night Kerala trip with my wife and toddler, mid-June, ₹80k budget, backwaters + nature"}
-            value={nlText}
-            onChange={e => setNlText(e.target.value)}
-            autoFocus
-          />
+          <div className="journal-page">
+            <div className="journal-page-header">
+              <span className="journal-title">trip notes ✦</span>
+              <span className="journal-badge">open journal</span>
+            </div>
+            <textarea
+              className="journal-textarea"
+              placeholder="e.g. 5-night Kerala trip with my wife and toddler, mid-June, ₹80k budget, backwaters + nature"
+              value={nlText}
+              onChange={e => setNlText(e.target.value)}
+              autoFocus
+            />
+          </div>
 
           {/* Suggestion chips */}
           {!nlText && (
@@ -538,7 +548,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       </div>
 
       {/* Spacer so content isn't hidden behind fixed bar on mobile */}
-      <div className="stepper-spacer" style={{ height: 90 }} />
+      <div className="stepper-spacer" style={{ height: 180 }} />
       </>)}
       </div>
       </div>

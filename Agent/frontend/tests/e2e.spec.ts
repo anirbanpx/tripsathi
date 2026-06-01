@@ -23,7 +23,7 @@ test("regular flow: planner opens in natural language mode", async ({ page }) =>
   await expect(page.locator("textarea")).toBeVisible();
   await expect(page.getByText("tell me everything")).toBeVisible();
   // Step-by-step toggle should be a subtle link, not a dominant button
-  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  await expect(page.getByText("guide me through it")).toBeVisible();
   // Stepper progress bar should NOT be visible by default
   await expect(page.getByText("Step 1 of 6")).not.toBeVisible();
 });
@@ -35,15 +35,15 @@ test("switching from natural to stepper mode and back", async ({ page }) => {
   // Natural mode is default
   await expect(page.locator("textarea")).toBeVisible();
 
-  // Click "prefer step-by-step?"
-  await page.getByText("prefer step-by-step?").click();
+  // Click "guide me through it"
+  await page.getByText("guide me through it").click();
   await expect(page.getByText("Step 1 of 6")).toBeVisible();
   await expect(page.getByText("← back to prompt")).toBeVisible();
 
   // Click back to prompt
   await page.getByText("← back to prompt").click();
   await expect(page.locator("textarea")).toBeVisible();
-  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  await expect(page.getByText("guide me through it")).toBeVisible();
 });
 
 test("full plan generation flow", async ({ page }) => {
