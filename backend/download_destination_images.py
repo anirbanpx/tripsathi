@@ -25,7 +25,7 @@ from pathlib import Path
 DESTINATIONS = [
     # Kerala
     {"name": "Kerala",      "query": "Kerala backwaters India green landscape"},
-    {"name": "Kochi",       "query": "Fort Kochi Chinese fishing nets Kerala waterfront"},
+    {"name": "Kochi",       "query": "Cochin Kerala India harbor"},
     {"name": "Alleppey",    "query": "Alleppey houseboat backwaters Kerala India"},
     {"name": "Munnar",      "query": "Munnar tea plantation hills Kerala India"},
     {"name": "Kovalam",     "query": "Kovalam beach lighthouse Kerala India"},
