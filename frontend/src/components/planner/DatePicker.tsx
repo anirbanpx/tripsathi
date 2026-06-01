@@ -98,24 +98,29 @@ export default function DatePicker({ value, onChange, placeholder = "pick a date
         style={{
           display: "flex", alignItems: "center", gap: 8,
           width: "100%", padding: "12px 14px",
-          background: "var(--surface)", border: "1.5px dashed var(--border-strong)",
+          background: "var(--surface)",
+          border: open ? "1.5px solid var(--accent)" : "1.5px dashed var(--border-strong)",
           borderRadius: "var(--radius)", cursor: "pointer",
           fontFamily: "var(--font-body)", fontWeight: 700,
           fontSize: 15, color: displayLabel ? "var(--fg)" : "var(--fg-3)",
-          textAlign: "left",
+          textAlign: "left", transition: "border-color var(--dur-fast)",
         }}
       >
-        <CalendarDays size={16} strokeWidth={2} color="var(--accent)" />
-        {displayLabel ?? placeholder}
+        <CalendarDays size={16} strokeWidth={2} color="var(--accent)" style={{ flexShrink: 0 }} />
+        <span style={{ flex: 1 }}>{displayLabel ?? placeholder}</span>
+        {displayLabel && !open && (
+          <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.04em" }}>change</span>
+        )}
       </button>
 
-      {/* Calendar dropdown */}
+      {/* Calendar — inline (not absolute) so it never clips behind sticky bottom bar */}
       {open && (
         <div style={{
-          position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 100,
+          marginTop: 8,
           background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-          borderRadius: "var(--radius-lg)", padding: "16px",
-          boxShadow: "var(--shadow-lg)", minWidth: 280, width: "100%",
+          borderRadius: "var(--radius-lg)", padding: "16px 14px",
+          boxShadow: "var(--shadow-lg)", width: "100%",
+          animation: "fadeIn 0.15s ease",
         }}>
           {/* Month nav */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
@@ -131,17 +136,17 @@ export default function DatePicker({ value, onChange, placeholder = "pick a date
           </div>
 
           {/* Day labels */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 2, marginBottom: 4 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 3, marginBottom: 4 }}>
             {DAYS.map(d => (
-              <div key={d} style={{ textAlign: "center", fontSize: 10, fontWeight: 800,
-                letterSpacing: "0.1em", color: "var(--fg-3)", padding: "2px 0" }}>
+              <div key={d} style={{ textAlign: "center", fontSize: 11, fontWeight: 800,
+                letterSpacing: "0.08em", color: "var(--fg-3)", padding: "4px 0" }}>
                 {d}
               </div>
             ))}
           </div>
 
           {/* Day grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 2 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 3 }}>
             {cells.map((day, i) => {
               if (!day) return <div key={i} />;
               const past = isPast(day);
@@ -154,15 +159,15 @@ export default function DatePicker({ value, onChange, placeholder = "pick a date
                   disabled={past}
                   onClick={() => selectDay(day)}
                   style={{
-                    width: "100%", aspectRatio: "1",
+                    width: "100%", aspectRatio: "1", minHeight: 36,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     borderRadius: "var(--radius-sm)",
                     border: tod && !sel ? "1.5px solid var(--accent)" : "1.5px solid transparent",
                     background: sel ? "var(--accent)" : "transparent",
                     color: sel ? "var(--paper)" : past ? "var(--fg-3)" : "var(--fg)",
                     fontFamily: "var(--font-body)", fontWeight: sel ? 800 : 600,
-                    fontSize: 13, cursor: past ? "default" : "pointer",
-                    opacity: past ? 0.35 : 1,
+                    fontSize: 14, cursor: past ? "default" : "pointer",
+                    opacity: past ? 0.3 : 1,
                     transition: "background var(--dur-fast)",
                   }}
                   onMouseEnter={e => { if (!sel && !past) (e.currentTarget as HTMLButtonElement).style.background = "var(--paper-2)"; }}
