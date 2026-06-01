@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, MessageCircle, Globe, ShieldCheck, Lock } from "lucide-react";
 import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
+import { getDestinationImageUrl } from "../lib/destinationImage";
 import type { UserContext } from "../types";
 
 interface Props {
@@ -43,11 +44,12 @@ export default function DemoEntryPage({ onSetContext }: Props) {
       </div>
 
       <div className="polaroid">
-        <div className="photo">
-          <div className="sun" />
-          <div className="silhouette" />
-          <div className="boat" />
-          <div className="water" />
+        <div className="photo" style={{ padding: 0, overflow: "hidden", background: "none", border: "none" }}>
+          <img
+            src={getDestinationImageUrl("kerala") ?? ""}
+            alt="Kerala backwaters"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block", borderRadius: 4 }}
+          />
         </div>
         <div className="caption">Kerala backwaters ✦</div>
       </div>
