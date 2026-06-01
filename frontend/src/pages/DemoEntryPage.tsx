@@ -44,6 +44,7 @@ export default function DemoEntryPage({ onSetContext }: Props) {
       </div>
 
       <div className="polaroid">
+        <div className="postcard-stamp">INDIA</div>
         <div className="photo" style={{ padding: 0, overflow: "hidden", background: "none", border: "none" }}>
           <img
             src={getDestinationImageUrl("kerala") ?? ""}

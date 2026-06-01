@@ -258,6 +258,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         <div className="recap">
           {Array.from({ length: step }).map((_, i) => (
             <div key={i} className="recap-item">
+              <span className="ink-stamp">✓</span>
               <span className="label">{STEP_LABELS[i]}</span>
               <span className="val">{recapLabel(i)}</span>
               <span className="edit" onClick={() => setStep(i)}>
