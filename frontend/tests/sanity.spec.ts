@@ -60,6 +60,25 @@ test("demo button navigates to planner", async ({ page }) => {
   await expect(page).toHaveURL("/planner");
 });
 
+// ── Entry page real photo (UX overhaul) ──────────────────────────────────────
+
+test("entry page shows real Kerala photo not CSS illustration", async ({ page }) => {
+  const imageStatuses: number[] = [];
+  page.on("response", (res) => {
+    if (res.url().includes("/images/destinations/kerala")) imageStatuses.push(res.status());
+  });
+
+  await page.goto("/");
+  await page.waitForTimeout(1000);
+
+  // Real <img> tag inside the polaroid — not CSS children
+  const polaroidImg = page.locator(".polaroid img[alt='Kerala backwaters']");
+  await expect(polaroidImg).toBeVisible({ timeout: 5000 });
+
+  // Image loaded successfully
+  expect(imageStatuses.some(s => s === 200)).toBeTruthy();
+});
+
 // ── Planner stepper ───────────────────────────────────────────────────────────
 
 test("destination image appears in stepper after step 1", async ({ page }) => {
@@ -85,6 +104,47 @@ test("destination name label renders on image card", async ({ page }) => {
 
   // The overlay label should say "Kerala"
   await expect(page.locator("text=Kerala ✦")).toBeVisible({ timeout: 5000 });
+});
+
+test("sticky destination band visible at top of stepper", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Try the demo");
+
+  // .dest-band should be in the DOM and visible (not clipped below sticky bar)
+  const band = page.locator(".dest-band");
+  await expect(band).toBeVisible({ timeout: 5000 });
+
+  // The band image should be in the top half of the viewport — not bottom-clipped
+  const box = await band.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeLessThan(200); // top edge well within upper portion of screen
+  expect(box!.y + box!.height).toBeLessThan(250); // bottom edge still in upper area
+});
+
+test("generation progress shows full-bleed image and bottom sheet", async ({ page }) => {
+  await page.route("**/api/plan", async (route) => {
+    await new Promise(r => setTimeout(r, 5000));
+    route.fulfill({ status: 200, contentType: "application/json", path: "src/mocks/plan.json" });
+  });
+
+  await page.goto("/");
+  await page.click("text=Try the demo");
+  for (let i = 0; i < 3; i++) { await page.click("button:has-text('next')"); await page.waitForTimeout(200); }
+  await page.click("button:has-text('sketch my plan')");
+  await page.waitForTimeout(1800);
+
+  // Full-bleed background image should be present
+  const bgImg = page.locator("img[alt='Kerala']").first();
+  await expect(bgImg).toBeVisible({ timeout: 5000 });
+
+  // Bottom sheet with stages list
+  await expect(page.locator(".progress-sheet")).toBeVisible({ timeout: 5000 });
+
+  // Headline visible inside the sheet
+  await expect(page.locator("text=sketching your")).toBeVisible({ timeout: 5000 });
+
+  // Brand text visible on the image (topbar) — first match is the progress screen one
+  await expect(page.locator("text=tripsathi").first()).toBeVisible();
 });
 
 // ── Itinerary map (PlanDisplay) ───────────────────────────────────────────────
