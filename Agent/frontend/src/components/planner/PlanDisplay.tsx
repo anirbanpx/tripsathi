@@ -5,6 +5,7 @@ import {
   GalleryHorizontal, LayoutList, Map,
 } from "lucide-react";
 import MapView from "./MapView";
+import { getIllustration } from "./TravelIllustrations";
 import { refinePlan, regeneratePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
@@ -21,7 +22,8 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [feedback, setFeedback] = useState("");
   const [refining, setRefining] = useState(false);
   const [activeDay, setActiveDay] = useState(0);
-  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("swipe");
+  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("map");
+  const [mapDay, setMapDay] = useState(0); // 0 = all stops, 1-N = specific day
   const [saveFlash, setSaveFlash] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -181,7 +183,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       )}
 
       {/* Warnings */}
-      {plan.warnings.length > 0 && <WarningsCarousel warnings={plan.warnings} />}
+      {plan.warnings.length > 0 && <WarningsCarousel warnings={plan.warnings.slice(0, 5)} />}
 
       {/* Two-column layout on tablet+ */}
       <div className="plan-two-col">
@@ -233,7 +235,32 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
             )}
             {dayView === "map" && (
               <div style={{ padding: "4px 0 8px" }}>
-                <MapView days={plan.days} hotels={plan.hotels} />
+                {/* Day selector — above map so it's never clipped by sticky bar */}
+                <div style={{
+                  display: "flex", gap: 6, overflowX: "auto", scrollbarWidth: "none",
+                  paddingBottom: 10, alignItems: "center",
+                }}>
+                  {[{ n: 0, label: "all stops" }, ...plan.days.map(d => ({ n: d.day_number, label: `D${d.day_number} · ${d.location.split(",")[0]}` }))].map(({ n, label }) => (
+                    <button
+                      key={n}
+                      onClick={() => setMapDay(n)}
+                      style={{
+                        padding: "5px 11px", borderRadius: 20, flexShrink: 0,
+                        border: `1.5px solid ${mapDay === n ? "var(--accent)" : "var(--border-strong)"}`,
+                        background: mapDay === n ? "var(--accent)" : "var(--surface)",
+                        color: mapDay === n ? "var(--paper)" : "var(--fg-2)",
+                        fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
+                        cursor: "pointer", whiteSpace: "nowrap",
+                        boxShadow: mapDay === n ? "0 2px 8px rgba(176,73,47,0.28)" : "none",
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ height: 420 }}>
+                  <MapView days={plan.days} hotels={plan.hotels} selectedDay={mapDay} />
+                </div>
               </div>
             )}
           </div>
@@ -410,46 +437,135 @@ function WarningsCarousel({ warnings }: { warnings: string[] }) {
 
 function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean }) {
   const imgUrl = getDestinationImageUrl(day.location);
+  const illustration = getIllustration(day.location);
+
   return (
-    <div className="day-swipe-card" style={listMode ? { flex: "none", width: "100%" } : {}}>
-      {imgUrl && (
+    <div
+      className="day-swipe-card"
+      style={{
+        ...(listMode ? { flex: "none", width: "100%" } : {}),
+        // Ruled-paper background
+        backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(62,47,35,0.07) 27px,rgba(62,47,35,0.07) 28px)",
+        backgroundPositionY: "80px",
+        position: "relative",
+        overflow: "hidden",
+        padding: "0 0 16px",
+      }}
+    >
+      {/* Washi tape strip across top */}
+      <div style={{
+        height: 14, background: "var(--tape)",
+        margin: "0 -16px 0", borderBottom: "1px solid rgba(166,112,29,0.3)",
+      }} />
+
+      {/* Header: day stamp + location + illustration */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "12px 16px 0", marginBottom: 12 }}>
+        {/* Ink stamp circle */}
         <div style={{
-          width: "calc(100% + 32px)", margin: "-18px -16px 14px",
-          height: 100, borderRadius: "18px 18px 0 0", overflow: "hidden",
+          width: 56, height: 56, borderRadius: "50%", flexShrink: 0,
+          border: "2.5px solid var(--bark)",
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          background: "transparent",
         }}>
-          <img src={imgUrl} alt={day.location}
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
-            onError={(e) => { (e.currentTarget.parentElement as HTMLElement).style.display = "none"; }}
-          />
-        </div>
-      )}
-      <div className="dsc-head">
-        <div className="dsc-num">Day {String(day.day_number).padStart(2, "0")}</div>
-        <div className="dsc-loc">{day.location}</div>
-        {day.updated_in_refinement && (
-          <span className="updated-tag" style={{ marginTop: 6 }}>
-            <RefreshCw size={10} strokeWidth={3} />updated
+          <span style={{ fontFamily: "var(--font-script)", fontSize: 30, fontWeight: 700, color: "var(--bark)", lineHeight: 1 }}>
+            {day.day_number}
           </span>
-        )}
+          <span style={{ fontFamily: "var(--font-body)", fontSize: 7, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--bark-2)", marginTop: 1 }}>
+            DAY
+          </span>
+        </div>
+
+        {/* Location + refinement tag */}
+        <div style={{ flex: 1, minWidth: 0, paddingTop: 4 }}>
+          <div style={{ fontFamily: "var(--font-script)", fontSize: 22, color: "var(--rust)", lineHeight: 1.15, fontWeight: 700 }}>
+            {day.location.split(",")[0]}
+          </div>
+          {day.location.includes(",") && (
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--bark-3)", fontWeight: 600, marginTop: 1 }}>
+              {day.location.split(",").slice(1).join(",").trim()}
+            </div>
+          )}
+          {day.updated_in_refinement && (
+            <span className="updated-tag" style={{ marginTop: 4, display: "inline-flex" }}>
+              <RefreshCw size={10} strokeWidth={3} />updated
+            </span>
+          )}
+        </div>
+
+        {/* Illustration */}
+        <div style={{ flexShrink: 0, opacity: 0.85, marginTop: -4 }}>
+          {illustration}
+        </div>
       </div>
 
-      {day.notes && (
-        <div className="dsc-note">
-          <Info size={12} strokeWidth={2} />
-          <span>{day.notes}</span>
+      {/* Photo strip with tape tabs */}
+      {imgUrl && (
+        <div style={{ position: "relative", margin: "0 16px 14px" }}>
+          {/* Tape tabs on photo */}
+          <div style={{
+            position: "absolute", top: -6, left: "50%", transform: "translateX(-50%)",
+            width: 40, height: 12, background: "var(--tape)",
+            borderRadius: 2, zIndex: 2,
+          }} />
+          <div style={{
+            borderRadius: 6, overflow: "hidden", height: 90,
+            boxShadow: "0 3px 12px rgba(62,47,35,0.2)",
+            border: "3px solid var(--paper)",
+            outline: "1px solid rgba(62,47,35,0.12)",
+          }}>
+            <img
+              src={imgUrl}
+              alt={day.location}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+              onError={e => { (e.currentTarget.parentElement!.parentElement as HTMLElement).style.display = "none"; }}
+            />
+          </div>
         </div>
       )}
 
-      <div className="dsc-acts">
-        {day.activities.map((a) => (
-          <div key={a.name} className="dsc-act">
-            <div className="dsc-act-dot" style={{ background: a.bookable ? "var(--moss)" : "var(--paper-3)" }} />
-            <div style={{ minWidth: 0 }}>
-              <div className="dsc-act-name">{a.name}</div>
+      {/* Notes callout */}
+      {day.notes && (
+        <div style={{
+          margin: "0 16px 10px",
+          padding: "8px 12px",
+          background: "rgba(216,149,64,0.12)",
+          border: "1.5px dashed var(--ochre-deep)",
+          borderRadius: 8,
+          display: "flex", gap: 7, alignItems: "flex-start",
+        }}>
+          <span style={{ fontSize: 13, flexShrink: 0 }}>✎</span>
+          <span style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark)", lineHeight: 1.5 }}>
+            {day.notes}
+          </span>
+        </div>
+      )}
+
+      {/* Activities — journal entry style */}
+      <div style={{ padding: "0 16px" }}>
+        {day.activities.map((a, i) => (
+          <div key={a.name} style={{
+            display: "flex", gap: 10, alignItems: "flex-start",
+            padding: "9px 0",
+            borderTop: i === 0 ? "none" : "1px dashed rgba(62,47,35,0.1)",
+          }}>
+            <span style={{
+              fontFamily: "var(--font-script)", fontSize: 16, fontWeight: 700,
+              color: a.bookable ? "var(--moss)" : "var(--bark-3)",
+              lineHeight: 1, flexShrink: 0, width: 18, textAlign: "center", paddingTop: 1,
+            }}>
+              {i + 1}.
+            </span>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13.5, color: "var(--fg)", lineHeight: 1.3 }}>
+                {a.name}
+              </div>
               {a.approx_cost != null && (
-                <div className="dsc-act-cost">~₹{a.approx_cost.toLocaleString()} / person</div>
+                <div style={{ fontFamily: "var(--font-script)", fontSize: 13, color: "var(--rust)", marginTop: 1 }}>
+                  ~₹{a.approx_cost.toLocaleString()} / person
+                </div>
               )}
-              <div className="act-badges">
+              <div className="act-badges" style={{ marginTop: 4 }}>
                 {a.bookable
                   ? <span className="badge bookable">bookable</span>
                   : <span className="badge">plan to visit</span>}
@@ -459,17 +575,35 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
         ))}
       </div>
 
-      <div className="dsc-meals">
-        <div className="dsc-meal"><span className="dsc-meal-icon">🍳</span><b>B</b>{day.meals.breakfast}</div>
-        <div className="dsc-meal"><span className="dsc-meal-icon">🥘</span><b>L</b>{day.meals.lunch}</div>
-        <div className="dsc-meal"><span className="dsc-meal-icon">🍛</span><b>D</b>{day.meals.dinner}</div>
+      {/* Meals — postage-stamp style row */}
+      <div style={{
+        margin: "10px 16px 0",
+        padding: "10px 0 0",
+        borderTop: "1.5px solid rgba(62,47,35,0.12)",
+        display: "flex", gap: 8,
+      }}>
+        {([
+          { icon: "🍳", label: "B", meal: day.meals.breakfast },
+          { icon: "🥘", label: "L", meal: day.meals.lunch },
+          { icon: "🍛", label: "D", meal: day.meals.dinner },
+        ]).map(({ icon, label, meal }) => (
+          <div key={label} style={{
+            flex: 1, padding: "6px 8px",
+            background: "rgba(244,236,219,0.8)",
+            border: "1px solid rgba(62,47,35,0.12)",
+            borderRadius: 8,
+          }}>
+            <div style={{ fontSize: 12, marginBottom: 2 }}>{icon}</div>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>{label}</div>
+            <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{meal}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 function HotelCard({ hotel }: { hotel: Hotel }) {
-  const photoClass = hotel.location.toLowerCase().includes("kovalam") || hotel.location.toLowerCase().includes("alleppey") ? "beach" : "";
   const imgUrl = getDestinationImageUrl(hotel.location);
   const [bookmarked, setBookmarked] = useState(() => isBookmarked(hotel.name));
 
@@ -479,42 +613,109 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
   }
 
   return (
-    <div className={`hotel-card ${hotel.content_source === "general" ? "general" : ""}`}>
-      <div className={`hotel-photo ${photoClass}`} style={{
-        position: "relative",
-        ...(imgUrl ? { backgroundImage: `url(${imgUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : {}),
-      }}>
-        <button className={`hotel-bm-btn ${bookmarked ? "saved" : ""}`} onClick={handleBookmark} title={bookmarked ? "Remove bookmark" : "Bookmark hotel"}>
+    <div style={{
+      borderRadius: 16, overflow: "hidden",
+      border: "1.5px solid rgba(62,47,35,0.14)",
+      boxShadow: "0 2px 0 rgba(62,47,35,.07), 0 8px 20px -10px rgba(62,47,35,.2)",
+      background: "var(--surface)",
+      marginBottom: 14,
+    }}>
+      {/* Photo — kraft paper frame */}
+      <div style={{ position: "relative", margin: "10px 10px 0" }}>
+        <div style={{
+          height: 130, borderRadius: 10, overflow: "hidden",
+          border: "3px solid var(--paper)",
+          outline: "1px solid rgba(62,47,35,0.12)",
+          boxShadow: "0 3px 14px rgba(62,47,35,0.18)",
+          background: "var(--paper-3)",
+          backgroundImage: imgUrl ? `url(${imgUrl})` : undefined,
+          backgroundSize: "cover", backgroundPosition: "center",
+        }}>
+          {!imgUrl && (
+            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🏨</div>
+          )}
+        </div>
+        {/* Tape tab on photo */}
+        <div style={{
+          position: "absolute", top: -5, left: "50%", transform: "translateX(-50%)",
+          width: 36, height: 11, background: "var(--tape)", borderRadius: 2, zIndex: 2,
+        }} />
+        {/* Bookmark button */}
+        <button
+          onClick={handleBookmark}
+          title={bookmarked ? "Remove bookmark" : "Bookmark hotel"}
+          style={{
+            position: "absolute", top: 8, right: 8,
+            width: 30, height: 30, borderRadius: "50%",
+            background: "rgba(244,236,219,0.9)", border: "none",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", boxShadow: "0 1px 6px rgba(62,47,35,0.2)",
+            color: bookmarked ? "var(--rust)" : "var(--bark-3)",
+          }}
+        >
           {bookmarked ? <BookmarkCheck size={14} strokeWidth={2} /> : <Bookmark size={14} strokeWidth={2} />}
         </button>
-      </div>
-      <div className="hotel-content">
-        <div className="hotel-top-row">
-          <div>
-            <div className="hotel-name">{hotel.name}</div>
-            <div className="hotel-loc">{hotel.location}</div>
-          </div>
-          <span className={`hotel-source ${hotel.content_source}`}>
-            {hotel.content_source === "rag"
-              ? <><BookOpen size={11} strokeWidth={2.5} />guide</>
-              : <><AlertCircle size={11} strokeWidth={2.5} />general</>}
-          </span>
+        {/* Source postmark stamp */}
+        <div style={{
+          position: "absolute", bottom: 8, right: 8,
+          padding: "3px 8px", borderRadius: 20,
+          border: `1.5px solid ${hotel.content_source === "rag" ? "var(--moss)" : "var(--bark-3)"}`,
+          background: "rgba(244,236,219,0.92)",
+          display: "flex", alignItems: "center", gap: 4,
+          fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 9,
+          letterSpacing: "0.12em", textTransform: "uppercase",
+          color: hotel.content_source === "rag" ? "var(--moss)" : "var(--bark-3)",
+        }}>
+          {hotel.content_source === "rag"
+            ? <><BookOpen size={9} strokeWidth={2.5} />verified</>
+            : <><AlertCircle size={9} strokeWidth={2.5} />general</>}
         </div>
-        <div className="hotel-reason">{hotel.reasoning}</div>
+      </div>
+
+      {/* Content — journal entry */}
+      <div style={{
+        padding: "12px 14px 14px",
+        backgroundImage: "repeating-linear-gradient(transparent,transparent 23px,rgba(62,47,35,0.06) 23px,rgba(62,47,35,0.06) 24px)",
+        backgroundPositionY: "28px",
+      }}>
+        {/* Hotel name in script */}
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 22, color: "var(--bark)", lineHeight: 1.2, fontWeight: 700 }}>
+          {hotel.name}
+        </div>
+        <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--bark-3)", fontWeight: 600, marginBottom: 8 }}>
+          {hotel.location}
+        </div>
+
+        {/* Reasoning in italic script */}
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark-2)", lineHeight: 1.55, marginBottom: 10, borderLeft: "3px solid var(--tape)", paddingLeft: 8 }}>
+          {hotel.reasoning}
+        </div>
+
         {hotel.updated_in_refinement && (
-          <div style={{ fontSize: 10, color: "var(--accent)", marginTop: 6, fontWeight: 700 }}>
-            ↻ Updated in this refinement
+          <div style={{ fontSize: 10, color: "var(--rust)", marginBottom: 8, fontWeight: 700, fontFamily: "var(--font-body)" }}>
+            ↻ updated in this refinement
           </div>
         )}
-        <div className="hotel-price-row">
-          <span className="hotel-price">
-            ~ ₹{hotel.approx_cost_per_night.toLocaleString()}
-            <span className="per">/ night</span>
-          </span>
+
+        {/* Price stamp */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 6 }}>
+          <div style={{
+            display: "inline-flex", alignItems: "baseline", gap: 3,
+            padding: "4px 12px", borderRadius: 6,
+            border: "2px solid var(--rust)",
+            background: "rgba(176,73,47,0.06)",
+          }}>
+            <span style={{ fontFamily: "var(--font-script)", fontSize: 20, fontWeight: 700, color: "var(--rust)" }}>
+              ₹{hotel.approx_cost_per_night.toLocaleString()}
+            </span>
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 10, fontWeight: 700, color: "var(--rust)", opacity: 0.7 }}>
+              / night
+            </span>
+          </div>
           {hotel.content_source === "general" && (
-            <div className="hotel-disclaimer">
-              <AlertCircle size={12} strokeWidth={2.5} />
-              <span>verify on Booking.com — price may vary.</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "var(--bark-3)", fontFamily: "var(--font-body)", fontWeight: 600 }}>
+              <AlertCircle size={11} strokeWidth={2} />
+              verify on Booking.com
             </div>
           )}
         </div>
