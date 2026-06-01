@@ -149,8 +149,13 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [step, canProceed, params]);
 
+  const destImgUrl = getDestinationImageUrl(params.destination);
+
   return (
-    <div className="screen" style={{ minHeight: "unset" }}>
+    <div className="stepper-grid">
+
+      {/* ── Left column — form ── */}
+      <div className="stepper-left">
       {ctx.mode === "demo" && (
         <div className="demo-banner">
           <span className="tag">Demo</span>
@@ -166,18 +171,14 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         <div style={{ width: 36 }} />
       </div>
 
-      {/* Sticky destination band — appears once destination is set */}
-      {params.destination && step >= 1 && (() => {
-        const bandImg = getDestinationImageUrl(params.destination);
-        if (!bandImg) return null;
-        return (
-          <div className="dest-band">
-            <img src={bandImg} alt={params.destination} />
-            <div className="dest-band-overlay" />
-            <div className="dest-band-label">{params.destination} ✦</div>
-          </div>
-        );
-      })()}
+      {/* Destination band — mobile only (hidden on tablet+ via CSS) */}
+      {params.destination && step >= 1 && destImgUrl && (
+        <div className="dest-band">
+          <img src={destImgUrl} alt={params.destination} />
+          <div className="dest-band-overlay" />
+          <div className="dest-band-label">{params.destination} ✦</div>
+        </div>
+      )}
 
       <div className="cx" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       {/* Mode toggle */}
@@ -497,10 +498,30 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         </div>
       </div>
 
-      {/* Spacer so content isn't hidden behind sticky bar */}
-      <div style={{ height: 90 }} />
+      {/* Spacer so content isn't hidden behind fixed bar on mobile */}
+      <div className="stepper-spacer" style={{ height: 90 }} />
       </>)}
       </div>
+      </div>
+
+      {/* ── Right column — destination panel (tablet+ only) ── */}
+      <div className="stepper-dest-panel">
+        {destImgUrl && step >= 1 ? (
+          <>
+            <img src={destImgUrl} alt={params.destination} />
+            <div className="stepper-dest-overlay" />
+            <div className="stepper-dest-label">
+              <h2>{params.destination} ✦</h2>
+              <span className="dest-sub">your trip awaits</span>
+            </div>
+          </>
+        ) : (
+          <div className="stepper-dest-placeholder">
+            <span>where are<br />you headed? ✦</span>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }

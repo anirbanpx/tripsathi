@@ -1068,16 +1068,86 @@ body {
   .polaroid { max-width: 440px; }
 }
 
-/* ── Stepper — taller band + wider form on tablet+ ──────────────── */
+/* ── Stepper 2-column layout (tablet+) ──────────────────────────── */
+
+/* Mobile base — single column, same as before */
+.stepper-grid { display: flex; flex-direction: column; min-height: 100svh; }
+.stepper-left  { display: flex; flex-direction: column; flex: 1; }
+.stepper-dest-panel { display: none; }
+
 @media (min-width: 640px) {
-  .dest-band { height: 160px; }
+  .stepper-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .stepper-left {
+    height: 100svh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  /* Override fixed bottom bar to sticky within scroll column */
+  .stepper-left .bottom-bar {
+    position: sticky;
+    bottom: 0;
+    left: unset;
+    right: unset;
+    width: 100%;
+  }
+  .stepper-spacer { display: none; }
+  .dest-band { display: none; } /* replaced by right panel */
+
+  /* Right destination panel */
+  .stepper-dest-panel {
+    display: block;
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .stepper-dest-panel img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    animation: fadeIn 0.7s ease;
+  }
+  .stepper-dest-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(62,47,35,0.75) 0%, rgba(62,47,35,0.15) 45%, transparent 100%);
+  }
+  .stepper-dest-label {
+    position: absolute; bottom: 36px; left: 32px; right: 32px;
+  }
+  .stepper-dest-label h2 {
+    font-family: var(--font-display); font-size: 38px; line-height: 1;
+    color: var(--paper); margin: 0;
+    text-shadow: 0 2px 14px rgba(62,47,35,0.45);
+  }
+  .stepper-dest-label .dest-sub {
+    font-family: var(--font-script); font-size: 20px;
+    color: rgba(244,236,219,0.75); display: block; margin-top: 6px;
+  }
+  .stepper-dest-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stepper-dest-placeholder span {
+    font-family: var(--font-script); font-size: 24px;
+    color: var(--fg-3); text-align: center; transform: rotate(-2deg);
+    line-height: 1.4;
+  }
+
+  /* Form area — slightly larger type on tablet */
   .question h1 { font-size: 40px; }
-  .recap-item { max-width: 600px; }
-  .bottom-bar { padding: 14px 36px 26px; }
+  .recap-item  { max-width: 600px; }
+  .bottom-bar  { padding: 14px 36px 26px; }
 }
+
 @media (min-width: 1024px) {
-  .dest-band { height: 200px; }
-  .question h1 { font-size: 50px; }
+  .stepper-grid { grid-template-columns: 58fr 42fr; }
+  .stepper-dest-label h2 { font-size: 48px; }
+  .question h1  { font-size: 50px; }
 }
 
 /* ── Plan display — 2-column on tablet+ ─────────────────────────── */
