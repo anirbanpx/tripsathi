@@ -96,6 +96,7 @@ Keep this section updated. Before starting any task, check here first to avoid r
 ### Unsplash image download (`backend/download_destination_images.py`)
 - **Free tier limit:** 50 requests/hour. A full run of 54 destinations exhausts this in one shot. **403 Forbidden = rate limit hit**, not an auth error. Wait ~60 min after the first run before retrying the failures. The script skips already-downloaded files so re-running is safe.
 - **No-results queries:** `Kochi`, `Thekkady`, `Pondicherry`, `Darjeeling`, and `Havelock` returned 0 results with original query strings. All fixed in the script — use city-landmark combos without "India" suffix, e.g. `"Fort Kochi Chinese fishing nets Kerala waterfront"`, `"Periyar wildlife sanctuary lake boat Kerala"`, `"Puducherry French colonial architecture promenade beach"`, `"Darjeeling tea plantation hills mountain West Bengal"`, `"Radhanagar beach Andaman Islands turquoise water"`.
+- **Image location:** Vite serves static files from `frontend/public/` — images MUST be in `frontend/public/images/destinations/`. The script now writes there directly. Old copies in `backend/static/images/destinations/` are unused.
 - **API key:** Stored in `backend/.env` as `UNSPLASH_ACCESS_KEY`. Run as: `python download_destination_images.py --key $UNSPLASH_ACCESS_KEY`
 
 ### Map tile rate limits
