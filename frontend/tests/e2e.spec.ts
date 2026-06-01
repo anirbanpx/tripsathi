@@ -7,12 +7,43 @@ test("landing page loads", async ({ page }) => {
   await expect(page.getByText("Sign in")).toBeVisible();
 });
 
-test("demo flow: land on planner at step 3", async ({ page }) => {
+test("demo flow: land on planner at step 3 (stepper mode)", async ({ page }) => {
   await page.goto("/");
   await page.getByText("Try the demo").click();
   await expect(page).toHaveURL(/\/planner/);
   await expect(page.getByText("Step 3 of 6")).toBeVisible();
   await expect(page.locator(".demo-banner")).toBeVisible();
+});
+
+test("regular flow: planner opens in natural language mode", async ({ page }) => {
+  await page.goto("/");
+  await page.getByText("Sign in to plan your own").click();
+  await expect(page).toHaveURL(/\/planner/);
+  // Natural language textarea should be the primary visible input
+  await expect(page.locator("textarea")).toBeVisible();
+  await expect(page.getByText("tell me everything")).toBeVisible();
+  // Step-by-step toggle should be a subtle link, not a dominant button
+  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  // Stepper progress bar should NOT be visible by default
+  await expect(page.getByText("Step 1 of 6")).not.toBeVisible();
+});
+
+test("switching from natural to stepper mode and back", async ({ page }) => {
+  await page.goto("/");
+  await page.getByText("Sign in to plan your own").click();
+
+  // Natural mode is default
+  await expect(page.locator("textarea")).toBeVisible();
+
+  // Click "prefer step-by-step?"
+  await page.getByText("prefer step-by-step?").click();
+  await expect(page.getByText("Step 1 of 6")).toBeVisible();
+  await expect(page.getByText("← back to prompt")).toBeVisible();
+
+  // Click back to prompt
+  await page.getByText("← back to prompt").click();
+  await expect(page.locator("textarea")).toBeVisible();
+  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
 });
 
 test("full plan generation flow", async ({ page }) => {
@@ -38,7 +69,7 @@ test("full plan generation flow", async ({ page }) => {
   // Step 6: submit
   await page.getByText("sketch my plan").click();
 
-  // Progress overlay — all stage labels are rendered, just check first visible one
+  // Progress overlay
   await expect(page.getByText("Understanding your profile...").first()).toBeVisible({ timeout: 5000 });
 
   // Wait for plan — LLM pipeline takes time
@@ -46,13 +77,12 @@ test("full plan generation flow", async ({ page }) => {
   await expect(page.getByText(/Kerala|Kochi|Munnar/i).first()).toBeVisible();
   console.log("✓ Plan displayed");
 
-  // Refinement input (it's an <input> in the sticky bottom bar)
+  // Refinement input
   const refineInput = page.locator('input[placeholder*="want a change"]');
   await expect(refineInput).toBeVisible();
   await refineInput.fill("add more vegetarian food options on day 2");
   await refineInput.press("Enter");
 
-  // Wait for refined plan to reload
   await expect(page.getByText(/Day 1/i).first()).toBeVisible({ timeout: 60_000 });
   console.log("✓ Refinement submitted");
 

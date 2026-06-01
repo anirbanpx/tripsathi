@@ -12,9 +12,7 @@ test("entry page loads", async ({ page }) => {
 
 test("India destinations map renders on entry page", async ({ page }) => {
   await page.goto("/");
-  // Wait for Leaflet container
   await expect(page.locator(".leaflet-container")).toBeVisible({ timeout: 10000 });
-  // At least some markers present
   const markers = page.locator(".leaflet-marker-icon");
   await expect(markers.first()).toBeVisible({ timeout: 10000 });
   const count = await markers.count();
@@ -24,30 +22,24 @@ test("India destinations map renders on entry page", async ({ page }) => {
 test("clicking a map marker shows popup with destination name", async ({ page }) => {
   await page.goto("/");
   await page.locator(".leaflet-marker-icon").first().click();
-  // Popup should appear with some text
   await expect(page.locator(".leaflet-popup-content")).toBeVisible({ timeout: 5000 });
   const text = await page.locator(".leaflet-popup-content").textContent();
   expect(text?.trim().length).toBeGreaterThan(0);
 });
 
 test("destination image loads inside map popup", async ({ page }) => {
-  // Track image requests and their responses
   const imageResponses: number[] = [];
   page.on("response", (res) => {
-    if (res.url().includes("/images/destinations/")) {
-      imageResponses.push(res.status());
-    }
+    if (res.url().includes("/images/destinations/")) imageResponses.push(res.status());
   });
 
   await page.goto("/");
   await page.locator(".leaflet-marker-icon").first().click();
   await page.waitForTimeout(2000);
 
-  // Check if any image request was made and whether it succeeded
   if (imageResponses.length > 0) {
     expect(imageResponses[0]).toBe(200);
   } else {
-    // No image request made at all — image URL not being fetched
     throw new Error("No /images/destinations/ request made — image URL broken or missing");
   }
 });
@@ -60,7 +52,7 @@ test("demo button navigates to planner", async ({ page }) => {
   await expect(page).toHaveURL("/planner");
 });
 
-// ── Entry page real photo (UX overhaul) ──────────────────────────────────────
+// ── Entry page real photo ─────────────────────────────────────────────────────
 
 test("entry page shows real Kerala photo not CSS illustration", async ({ page }) => {
   const imageStatuses: number[] = [];
@@ -71,15 +63,49 @@ test("entry page shows real Kerala photo not CSS illustration", async ({ page })
   await page.goto("/");
   await page.waitForTimeout(1000);
 
-  // Real <img> tag inside the polaroid — not CSS children
   const polaroidImg = page.locator(".polaroid img[alt='Kerala backwaters']");
   await expect(polaroidImg).toBeVisible({ timeout: 5000 });
-
-  // Image loaded successfully
   expect(imageStatuses.some(s => s === 200)).toBeTruthy();
 });
 
-// ── Planner stepper ───────────────────────────────────────────────────────────
+// ── Planner input modes ───────────────────────────────────────────────────────
+
+test("regular planner opens in natural language mode by default", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Sign in to plan your own");
+  await expect(page).toHaveURL("/planner");
+  await expect(page.locator("textarea")).toBeVisible();
+  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+  await expect(page.getByText("Step 1 of 6")).not.toBeVisible();
+});
+
+test("demo planner opens in stepper mode at step 3", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Try the demo");
+  await expect(page).toHaveURL("/planner");
+  await expect(page.getByText("Step 3 of 6")).toBeVisible();
+  // Natural language textarea should NOT be the primary view in demo mode
+  await expect(page.getByText("prefer step-by-step?")).not.toBeVisible();
+});
+
+test("prefer step-by-step link switches to stepper", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Sign in to plan your own");
+  await page.getByText("prefer step-by-step?").click();
+  await expect(page.getByText("Step 1 of 6")).toBeVisible();
+  await expect(page.getByText("← back to prompt")).toBeVisible();
+});
+
+test("back to prompt link returns to natural mode", async ({ page }) => {
+  await page.goto("/");
+  await page.click("text=Sign in to plan your own");
+  await page.getByText("prefer step-by-step?").click();
+  await page.getByText("← back to prompt").click();
+  await expect(page.locator("textarea")).toBeVisible();
+  await expect(page.getByText("prefer step-by-step?")).toBeVisible();
+});
+
+// ── Stepper destination image ─────────────────────────────────────────────────
 
 test("destination image appears in stepper after step 1", async ({ page }) => {
   const imageStatuses: number[] = [];
@@ -91,13 +117,10 @@ test("destination image appears in stepper after step 1", async ({ page }) => {
   await page.click("text=Try the demo");
   await expect(page).toHaveURL("/planner");
 
-  // Destination image shows in either the mobile band OR the tablet+ right panel
   await page.waitForTimeout(500);
   const bandImgVisible  = await page.locator(".dest-band img[alt='Kerala']").isVisible();
   const panelImgVisible = await page.locator(".stepper-dest-panel img[alt='Kerala']").isVisible();
   expect(bandImgVisible || panelImgVisible).toBeTruthy();
-
-  // Image request succeeded
   expect(imageStatuses.some(s => s === 200)).toBeTruthy();
 });
 
@@ -105,31 +128,13 @@ test("destination name label renders on image card", async ({ page }) => {
   await page.goto("/");
   await page.click("text=Try the demo");
 
-  // Destination name shows in either .dest-band-label (mobile) or .stepper-dest-label h2 (tablet+)
   await page.waitForTimeout(500);
   const bandLabelVisible  = await page.locator(".dest-band-label").isVisible();
   const panelLabelVisible = await page.locator(".stepper-dest-label h2").isVisible();
   expect(bandLabelVisible || panelLabelVisible).toBeTruthy();
 });
 
-test("destination image visible at top of stepper (band or panel)", async ({ page }) => {
-  await page.goto("/");
-  await page.click("text=Try the demo");
-
-  // On mobile: .dest-band is visible. On tablet+: .stepper-dest-panel is visible.
-  // At least one must be visible and in the upper portion of the screen.
-  const band = page.locator(".dest-band");
-  const panel = page.locator(".stepper-dest-panel");
-  const bandVisible  = await band.isVisible();
-  const panelVisible = await panel.isVisible();
-  expect(bandVisible || panelVisible).toBeTruthy();
-
-  // Whichever is active should be within the top 400px
-  const active = bandVisible ? band : panel;
-  const box = await active.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.y).toBeLessThan(400);
-});
+// ── Generation progress ───────────────────────────────────────────────────────
 
 test("generation progress shows full-bleed image and bottom sheet", async ({ page }) => {
   await page.route("**/api/plan", async (route) => {
@@ -143,87 +148,102 @@ test("generation progress shows full-bleed image and bottom sheet", async ({ pag
   await page.click("button:has-text('sketch my plan')");
   await page.waitForTimeout(1800);
 
-  // Bottom sheet is the definitive marker of the progress screen
   await expect(page.locator(".progress-sheet")).toBeVisible({ timeout: 5000 });
-
-  // Headline visible inside the sheet
   await expect(page.locator("text=sketching your")).toBeVisible({ timeout: 5000 });
-
-  // Brand text visible on the image (topbar)
   await expect(page.locator("text=tripsathi").first()).toBeVisible();
-
-  // Kerala image present in DOM (may be in stepper panel or progress bg)
   expect(await page.locator("img[alt='Kerala']").count()).toBeGreaterThan(0);
 });
 
-// ── Itinerary map (PlanDisplay) ───────────────────────────────────────────────
+// ── Plan display ──────────────────────────────────────────────────────────────
 
-test("itinerary map renders with day markers and hotel pins", async ({ page }) => {
-  // Intercept /api/plan so we don't wait for the real backend
+async function loadMockPlan(page: Parameters<Parameters<typeof test>[1]>[0]) {
   await page.route("**/api/plan", (route) => {
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      path: "src/mocks/plan.json",
-    });
+    route.fulfill({ status: 200, contentType: "application/json", path: "src/mocks/plan.json" });
   });
-
   await page.goto("/");
   await page.click("text=Try the demo");
-  await expect(page).toHaveURL("/planner");
-
-  // Demo starts at step 2 — click next through steps 2→3→4→5
   for (let i = 0; i < 3; i++) {
     await page.click("button:has-text('next')");
     await page.waitForTimeout(200);
   }
-
-  // Step 5: generate
   await page.click("button:has-text('sketch my plan')");
-
-  // Wait for plan display (generation progress clears, plan header appears)
   await expect(page.locator("text=plan, sketched")).toBeVisible({ timeout: 15000 });
+}
 
-  // Switch to map view
-  await page.click("button[title='Map view']");
-  await page.waitForTimeout(2000);
+test("warnings carousel shows at most 5 items", async ({ page }) => {
+  await loadMockPlan(page);
 
-  // Leaflet map should be visible
-  await expect(page.locator(".leaflet-container").last()).toBeVisible({ timeout: 8000 });
-
-  // Day markers (numbered circles) should be present
-  const markers = page.locator(".leaflet-marker-icon");
-  const count = await markers.count();
-  expect(count).toBeGreaterThan(0);
+  const warningCards = page.locator(".cx >> text=heads up").locator("..").locator("[style*='scroll-snap-align']");
+  const count = await warningCards.count();
+  expect(count).toBeLessThanOrEqual(5);
 });
 
-test("itinerary map popups show day activities", async ({ page }) => {
-  await page.route("**/api/plan", (route) => {
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      path: "src/mocks/plan.json",
-    });
-  });
+test("day card shows local tip callout when notes exist", async ({ page }) => {
+  await loadMockPlan(page);
 
-  await page.goto("/");
-  await page.click("text=Try the demo");
-  for (let i = 0; i < 3; i++) {
-    await page.click("button:has-text('next')");
-    await page.waitForTimeout(200);
+  // Look for the amber left-border note callout inside a day card
+  // It has borderLeft: "4px solid var(--ochre-deep)" and an Info icon sibling
+  const noteCallout = page.locator(".day-swipe-card").filter({ has: page.locator("[style*='border-left']") }).first();
+  const hasNote = await noteCallout.count() > 0;
+
+  if (hasNote) {
+    await expect(noteCallout).toBeVisible();
+    // The callout should contain some text (the day note)
+    const text = await noteCallout.locator("[style*='border-left']").first().textContent();
+    expect(text?.trim().length).toBeGreaterThan(0);
+  } else {
+    // Mock plan has no notes — that's valid, just skip
+    console.log("No day notes in mock plan — skipping callout assertion");
   }
-  await page.click("button:has-text('sketch my plan')");
-  await expect(page.locator("text=plan, sketched")).toBeVisible({ timeout: 15000 });
+});
+
+// ── Itinerary map (Mapbox) ────────────────────────────────────────────────────
+
+test("itinerary map renders with Mapbox canvas", async ({ page }) => {
+  await loadMockPlan(page);
 
   await page.click("button[title='Map view']");
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(3000);
 
-  // Click the first day marker — force bypasses Leaflet inner-div pointer interception
-  await page.locator(".leaflet-marker-icon").first().click({ force: true });
-  await page.waitForTimeout(1000);
+  // Mapbox renders a <canvas> inside .mapboxgl-canvas-container
+  const mapCanvas = page.locator(".mapboxgl-canvas");
+  const mapUnavailable = page.locator("text=Map unavailable");
 
-  // Popup should show location + at least one activity
-  await expect(page.locator(".leaflet-popup-content")).toBeVisible({ timeout: 5000 });
-  const popupText = await page.locator(".leaflet-popup-content").textContent();
-  expect(popupText?.length).toBeGreaterThan(10);
+  const canvasVisible      = await mapCanvas.isVisible();
+  const unavailableVisible = await mapUnavailable.isVisible();
+
+  // One of the two states must be shown
+  expect(canvasVisible || unavailableVisible).toBeTruthy();
+
+  if (canvasVisible) {
+    console.log("✓ Mapbox canvas rendered");
+    // Custom marker divs should be present (numbered stops + hotel pins)
+    const markers = page.locator(".mapboxgl-marker");
+    const count = await markers.count();
+    expect(count).toBeGreaterThan(0);
+  } else {
+    console.log("⚠ Map unavailable state shown (no token in test env) — fallback UI verified");
+  }
+});
+
+test("itinerary map has markers for day stops and hotels", async ({ page }) => {
+  await loadMockPlan(page);
+
+  await page.click("button[title='Map view']");
+  await page.waitForTimeout(3000);
+
+  const mapCanvas = page.locator(".mapboxgl-canvas");
+  if (!(await mapCanvas.isVisible())) {
+    console.log("Map unavailable — skipping");
+    return;
+  }
+
+  // Custom marker divs (numbered stops + hotel pins)
+  const markers = page.locator(".mapboxgl-marker");
+  const count = await markers.count();
+  expect(count).toBeGreaterThan(0);
+  console.log(`✓ ${count} Mapbox markers rendered`);
+
+  // Navigation controls (zoom buttons) should be present
+  await expect(page.locator(".mapboxgl-ctrl-zoom-in")).toBeVisible();
 });

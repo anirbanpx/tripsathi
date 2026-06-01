@@ -30,7 +30,7 @@ const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
-  const [inputMode, setInputMode] = useState<"stepper" | "natural">("stepper");
+  const [inputMode, setInputMode] = useState<"stepper" | "natural">(ctx.mode === "demo" ? "stepper" : "natural");
   const [nlText, setNlText] = useState("");
   const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
   const [groupType, setGroupType] = useState<string | null>(null);
@@ -69,6 +69,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     onSetContext({ current_stage: "generating", generation_active: true, destination: nlText });
     try {
       const parsed = await parseIntent(nlText);
+      if (parsed.destination) onSetContext({ destination: parsed.destination });
       const merged: TripParameters = {
         destination:     parsed.destination || "",
         start_date:      parsed.start_date || "",
@@ -181,25 +182,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       )}
 
       <div className="cx" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-      {/* Mode toggle */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 4 }}>
-        {(["stepper", "natural"] as const).map(m => (
-          <button key={m} onClick={() => setInputMode(m)} style={{
-            flex: 1, padding: "8px 0",
-            border: "1.5px solid var(--border-strong)",
-            borderRadius: "var(--radius-pill)",
-            background: inputMode === m ? "var(--accent)" : "transparent",
-            color: inputMode === m ? "var(--paper)" : "var(--fg-2)",
-            fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 12,
-            cursor: "pointer", letterSpacing: "0.04em",
-            transition: "all var(--dur-fast)",
-          }}>
-            {m === "stepper" ? "step by step" : "just tell sathi"}
-          </button>
-        ))}
-      </div>
-
-      {/* Natural language mode */}
+      {/* Natural language mode — primary */}
       {inputMode === "natural" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
           <div className="question" style={{ marginTop: 8 }}>
@@ -219,14 +202,57 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
               fontWeight: 600, fontSize: 14, color: "var(--fg)",
               resize: "none", outline: "none", lineHeight: 1.6,
             }}
-            placeholder={"e.g. planning a 5-night Kerala trip with my wife and 2-year-old toddler in mid-June, budget around ₹80k, want backwaters and a bit of nature, nothing too adventurous"}
+            placeholder={"e.g. 5-night Kerala trip with my wife and toddler, mid-June, ₹80k budget, backwaters + nature"}
             value={nlText}
             onChange={e => setNlText(e.target.value)}
             autoFocus
           />
+
+          {/* Suggestion chips */}
+          {!nlText && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {[
+                "5-night Kerala family trip, mid-range budget",
+                "Goa honeymoon, 4 nights, ₹60k",
+                "Solo Ladakh trek, 10 days, July",
+                "Rajasthan heritage tour, 7 nights, seniors",
+                "Coorg weekend getaway, couple, budget",
+              ].map(s => (
+                <span
+                  key={s}
+                  onClick={() => setNlText(s)}
+                  style={{
+                    fontSize: 11, padding: "5px 10px",
+                    borderRadius: "var(--radius-pill)",
+                    border: "1.5px solid var(--border-strong)",
+                    color: "var(--fg-2)", cursor: "pointer",
+                    fontFamily: "var(--font-body)", fontWeight: 700,
+                    background: "var(--surface)", whiteSpace: "nowrap",
+                    transition: "all var(--dur-fast)",
+                  }}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          )}
+
           <div className="bottom-bar">
             <div className="inner">
-              <span />
+              <button
+                style={{
+                  padding: "6px 12px",
+                  border: "1.5px solid var(--border-strong)",
+                  borderRadius: "var(--radius-pill)",
+                  background: "var(--surface)",
+                  fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
+                  color: "var(--fg-2)", cursor: "pointer", letterSpacing: "0.04em",
+                  whiteSpace: "nowrap",
+                }}
+                onClick={() => setInputMode("stepper")}
+              >
+                guide me through it →
+              </button>
               <button
                 className="cta-primary"
                 disabled={!nlText.trim()}
@@ -241,6 +267,19 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
       {/* Stepper mode */}
       {inputMode === "stepper" && (<>
+      <div style={{ marginBottom: 8 }}>
+        <button
+          style={{
+            background: "none", border: "none", padding: 0,
+            fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
+            color: "var(--fg-3)", cursor: "pointer", letterSpacing: "0.04em",
+            textDecoration: "underline", textUnderlineOffset: 3,
+          }}
+          onClick={() => setInputMode("natural")}
+        >
+          ← back to prompt
+        </button>
+      </div>
       <div className="stepper">
         {STEP_LABELS.map((_, i) => (
           <span
