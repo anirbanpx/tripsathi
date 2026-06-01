@@ -183,90 +183,98 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       {/* Warnings */}
       {plan.warnings.length > 0 && <WarningsCarousel warnings={plan.warnings} />}
 
-      {/* Days — swipe or list */}
-      <div style={{ marginTop: 22 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <div className="days-swiper-label">
-            {dayView === "swipe"
-              ? <>{`Day ${activeDay + 1}`} <span style={{ opacity: 0.45 }}>/ {plan.days.length}</span></>
-              : <>{plan.days.length} <span style={{ opacity: 0.45 }}>days</span></>}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      {/* Two-column layout on tablet+ */}
+      <div className="plan-two-col">
+
+        {/* LEFT — days */}
+        <div className="plan-col-left">
+          <div style={{ marginTop: 22 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <div className="days-swiper-label">
+                {dayView === "swipe"
+                  ? <>{`Day ${activeDay + 1}`} <span style={{ opacity: 0.45 }}>/ {plan.days.length}</span></>
+                  : <>{plan.days.length} <span style={{ opacity: 0.45 }}>days</span></>}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {dayView === "swipe" && (
+                  <div className="days-dot-row">
+                    {plan.days.map((_, i) => (
+                      <div key={i} className={`day-dot ${i === activeDay ? "active" : ""}`} onClick={() => scrollToDay(i)} />
+                    ))}
+                  </div>
+                )}
+                <div className="view-toggle">
+                  <button className={dayView === "swipe" ? "active" : ""} onClick={() => setDayView("swipe")} title="Swipe view">
+                    <GalleryHorizontal size={14} strokeWidth={2} />
+                  </button>
+                  <button className={dayView === "list" ? "active" : ""} onClick={() => setDayView("list")} title="List view">
+                    <LayoutList size={14} strokeWidth={2} />
+                  </button>
+                  <button className={dayView === "map" ? "active" : ""} onClick={() => setDayView("map")} title="Map view">
+                    <Map size={14} strokeWidth={2} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {dayView === "swipe" && (
-              <div className="days-dot-row">
-                {plan.days.map((_, i) => (
-                  <div key={i} className={`day-dot ${i === activeDay ? "active" : ""}`} onClick={() => scrollToDay(i)} />
+              <div className="days-swiper" ref={scrollRef} onScroll={onScroll}>
+                {plan.days.map((day) => (
+                  <SwipeCard key={day.day_number} day={day} />
                 ))}
               </div>
             )}
-            <div className="view-toggle">
-              <button className={dayView === "swipe" ? "active" : ""} onClick={() => setDayView("swipe")} title="Swipe view">
-                <GalleryHorizontal size={14} strokeWidth={2} />
-              </button>
-              <button className={dayView === "list" ? "active" : ""} onClick={() => setDayView("list")} title="List view">
-                <LayoutList size={14} strokeWidth={2} />
-              </button>
-              <button className={dayView === "map" ? "active" : ""} onClick={() => setDayView("map")} title="Map view">
-                <Map size={14} strokeWidth={2} />
-              </button>
+            {dayView === "list" && (
+              <div style={{ padding: "4px 0 8px", display: "flex", flexDirection: "column", gap: 12 }}>
+                {plan.days.map((day) => (
+                  <SwipeCard key={day.day_number} day={day} listMode />
+                ))}
+              </div>
+            )}
+            {dayView === "map" && (
+              <div style={{ padding: "4px 0 8px" }}>
+                <MapView days={plan.days} hotels={plan.hotels} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT — hotels + budget (sticky on tablet+) */}
+        <div className="plan-col-right">
+          <div className="day-section" style={{ marginTop: 22 }}>
+            <div className="label"><span>Accommodation</span><span className="line" /></div>
+            {plan.hotels.map((h) => <HotelCard key={h.name} hotel={h} />)}
+          </div>
+
+          <div className="budget">
+            <h3>budget <span className="total">~ ₹{plan.budget_breakdown.total.toLocaleString()}</span></h3>
+            <div className="budget-bar">
+              <div className="seg acc" style={{ flex: plan.budget_breakdown.accommodation }} />
+              <div className="seg tra" style={{ flex: plan.budget_breakdown.transport }} />
+              <div className="seg foo" style={{ flex: plan.budget_breakdown.food }} />
+              <div className="seg act" style={{ flex: plan.budget_breakdown.activities }} />
+            </div>
+            <div className="budget-rows">
+              {([
+                ["accommodation", Bed, plan.budget_breakdown.accommodation],
+                ["transport", Car, plan.budget_breakdown.transport],
+                ["food", Utensils, plan.budget_breakdown.food],
+                ["activities", Sparkles, plan.budget_breakdown.activities],
+              ] as const).map(([key, Icon, val]) => (
+                <div key={key} className="budget-row">
+                  <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
+                  <span className="val">₹{(val as number).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+            <div className="budget-disc">
+              <AlertCircle size={12} strokeWidth={2} />
+              estimates only — book to see actual prices.
             </div>
           </div>
         </div>
 
-        {dayView === "swipe" && (
-          <div className="days-swiper" ref={scrollRef} onScroll={onScroll}>
-            {plan.days.map((day) => (
-              <SwipeCard key={day.day_number} day={day} />
-            ))}
-          </div>
-        )}
-        {dayView === "list" && (
-          <div style={{ padding: "4px 0 8px", display: "flex", flexDirection: "column", gap: 12 }}>
-            {plan.days.map((day) => (
-              <SwipeCard key={day.day_number} day={day} listMode />
-            ))}
-          </div>
-        )}
-        {dayView === "map" && (
-          <div style={{ padding: "4px 0 8px" }}>
-            <MapView days={plan.days} hotels={plan.hotels} />
-          </div>
-        )}
-      </div>
-
-      {/* Hotels section */}
-      <div className="day-section" style={{ marginTop: 22 }}>
-        <div className="label"><span>Accommodation</span><span className="line" /></div>
-        {plan.hotels.map((h) => <HotelCard key={h.name} hotel={h} />)}
-      </div>
-
-      {/* Budget */}
-      <div className="budget">
-        <h3>budget <span className="total">~ ₹{plan.budget_breakdown.total.toLocaleString()}</span></h3>
-        <div className="budget-bar">
-          <div className="seg acc" style={{ flex: plan.budget_breakdown.accommodation }} />
-          <div className="seg tra" style={{ flex: plan.budget_breakdown.transport }} />
-          <div className="seg foo" style={{ flex: plan.budget_breakdown.food }} />
-          <div className="seg act" style={{ flex: plan.budget_breakdown.activities }} />
-        </div>
-        <div className="budget-rows">
-          {([
-            ["accommodation", Bed, plan.budget_breakdown.accommodation],
-            ["transport", Car, plan.budget_breakdown.transport],
-            ["food", Utensils, plan.budget_breakdown.food],
-            ["activities", Sparkles, plan.budget_breakdown.activities],
-          ] as const).map(([key, Icon, val]) => (
-            <div key={key} className="budget-row">
-              <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
-              <span className="val">₹{(val as number).toLocaleString()}</span>
-            </div>
-          ))}
-        </div>
-        <div className="budget-disc">
-          <AlertCircle size={12} strokeWidth={2} />
-          estimates only — book to see actual prices.
-        </div>
-      </div>
+      </div>{/* end .plan-two-col */}
 
       </div>{/* end .cx */}
 

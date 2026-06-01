@@ -1027,6 +1027,76 @@ body {
 .bp-tear::before { left: -23px; }
 .bp-tear::after { right: -23px; }
 
+/* =================================================================
+   Responsive layouts — tablet (640px+) and desktop (1024px+)
+   Mobile-first: all base styles above are for <640px.
+   ================================================================= */
+
+/* ── Global container ────────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .cx {
+    max-width: 900px;
+    padding-left: clamp(28px, 5vw, 56px);
+    padding-right: clamp(28px, 5vw, 56px);
+  }
+}
+@media (min-width: 1024px) {
+  .cx { max-width: 1140px; }
+}
+
+/* ── Entry page — 2-column on tablet+ ───────────────────────────── */
+@media (min-width: 640px) {
+  .entry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .entry-left { display: flex; flex-direction: column; }
+  .entry-right { display: flex; align-items: center; justify-content: center; }
+  .polaroid { margin: 0 auto; max-width: 380px; width: 100%; }
+  .hero { margin-top: 0; }
+  .hero h1 { font-size: 54px; }
+  .entry-ctas { margin-top: 28px; }
+  .footer-note { margin-top: 28px; padding-top: 0; }
+  .entry-map-section { margin-top: 48px; }
+}
+@media (min-width: 1024px) {
+  .entry-grid { gap: 72px; }
+  .hero h1 { font-size: 66px; }
+  .polaroid { max-width: 440px; }
+}
+
+/* ── Stepper — taller band + wider form on tablet+ ──────────────── */
+@media (min-width: 640px) {
+  .dest-band { height: 160px; }
+  .question h1 { font-size: 40px; }
+  .recap-item { max-width: 600px; }
+  .bottom-bar { padding: 14px 36px 26px; }
+}
+@media (min-width: 1024px) {
+  .dest-band { height: 200px; }
+  .question h1 { font-size: 50px; }
+}
+
+/* ── Plan display — 2-column on tablet+ ─────────────────────────── */
+@media (min-width: 768px) {
+  .plan-two-col {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 20px;
+  }
+  .plan-col-right { position: sticky; top: 16px; }
+  .trip-head h1 { font-size: 50px; }
+}
+@media (min-width: 1024px) {
+  .plan-two-col { grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+  .trip-head h1 { font-size: 58px; }
+}
+
 .bp-stub { padding: 12px 14px 14px; }
 
 /* Confirmed stub */

@@ -117,8 +117,8 @@ test("sticky destination band visible at top of stepper", async ({ page }) => {
   // The band image should be in the top half of the viewport — not bottom-clipped
   const box = await band.boundingBox();
   expect(box).not.toBeNull();
-  expect(box!.y).toBeLessThan(200); // top edge well within upper portion of screen
-  expect(box!.y + box!.height).toBeLessThan(250); // bottom edge still in upper area
+  expect(box!.y).toBeLessThan(220); // top edge below demo banner + topbar
+  expect(box!.y + box!.height).toBeLessThan(340); // bottom edge still in upper third
 });
 
 test("generation progress shows full-bleed image and bottom sheet", async ({ page }) => {
