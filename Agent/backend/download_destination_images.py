@@ -122,7 +122,8 @@ def download_file(url: str, dest: Path) -> bool:
 
 
 def main(access_key: str, skip_existing: bool = True):
-    images_dir = Path(__file__).parent / "static" / "images" / "destinations"
+    # Images served by Vite from frontend/public/ — write there directly
+    images_dir = Path(__file__).parent.parent / "frontend" / "public" / "images" / "destinations"
     images_dir.mkdir(parents=True, exist_ok=True)
 
     data_dir = Path(__file__).parent / "data"
