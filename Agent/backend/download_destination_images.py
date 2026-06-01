@@ -25,11 +25,11 @@ from pathlib import Path
 DESTINATIONS = [
     # Kerala
     {"name": "Kerala",      "query": "Kerala backwaters India green landscape"},
-    {"name": "Kochi",       "query": "Kochi Fort Cochin Kerala waterfront India"},
+    {"name": "Kochi",       "query": "Fort Kochi Chinese fishing nets Kerala waterfront"},
     {"name": "Alleppey",    "query": "Alleppey houseboat backwaters Kerala India"},
     {"name": "Munnar",      "query": "Munnar tea plantation hills Kerala India"},
     {"name": "Kovalam",     "query": "Kovalam beach lighthouse Kerala India"},
-    {"name": "Thekkady",    "query": "Thekkady Periyar lake wildlife Kerala"},
+    {"name": "Thekkady",    "query": "Periyar wildlife sanctuary lake boat Kerala"},
     {"name": "Varkala",     "query": "Varkala cliff beach Kerala India"},
     {"name": "Wayanad",     "query": "Wayanad misty forest Kerala India"},
     {"name": "Kumarakom",   "query": "Kumarakom backwaters sunset Kerala India"},
@@ -71,7 +71,7 @@ DESTINATIONS = [
     {"name": "Coorg",       "query": "Coorg Kodagu coffee plantation Karnataka India"},
     {"name": "Ooty",        "query": "Ooty Nilgiris tea garden Tamil Nadu India"},
     {"name": "Kodaikanal",  "query": "Kodaikanal lake hill station Tamil Nadu India"},
-    {"name": "Pondicherry", "query": "Pondicherry French quarter promenade beach India"},
+    {"name": "Pondicherry", "query": "Puducherry French colonial architecture promenade beach"},
     {"name": "Mahabalipuram","query": "Mahabalipuram shore temple Tamil Nadu India"},
     {"name": "Madurai",     "query": "Madurai Meenakshi temple Tamil Nadu India"},
 
@@ -83,13 +83,13 @@ DESTINATIONS = [
     {"name": "Kolkata",     "query": "Kolkata Howrah Bridge Victoria Memorial India"},
 
     # East India
-    {"name": "Darjeeling",  "query": "Darjeeling tea garden Kanchenjunga West Bengal India"},
+    {"name": "Darjeeling",  "query": "Darjeeling tea plantation hills mountain West Bengal"},
     {"name": "Puri",        "query": "Puri beach Jagannath temple Odisha India"},
     {"name": "Bhubaneswar", "query": "Bhubaneswar Lingaraj temple Odisha India"},
 
     # Islands
     {"name": "Andaman",     "query": "Andaman Islands turquoise beach India"},
-    {"name": "Havelock",    "query": "Havelock Island Andaman pristine beach India"},
+    {"name": "Havelock",    "query": "Radhanagar beach Andaman Islands turquoise water"},
 
     # West India
     {"name": "Ahmedabad",   "query": "Ahmedabad Sabarmati ashram Gujarat India"},

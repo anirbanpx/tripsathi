@@ -89,6 +89,30 @@ When suggesting implementations, default to this stack. If recommending alternat
 
 ---
 
+## Known Issues & Gotchas
+
+Keep this section updated. Before starting any task, check here first to avoid repeating known dead ends.
+
+### Unsplash image download (`backend/download_destination_images.py`)
+- **Free tier limit:** 50 requests/hour. A full run of 54 destinations exhausts this in one shot. **403 Forbidden = rate limit hit**, not an auth error. Wait ~60 min after the first run before retrying the failures. The script skips already-downloaded files so re-running is safe.
+- **No-results queries:** `Kochi`, `Thekkady`, `Pondicherry`, `Darjeeling`, and `Havelock` returned 0 results with original query strings. All fixed in the script — use city-landmark combos without "India" suffix, e.g. `"Fort Kochi Chinese fishing nets Kerala waterfront"`, `"Periyar wildlife sanctuary lake boat Kerala"`, `"Puducherry French colonial architecture promenade beach"`, `"Darjeeling tea plantation hills mountain West Bengal"`, `"Radhanagar beach Andaman Islands turquoise water"`.
+- **API key:** Stored in `backend/.env` as `UNSPLASH_ACCESS_KEY`. Run as: `python download_destination_images.py --key $UNSPLASH_ACCESS_KEY`
+
+### Map tile rate limits
+- **Don't use Mapbox/Google Maps** — both require billing setup and hit rate limits on free tier quickly.
+- **Use CARTO tiles** (`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png`) — free, no API key, no rate limit for dev use.
+- Current `MapView.tsx` and `IndiaDestinationsMap.tsx` both use CARTO. Keep it this way.
+
+### Groq + reasoning model (`openai/gpt-oss-120b`)
+- Uses 600+ internal tokens before producing output. Any `max_tokens < 1024` for query expansion returns empty string. Synthesis needs 4096.
+- `response_format={"type": "json_object"}` causes `json_validate_failed` on Unicode chars — don't use it, rely on prompt + retry.
+- Rate limits exhaust fast — wait 60–90s between full pipeline runs in eval scripts.
+
+### Leaflet in Vite
+- Default icon paths break in Vite. Fix already applied in both map components: delete `_getIconUrl` and call `L.Icon.Default.mergeOptions(...)` with unpkg URLs.
+
+---
+
 ## IMPORTANT Principles
 
 Follow KISS and YAGNI at all times:

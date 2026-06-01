@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, MessageCircle, Globe, ShieldCheck, Lock } from "lucide-react";
+import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
 import type { UserContext } from "../types";
 
 interface Props {
@@ -74,6 +75,16 @@ export default function DemoEntryPage({ onSetContext }: Props) {
       </div>
 
       <div className="footer-note">made for Indian trips, in India ✦</div>
+
+      <div style={{ padding: "28px 0 8px" }}>
+        <div style={{
+          fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase",
+          color: "var(--fg-3)", marginBottom: 12,
+        }}>
+          Explore India · 50+ destinations
+        </div>
+        <IndiaDestinationsMap />
+      </div>
       </div>
     </div>
   );
