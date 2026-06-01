@@ -4,12 +4,24 @@ import {
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
   GalleryHorizontal, LayoutList, Map,
 } from "lucide-react";
-import MapView from "./MapView";
+import MapView, { haversineDist, driveTime } from "./MapView";
+
+// Strip LLM internal notes from activity names:
+//   ") — check something"  →  ""
+//   " — verify/check ..."  →  ""
+function cleanName(name: string): string {
+  return name
+    .replace(/\s*\)\s*—\s*.+$/i, "")
+    .replace(/\s*—\s*(check|verify|note|confirm|see)\b.+$/i, "")
+    .replace(/\s*\(LWD\s+\w+\)/i, "")
+    .trim();
+}
 import { getIllustration } from "./TravelIllustrations";
 import { refinePlan, regeneratePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
+import { getCoordinates } from "../../lib/destinationCoordinates";
 import type { UserContext, DayPlan, Hotel } from "../../types";
 
 interface Props {
@@ -235,7 +247,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
             )}
             {dayView === "map" && (
               <div style={{ padding: "4px 0 8px" }}>
-                {/* Day selector — above map so it's never clipped by sticky bar */}
+                {/* Day selector tabs */}
                 <div style={{
                   display: "flex", gap: 6, overflowX: "auto", scrollbarWidth: "none",
                   paddingBottom: 10, alignItems: "center",
@@ -252,14 +264,22 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
                         fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
                         cursor: "pointer", whiteSpace: "nowrap",
                         boxShadow: mapDay === n ? "0 2px 8px rgba(176,73,47,0.28)" : "none",
+                        transition: "all 0.2s ease",
                       }}
                     >
                       {label}
                     </button>
                   ))}
                 </div>
-                <div style={{ height: 420 }}>
+
+                {/* Split panel: map left + day card right */}
+                <div className="map-split">
                   <MapView days={plan.days} hotels={plan.hotels} selectedDay={mapDay} />
+                  <MapDayPanel
+                    days={plan.days}
+                    hotels={plan.hotels}
+                    selectedDay={mapDay}
+                  />
                 </div>
               </div>
             )}
@@ -558,7 +578,7 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
             </span>
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13.5, color: "var(--fg)", lineHeight: 1.3 }}>
-                {a.name}
+                {cleanName(a.name)}
               </div>
               {a.approx_cost != null && (
                 <div style={{ fontFamily: "var(--font-script)", fontSize: 13, color: "var(--rust)", marginTop: 1 }}>
@@ -719,6 +739,164 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Map split panel — right-side day detail card ──────────────────────────────
+
+function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: Hotel[]; selectedDay: number }) {
+  const day = selectedDay > 0 ? days.find(d => d.day_number === selectedDay) ?? null : null;
+
+  // Summary view (all stops)
+  if (!day) {
+    return (
+      <div className="map-day-panel">
+        <div className="map-day-panel-header">
+          <div style={{ fontFamily: "var(--font-script)", fontSize: 22, fontWeight: 700, color: "var(--accent)", lineHeight: 1 }}>
+            full journey ✦
+          </div>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)", fontWeight: 600, marginTop: 4 }}>
+            {days.length} days · click a day tab to explore
+          </div>
+        </div>
+        <div className="map-day-body">
+          <div className="map-section-label">stops</div>
+          <div className="map-summary">
+            <div className="stop-list">
+              {/* Deduplicate stops by location for summary */}
+              {((): { loc: string; dayNums: number[] }[] => {
+                const seen: { loc: string; dayNums: number[] }[] = [];
+                for (const d of days) {
+                  const base = d.location.split(",")[0];
+                  const existing = seen.find(s => s.loc === base);
+                  if (existing) existing.dayNums.push(d.day_number);
+                  else seen.push({ loc: base, dayNums: [d.day_number] });
+                }
+                return seen;
+              })().map(({ loc, dayNums }, i) => (
+                <div key={loc} className="map-stop-row">
+                  <div className="stop-num">{i + 1}</div>
+                  <div className="stop-info">
+                    <div className="stop-name">{loc}</div>
+                    <div className="stop-days">
+                      {dayNums.map(n => `Day ${n}`).join(" · ")}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="map-section-label" style={{ marginTop: 18 }}>accommodation</div>
+          {hotels.map(h => (
+            <div key={h.name} className="map-hotel-row" style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 16 }}>🏨</div>
+              <div className="hname">{h.name}<br /><span style={{ fontWeight: 600, color: "var(--fg-3)", fontSize: 10 }}>{h.location}</span></div>
+              <div className="hcost">₹{h.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Specific day view
+  const prevDay = days.find(d => d.day_number === selectedDay - 1) ?? null;
+  const prevCoords = prevDay ? getCoordinates(prevDay.location) : null;
+  const currCoords = getCoordinates(day.location);
+  const legKm = prevCoords && currCoords
+    ? haversineDist(prevCoords, currCoords)
+    : null;
+  const isSameLocation = legKm !== null && legKm < 5;
+
+  const nightHotel = hotels.find(h => {
+    const hLoc = h.location.split(",")[0].toLowerCase();
+    const dLoc = day.location.split(",")[0].toLowerCase();
+    return hLoc.includes(dLoc.split(" ")[0]) || dLoc.includes(hLoc.split(" ")[0]);
+  }) ?? null;
+
+  return (
+    <div className="map-day-panel" key={selectedDay}>
+      <div className="map-day-panel-header">
+        <div className="day-num">{selectedDay}</div>
+        <div className="day-loc">{day.location.split(",")[0]}</div>
+        {day.updated_in_refinement && (
+          <div style={{ marginTop: 4, fontSize: 10, color: "var(--rust)", fontFamily: "var(--font-body)", fontWeight: 700 }}>
+            ↻ updated
+          </div>
+        )}
+      </div>
+
+      {/* Leg stat — drive from previous */}
+      {prevDay && legKm !== null && !isSameLocation && (
+        <div className="map-leg-stat">
+          <span className="leg-pill">from {prevDay.location.split(",")[0]}</span>
+          <span>{driveTime(legKm)} · {Math.round(legKm)} km</span>
+        </div>
+      )}
+      {prevDay && isSameLocation && (
+        <div className="map-leg-stat">
+          <span className="leg-pill">same base</span>
+          <span>no travel · explore more today</span>
+        </div>
+      )}
+      {!prevDay && (
+        <div className="map-leg-stat">
+          <span className="leg-pill">Day 1</span>
+          <span>arrival day</span>
+        </div>
+      )}
+
+      <div className="map-day-body">
+        <div className="map-section-label">activities</div>
+        {day.activities.map((a, i) => (
+          <div key={i} className="map-act-row">
+            <div className="dot" />
+            <div className="name">{cleanName(a.name)}</div>
+            {a.approx_cost != null && (
+              <div className="cost">~₹{a.approx_cost.toLocaleString()}</div>
+            )}
+          </div>
+        ))}
+
+        {nightHotel && (
+          <>
+            <div className="map-section-label">tonight's stay</div>
+            <div className="map-hotel-row">
+              <div style={{ fontSize: 16 }}>🏨</div>
+              <div className="hname">{nightHotel.name}</div>
+              <div className="hcost">₹{nightHotel.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
+            </div>
+          </>
+        )}
+
+        <div className="map-section-label">meals</div>
+        {([
+          { label: "B", meal: day.meals.breakfast },
+          { label: "L", meal: day.meals.lunch },
+          { label: "D", meal: day.meals.dinner },
+        ]).map(({ label, meal }) => (
+          <div key={label} className="map-meal-row">
+            <span className="mlabel">{label}</span>
+            <span>{meal}</span>
+          </div>
+        ))}
+
+        {day.notes && (
+          <div style={{
+            marginTop: 14,
+            padding: "8px 10px",
+            background: "rgba(216,149,64,0.08)",
+            borderLeft: "3px solid var(--ochre)",
+            borderRadius: "0 8px 8px 0",
+            fontFamily: "var(--font-script)",
+            fontSize: 13, color: "var(--bark)", lineHeight: 1.5,
+          }}>
+            {day.notes}
+          </div>
+        )}
       </div>
     </div>
   );

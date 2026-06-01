@@ -150,7 +150,7 @@ function DestinationMap({ destination, height = 190 }: { destination: string; he
 
     const coords = getCoordinates(destination);
     const center: [number, number] = coords ? [coords[1], coords[0]] : [78.9629, 20.5937]; // fallback: India centre
-    const zoom = coords ? 9 : 4;
+    const zoom = coords ? 7 : 4;
 
     mapboxgl.accessToken = MAPBOX_TOKEN;
     const map = new mapboxgl.Map({
