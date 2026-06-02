@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
+    RESEARCH_AGENT_SYSTEM,
     PERSONA_CLASSIFICATION_SYSTEM,
-    QUERY_EXPANSION_SYSTEM,
     RESEARCH_SYNTHESIS_SYSTEM,
     PLAN_GENERATION_SYSTEM,
     PLAN_REFINEMENT_SYSTEM,
@@ -21,6 +21,14 @@ _client = OpenAI(
     api_key=os.environ.get("LLM_API_KEY", "lm-studio"),
 )
 _MODEL = os.environ.get("LLM_MODEL", "local-model")
+
+# Separate client for the research agent — uses a model with confirmed tool-calling support.
+# Defaults to llama-3.3-70b-versatile; override with RESEARCH_MODEL env var.
+_RESEARCH_MODEL = os.environ.get("RESEARCH_MODEL", "llama-3.3-70b-versatile")
+_research_client = OpenAI(
+    base_url=os.environ.get("LLM_BASE_URL", "http://localhost:1234/v1"),
+    api_key=os.environ.get("LLM_API_KEY", "lm-studio"),
+)
 
 APPROVAL_SIGNALS = {
     "looks good", "approve", "approved", "perfect", "that's fine", "yes",
@@ -178,11 +186,19 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | 
 
 
 def persona_classification(state: TripSathiState) -> dict:
+    from memory import read_memories
+
     answers_text = "\n".join(
         f"Q: {a['question']}\nA: {a['answer']}" for a in state["onboarding_answers"]
     )
     if state.get("destination"):
         answers_text += f"\nDestination hint: {state['destination']}"
+
+    # Inject long-term memories if a user_id is present in trip_parameters
+    user_id = state["trip_parameters"].get("user_id", "")
+    past_memories = read_memories(user_id)
+    if past_memories:
+        answers_text += f"\n\n{past_memories}"
 
     try:
         user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
@@ -197,46 +213,81 @@ def persona_classification(state: TripSathiState) -> dict:
     }
 
 
-def destination_intelligence(state: TripSathiState) -> dict:
-    from rag.indexer import get_query_engine
+def _run_research_agent(destination: str, user_profile: dict, trip_parameters: dict) -> list[str]:
+    """ReAct agent loop: uses web_search + knowledge_base_query tools to gather destination intel.
+    Returns a list of content strings collected from tool calls."""
+    from tools import TOOL_SCHEMAS, execute_tool
 
-    # Call 2: expand queries
-    expansion_prompt = (
-        f"Destination: {state['destination']}\n"
-        f"Traveller profile: {json.dumps(state['user_profile'])}\n"
-        f"Trip: {json.dumps(state['trip_parameters'])}"
+    dest_slug = destination.lower().split(",")[0].strip().replace(" ", "_")
+    task = (
+        f"Research destination: {destination}\n"
+        f"Traveller profile: {json.dumps(user_profile)}\n"
+        f"Trip parameters: {json.dumps(trip_parameters)}\n\n"
+        "Gather comprehensive destination intelligence covering routing, local risks, "
+        "seasonal context, key places, and persona-specific concerns using the tools available.\n"
+        f"When calling knowledge_base_query, always pass destination=\"{dest_slug}\" "
+        "to restrict results to this destination only."
     )
+
+    messages = [
+        {"role": "system", "content": RESEARCH_AGENT_SYSTEM},
+        {"role": "user", "content": task},
+    ]
+
+    gathered = []
+    MAX_ITERATIONS = 8
+
+    for iteration in range(MAX_ITERATIONS):
+        response = _research_client.chat.completions.create(
+            model=_RESEARCH_MODEL,
+            messages=messages,
+            tools=TOOL_SCHEMAS,
+            tool_choice="auto",
+            max_tokens=2048,
+        )
+        choice = response.choices[0]
+        messages.append(choice.message)
+
+        if choice.finish_reason != "tool_calls" or not choice.message.tool_calls:
+            logger.info("research_agent done after %d iterations", iteration + 1)
+            break
+
+        for tc in choice.message.tool_calls:
+            args = json.loads(tc.function.arguments)
+            result = execute_tool(tc.function.name, args)
+            logger.info("research_agent tool=%s query=%r chars=%d", tc.function.name, args.get("query", ""), len(result))
+            gathered.append(f"[{tc.function.name}: {args.get('query', '')}]\n{result}")
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tc.id,
+                "content": result,
+            })
+
+    return gathered
+
+
+def destination_intelligence(state: TripSathiState) -> dict:
+    # Research agent loop: gathers content via web_search + knowledge_base_query tools
     try:
-        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024)
+        gathered_content = _run_research_agent(
+            state["destination"],
+            state.get("user_profile") or {},
+            state["trip_parameters"],
+        )
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
-    # LlamaIndex retrieval (local variable — not state)
-    retrieved_content = []
-    rag_failed = False
-    try:
-        query_engine = get_query_engine()
-        for q in expanded_queries:
-            result = query_engine.query(q)
-            text = str(result).strip()
-            if text:
-                retrieved_content.append(text)
-    except Exception:
-        rag_failed = True  # Graceful degradation: proceed with empty corpus
-
-    if not retrieved_content:
-        rag_failed = True
-
     knowledge_block = (
-        "\n\n---\n\n".join(retrieved_content)
-        if retrieved_content
+        "\n\n---\n\n".join(gathered_content)
+        if gathered_content
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
+    no_content = not gathered_content
 
-    # Call 3: synthesize
+    # Synthesis call: same as before — turns gathered content into structured research_synthesis
     synthesis_prompt = (
         f"Destination: {state['destination']}\n"
-        f"Traveller profile: {json.dumps(state['user_profile'])}\n"
+        f"Traveller profile: {json.dumps(state.get('user_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Retrieved knowledge:\n{knowledge_block}"
     )
@@ -245,11 +296,10 @@ def destination_intelligence(state: TripSathiState) -> dict:
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
-    if rag_failed:
+    if no_content:
         warnings = research_synthesis.get("implicit_warnings", [])
         warnings.insert(0, (
-            "Local knowledge base returned no results for this destination — "
-            "recommendations are based on general knowledge only. "
+            "No destination content retrieved — recommendations are based on general knowledge only. "
             "Verify local risks, pricing, and logistics independently before booking."
         ))
         research_synthesis["implicit_warnings"] = warnings
@@ -401,11 +451,40 @@ def human_feedback(state: TripSathiState) -> dict:
 
 
 def finalize(state: TripSathiState) -> dict:
+    from memory import write_memory
+
+    user_id = state["trip_parameters"].get("user_id", "")
+    write_memory(
+        user_id=user_id,
+        plan=state.get("plan") or {},
+        trip_parameters=state.get("trip_parameters") or {},
+        user_profile=state.get("user_profile") or {},
+    )
     return {
         "awaiting_feedback": False,
         "current_node": "done",
         "stage_label": "Plan finalised",
     }
+
+
+def _classify_approval(feedback: str) -> bool:
+    """LLM semantic check for ambiguous approval signals not in the keyword list."""
+    prompt = (
+        f'Is this user message approving a travel plan as-is, or requesting a change?\n'
+        f'Message: "{feedback}"\n'
+        f'Reply with exactly one word: approve OR change'
+    )
+    try:
+        response = _client.chat.completions.create(
+            model=_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=5,
+        )
+        answer = (response.choices[0].message.content or "").strip().lower()
+        return answer.startswith("approve")
+    except Exception as e:
+        logger.warning("_classify_approval LLM call failed: %s — treating as change request", e)
+        return False
 
 
 def route_after_feedback(state: TripSathiState) -> str:
@@ -416,10 +495,15 @@ def route_after_feedback(state: TripSathiState) -> str:
         return "plan_assembly"
 
     feedback = state.get("user_feedback", "")
-    if feedback and feedback.lower().strip() in APPROVAL_SIGNALS:
+    if not feedback:
+        return END
+
+    # Fast path: exact keyword match
+    if feedback.lower().strip() in APPROVAL_SIGNALS:
         return "finalize"
 
-    if feedback:
-        return "plan_assembly"
+    # Semantic path: LLM classifies ambiguous signals ("that works", "all good", etc.)
+    if _classify_approval(feedback):
+        return "finalize"
 
-    return END
+    return "plan_assembly"
