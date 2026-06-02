@@ -294,30 +294,39 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           </div>
 
           <div className="budget">
-            <h3>budget <span className="total">~ ₹{plan.budget_breakdown.total.toLocaleString()}</span></h3>
-            <div className="budget-bar">
-              <div className="seg acc" style={{ flex: plan.budget_breakdown.accommodation }} />
-              <div className="seg tra" style={{ flex: plan.budget_breakdown.transport }} />
-              <div className="seg foo" style={{ flex: plan.budget_breakdown.food }} />
-              <div className="seg act" style={{ flex: plan.budget_breakdown.activities }} />
-            </div>
-            <div className="budget-rows">
-              {([
-                ["accommodation", Bed, plan.budget_breakdown.accommodation],
-                ["transport", Car, plan.budget_breakdown.transport],
-                ["food", Utensils, plan.budget_breakdown.food],
-                ["activities", Sparkles, plan.budget_breakdown.activities],
-              ] as const).map(([key, Icon, val]) => (
-                <div key={key} className="budget-row">
-                  <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
-                  <span className="val">₹{(val as number).toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-            <div className="budget-disc">
-              <AlertCircle size={12} strokeWidth={2} />
-              estimates only — book to see actual prices.
-            </div>
+            {(() => {
+              const b = plan.budget_breakdown;
+              const partsSum = b.accommodation + b.transport + b.food + b.activities;
+              const displayTotal = Math.max(b.total, partsSum);
+              return (
+                <>
+                  <h3>budget <span className="total">~ ₹{displayTotal.toLocaleString()}</span></h3>
+                  <div className="budget-bar">
+                    <div className="seg acc" style={{ flex: b.accommodation }} />
+                    <div className="seg tra" style={{ flex: b.transport }} />
+                    <div className="seg foo" style={{ flex: b.food }} />
+                    <div className="seg act" style={{ flex: b.activities }} />
+                  </div>
+                  <div className="budget-rows">
+                    {([
+                      ["accommodation", Bed, b.accommodation],
+                      ["transport", Car, b.transport],
+                      ["food", Utensils, b.food],
+                      ["activities", Sparkles, b.activities],
+                    ] as const).map(([key, Icon, val]) => (
+                      <div key={key} className="budget-row">
+                        <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
+                        <span className="val">₹{(val as number).toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="budget-disc">
+                    <AlertCircle size={12} strokeWidth={2} />
+                    estimates only — book to see actual prices.
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
 

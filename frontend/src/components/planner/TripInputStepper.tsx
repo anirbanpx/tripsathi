@@ -139,15 +139,22 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     ? (step === 0 ? !!params.destination : step === 1 ? !!params.start_date : true)
     : true;
 
-  // Scroll on step change — top for most steps, bottom for the last step
-  // so the textarea isn't hidden behind the sticky bar when 5 recap rows stack up.
+  // Scroll on step change — top for most steps, bottom for step 5 (recap chips stack up)
+  // and bottom for step 2 when kids are pre-filled so the age inputs aren't hidden behind the bar.
   useEffect(() => {
-    if (step === 5) {
+    if (step === 5 || (step === 2 && params.kid_ages.length > 0)) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [step]);
+
+  // Also scroll to bottom when user adds a kid mid-step so the new age input is visible.
+  useEffect(() => {
+    if (step === 2 && params.kid_ages.length > 0) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+  }, [params.kid_ages.length]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
