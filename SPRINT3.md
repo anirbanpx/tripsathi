@@ -36,16 +36,13 @@
   - Target: 3–5× eval coverage from Sprint 2.
   - Bootcamp curriculum explicitly requires this for Sprint 3.
 
-- [ ] **Deploy backend to Railway** (~3–4h)
+- [x] **Deploy backend to Railway** — `https://tripsathi-production.up.railway.app`
   - FastAPI app + SQLite checkpoints.
   - Add `railway.toml` or `Procfile`.
   - Update CORS in `main.py` with Railway URL.
   - Update `frontend/src/services/api.ts` to point at Railway URL in production.
 
-- [ ] **Deploy frontend to Vercel/Netlify** (~2h)
-  - Vite build → static deploy.
-  - Set `VITE_API_URL` env var to Railway backend URL.
-  - Test full flow on deployed URLs.
+- [x] **Deploy frontend to Vercel** — `https://frontend-agent-demo-s-projects.vercel.app`
 
 - [ ] **Cost analysis** (~2–3h)
   - After token logging is added: run all 3 baseline eval cases, capture token counts.
