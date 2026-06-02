@@ -375,6 +375,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
 
 function WarningsCarousel({ warnings }: { warnings: string[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [expanded, setExpanded] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
   function onScroll() {
@@ -447,8 +448,27 @@ function WarningsCarousel({ warnings }: { warnings: string[] }) {
               fontWeight: 600, fontSize: 13,
               color: "var(--bark)", lineHeight: 1.5,
             }}
-            dangerouslySetInnerHTML={{ __html: w.replace(/^([^—–:]+[—–:])/, "<b>$1</b>") }}
-          />
+          >
+            <div
+              style={!expanded ? {
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 3,
+                overflow: "hidden",
+              } as React.CSSProperties : {}}
+              dangerouslySetInnerHTML={{ __html: w.replace(/^([^—–:]+[—–:])/, "<b>$1</b>") }}
+            />
+            <button
+              onClick={() => setExpanded(e => !e)}
+              style={{
+                marginTop: 6, background: "none", border: "none", padding: 0,
+                fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
+                color: "var(--ochre-deep)", cursor: "pointer", letterSpacing: "0.04em",
+              }}
+            >
+              {expanded ? "show less ↑" : "read more ↓"}
+            </button>
+          </div>
         ))}
       </div>
     </div>
