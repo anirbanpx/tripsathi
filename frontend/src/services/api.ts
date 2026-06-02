@@ -14,7 +14,7 @@ function delay(ms: number) {
 }
 
 export async function parseIntent(text: string): Promise<TripParameters & { onboarding_summary: string }> {
-  const res = await fetch("/api/parse", {
+  const res = await fetch(`${API_BASE}/api/parse`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
