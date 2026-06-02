@@ -304,7 +304,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       </div>
 
       {/* Recap of completed steps */}
-      {step > 0 && (
+      {step > 0 && step <= 3 && (
         <div className="recap">
           {Array.from({ length: step }).map((_, i) => (
             <div key={i} className="recap-item">
@@ -315,6 +315,27 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                 <Pencil size={12} strokeWidth={2.5} />edit
               </span>
             </div>
+          ))}
+        </div>
+      )}
+      {step > 3 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, padding: "14px 0 0" }}>
+          {Array.from({ length: step }).map((_, i) => (
+            <span
+              key={i}
+              onClick={() => setStep(i)}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                padding: "5px 11px", borderRadius: 999,
+                background: "var(--surface)", border: "1.5px solid var(--border)",
+                fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
+                color: "var(--fg)", cursor: "pointer",
+              }}
+            >
+              <span style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--fg-3)" }}>{STEP_LABELS[i]}</span>
+              <span style={{ color: "var(--accent)" }}>✓</span>
+              {recapLabel(i)}
+            </span>
           ))}
         </div>
       )}

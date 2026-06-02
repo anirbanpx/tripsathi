@@ -194,31 +194,33 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
             <span className="line" />
             <span>{bookableActivities.filter((a) => bookedItems[a.name]).length} booked</span>
           </div>
-          {bookableActivities.map((item) => (
-            <BoardingPass
-              key={item.name}
-              item={item}
-              isDemo={isDemo}
-              booking={bookedItems[item.name]}
-              loading={loadingItems.has(item.name)}
-              skipped={skippedItems.has(item.name)}
-              onBook={() => handleBook(item)}
-              onSkip={() => handleSkip(item.name)}
-              onUndo={() => handleUndo(item.name)}
-            />
-          ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {bookableActivities.map((item) => (
+              <ActivityRow
+                key={item.name}
+                item={item}
+                isDemo={isDemo}
+                booking={bookedItems[item.name]}
+                loading={loadingItems.has(item.name)}
+                skipped={skippedItems.has(item.name)}
+                onBook={() => handleBook(item)}
+                onSkip={() => handleSkip(item.name)}
+                onUndo={() => handleUndo(item.name)}
+              />
+            ))}
+          </div>
         </div>
       )}
 
       {/* Plan to visit */}
       {planToVisit.length > 0 && (
-        <div className="bs-section">
+        <div className="bs-section" style={{ opacity: 0.75 }}>
           <div className="label">
             <span>Plan to visit · {planToVisit.length}</span>
             <span className="line" />
-            <span>no booking needed</span>
+            <span style={{ fontStyle: "italic" }}>just show up · no booking</span>
           </div>
-          <div className="visit-list">
+          <div className="visit-list" style={{ background: "var(--paper-2)", borderColor: "var(--border)" }}>
             {planToVisit.map((a) => (
               <div key={a.name} className="visit-row">
                 <span className="num">D{a.dayNum}</span>
@@ -412,6 +414,67 @@ function BoardingPass({ item, isDemo, booking, loading, skipped, onBook, onSkip,
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+interface ActivityRowProps {
+  item: BookableItem;
+  isDemo: boolean;
+  booking?: BookingResponse;
+  loading: boolean;
+  skipped: boolean;
+  onBook: () => void;
+  onSkip: () => void;
+  onUndo: () => void;
+}
+
+function ActivityRow({ item, isDemo, booking, loading, skipped, onBook, onSkip, onUndo }: ActivityRowProps) {
+  if (skipped) {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10,
+        padding: "10px 14px", borderRadius: 12,
+        background: "var(--surface)", border: "1.5px dashed var(--border)",
+        opacity: 0.45,
+      }}>
+        <Zap size={13} strokeWidth={2} style={{ color: "var(--fg-3)", flexShrink: 0 }} />
+        <span style={{ flex: 1, fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 13, color: "var(--fg)", textDecoration: "line-through" }}>{item.name}</span>
+        <button className="skip-btn" style={{ padding: "5px 10px", fontSize: 11 }} onClick={onUndo}>undo</button>
+      </div>
+    );
+  }
+
+  if (booking) {
+    return (
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10,
+        padding: "10px 14px", borderRadius: 12,
+        background: "var(--moss)", color: "var(--paper)",
+      }}>
+        <Check size={13} strokeWidth={3} style={{ flexShrink: 0 }} />
+        <span style={{ flex: 1, fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13 }}>{item.name}</span>
+        <span style={{ fontFamily: "var(--font-display)", fontSize: 11, opacity: 0.7 }}>{booking.confirmation_id}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", gap: 10,
+      padding: "10px 14px", borderRadius: 12,
+      background: "var(--surface)", border: "1.5px solid var(--border)",
+    }}>
+      <Zap size={13} strokeWidth={2} style={{ color: "var(--accent)", flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{item.name}</div>
+        <div style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 11, color: "var(--fg-3)", marginTop: 1 }}>{item.location}</div>
+      </div>
+      <span style={{ fontFamily: "var(--font-display)", fontSize: 14, color: "var(--accent)", flexShrink: 0 }}>~₹{item.approx_cost.toLocaleString()}</span>
+      <button className="book-btn" style={{ flex: "none", padding: "7px 12px", fontSize: 12 }} onClick={onBook} disabled={loading}>
+        {loading ? <span className="btn-spinner" /> : isDemo ? "book demo" : "book"}
+      </button>
+      <button className="skip-btn" style={{ padding: "7px 10px", fontSize: 12 }} onClick={onSkip}>skip</button>
     </div>
   );
 }

@@ -167,7 +167,7 @@ function DestinationMap({ destination, height = 190 }: { destination: string; he
         const el = document.createElement("div");
         el.style.cssText = `
           width:32px;height:32px;border-radius:50%;
-          background:#B45309;color:#F4ECDB;
+          background:#B0492F;color:#F4ECDB;
           display:flex;align-items:center;justify-content:center;
           font-size:15px;border:3px solid #F4ECDB;
           box-shadow:0 3px 12px rgba(62,47,35,0.45);

@@ -947,6 +947,7 @@ body {
 /* ── Shared keyframes ───────────────────────────────────────────── */
 @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(36px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes bounce-cue { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(5px); opacity: 1; } }
 
 /* ── Days horizontal swiper ─────────────────────────────────────── */
 
@@ -1486,6 +1487,10 @@ body {
     border-top: 1.5px solid var(--border);
     max-height: 340px;
   }
+  .map-act-row .name { font-size: 12px; }
+  .map-stop-row .stop-name { font-size: 12px; }
+  .map-stop-row .stop-days { font-size: 11px; }
+  .map-hotel-row .hname { font-size: 12px; }
 }
 
 /* Confirmed stub */
