@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Clock } from "lucide-react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
@@ -136,52 +136,47 @@ function RotatingTidbit({ destination, glass = false }: { destination: string; g
   );
 }
 
-// ── Destination mini-map ──────────────────────────────────────────────────────
-
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
+// ── Destination mini-map (Leaflet + CARTO — no API key required) ─────────────
 
 function DestinationMap({ destination, height = 190 }: { destination: string; height?: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
-    if (!MAPBOX_TOKEN || MAPBOX_TOKEN === "your_mapbox_token_here") return;
 
     const coords = getCoordinates(destination);
-    const center: [number, number] = coords ? [coords[1], coords[0]] : [78.9629, 20.5937]; // fallback: India centre
+    const center: [number, number] = coords ?? [20.5937, 78.9629]; // [lat, lon] fallback: India centre
     const zoom = coords ? 7 : 4;
 
-    mapboxgl.accessToken = MAPBOX_TOKEN;
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: "mapbox://styles/mapbox/streets-v12",
+    const map = L.map(containerRef.current, {
       center,
       zoom,
-      interactive: false,
+      zoomControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
       attributionControl: false,
     });
 
-    map.on("load", () => {
-      if (coords) {
-        const el = document.createElement("div");
-        el.style.cssText = `
-          width:32px;height:32px;border-radius:50%;
-          background:#B0492F;color:#F4ECDB;
-          display:flex;align-items:center;justify-content:center;
-          font-size:15px;border:3px solid #F4ECDB;
-          box-shadow:0 3px 12px rgba(62,47,35,0.45);
-        `;
-        el.textContent = "✦";
-        new mapboxgl.Marker({ element: el }).setLngLat(center).addTo(map);
-      }
-    });
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      subdomains: "abcd",
+      maxZoom: 19,
+    }).addTo(map);
+
+    if (coords) {
+      const icon = L.divIcon({
+        html: `<div style="width:32px;height:32px;border-radius:50%;background:#B0492F;color:#F4ECDB;display:flex;align-items:center;justify-content:center;font-size:15px;border:3px solid #F4ECDB;box-shadow:0 3px 12px rgba(62,47,35,0.45);">✦</div>`,
+        className: "",
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+      });
+      L.marker(center, { icon }).addTo(map);
+    }
 
     mapRef.current = map;
     return () => { map.remove(); mapRef.current = null; };
   }, [destination]);
-
-  if (!MAPBOX_TOKEN || MAPBOX_TOKEN === "your_mapbox_token_here") return null;
 
   return (
     <div style={{ height, borderRadius: 16, overflow: "hidden", flexShrink: 0 }}>
