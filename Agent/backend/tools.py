@@ -2,8 +2,10 @@ import json
 import logging
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from opentelemetry import trace
 
 logger = logging.getLogger(__name__)
+_tracer = trace.get_tracer(__name__)
 
 _tavily_client = None
 
@@ -32,23 +34,36 @@ def _duckduckgo_search(query: str) -> str:
 
 def web_search(query: str) -> str:
     # Try Tavily first; fall back to DuckDuckGo if unavailable or quota exceeded.
-    try:
-        client = _get_tavily()
-        result = client.search(query, max_results=5, search_depth="basic")
-        snippets = []
-        for r in result.get("results", []):
-            title = r.get("title", "")
-            content = r.get("content", "")
-            url = r.get("url", "")
-            snippets.append(f"[{title}]\n{content}\nSource: {url}")
-        return "\n\n".join(snippets) if snippets else "No results found."
-    except Exception as tavily_err:
-        logger.warning("Tavily failed query=%r (%s) — falling back to DuckDuckGo", query, tavily_err)
+    with _tracer.start_as_current_span("web_search") as span:
+        span.set_attribute("openinference.span.kind", "TOOL")
+        span.set_attribute("tool.name", "tavily")
+        span.set_attribute("input.value", query)
         try:
-            return _duckduckgo_search(query)
-        except Exception as ddg_err:
-            logger.warning("DuckDuckGo also failed query=%r: %s", query, ddg_err)
-            return f"Search unavailable: {ddg_err}"
+            client = _get_tavily()
+            result = client.search(query, max_results=5, search_depth="basic")
+            snippets = []
+            for r in result.get("results", []):
+                title = r.get("title", "")
+                content = r.get("content", "")
+                url = r.get("url", "")
+                snippets.append(f"[{title}]\n{content}\nSource: {url}")
+            output = "\n\n".join(snippets) if snippets else "No results found."
+            span.set_attribute("output.value", output[:2000])
+            span.set_attribute("search.result_count", len(snippets))
+            return output
+        except Exception as tavily_err:
+            logger.warning("Tavily failed query=%r (%s) — falling back to DuckDuckGo", query, tavily_err)
+            span.set_attribute("tool.name", "duckduckgo")
+            span.record_exception(tavily_err)
+            try:
+                output = _duckduckgo_search(query)
+                span.set_attribute("output.value", output[:2000])
+                return output
+            except Exception as ddg_err:
+                logger.warning("DuckDuckGo also failed query=%r: %s", query, ddg_err)
+                span.record_exception(ddg_err)
+                span.set_status(trace.StatusCode.ERROR, str(ddg_err))
+                return f"Search unavailable: {ddg_err}"
 
 
 def get_weather(destination: str, travel_dates: str = "") -> str:

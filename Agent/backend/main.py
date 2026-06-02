@@ -1,6 +1,9 @@
+import logging
 import os
 from uuid import uuid4
 from dotenv import load_dotenv
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -10,14 +13,23 @@ load_dotenv()
 
 if os.getenv("PHOENIX_ENABLED") == "true":
     try:
-        import phoenix as px
+        from phoenix.otel import register
         from openinference.instrumentation.langchain import LangChainInstrumentor
         from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
-        px.launch_app()
+        from openinference.instrumentation.openai import OpenAIInstrumentor
+        _phoenix_kwargs = dict(
+            project_name="tripsathi",
+            endpoint=os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006/v1/traces"),
+        )
+        # Phoenix Cloud requires an API key header; local Docker does not.
+        if os.getenv("PHOENIX_API_KEY"):
+            _phoenix_kwargs["headers"] = {"api_key": os.getenv("PHOENIX_API_KEY")}
+        register(**_phoenix_kwargs)
         LangChainInstrumentor().instrument()
         LlamaIndexInstrumentor().instrument()
+        OpenAIInstrumentor().instrument()
     except ImportError:
-        pass  # pip install arize-phoenix openinference-instrumentation-langchain openinference-instrumentation-llama-index
+        pass  # pip install arize-phoenix-otel openinference-instrumentation-langchain openinference-instrumentation-llama-index openinference-instrumentation-openai
 
 if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")

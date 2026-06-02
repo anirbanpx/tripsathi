@@ -266,6 +266,54 @@ def _run_research_agent(destination: str, user_profile: dict, trip_parameters: d
     return gathered
 
 
+def _enrich_hotel_prices(plan: dict, destination: str, duration_nights: int) -> dict:
+    """Search Tavily for current hotel prices and patch approx_cost_per_night in-place."""
+    import re
+    from tools import web_search
+
+    for hotel in plan.get("hotels", []):
+        name = hotel.get("name", "")
+        if not name or len(name) < 5 or "land hotel" in name.lower():
+            continue  # skip placeholders
+        query = f"{name} {destination} hotel price per night INR 2025 booking"
+        try:
+            result = web_search(query)
+            # Match patterns like ₹2,500 / Rs 3000 / 2500 per night
+            prices_raw = re.findall(
+                r'(?:₹|Rs\.?\s*)(\d{1,2},?\d{3})\s*(?:/\s*night|per night|a night)?',
+                result, re.IGNORECASE
+            )
+            if not prices_raw:
+                prices_raw = re.findall(r'(\d{1,2},?\d{3})\s*(?:per night|/night)', result, re.IGNORECASE)
+            parsed = sorted(
+                {int(p.replace(",", "")) for p in prices_raw if 500 <= int(p.replace(",", "")) <= 50_000}
+            )
+            if parsed:
+                median = parsed[len(parsed) // 2]
+                hotel["approx_cost_per_night"] = median
+                hotel["content_source"] = "web"
+                logger.info("hotel_price_enriched name=%r price=%d", name, median)
+        except Exception as e:
+            logger.warning("hotel_price_lookup_failed name=%r: %s", name, e)
+
+    # Recalculate accommodation + total in budget_breakdown
+    hotels = plan.get("hotels", [])
+    budget = plan.get("budget_breakdown", {})
+    if budget and hotels:
+        budget["accommodation"] = sum(
+            h.get("approx_cost_per_night", 0) * duration_nights for h in hotels
+        )
+        budget["total"] = sum([
+            budget.get("accommodation", 0),
+            budget.get("transport", 0),
+            budget.get("activities", 0),
+            budget.get("food", 0),
+        ])
+        plan["budget_breakdown"] = budget
+
+    return plan
+
+
 def destination_intelligence(state: TripSathiState) -> dict:
     # Research agent loop: gathers content via web_search + knowledge_base_query tools
     try:
@@ -327,6 +375,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
         new_plan = _enforce_plan_quality(new_plan, _get_kid_ages(state), state.get("research_synthesis"), state["destination"], elderly=_get_elderly(state))
+        new_plan = _enrich_hotel_prices(new_plan, state["destination"], state["trip_parameters"].get("duration_nights", 1))
         return {
             "plan": new_plan,
             "regenerate_requested": False,
@@ -422,6 +471,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
     is_elderly = _get_elderly(state)
     plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
+    plan = _enrich_hotel_prices(plan, state["destination"], state["trip_parameters"].get("duration_nights", 1))
     return {
         "plan": plan,
         "refinement_count": 1,
