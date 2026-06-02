@@ -2,8 +2,11 @@ import os
 from pathlib import Path
 
 import chromadb
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
+
+Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 KNOWLEDGE_DIR = Path(__file__).parent / "knowledge"
 CHROMA_PATH = Path(__file__).parent.parent / "data" / "chroma_db"

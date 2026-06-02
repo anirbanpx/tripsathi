@@ -8,6 +8,16 @@ from langgraph.types import Command
 
 load_dotenv()
 
+try:
+    import phoenix as px
+    from openinference.instrumentation.langchain import LangChainInstrumentor
+    from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+    px.launch_app()
+    LangChainInstrumentor().instrument()
+    LlamaIndexInstrumentor().instrument()
+except ImportError:
+    pass  # observability optional — pip install arize-phoenix openinference-instrumentation-langchain openinference-instrumentation-llama-index
+
 if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")
 

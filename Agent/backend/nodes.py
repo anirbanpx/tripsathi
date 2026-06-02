@@ -1,7 +1,10 @@
 import json
+import logging
 import os
 import time
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
@@ -71,14 +74,8 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
             notes = day.get("notes", "")
             if "1:00" not in notes and "nap" not in notes.lower() and "rest" not in notes.lower():
                 day["notes"] = "1:00–2:30 PM: mandatory nap/rest at hotel — no activities scheduled during this window. " + notes
-    elif elderly and has_young_child:
-        # 1b. Afternoon rest for elderly + young child combo
-        for day in plan.get("days", []):
-            notes = day.get("notes", "")
-            if "rest" not in notes.lower() and "midday" not in notes.lower() and "afternoon" not in notes.lower():
-                day["notes"] = "1:00–2:00 PM: midday rest — elderly and child benefit from afternoon break before evening activities. " + notes
 
-        # 2. Replace overnight houseboat hotel with land hotel (Kerala only)
+        # 2. Replace overnight houseboat hotel with land hotel (Kerala only, toddler)
         if is_kerala:
             for hotel in plan.get("hotels", []):
                 if "houseboat" in hotel.get("name", "").lower():
@@ -93,6 +90,13 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
         # 3. Add toddler houseboat warning (Kerala only)
         if is_kerala and not any("under 3" in w or "toddler" in w.lower() for w in warnings):
             warnings.insert(0, HOUSEBOAT_TODDLER_WARNING)
+
+    elif elderly and has_young_child:
+        # 1b. Afternoon rest for elderly + young child combo
+        for day in plan.get("days", []):
+            notes = day.get("notes", "")
+            if "rest" not in notes.lower() and "midday" not in notes.lower() and "afternoon" not in notes.lower():
+                day["notes"] = "1:00–2:00 PM: midday rest — elderly and child benefit from afternoon break before evening activities. " + notes
 
     # 4. Carry all synthesis local_risks and implicit_warnings into plan.warnings
     #    — guarantees RAG-sourced risks reach the user even if plan LLM dropped them
@@ -148,6 +152,14 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | 
             ],
             max_tokens=max_tokens,
         )
+        if response.usage:
+            logger.info(
+                "llm_call model=%s prompt_tokens=%d completion_tokens=%d total_tokens=%d",
+                _MODEL,
+                response.usage.prompt_tokens,
+                response.usage.completion_tokens,
+                response.usage.total_tokens,
+            )
         raw = (response.choices[0].message.content or "").strip()
         if not raw:
             continue  # empty response — retry with backoff
@@ -280,12 +292,14 @@ def plan_assembly(state: TripSathiState) -> dict:
         feedback = state["user_feedback"]
         synthesis = state.get("research_synthesis") or {}
         recent_history = state.get("refinement_history", [])[-3:]
+        rag_risks = synthesis.get("local_risks", []) + synthesis.get("implicit_warnings", [])
         refinement_prompt = (
             f"Current plan: {json.dumps(state.get('plan'))}\n"
             f"User change request: {feedback}\n"
             f"Previous changes: {json.dumps(recent_history)}\n"
             f"User profile: {json.dumps(state.get('user_profile'))}\n"
             f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+            + (f"\nRAG risks — preserve verbatim in refined plan: {json.dumps(rag_risks)}" if rag_risks else "")
         )
         try:
             updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt)
