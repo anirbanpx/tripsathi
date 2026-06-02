@@ -34,6 +34,11 @@ def rebuild():
     print(f"Indexing {len(files)} knowledge files: {[f.name for f in files]}")
 
     documents = SimpleDirectoryReader(str(KNOWLEDGE_DIR)).load_data()
+    for doc in documents:
+        stem = Path(doc.metadata.get("file_name", "")).stem
+        if stem:
+            doc.metadata["destination"] = stem.lower()
+
     VectorStoreIndex.from_documents(documents, storage_context=storage_context)
     print(f"Done. Indexed {len(documents)} document chunks into ChromaDB.")
 
