@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import {
-  ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, Info, RefreshCw, Check,
+  ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, RefreshCw, Check,
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
   GalleryHorizontal, LayoutList, Map,
 } from "lucide-react";

@@ -181,7 +181,6 @@ const COORDS: Record<string, [number, number]> = {
   agatti:       [10.8239, 72.1983],
 
   // Wildlife
-  corbett:      [29.5300, 78.7747],
   bandhavgarh:  [23.7154, 81.0366],
   kanha:        [22.3372, 80.6116],
   pench:        [21.6800, 79.2900],
