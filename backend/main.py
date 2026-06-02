@@ -8,15 +8,16 @@ from langgraph.types import Command
 
 load_dotenv()
 
-try:
-    import phoenix as px
-    from openinference.instrumentation.langchain import LangChainInstrumentor
-    from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
-    px.launch_app()
-    LangChainInstrumentor().instrument()
-    LlamaIndexInstrumentor().instrument()
-except ImportError:
-    pass  # observability optional — pip install arize-phoenix openinference-instrumentation-langchain openinference-instrumentation-llama-index
+if os.getenv("PHOENIX_ENABLED") == "true":
+    try:
+        import phoenix as px
+        from openinference.instrumentation.langchain import LangChainInstrumentor
+        from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+        px.launch_app()
+        LangChainInstrumentor().instrument()
+        LlamaIndexInstrumentor().instrument()
+    except ImportError:
+        pass  # pip install arize-phoenix openinference-instrumentation-langchain openinference-instrumentation-llama-index
 
 if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")
@@ -25,9 +26,14 @@ from graph import graph  # noqa: E402 — import after env check
 
 app = FastAPI(title="TripSathi API")
 
+_cors_origins = ["http://localhost:5173", "http://localhost:5174"]
+_frontend_url = os.getenv("FRONTEND_URL")
+if _frontend_url:
+    _cors_origins.append(_frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174"],
+    allow_origins=_cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

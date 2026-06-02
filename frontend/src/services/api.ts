@@ -7,7 +7,7 @@ import mockAuth from "../mocks/auth.json";
 import mockProfile from "../mocks/profile.json";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
-const API_BASE = "";
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
