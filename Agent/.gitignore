@@ -29,3 +29,6 @@ temp/
 
 # Export artifacts
 export/
+
+# ChromaDB and SQLite generated at runtime
+backend/data/
