@@ -28,6 +28,70 @@ Test-Path D:\Workspace\Agent\frontend\node_modules
 
 Stop here and report — do not attempt to launch if prerequisites are missing.
 
+## Step 0 — Start Docker Desktop + Phoenix (local observability)
+
+This step runs before the backend. Skip it only if `PHOENIX_ENABLED` is not `true` in `.env`.
+
+### 0a — Ensure Docker daemon is running
+
+```powershell
+$docker = "C:\Program Files\Docker\Docker\resources\bin\docker.exe"
+$env:PATH += ";C:\Program Files\Docker\Docker\resources\bin"
+$out = & $docker info 2>&1 | Out-String
+$out
+```
+
+- If output contains `Server Version` → daemon is already up, skip to 0b.
+- If not → launch Docker Desktop and wait:
+
+```powershell
+Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+# Poll up to 90s for daemon to be ready
+$maxWait = 90; $elapsed = 0
+while ($elapsed -lt $maxWait) {
+    $out = & $docker info 2>&1 | Out-String
+    if ($out -match "Server Version") { Write-Host "Docker ready"; break }
+    Start-Sleep -Seconds 10; $elapsed += 10
+    Write-Host "Waiting for Docker... ($elapsed s)"
+}
+if ($elapsed -ge $maxWait) { Write-Host "ERROR: Docker daemon did not start in time. Ask user to open Docker Desktop manually." }
+```
+
+**If Docker Desktop is not installed:** tell the user to run `winget install -e --id Docker.DockerDesktop --accept-source-agreements --accept-package-agreements` and restart.
+
+### 0b — Ensure Phoenix container is running
+
+```powershell
+$env:PATH += ";C:\Program Files\Docker\Docker\resources\bin"
+$status = & docker inspect -f "{{.State.Running}}" phoenix 2>&1
+if ($status -eq "true") {
+    Write-Host "Phoenix already running"
+} elseif ($status -match "false") {
+    # Container exists but stopped — restart it
+    docker start phoenix
+    Write-Host "Phoenix restarted"
+} else {
+    # Container does not exist — create it fresh
+    docker run -d -p 6006:6006 -p 4317:4317 --name phoenix arizephoenix/phoenix:latest
+    Write-Host "Phoenix started fresh"
+}
+```
+
+Wait 3 seconds then confirm the UI is up:
+
+```powershell
+Start-Sleep -Seconds 3
+try {
+    $r = Invoke-WebRequest -Uri "http://localhost:6006" -TimeoutSec 5 -UseBasicParsing
+    Write-Host "Phoenix UI OK (HTTP $($r.StatusCode))"
+} catch {
+    Write-Host "Phoenix UI not yet reachable — backend will still start, traces will queue"
+}
+```
+
+**Success signal:** `Phoenix UI OK`  
+**If Phoenix fails to start:** warn the user but continue — the backend starts fine without Phoenix; OTEL traces are silently dropped until Phoenix is up.
+
 ## Step 1 — Start backend
 
 ```powershell
@@ -78,9 +142,10 @@ Get-Content "$env:TEMP\tripsathi_frontend_err.txt" -ErrorAction SilentlyContinue
 
 ## Step 3 — Confirm and report
 
-Once both are up, report to the user:
+Once all services are up, report to the user:
 
 ```
+Phoenix:  http://localhost:6006   (Arize Phoenix UI — project: tripsathi)
 Backend:  http://localhost:8000   (FastAPI + uvicorn, --reload active)
 Frontend: http://localhost:5173   (Vite dev server)
 
@@ -96,3 +161,6 @@ Logs:
 - **Never** use `-RedirectStandardError "2>&1"` syntax — PowerShell 5.1 wraps native stderr as ErrorRecords; redirect to a separate file instead.
 - The Vite proxy forwards `/api/*` → `http://localhost:8000` (configured in `frontend/vite.config.ts`). No CORS config needed for local dev.
 - HuggingFace embedding model (`BAAI/bge-small-en-v1.5`) loads from cache on startup — expect a `Loading weights` line in backend logs, that's normal.
+- **Docker bin is not on PATH by default** — always set `$env:PATH += ";C:\Program Files\Docker\Docker\resources\bin"` before running any `docker` command in PowerShell.
+- **Phoenix container name is `phoenix`** — use `docker start phoenix` to restart after a reboot (do not `docker run` again, it will fail with "name already in use").
+- **Phoenix Cloud vs local:** local dev uses Docker at `http://localhost:6006`; production uses Phoenix Cloud. Controlled by `.env`: set `PHOENIX_COLLECTOR_ENDPOINT` + `PHOENIX_API_KEY` for cloud, leave defaults for local.
