@@ -187,7 +187,7 @@ function DestinationMap({ destination, height = 190 }: { destination: string; he
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function GenerationProgress({ stageIndex, stageLabel: _stageLabel, destination = "" }: Props) {
+export default function GenerationProgress({ stageIndex, stageLabel, destination = "" }: Props) {
   const [showLongWait, setShowLongWait] = useState(false);
   const imgUrl = getDestinationImageUrl(destination);
 
@@ -202,7 +202,7 @@ export default function GenerationProgress({ stageIndex, stageLabel: _stageLabel
         <h1>sketching your<br /><span className="sw">plan</span></h1>
         <div className="now">
           <span className="spinner" />
-          {PROGRESS_STAGES[stageIndex]?.label ?? "finalising..."}
+          {stageLabel || PROGRESS_STAGES[stageIndex]?.label || "finalising..."}
         </div>
       </div>
       <div className="stages">

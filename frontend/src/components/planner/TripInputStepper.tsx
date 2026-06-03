@@ -3,8 +3,8 @@ import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
   Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
 } from "lucide-react";
-import { generatePlan, parseIntent } from "../../services/api";
-import { startFakeProgress } from "../../lib/fakeProgress";
+import { streamPlan, parseIntent } from "../../services/api";
+import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
@@ -62,11 +62,8 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleNaturalGenerate() {
     if (!nlText.trim() || ctx.generation_active) return;
-    const handle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText });
+    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText, fake_stage_index: 0, fake_stage_label: "Understanding your profile..." });
+    let stageIndex = 0;
     try {
       const parsed = await parseIntent(nlText);
       if (parsed.destination) onSetContext({ destination: parsed.destination });
@@ -81,8 +78,10 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         trip_style:      parsed.trip_style || [],
         special_needs:   parsed.special_needs || "",
       };
-      const res = await generatePlan(merged);
-      handle.stop();
+      const res = await streamPlan(merged, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -92,7 +91,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch (err) {
-      handle.stop();
       onSetContext({ current_stage: "trip_input", generation_active: false });
       alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }
@@ -100,14 +98,13 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleGenerate() {
     if (ctx.generation_active) return;
-    const handle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination });
+    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile..." });
+    let stageIndex = 0;
     try {
-      const res = await generatePlan(params);
-      handle.stop();
+      const res = await streamPlan(params, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -116,7 +113,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch (err) {
-      handle.stop();
       onSetContext({ current_stage: "trip_input", generation_active: false });
       alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }

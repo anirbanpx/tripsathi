@@ -4,8 +4,11 @@ from uuid import uuid4
 from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
+import asyncio
+import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from langgraph.types import Command
 
@@ -162,6 +165,54 @@ async def start_plan(req: PlanRequest):
     graph.invoke(initial_state, config=config)
     state = _get_state(config)
     return _plan_response(state, thread_id)
+
+
+@app.post("/api/plan/stream")
+async def stream_plan(req: PlanRequest):
+    """SSE stream for plan generation — emits stage labels as nodes complete, then the final plan."""
+    thread_id = str(uuid4())
+    config = {"configurable": {"thread_id": thread_id}}
+
+    initial_state = {
+        "destination": req.destination,
+        "trip_parameters": req.trip_parameters,
+        "onboarding_answers": req.onboarding_answers,
+        "user_profile": None,
+        "research_synthesis": None,
+        "plan": None,
+        "user_feedback": None,
+        "refinement_count": 0,
+        "refinement_history": [],
+        "regenerate_requested": False,
+        "awaiting_feedback": False,
+        "current_node": "persona_classification",
+        "stage_label": "Understanding your profile",
+        "error": None,
+    }
+
+    async def generate():
+        yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
+        try:
+            async for chunk in graph.astream(initial_state, config=config, stream_mode="updates"):
+                for _node, update in chunk.items():
+                    stage = update.get("stage_label")
+                    if stage:
+                        yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
+                        await asyncio.sleep(0)
+        except Exception:
+            pass  # graph interrupted at human_feedback — read final state below
+
+        state = _get_state(config)
+        if state.get("error"):
+            yield f"data: {json.dumps({'type': 'error', 'detail': state['error']})}\n\n"
+        else:
+            yield f"data: {json.dumps({'type': 'done', 'plan': state.get('plan'), 'thread_id': thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @app.post("/api/refine")
