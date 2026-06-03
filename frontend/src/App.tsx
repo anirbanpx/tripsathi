@@ -8,6 +8,7 @@ import type { UserContext } from "./types";
 const INITIAL_CONTEXT: UserContext = {
   mode: "demo",
   user_id: null,
+  trip_params: null,
   thread_id: null,
   current_stage: "entry",
   generation_active: false,

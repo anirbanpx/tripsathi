@@ -231,6 +231,51 @@ function candidates(location: string): string[] {
   return [...new Set(result)];
 }
 
+const ROUTE_WAYPOINTS: Record<string, [number, number][]> = {
+  kerala:     [[9.9312,76.2673],[10.0889,77.0595],[9.4981,76.3388],[9.6169,76.4290]],
+  goa:        [[15.4909,73.8278],[15.5440,73.7553],[15.2832,73.9862],[15.0101,74.0233]],
+  rajasthan:  [[26.9124,75.7873],[26.4899,74.5511],[26.2389,73.0243],[26.9157,70.9083],[24.5854,73.7125]],
+  ladakh:     [[34.1526,77.5771],[34.6494,77.5619],[33.7706,78.6474]],
+  manali:     [[32.2396,77.1887],[32.3097,77.1503],[32.4313,77.1046]],
+  coorg:      [[12.4217,75.7394],[12.3784,75.6980],[12.3600,75.9200]],
+  guwahati:   [[26.1445,91.7362],[26.5775,93.1711],[25.5788,91.8933]],
+  puri:       [[20.2961,85.8245],[19.8135,85.8312],[19.7145,85.3186]],
+  darjeeling: [[26.7271,88.3953],[27.0410,88.2663],[27.0524,88.2642]],
+  shimla:     [[30.7333,76.7794],[31.1048,77.1734],[31.0962,77.2631],[31.6340,77.1673]],
+  andaman:    [[11.6234,92.7265],[12.0264,92.9838],[11.8300,92.7300]],
+  varanasi:   [[25.4358,81.8463],[25.3176,82.9739],[25.3734,83.0237]],
+  mysore:     [[12.9716,77.5946],[12.2958,76.6394],[12.4217,75.7394]],
+  hampi:      [[15.2700,76.3840],[15.3350,76.4600],[15.9100,75.6800]],
+  rishikesh:  [[29.9457,78.1642],[30.0869,78.2676],[30.4498,78.7647]],
+};
+
+function matchRouteKey(destination: string): string | null {
+  const dk = destination.split(",")[0].toLowerCase();
+  if (dk.includes("kerala")||dk.includes("munnar")||dk.includes("alleppey")||dk.includes("kochi")||dk.includes("kovalam")||dk.includes("wayanad")) return "kerala";
+  if (dk.includes("goa")||dk.includes("panaji")||dk.includes("calangute")||dk.includes("palolem")) return "goa";
+  if (dk.includes("rajasthan")||dk.includes("jaipur")||dk.includes("jodhpur")||dk.includes("jaisalmer")||dk.includes("udaipur")) return "rajasthan";
+  if (dk.includes("ladakh")||dk.includes("leh")) return "ladakh";
+  if (dk.includes("manali")) return "manali";
+  if (dk.includes("coorg")||dk.includes("kodagu")) return "coorg";
+  if (dk.includes("guwahati")||dk.includes("kaziranga")) return "guwahati";
+  if (dk.includes("puri")||dk.includes("bhubaneswar")||dk.includes("chilika")) return "puri";
+  if (dk.includes("darjeeling")) return "darjeeling";
+  if (dk.includes("shimla")||dk.includes("himachal")) return "shimla";
+  if (dk.includes("andaman")) return "andaman";
+  if (dk.includes("varanasi")||dk.includes("banaras")||dk.includes("kashi")) return "varanasi";
+  if (dk.includes("mysore")||dk.includes("mysuru")) return "mysore";
+  if (dk.includes("hampi")) return "hampi";
+  if (dk.includes("rishikesh")||dk.includes("haridwar")) return "rishikesh";
+  return null;
+}
+
+export function getRouteWaypoints(destination: string): [number, number][] {
+  const key = matchRouteKey(destination);
+  if (key) return ROUTE_WAYPOINTS[key];
+  const c = getCoordinates(destination);
+  return c ? [c] : [];
+}
+
 export function getCoordinates(location: string): [number, number] | null {
   for (const key of candidates(location)) {
     if (COORDS[key]) return COORDS[key];
