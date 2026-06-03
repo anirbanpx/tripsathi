@@ -314,6 +314,24 @@ def _enrich_hotel_prices(plan: dict, destination: str, duration_nights: int) -> 
     return plan
 
 
+def _run_targeted_risk_search(destination: str) -> list[str]:
+    """Fallback targeted searches when synthesis returns no local_risks."""
+    from tools import web_search
+    queries = [
+        f"{destination} travel risks warnings safety tips tourists",
+        f"{destination} common tourist mistakes local tips scams",
+    ]
+    results = []
+    for q in queries:
+        try:
+            result = web_search(q)
+            if result:
+                results.append(f"[web_search: {q}]\n{result}")
+        except Exception as e:
+            logger.warning("targeted_risk_search failed query=%r: %s", q, e)
+    return results
+
+
 def destination_intelligence(state: TripSathiState) -> dict:
     # Research agent loop: gathers content via web_search + knowledge_base_query tools
     try:
@@ -343,6 +361,27 @@ def destination_intelligence(state: TripSathiState) -> dict:
         research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096)
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
+
+    # Quality gate: if local_risks came back empty, run targeted fallback and re-synthesize
+    if not research_synthesis.get("local_risks"):
+        logger.info("quality_gate triggered: local_risks empty for %r", state["destination"])
+        fallback_content = _run_targeted_risk_search(state["destination"])
+        if fallback_content:
+            extended_block = knowledge_block + "\n\n---\n\n" + "\n\n---\n\n".join(fallback_content)
+            fallback_prompt = (
+                f"Destination: {state['destination']}\n"
+                f"Traveller profile: {json.dumps(state.get('user_profile'))}\n"
+                f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
+                f"Retrieved knowledge:\n{extended_block}"
+            )
+            try:
+                research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, fallback_prompt, max_tokens=4096)
+                logger.info(
+                    "quality_gate re-synthesis done local_risks=%d",
+                    len(research_synthesis.get("local_risks", [])),
+                )
+            except Exception as e:
+                logger.warning("quality_gate re-synthesis failed: %s — keeping original", e)
 
     if no_content:
         warnings = research_synthesis.get("implicit_warnings", [])
