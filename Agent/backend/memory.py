@@ -1,9 +1,10 @@
-"""Long-term user memory via Mem0 (local OSS mode — no API key required).
+"""Long-term user memory via Mem0.
 
-Stores per-user travel preferences after each session and reads them back
-at the start of persona classification to inform the LLM.
-
-Local config: HuggingFace embeddings (same model as RAG) + Chroma vector store.
+Prefers Mem0 Cloud (MEM0_API_KEY env var) — cloud handles LLM extraction on
+their side so we don't burn Groq tokens on Mem0's large internal prompts.
+Falls back to local OSS mode (ChromaDB + HuggingFace) if no API key is set,
+but note: local mode requires a Groq model with >9k TPM which the free tier
+doesn't provide, so cloud is strongly preferred.
 """
 import logging
 import os
@@ -21,34 +22,40 @@ def _get_memory():
     if _memory is not None:
         return _memory
 
-    from mem0 import Memory
+    mem0_api_key = os.environ.get("MEM0_API_KEY", "")
 
-    MEMORY_DB_PATH.mkdir(parents=True, exist_ok=True)
+    if mem0_api_key:
+        from mem0 import MemoryClient
+        _memory = MemoryClient(api_key=mem0_api_key)
+        logger.info("Mem0 using Cloud API")
+    else:
+        # Local OSS fallback — requires high TPM Groq quota
+        from mem0 import Memory
+        MEMORY_DB_PATH.mkdir(parents=True, exist_ok=True)
+        config = {
+            "llm": {
+                "provider": "openai",
+                "config": {
+                    "model": os.environ.get("MEM0_LLM_MODEL", "llama-3.1-8b-instant"),
+                    "api_key": os.environ.get("LLM_API_KEY", ""),
+                    "openai_base_url": os.environ.get("LLM_BASE_URL", ""),
+                },
+            },
+            "embedder": {
+                "provider": "huggingface",
+                "config": {"model": "BAAI/bge-small-en-v1.5"},
+            },
+            "vector_store": {
+                "provider": "chroma",
+                "config": {
+                    "collection_name": "tripsathi_memories",
+                    "path": str(MEMORY_DB_PATH),
+                },
+            },
+        }
+        _memory = Memory.from_config(config)
+        logger.info("Mem0 using local OSS mode")
 
-    config = {
-        "llm": {
-            "provider": "openai",
-            "config": {
-                "model": os.environ.get("LLM_MODEL", "openai/gpt-oss-120b"),
-                "api_key": os.environ.get("LLM_API_KEY", ""),
-                "openai_base_url": os.environ.get("LLM_BASE_URL", ""),
-            },
-        },
-        "embedder": {
-            "provider": "huggingface",
-            "config": {
-                "model": "BAAI/bge-small-en-v1.5",
-            },
-        },
-        "vector_store": {
-            "provider": "chroma",
-            "config": {
-                "collection_name": "tripsathi_memories",
-                "path": str(MEMORY_DB_PATH),
-            },
-        },
-    }
-    _memory = Memory.from_config(config)
     return _memory
 
 
@@ -58,7 +65,7 @@ def read_memories(user_id: str) -> str:
         return ""
     try:
         mem = _get_memory()
-        results = mem.search("travel preferences past trips", user_id=user_id, limit=10)
+        results = mem.search("travel preferences past trips", filters={"user_id": user_id}, limit=10)
         memories = results.get("results", []) if isinstance(results, dict) else results
         if not memories:
             return ""
