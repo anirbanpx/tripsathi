@@ -13,6 +13,16 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function getOrCreateUserId(): string {
+  const key = "tripsathi_user_id";
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = `anon_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+
 export async function parseIntent(text: string): Promise<TripParameters & { onboarding_summary: string }> {
   const res = await fetch(`${API_BASE}/api/parse`, {
     method: "POST",
@@ -53,6 +63,7 @@ export async function generatePlan(params: TripParameters): Promise<PlanResponse
         elderly: params.elderly,
         budget: params.budget_bracket,
         trip_style: params.trip_style,
+        user_id: getOrCreateUserId(),
       },
       onboarding_answers,
     }),
