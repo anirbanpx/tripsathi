@@ -18,6 +18,10 @@ class TripSathiState(TypedDict):
     refinement_history: list[str]       # all feedback messages in session
     regenerate_requested: bool          # True when user taps "Regenerate"
 
+    # Personalization
+    taste_profile: Optional[dict]       # serialised TasteProfile; None if not loaded
+    traveler_notes: Optional[str]       # verbatim NL input from user; None if stepper mode
+
     # Control/meta
     awaiting_feedback: bool
     current_node: str                   # internal id

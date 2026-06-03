@@ -3,7 +3,7 @@ import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
   Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
 } from "lucide-react";
-import { streamPlan, parseIntent } from "../../services/api";
+import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId } from "../../services/api";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
@@ -30,7 +30,10 @@ const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
-  const [inputMode, setInputMode] = useState<"stepper" | "natural">(ctx.mode === "demo" ? "stepper" : "natural");
+  const [inputMode, setInputMode] = useState<"stepper" | "natural" | "clarify">(ctx.mode === "demo" ? "stepper" : "natural");
+  const [clarifyQuestions, setClarifyQuestions] = useState<string[]>([]);
+  const [clarifyAnswers, setClarifyAnswers] = useState<string[]>([]);
+  const [pendingParams, setPendingParams] = useState<TripParameters | null>(null);
   const [nlText, setNlText] = useState("");
   const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
   const [groupType, setGroupType] = useState<string | null>(null);
@@ -77,7 +80,21 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         budget_bracket:  parsed.budget_bracket || "mid",
         trip_style:      parsed.trip_style || [],
         special_needs:   parsed.special_needs || "",
+        traveler_notes:  nlText.trim(),
       };
+
+      // Fetch adaptive clarify questions based on taste profile gaps
+      const userId = getOrCreateUserId();
+      const questions = await getClarifyQuestions(userId, merged.destination);
+      if (questions.length > 0) {
+        setPendingParams(merged);
+        setClarifyQuestions(questions);
+        setClarifyAnswers(new Array(questions.length).fill(""));
+        setInputMode("clarify");
+        onSetContext({ current_stage: "trip_input", generation_active: false });
+        return;
+      }
+
       const res = await streamPlan(merged, (label) => {
         stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
         onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
@@ -114,6 +131,30 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       });
     } catch (err) {
       onSetContext({ current_stage: "trip_input", generation_active: false });
+      alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
+    }
+  }
+
+  async function handleClarifySubmit() {
+    if (!pendingParams || ctx.generation_active) return;
+    const qaBlock = clarifyQuestions
+      .map((q, i) => `Q: ${q}\nA: ${clarifyAnswers[i] || "(skipped)"}`)
+      .join("\n\n");
+    const finalParams: TripParameters = {
+      ...pendingParams,
+      traveler_notes: `${pendingParams.traveler_notes || ""}\n\n--- Quick questions ---\n${qaBlock}`.trim(),
+    };
+    let stageIndex = 0;
+    onSetContext({ current_stage: "generating", generation_active: true, destination: finalParams.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: finalParams });
+    try {
+      const res = await streamPlan(finalParams, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
+      onSetContext({ current_stage: "plan_display", generation_active: false, plan: res.plan, thread_id: res.thread_id, fake_stage_label: "Done" });
+    } catch (err) {
+      onSetContext({ current_stage: "trip_input", generation_active: false });
+      setInputMode("natural");
       alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }
   }
@@ -271,6 +312,63 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                 disabled={!nlText.trim()}
                 onClick={handleNaturalGenerate}
               >
+                sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Clarify mode — adaptive follow-up questions before generation */}
+      {inputMode === "clarify" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, flex: 1 }}>
+          <div className="question" style={{ marginTop: 8 }}>
+            <div className="q-eyebrow">
+              <Sparkles size={13} strokeWidth={2.5} />
+              one moment
+            </div>
+            <h1>a couple of<br /><span className="sw">quick questions.</span></h1>
+            <div className="hint">helps us personalise your plan — skip any you want</div>
+          </div>
+
+          {clarifyQuestions.map((q, i) => (
+            <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
+                {q}
+              </label>
+              <textarea
+                rows={2}
+                style={{
+                  background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+                  borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)",
+                  fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
+                  outline: "none",
+                }}
+                placeholder="(optional)"
+                value={clarifyAnswers[i]}
+                onChange={e => {
+                  const next = [...clarifyAnswers];
+                  next[i] = e.target.value;
+                  setClarifyAnswers(next);
+                }}
+              />
+            </div>
+          ))}
+
+          <div className="bottom-bar">
+            <div className="inner">
+              <button
+                style={{
+                  padding: "6px 12px", border: "1.5px solid var(--border-strong)",
+                  borderRadius: "var(--radius-pill)", background: "var(--surface)",
+                  fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
+                  color: "var(--fg-2)", cursor: "pointer", letterSpacing: "0.04em",
+                }}
+                onClick={() => setInputMode("natural")}
+              >
+                ← back
+              </button>
+              <button className="cta-primary" onClick={handleClarifySubmit}>
                 sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
               </button>
             </div>

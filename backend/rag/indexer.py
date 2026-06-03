@@ -1,77 +1,76 @@
 import os
 from pathlib import Path
 
-import chromadb
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, Settings
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.vector_stores.chroma import ChromaVectorStore
-
-Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
-Settings.llm = None  # disable LlamaIndex LLM synthesis — we do our own synthesis in nodes.py
+from qdrant_client import QdrantClient
+from llama_index.core import VectorStoreIndex, StorageContext, Settings
+from llama_index.vector_stores.qdrant import QdrantVectorStore
+from llama_index.embeddings.voyageai import VoyageEmbedding
 
 KNOWLEDGE_DIR = Path(__file__).parent / "knowledge"
-CHROMA_PATH = Path(__file__).parent.parent / "data" / "chroma_db"
+COLLECTION_NAME = "tripsathi"
 
+Settings.embed_model = VoyageEmbedding(
+    model_name="voyage-3.5-lite",
+    voyage_api_key=os.environ["VOYAGE_API_KEY"],
+)
+Settings.llm = None  # LlamaIndex LLM synthesis disabled — synthesis handled in nodes.py
+
+_qdrant: QdrantClient | None = None
 _index: VectorStoreIndex | None = None
 
 
-def _build_index() -> VectorStoreIndex:
-    CHROMA_PATH.mkdir(parents=True, exist_ok=True)
-    chroma_client = chromadb.PersistentClient(path=str(CHROMA_PATH))
-    collection = chroma_client.get_or_create_collection("tripsathi")
-    vector_store = ChromaVectorStore(chroma_collection=collection)
-    storage_context = StorageContext.from_defaults(vector_store=vector_store)
-
-    if not any(KNOWLEDGE_DIR.glob("*.md")):
-        raise RuntimeError(
-            f"No knowledge files found in {KNOWLEDGE_DIR}. "
-            "Add destination .md files before starting the server."
+def _get_qdrant() -> QdrantClient:
+    global _qdrant
+    if _qdrant is None:
+        _qdrant = QdrantClient(
+            url=os.environ["QDRANT_URL"],
+            api_key=os.environ["QDRANT_API_KEY"],
         )
-
-    documents = SimpleDirectoryReader(str(KNOWLEDGE_DIR)).load_data()
-    for doc in documents:
-        # Tag each document with its destination so queries can be scoped at retrieval time
-        stem = Path(doc.metadata.get("file_name", "")).stem
-        if stem:
-            doc.metadata["destination"] = stem.lower()
-
-    return VectorStoreIndex.from_documents(documents, storage_context=storage_context)
-
-
-def _load_index() -> VectorStoreIndex:
-    CHROMA_PATH.mkdir(parents=True, exist_ok=True)
-    chroma_client = chromadb.PersistentClient(path=str(CHROMA_PATH))
-    collection = chroma_client.get_or_create_collection("tripsathi")
-    vector_store = ChromaVectorStore(chroma_collection=collection)
-    storage_context = StorageContext.from_defaults(vector_store=vector_store)
-    return VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
+    return _qdrant
 
 
 def get_index() -> VectorStoreIndex:
-    """Return a cached index, building from knowledge files on first call."""
+    """Return a cached VectorStoreIndex backed by Qdrant Cloud. Raises if collection is empty."""
     global _index
     if _index is not None:
         return _index
 
-    try:
-        index = _load_index()
-        if index._vector_store._collection.count() == 0:
-            index = _build_index()
-    except Exception:
-        index = _build_index()
+    client = _get_qdrant()
 
-    _index = index
+    try:
+        count = client.count(COLLECTION_NAME).count
+    except Exception as e:
+        raise RuntimeError(
+            f"Qdrant collection '{COLLECTION_NAME}' not found. Run: python reindex.py\n({e})"
+        )
+
+    if count == 0:
+        raise RuntimeError(
+            f"Qdrant collection '{COLLECTION_NAME}' is empty. Run: python reindex.py"
+        )
+
+    vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME)
+    storage_context = StorageContext.from_defaults(vector_store=vector_store)
+    _index = VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
     return _index
 
 
-def get_query_engine(similarity_top_k: int = 5):
-    """Return a query engine backed by the cached index."""
-    return get_index().as_query_engine(similarity_top_k=similarity_top_k)
+def get_query_engine(similarity_top_k: int = 5, destination: str | None = None):
+    """Return a query engine. Pass destination to restrict results to that destination only."""
+    index = get_index()
+    if destination:
+        from llama_index.core.vector_stores import MetadataFilter, MetadataFilters, FilterOperator
+        filters = MetadataFilters(filters=[
+            MetadataFilter(key="destination", value=destination.lower(), operator=FilterOperator.EQ)
+        ])
+        return index.as_query_engine(similarity_top_k=similarity_top_k, filters=filters)
+    return index.as_query_engine(similarity_top_k=similarity_top_k)
 
 
 def rebuild_index():
-    """Force a full index rebuild from knowledge files."""
+    """Force a full re-index from knowledge files. Prefer running reindex.py directly."""
     global _index
     _index = None
-    _index = _build_index()
-    return _index.as_query_engine(similarity_top_k=5)
+    import reindex
+    reindex.rebuild()
+    _index = None  # force fresh load on next get_index() call
