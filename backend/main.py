@@ -115,6 +115,8 @@ def _build_initial_state(req: PlanRequest) -> dict:
         "onboarding_answers": req.onboarding_answers,
         "traveler_notes": req.traveler_notes or None,
         "taste_profile": None,
+        "candidates": None,
+        "ranked_candidates": None,
         "user_profile": None,
         "research_synthesis": None,
         "plan": None,

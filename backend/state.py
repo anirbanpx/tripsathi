@@ -21,6 +21,8 @@ class TripSathiState(TypedDict):
     # Personalization
     taste_profile: Optional[dict]       # serialised TasteProfile; None if not loaded
     traveler_notes: Optional[str]       # verbatim NL input from user; None if stepper mode
+    candidates: Optional[list]          # raw candidate pool from candidate_gen
+    ranked_candidates: Optional[list]   # taste-scored pool from ranker
 
     # Control/meta
     awaiting_feedback: bool

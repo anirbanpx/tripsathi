@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
+    CANDIDATE_GEN_SYSTEM,
     CLARIFY_SYSTEM,
     PERSONA_CLASSIFICATION_SYSTEM,
     QUERY_EXPANSION_SYSTEM,
@@ -443,12 +444,34 @@ def plan_assembly(state: TripSathiState) -> dict:
     if state.get("traveler_notes"):
         notes_block = f"\n\nUser's original request (verbatim — honor the intent and tone): {state['traveler_notes']}"
 
+    # Ranked candidates block — steer plan generation toward taste-matched items
+    ranked_block = ""
+    ranked = state.get("ranked_candidates") or []
+    if ranked:
+        def _fmt(items: list, n: int) -> str:
+            return "\n".join(
+                f"  - {c['name']} (match {c.get('match_score', 0):.3f}): {c.get('description', '')[:90]}"
+                for c in items[:n]
+            )
+        activities = [c for c in ranked if c.get("type") not in ("hotel", "restaurant")]
+        hotels     = [c for c in ranked if c.get("type") == "hotel"]
+        restaurants = [c for c in ranked if c.get("type") == "restaurant"]
+        ranked_block = "\n\nRANKED CANDIDATES (pre-scored against traveller taste — use as your primary selection pool):"
+        if activities:
+            ranked_block += f"\nActivities/experiences:\n{_fmt(activities, 12)}"
+        if hotels:
+            ranked_block += f"\nHotels:\n{_fmt(hotels, 4)}"
+        if restaurants:
+            ranked_block += f"\nRestaurants:\n{_fmt(restaurants, 5)}"
+        ranked_block += "\nPrioritise higher-scored items. Include a lower-scored item only if logistically essential."
+
     generation_prompt = (
         f"Destination: {state['destination']}\n"
         f"Research: {json.dumps(state.get('research_synthesis'))}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}"
         f"{notes_block}"
+        f"{ranked_block}"
         f"{req_block}"
         f"{toddler_block}"
     )
@@ -491,6 +514,201 @@ def finalize(state: TripSathiState) -> dict:
         "awaiting_feedback": False,
         "current_node": "done",
         "stage_label": "Plan finalised",
+    }
+
+
+def _rerank(query: str, documents: list[str], top_k: int = 30) -> list[tuple[int, float]]:
+    """Score documents against query. Returns (original_index, score) sorted by relevance desc.
+    Tries Voyage rerank-2.5 first; falls back to Cohere rerank-english-v3.0; then identity order."""
+    if os.getenv("VOYAGE_API_KEY"):
+        try:
+            import voyageai
+            from packaging.version import Version
+            if Version(voyageai.__version__) >= Version("0.3.0"):
+                vo = voyageai.Client(api_key=os.environ["VOYAGE_API_KEY"])
+                result = vo.rerank(query, documents, model="rerank-2.5", top_k=min(top_k, len(documents)))
+                return [(r.index, r.relevance_score) for r in result.results]
+            # voyageai < 0.3.0 has no rerank — fall through to Cohere
+        except Exception as e:
+            logger.warning("Voyage rerank failed (%s) — trying Cohere", e)
+    if os.getenv("COHERE_API_KEY"):
+        try:
+            import cohere
+            co = cohere.Client(api_key=os.environ["COHERE_API_KEY"])
+            result = co.rerank(
+                query=query, documents=documents,
+                model="rerank-english-v3.0",
+                top_n=min(top_k, len(documents)),
+                return_documents=False,
+            )
+            return [(r.index, r.relevance_score) for r in result.results]
+        except Exception as e:
+            logger.warning("Cohere rerank also failed (%s) — using identity order", e)
+    return [(i, 0.5) for i in range(min(len(documents), top_k))]
+
+
+def _build_taste_query(taste_profile: dict | None, user_profile: dict | None, trip_parameters: dict) -> str:
+    """Build a natural-language POSITIVE preference statement for the reranker.
+    Cross-encoders need full sentences. Only include positive wants — negatives backfire.
+    Hard avoids are filtered in _filter_candidates before this is called."""
+    clauses: list[str] = []
+
+    if taste_profile:
+        pace = taste_profile.get("pace", 3)
+        ct   = taste_profile.get("crowd_tolerance", 3)
+        fa   = taste_profile.get("food_adventurousness", 3)
+        wt   = taste_profile.get("walking_tolerance", 3)
+        at   = taste_profile.get("accommodation_taste", 3)
+
+        # Pace + crowd
+        if pace <= 2 and ct <= 2:
+            clauses.append("slow relaxed trip exploring quiet offbeat hidden local spots away from tourists")
+        elif pace <= 2:
+            clauses.append("slow relaxed leisurely travel")
+        elif ct <= 2:
+            clauses.append("offbeat peaceful authentic local experiences away from tourist crowds")
+        elif pace >= 4:
+            clauses.append("active packed itinerary visiting multiple popular attractions each day")
+
+        # Interests
+        interests = taste_profile.get("interests", {})
+        high = [k for k, v in sorted(interests.items(), key=lambda x: -x[1]) if v >= 0.6]
+        if high:
+            clauses.append(f"interested in {' '.join(high[:5])}")
+
+        # Walking
+        if wt >= 4:
+            clauses.append("enjoys hiking trekking and walking trails in nature")
+        elif wt <= 2:
+            clauses.append("prefers easy accessible flat terrain minimal walking")
+
+        # Accommodation
+        if at <= 2:
+            clauses.append("prefers staying in boutique hotels homestays guesthouses")
+        elif at >= 4:
+            clauses.append("prefers well-appointed hotel resorts with full amenities")
+
+        # Food
+        if fa >= 4:
+            clauses.append("loves trying authentic local street food and regional cuisine")
+        elif fa <= 2:
+            clauses.append("prefers familiar hotel dining and known cuisine")
+
+        # Dietary
+        if taste_profile.get("dietary_restrictions"):
+            clauses.append(f"{' '.join(taste_profile['dietary_restrictions'])} food options")
+
+    up = user_profile or {}
+    constraints = up.get("constraints", {})
+    if constraints.get("kid_ages"):
+        clauses.append("family-friendly activities suitable for young children")
+    if constraints.get("elderly"):
+        clauses.append("accessible low-intensity senior-friendly activities with flat terrain")
+    if trip_parameters.get("budget") == "budget":
+        clauses.append("free or very low cost activities")
+
+    return ". ".join(clauses) + "." if clauses else "Authentic local sightseeing and cultural experiences."
+
+
+def _filter_candidates(candidates: list, taste_profile: dict | None, user_profile: dict | None) -> list:
+    """Pre-filter candidates on hard constraints before reranking.
+    Removes items matching hard_avoids, and checks toddler/elderly flags."""
+    hard_avoids = [a.lower() for a in (taste_profile or {}).get("hard_avoids", [])]
+    up = user_profile or {}
+    constraints = up.get("constraints", {})
+    kid_ages = constraints.get("kid_ages") or []
+    has_toddler = any(isinstance(a, int) and a <= 3 for a in kid_ages)
+    has_elderly = bool(constraints.get("elderly"))
+
+    filtered = []
+    for c in candidates:
+        text = (c.get("name", "") + " " + c.get("description", "")).lower()
+        if any(avoid in text for avoid in hard_avoids if len(avoid) > 3):
+            continue
+        if has_toddler and c.get("toddler_ok") is False:
+            continue
+        if has_elderly and c.get("elderly_ok") is False:
+            continue
+        filtered.append(c)
+
+    return filtered if len(filtered) >= 5 else candidates  # don't filter so hard we're left with nothing
+
+
+def _candidate_to_doc(c: dict) -> str:
+    tags = ", ".join(c.get("interest_tags", []))
+    return (
+        f"{c.get('name', '')}: {c.get('description', '')} "
+        f"Type: {c.get('type', '')}. Tags: {tags}. "
+        f"Cost: {c.get('cost_tier', '')}. Terrain: {c.get('terrain', '')}."
+    )
+
+
+def candidate_gen(state: TripSathiState) -> dict:
+    """Extract a structured item pool from research_synthesis using the LLM."""
+    synthesis = state.get("research_synthesis") or {}
+    extraction_input = (
+        f"Destination: {state['destination']}\n"
+        f"Key places: {json.dumps(synthesis.get('key_places', []))}\n"
+        f"Routing: {synthesis.get('routing', '')}\n"
+        f"Seasonal context: {synthesis.get('seasonal_context', '')}\n"
+        f"User profile: {json.dumps(state.get('user_profile'))}\n"
+        f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+    )
+    try:
+        raw = _call_llm(CANDIDATE_GEN_SYSTEM, extraction_input, max_tokens=2048)
+    except Exception as e:
+        logger.warning("candidate_gen LLM failed (%s) — proceeding with empty pool", e)
+        raw = []
+
+    if isinstance(raw, dict):
+        raw = raw.get("candidates", raw.get("items", []))
+    candidates = raw if isinstance(raw, list) else []
+
+    return {
+        "candidates": candidates,
+        "current_node": "ranker",
+        "stage_label": "Personalising your plan",
+        "error": None,
+    }
+
+
+def ranker(state: TripSathiState) -> dict:
+    """Score candidates against the user's taste profile via Voyage/Cohere rerank."""
+    candidates = state.get("candidates") or []
+    if not candidates:
+        return {
+            "ranked_candidates": [],
+            "current_node": "plan_assembly",
+            "stage_label": "Generating your itinerary",
+            "error": None,
+        }
+
+    candidates = _filter_candidates(candidates, state.get("taste_profile"), state.get("user_profile"))
+    query = _build_taste_query(
+        state.get("taste_profile"),
+        state.get("user_profile"),
+        state["trip_parameters"],
+    )
+    docs = [_candidate_to_doc(c) for c in candidates]
+    scored = _rerank(query, docs, top_k=min(len(docs), 30))
+
+    ranked = []
+    for idx, score in scored:
+        if idx < len(candidates):
+            item = dict(candidates[idx])
+            item["match_score"] = round(float(score), 4)
+            ranked.append(item)
+
+    logger.info(
+        "ranker destination=%s candidates=%d ranked=%d top=%r",
+        state["destination"], len(candidates), len(ranked),
+        ranked[0]["name"] if ranked else "—",
+    )
+    return {
+        "ranked_candidates": ranked,
+        "current_node": "plan_assembly",
+        "stage_label": "Generating your itinerary",
+        "error": None,
     }
 
 
