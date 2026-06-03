@@ -230,21 +230,39 @@ async def stream_plan(req: PlanRequest):
 
     async def generate():
         yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
-        try:
-            loop = asyncio.get_event_loop()
-            chunks = await loop.run_in_executor(
-                None,
-                lambda: list(graph.stream(_build_initial_state(req), config=config, stream_mode="updates"))
-            )
-            for chunk in chunks:
-                for _node, update in chunk.items():
-                    stage = update.get("stage_label")
-                    if stage:
-                        yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
-                        await asyncio.sleep(0)
-        except Exception as e:
-            yield f"data: {json.dumps({'type': 'error', 'detail': str(e)})}\n\n"
-            return
+
+        loop = asyncio.get_event_loop()
+        queue: asyncio.Queue = asyncio.Queue()
+        _SENTINEL = object()
+
+        # graph.stream is a *sync* generator and the SqliteSaver checkpointer is
+        # incompatible with astream, so we drive it in a worker thread and push
+        # each chunk onto an asyncio.Queue as it's produced — yielding stage
+        # events incrementally instead of buffering the whole pipeline first.
+        def run_graph():
+            try:
+                for chunk in graph.stream(_build_initial_state(req), config=config, stream_mode="updates"):
+                    loop.call_soon_threadsafe(queue.put_nowait, chunk)
+            except Exception as e:  # noqa: BLE001 — surfaced to client below
+                loop.call_soon_threadsafe(queue.put_nowait, e)
+            finally:
+                loop.call_soon_threadsafe(queue.put_nowait, _SENTINEL)
+
+        loop.run_in_executor(None, run_graph)
+
+        while True:
+            item = await queue.get()
+            if item is _SENTINEL:
+                break
+            if isinstance(item, Exception):
+                yield f"data: {json.dumps({'type': 'error', 'detail': str(item)})}\n\n"
+                return
+            for _node, update in item.items():
+                if not isinstance(update, dict):
+                    continue
+                stage = update.get("stage_label")
+                if stage:
+                    yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
 
         state = _get_state(config)
         if state.get("error"):
