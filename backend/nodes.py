@@ -744,7 +744,7 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
         f"  interests top: {sorted(profile.interests.items(), key=lambda x: -x[1])[:3]}"
     )
     try:
-        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=256)
+        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=1024)
         if isinstance(result, list):
             return [str(q) for q in result[:2] if q]
     except Exception:
