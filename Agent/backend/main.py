@@ -231,7 +231,12 @@ async def stream_plan(req: PlanRequest):
     async def generate():
         yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
         try:
-            async for chunk in graph.astream(_build_initial_state(req), config=config, stream_mode="updates"):
+            loop = asyncio.get_event_loop()
+            chunks = await loop.run_in_executor(
+                None,
+                lambda: list(graph.stream(_build_initial_state(req), config=config, stream_mode="updates"))
+            )
+            for chunk in chunks:
                 for _node, update in chunk.items():
                     stage = update.get("stage_label")
                     if stage:
