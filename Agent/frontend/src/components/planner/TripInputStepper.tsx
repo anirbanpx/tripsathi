@@ -62,7 +62,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleNaturalGenerate() {
     if (!nlText.trim() || ctx.generation_active) return;
-    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText, fake_stage_index: 0, fake_stage_label: "Understanding your profile..." });
+    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: null });
     let stageIndex = 0;
     try {
       const parsed = await parseIntent(nlText);
@@ -98,7 +98,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleGenerate() {
     if (ctx.generation_active) return;
-    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile..." });
+    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: params });
     let stageIndex = 0;
     try {
       const res = await streamPlan(params, (label) => {
