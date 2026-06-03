@@ -8,8 +8,9 @@ logger = logging.getLogger(__name__)
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
-    RESEARCH_AGENT_SYSTEM,
+    CLARIFY_SYSTEM,
     PERSONA_CLASSIFICATION_SYSTEM,
+    QUERY_EXPANSION_SYSTEM,
     RESEARCH_SYNTHESIS_SYSTEM,
     PLAN_GENERATION_SYSTEM,
     PLAN_REFINEMENT_SYSTEM,
@@ -22,33 +23,85 @@ _client = OpenAI(
 )
 _MODEL = os.environ.get("LLM_MODEL", "local-model")
 
-# Separate client for the research agent — uses a model with confirmed tool-calling support.
-# Defaults to llama-3.3-70b-versatile; override with RESEARCH_MODEL env var.
-_RESEARCH_MODEL = os.environ.get("RESEARCH_MODEL", "llama-3.3-70b-versatile")
-_research_client = OpenAI(
-    base_url=os.environ.get("LLM_BASE_URL", "http://localhost:1234/v1"),
-    api_key=os.environ.get("LLM_API_KEY", "lm-studio"),
-)
-
 APPROVAL_SIGNALS = {
     "looks good", "approve", "approved", "perfect", "that's fine", "yes",
     "ok", "done", "great", "thanks", "good", "fine", "accept", "confirmed",
 }
 
-HOUSEBOAT_TRUST_WARNING = (
-    "Houseboat booking risk: cold-approach operators at the jetty inflate prices 30–50% "
-    "and may provide substandard boats. Book through your hotel front desk or a Kerala Tourism-certified "
-    "aggregator (e.g. Vasudeva Vilasam for mid-range, Spice Routes Leisure for premium)."
-)
-ALLEPPEY_LOCATION_WARNING = (
-    "Alleppey hotel location matters: choose a hotel near the backwater junction "
-    "(Finishing Point Road or near the boat jetty) — NOT on NH 66 or near Alleppey beach, "
-    "which adds 3–5 km and extra cost to reach houseboats."
-)
-HOUSEBOAT_TODDLER_WARNING = (
-    "Overnight houseboat not suitable for children under 3: open deck with no railings, "
-    "open water, limited bathroom facilities. Book a day cruise (4–6 hrs) instead through your hotel."
-)
+DESTINATION_RULES: dict[str, dict] = {
+    # keys are lowercase substrings to match in destination name
+    "kerala": {
+        "toddler_hotel_swap": {
+            "match_hotel_keyword": "houseboat",
+            "replacement_name": "Backwater-side land hotel (book near jetty, not highway)",
+            "replacement_reasoning": (
+                "Overnight houseboat not safe for toddlers under 3. "
+                "Choose a land hotel near the backwater jetty (Finishing Point Road area) "
+                "for easy day-cruise access. High chair: pre-request on booking."
+            ),
+        },
+        "toddler_warning": (
+            "Overnight houseboat not suitable for children under 3: open deck with no railings, "
+            "open water, limited bathroom facilities. Book a day cruise (4–6 hrs) instead through your hotel."
+        ),
+        "trust_warnings": [
+            {
+                "trigger_in_synthesis": ["houseboat"],
+                "text": (
+                    "Houseboat booking risk: cold-approach operators at the jetty inflate prices 30–50% "
+                    "and may provide substandard boats. Book through your hotel front desk or a Kerala Tourism-certified "
+                    "aggregator (e.g. Vasudeva Vilasam for mid-range, Spice Routes Leisure for premium)."
+                ),
+                "dedup_key": "cold-approach",
+            },
+        ],
+        "location_warnings": [
+            {
+                "trigger_in_synthesis": ["alleppey", "hotel location", "highway"],
+                "text": (
+                    "Alleppey hotel location matters: choose a hotel near the backwater junction "
+                    "(Finishing Point Road or near the boat jetty) — NOT on NH 66 or near Alleppey beach, "
+                    "which adds 3–5 km and extra cost to reach houseboats."
+                ),
+                "dedup_key": "NH 66",
+            },
+        ],
+    },
+    "manali": {
+        "trust_warnings": [
+            {
+                "trigger_in_synthesis": ["photo tout", "hadimba", "cap"],
+                "text": (
+                    "Photo tout risk at Hadimba Temple: men with Himachali caps and yaks position themselves "
+                    "on the approach path. Once a cap is placed on a child, they demand ₹300–500. "
+                    "Decline before physical contact — walk past without eye contact."
+                ),
+                "dedup_key": "photo tout",
+            },
+        ],
+    },
+    "jaisalmer": {
+        "trust_warnings": [
+            {
+                "trigger_in_synthesis": ["camel", "operator", "desert camp"],
+                "text": (
+                    "Desert camp and camel safari operators outside the fort charge inflated rates. "
+                    "Book through your hotel or a TripAdvisor-reviewed operator. "
+                    "Confirm camp location: Sam Sand Dunes (40 km) is more scenic than closer alternatives."
+                ),
+                "dedup_key": "desert camp",
+            },
+        ],
+    },
+}
+
+
+def _get_destination_rules(destination: str) -> dict:
+    dest_lower = destination.lower()
+    for key, rules in DESTINATION_RULES.items():
+        if key in dest_lower:
+            return rules
+    return {}
 
 
 def _get_kid_ages(state) -> list:
@@ -71,8 +124,7 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
     warnings = plan.get("warnings", [])
-    dest_lower = destination.lower()
-    is_kerala = "kerala" in dest_lower or "alleppey" in dest_lower or "munnar" in dest_lower or "kochi" in dest_lower
+    rules = _get_destination_rules(destination)
 
     has_young_child = any(isinstance(age, int) and age <= 10 for age in kid_ages)
 
@@ -83,21 +135,20 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
             if "1:00" not in notes and "nap" not in notes.lower() and "rest" not in notes.lower():
                 day["notes"] = "1:00–2:30 PM: mandatory nap/rest at hotel — no activities scheduled during this window. " + notes
 
-        # 2. Replace overnight houseboat hotel with land hotel (Kerala only, toddler)
-        if is_kerala:
+        # 2. Replace overnight hotel matching keyword with land alternative (destination-specific)
+        swap = rules.get("toddler_hotel_swap")
+        if swap:
+            keyword = swap["match_hotel_keyword"]
             for hotel in plan.get("hotels", []):
-                if "houseboat" in hotel.get("name", "").lower():
-                    hotel["name"] = "Backwater-side land hotel (book near jetty, not highway)"
-                    hotel["reasoning"] = (
-                        "Overnight houseboat not safe for toddlers under 3. "
-                        "Choose a land hotel near the backwater jetty (Finishing Point Road area) "
-                        "for easy day-cruise access. High chair: pre-request on booking."
-                    )
+                if keyword in hotel.get("name", "").lower():
+                    hotel["name"] = swap["replacement_name"]
+                    hotel["reasoning"] = swap["replacement_reasoning"]
                     hotel["content_source"] = "rag"
 
-        # 3. Add toddler houseboat warning (Kerala only)
-        if is_kerala and not any("under 3" in w or "toddler" in w.lower() for w in warnings):
-            warnings.insert(0, HOUSEBOAT_TODDLER_WARNING)
+        # 3. Add toddler warning (destination-specific)
+        toddler_warning = rules.get("toddler_warning")
+        if toddler_warning and not any("under 3" in w or "toddler" in w.lower() for w in warnings):
+            warnings.insert(0, toddler_warning)
 
     elif elderly and has_young_child:
         # 1b. Afternoon rest for elderly + young child combo
@@ -121,23 +172,34 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
                 warnings.append(risk)
                 existing_lower += " " + risk.lower()
 
-    # 6. Houseboat trust warning — Kerala only, triggered by RAG synthesis
-    if is_kerala and not any("cold-approach" in w or "inflate" in w for w in warnings):
-        if research_synthesis:
-            risks = research_synthesis.get("local_risks", []) + research_synthesis.get("implicit_warnings", [])
-            if any("houseboat" in r.lower() for r in risks):
-                warnings.append(HOUSEBOAT_TRUST_WARNING)
-        else:
-            warnings.append(HOUSEBOAT_TRUST_WARNING)
+    # 5. Trust warnings — destination-specific, triggered by RAG synthesis keywords
+    synthesis_text = ""
+    if research_synthesis:
+        all_risks = research_synthesis.get("local_risks", []) + research_synthesis.get("implicit_warnings", [])
+        synthesis_text = " ".join(all_risks).lower()
 
-    # 7. Alleppey hotel location warning — Kerala only
-    if is_kerala and not any("NH 66" in w or "finishing point" in w.lower() for w in warnings):
+    for tw in rules.get("trust_warnings", []):
+        dedup_key = tw["dedup_key"]
+        if any(dedup_key in w for w in warnings):
+            continue
+        triggers = tw["trigger_in_synthesis"]
         if research_synthesis:
-            all_text = " ".join(research_synthesis.get("implicit_warnings", []) + research_synthesis.get("local_risks", []))
-            if "alleppey" in all_text.lower() or "hotel location" in all_text.lower() or "highway" in all_text.lower():
-                warnings.append(ALLEPPEY_LOCATION_WARNING)
+            if any(t in synthesis_text for t in triggers):
+                warnings.append(tw["text"])
         else:
-            warnings.append(ALLEPPEY_LOCATION_WARNING)
+            warnings.append(tw["text"])
+
+    # 6. Location warnings — destination-specific, triggered by RAG synthesis keywords
+    for lw in rules.get("location_warnings", []):
+        dedup_key = lw["dedup_key"]
+        if any(dedup_key in w for w in warnings):
+            continue
+        triggers = lw["trigger_in_synthesis"]
+        if research_synthesis:
+            if any(t in synthesis_text for t in triggers):
+                warnings.append(lw["text"])
+        else:
+            warnings.append(lw["text"])
 
     plan["warnings"] = warnings
     return plan
@@ -194,7 +256,9 @@ def persona_classification(state: TripSathiState) -> dict:
     if state.get("destination"):
         answers_text += f"\nDestination hint: {state['destination']}"
 
-    # Inject long-term memories if a user_id is present in trip_parameters
+    if state.get("traveler_notes"):
+        answers_text += f"\n\nUser's original request (verbatim): {state['traveler_notes']}"
+
     user_id = state["trip_parameters"].get("user_id", "")
     past_memories = read_memories(user_id)
     if past_memories:
@@ -213,147 +277,47 @@ def persona_classification(state: TripSathiState) -> dict:
     }
 
 
-def _run_research_agent(destination: str, user_profile: dict, trip_parameters: dict) -> list[str]:
-    """ReAct agent loop: uses web_search + knowledge_base_query tools to gather destination intel.
-    Returns a list of content strings collected from tool calls."""
-    from tools import TOOL_SCHEMAS, execute_tool
-
-    dest_slug = destination.lower().split(",")[0].strip().replace(" ", "_")
-    task = (
-        f"Research destination: {destination}\n"
-        f"Traveller profile: {json.dumps(user_profile)}\n"
-        f"Trip parameters: {json.dumps(trip_parameters)}\n\n"
-        "Gather comprehensive destination intelligence covering routing, local risks, "
-        "seasonal context, key places, and persona-specific concerns using the tools available.\n"
-        f"When calling knowledge_base_query, always pass destination=\"{dest_slug}\" "
-        "to restrict results to this destination only."
-    )
-
-    messages = [
-        {"role": "system", "content": RESEARCH_AGENT_SYSTEM},
-        {"role": "user", "content": task},
-    ]
-
-    gathered = []
-    MAX_ITERATIONS = 8
-
-    for iteration in range(MAX_ITERATIONS):
-        response = _research_client.chat.completions.create(
-            model=_RESEARCH_MODEL,
-            messages=messages,
-            tools=TOOL_SCHEMAS,
-            tool_choice="auto",
-            max_tokens=2048,
-        )
-        choice = response.choices[0]
-        messages.append(choice.message)
-
-        if choice.finish_reason != "tool_calls" or not choice.message.tool_calls:
-            logger.info("research_agent done after %d iterations", iteration + 1)
-            break
-
-        for tc in choice.message.tool_calls:
-            args = json.loads(tc.function.arguments)
-            result = execute_tool(tc.function.name, args)
-            logger.info("research_agent tool=%s query=%r chars=%d", tc.function.name, args.get("query", ""), len(result))
-            gathered.append(f"[{tc.function.name}: {args.get('query', '')}]\n{result}")
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tc.id,
-                "content": result,
-            })
-
-    return gathered
-
-
-def _enrich_hotel_prices(plan: dict, destination: str, duration_nights: int) -> dict:
-    """Search Tavily for current hotel prices and patch approx_cost_per_night in-place."""
-    import re
-    from tools import web_search
-
-    for hotel in plan.get("hotels", []):
-        name = hotel.get("name", "")
-        if not name or len(name) < 5 or "land hotel" in name.lower():
-            continue  # skip placeholders
-        query = f"{name} {destination} hotel price per night INR 2025 booking"
-        try:
-            result = web_search(query)
-            # Match patterns like ₹2,500 / Rs 3000 / 2500 per night
-            prices_raw = re.findall(
-                r'(?:₹|Rs\.?\s*)(\d{1,2},?\d{3})\s*(?:/\s*night|per night|a night)?',
-                result, re.IGNORECASE
-            )
-            if not prices_raw:
-                prices_raw = re.findall(r'(\d{1,2},?\d{3})\s*(?:per night|/night)', result, re.IGNORECASE)
-            parsed = sorted(
-                {int(p.replace(",", "")) for p in prices_raw if 500 <= int(p.replace(",", "")) <= 50_000}
-            )
-            if parsed:
-                median = parsed[len(parsed) // 2]
-                hotel["approx_cost_per_night"] = median
-                hotel["content_source"] = "web"
-                logger.info("hotel_price_enriched name=%r price=%d", name, median)
-        except Exception as e:
-            logger.warning("hotel_price_lookup_failed name=%r: %s", name, e)
-
-    # Recalculate accommodation + total in budget_breakdown
-    hotels = plan.get("hotels", [])
-    budget = plan.get("budget_breakdown", {})
-    if budget and hotels:
-        budget["accommodation"] = sum(
-            h.get("approx_cost_per_night", 0) * duration_nights for h in hotels
-        )
-        budget["total"] = sum([
-            budget.get("accommodation", 0),
-            budget.get("transport", 0),
-            budget.get("activities", 0),
-            budget.get("food", 0),
-        ])
-        plan["budget_breakdown"] = budget
-
-    return plan
-
-
-def _run_targeted_risk_search(destination: str) -> list[str]:
-    """Fallback targeted searches when synthesis returns no local_risks."""
-    from tools import web_search
-    queries = [
-        f"{destination} travel risks warnings safety tips tourists",
-        f"{destination} common tourist mistakes local tips scams",
-    ]
-    results = []
-    for q in queries:
-        try:
-            result = web_search(q)
-            if result:
-                results.append(f"[web_search: {q}]\n{result}")
-        except Exception as e:
-            logger.warning("targeted_risk_search failed query=%r: %s", q, e)
-    return results
-
-
 def destination_intelligence(state: TripSathiState) -> dict:
-    # Research agent loop: gathers content via web_search + knowledge_base_query tools
+    from rag.indexer import get_query_engine
+
+    # Call 2: expand queries
+    expansion_prompt = (
+        f"Destination: {state['destination']}\n"
+        f"Traveller profile: {json.dumps(state['user_profile'])}\n"
+        f"Trip: {json.dumps(state['trip_parameters'])}"
+    )
     try:
-        gathered_content = _run_research_agent(
-            state["destination"],
-            state.get("user_profile") or {},
-            state["trip_parameters"],
-        )
+        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024)
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
+    # LlamaIndex retrieval (local variable — not state)
+    retrieved_content = []
+    rag_failed = False
+    dest_slug = state["destination"].lower().split(",")[0].strip().replace(" ", "_")
+    try:
+        query_engine = get_query_engine(destination=dest_slug)
+        for q in expanded_queries:
+            result = query_engine.query(q)
+            text = str(result).strip()
+            if text:
+                retrieved_content.append(text)
+    except Exception:
+        rag_failed = True  # Graceful degradation: proceed with empty corpus
+
+    if not retrieved_content:
+        rag_failed = True
+
     knowledge_block = (
-        "\n\n---\n\n".join(gathered_content)
-        if gathered_content
+        "\n\n---\n\n".join(retrieved_content)
+        if retrieved_content
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
-    no_content = not gathered_content
 
-    # Synthesis call: same as before — turns gathered content into structured research_synthesis
+    # Call 3: synthesize
     synthesis_prompt = (
         f"Destination: {state['destination']}\n"
-        f"Traveller profile: {json.dumps(state.get('user_profile'))}\n"
+        f"Traveller profile: {json.dumps(state['user_profile'])}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Retrieved knowledge:\n{knowledge_block}"
     )
@@ -362,31 +326,11 @@ def destination_intelligence(state: TripSathiState) -> dict:
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
-    # Quality gate: if local_risks came back empty, run targeted fallback and re-synthesize
-    if not research_synthesis.get("local_risks"):
-        logger.info("quality_gate triggered: local_risks empty for %r", state["destination"])
-        fallback_content = _run_targeted_risk_search(state["destination"])
-        if fallback_content:
-            extended_block = knowledge_block + "\n\n---\n\n" + "\n\n---\n\n".join(fallback_content)
-            fallback_prompt = (
-                f"Destination: {state['destination']}\n"
-                f"Traveller profile: {json.dumps(state.get('user_profile'))}\n"
-                f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
-                f"Retrieved knowledge:\n{extended_block}"
-            )
-            try:
-                research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, fallback_prompt, max_tokens=4096)
-                logger.info(
-                    "quality_gate re-synthesis done local_risks=%d",
-                    len(research_synthesis.get("local_risks", [])),
-                )
-            except Exception as e:
-                logger.warning("quality_gate re-synthesis failed: %s — keeping original", e)
-
-    if no_content:
+    if rag_failed:
         warnings = research_synthesis.get("implicit_warnings", [])
         warnings.insert(0, (
-            "No destination content retrieved — recommendations are based on general knowledge only. "
+            "Local knowledge base returned no results for this destination — "
+            "recommendations are based on general knowledge only. "
             "Verify local risks, pricing, and logistics independently before booking."
         ))
         research_synthesis["implicit_warnings"] = warnings
@@ -414,7 +358,6 @@ def plan_assembly(state: TripSathiState) -> dict:
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
         new_plan = _enforce_plan_quality(new_plan, _get_kid_ages(state), state.get("research_synthesis"), state["destination"], elderly=_get_elderly(state))
-        new_plan = _enrich_hotel_prices(new_plan, state["destination"], state["trip_parameters"].get("duration_nights", 1))
         return {
             "plan": new_plan,
             "regenerate_requested": False,
@@ -496,11 +439,16 @@ def plan_assembly(state: TripSathiState) -> dict:
             + "\n".join(f"- {r}" for r in explicit_reqs)
         )
 
+    notes_block = ""
+    if state.get("traveler_notes"):
+        notes_block = f"\n\nUser's original request (verbatim — honor the intent and tone): {state['traveler_notes']}"
+
     generation_prompt = (
         f"Destination: {state['destination']}\n"
         f"Research: {json.dumps(state.get('research_synthesis'))}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+        f"{notes_block}"
         f"{req_block}"
         f"{toddler_block}"
     )
@@ -510,7 +458,6 @@ def plan_assembly(state: TripSathiState) -> dict:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
     is_elderly = _get_elderly(state)
     plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
-    plan = _enrich_hotel_prices(plan, state["destination"], state["trip_parameters"].get("duration_nights", 1))
     return {
         "plan": plan,
         "refinement_count": 1,
@@ -540,15 +487,6 @@ def human_feedback(state: TripSathiState) -> dict:
 
 
 def finalize(state: TripSathiState) -> dict:
-    from memory import write_memory
-
-    user_id = state["trip_parameters"].get("user_id", "")
-    write_memory(
-        user_id=user_id,
-        plan=state.get("plan") or {},
-        trip_parameters=state.get("trip_parameters") or {},
-        user_profile=state.get("user_profile") or {},
-    )
     return {
         "awaiting_feedback": False,
         "current_node": "done",
@@ -556,24 +494,40 @@ def finalize(state: TripSathiState) -> dict:
     }
 
 
-def _classify_approval(feedback: str) -> bool:
-    """LLM semantic check for ambiguous approval signals not in the keyword list."""
+def get_clarify_questions(user_id: str, destination: str) -> list[str]:
+    """Generate 1-2 adaptive clarifying questions based on the user's taste profile confidence gaps.
+    Returns [] if no questions are needed (profile already confident or no profile yet and we want
+    to stay friction-free)."""
+    from taste import load_taste
+
+    profile = load_taste(user_id) if user_id else None
+
+    if profile is None:
+        # No profile — ask one open-ended orientation question to seed the taste model
+        return [f"Tell me about a past trip you loved — what made it special for you?"]
+
+    low_conf = {k: v for k, v in profile.confidence.items() if v < 0.5}
+    if not low_conf:
+        return []  # all dimensions already confident — skip clarify
+
     prompt = (
-        f'Is this user message approving a travel plan as-is, or requesting a change?\n'
-        f'Message: "{feedback}"\n'
-        f'Reply with exactly one word: approve OR change'
+        f"Destination: {destination}\n"
+        f"Low-confidence taste dimensions (need clarification): {list(low_conf.keys())}\n"
+        f"Taste profile:\n"
+        f"  pace: {profile.pace}/5 (confidence {profile.confidence.get('pace', 0):.1f})\n"
+        f"  crowd_tolerance: {profile.crowd_tolerance}/5 (confidence {profile.confidence.get('crowd_tolerance', 0):.1f})\n"
+        f"  food_adventurousness: {profile.food_adventurousness}/5 (confidence {profile.confidence.get('food_adventurousness', 0):.1f})\n"
+        f"  immersion_style: {profile.immersion_style}/5 (confidence {profile.confidence.get('immersion_style', 0):.1f})\n"
+        f"  walking_tolerance: {profile.walking_tolerance}/5 (confidence {profile.confidence.get('walking_tolerance', 0):.1f})\n"
+        f"  interests top: {sorted(profile.interests.items(), key=lambda x: -x[1])[:3]}"
     )
     try:
-        response = _client.chat.completions.create(
-            model=_MODEL,
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=5,
-        )
-        answer = (response.choices[0].message.content or "").strip().lower()
-        return answer.startswith("approve")
-    except Exception as e:
-        logger.warning("_classify_approval LLM call failed: %s — treating as change request", e)
-        return False
+        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=256)
+        if isinstance(result, list):
+            return [str(q) for q in result[:2] if q]
+    except Exception:
+        pass
+    return []
 
 
 def route_after_feedback(state: TripSathiState) -> str:
@@ -584,15 +538,10 @@ def route_after_feedback(state: TripSathiState) -> str:
         return "plan_assembly"
 
     feedback = state.get("user_feedback", "")
-    if not feedback:
-        return END
-
-    # Fast path: exact keyword match
-    if feedback.lower().strip() in APPROVAL_SIGNALS:
+    if feedback and feedback.lower().strip() in APPROVAL_SIGNALS:
         return "finalize"
 
-    # Semantic path: LLM classifies ambiguous signals ("that works", "all good", etc.)
-    if _classify_approval(feedback):
-        return "finalize"
+    if feedback:
+        return "plan_assembly"
 
-    return "plan_assembly"
+    return END

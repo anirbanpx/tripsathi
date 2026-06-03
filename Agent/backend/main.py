@@ -1,6 +1,8 @@
 import logging
 import os
+from dataclasses import asdict
 from uuid import uuid4
+
 from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
@@ -24,7 +26,6 @@ if os.getenv("PHOENIX_ENABLED") == "true":
             project_name="tripsathi",
             endpoint=os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006/v1/traces"),
         )
-        # Phoenix Cloud requires an API key header; local Docker does not.
         if os.getenv("PHOENIX_API_KEY"):
             _phoenix_kwargs["headers"] = {"api_key": os.getenv("PHOENIX_API_KEY")}
         register(**_phoenix_kwargs)
@@ -32,7 +33,7 @@ if os.getenv("PHOENIX_ENABLED") == "true":
         LlamaIndexInstrumentor().instrument()
         OpenAIInstrumentor().instrument()
     except ImportError:
-        pass  # pip install arize-phoenix-otel openinference-instrumentation-langchain openinference-instrumentation-llama-index openinference-instrumentation-openai
+        pass
 
 if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")
@@ -54,7 +55,6 @@ app.add_middleware(
 )
 
 
-
 # ── Request / Response models ────────────────────────────────────────────────
 
 class ParseRequest(BaseModel):
@@ -62,14 +62,17 @@ class ParseRequest(BaseModel):
 
 
 class OnboardRequest(BaseModel):
-    onboarding_answers: list[dict]
+    onboarding_answers: list[dict] = []
     destination_hint: str = ""
+    taste_data: dict = {}
+    user_id: str = ""
 
 
 class PlanRequest(BaseModel):
     destination: str
     trip_parameters: dict  # {duration_nights, budget_total, travel_dates, group_size}
     onboarding_answers: list[dict]
+    traveler_notes: str = ""  # verbatim NL input; empty string when stepper mode
 
 
 class RefineRequest(BaseModel):
@@ -105,6 +108,27 @@ def _plan_response(state: dict, thread_id: str) -> dict:
     }
 
 
+def _build_initial_state(req: PlanRequest) -> dict:
+    return {
+        "destination": req.destination,
+        "trip_parameters": req.trip_parameters,
+        "onboarding_answers": req.onboarding_answers,
+        "traveler_notes": req.traveler_notes or None,
+        "taste_profile": None,
+        "user_profile": None,
+        "research_synthesis": None,
+        "plan": None,
+        "user_feedback": None,
+        "refinement_count": 0,
+        "refinement_history": [],
+        "regenerate_requested": False,
+        "awaiting_feedback": False,
+        "current_node": "persona_classification",
+        "stage_label": "Understanding your profile",
+        "error": None,
+    }
+
+
 # ── Endpoints ────────────────────────────────────────────────────────────────
 
 @app.post("/api/parse")
@@ -121,22 +145,61 @@ async def parse_intent(req: ParseRequest):
 
 @app.post("/api/onboard")
 async def onboard(req: OnboardRequest):
-    """Classify user persona from onboarding answers only (no full graph run)."""
-    from nodes import _call_llm
-    from prompts import PERSONA_CLASSIFICATION_SYSTEM
+    """Classify user persona from onboarding answers and persist taste profile."""
+    from taste import TasteProfile, save_taste
 
-    answers_text = "\n".join(
-        f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers
-    )
-    if req.destination_hint:
-        answers_text += f"\nDestination hint: {req.destination_hint}"
+    user_id = req.user_id.strip() if req.user_id.strip() else f"anon_{uuid4().hex[:12]}"
 
-    try:
-        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"persona_classification_failed: {e}")
+    user_profile = None
+    if req.onboarding_answers:
+        from nodes import _call_llm
+        from prompts import PERSONA_CLASSIFICATION_SYSTEM
 
-    return {"user_profile": user_profile}
+        answers_text = "\n".join(
+            f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers
+        )
+        if req.destination_hint:
+            answers_text += f"\nDestination hint: {req.destination_hint}"
+
+        try:
+            user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"persona_classification_failed: {e}")
+
+    taste_profile_dict = None
+    if req.taste_data:
+        profile_data = {"user_id": user_id, **req.taste_data}
+        profile = TasteProfile(**{
+            k: v for k, v in profile_data.items()
+            if k in TasteProfile.__dataclass_fields__
+        })
+        save_taste(profile)
+        taste_profile_dict = asdict(profile)
+
+    return {
+        "user_id": user_id,
+        "user_profile": user_profile,
+        "taste_profile": taste_profile_dict,
+    }
+
+
+@app.get("/api/taste/{user_id}")
+async def get_taste(user_id: str):
+    """Return the stored taste profile for a user (404 if not found)."""
+    from taste import load_taste
+
+    profile = load_taste(user_id)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Taste profile not found")
+    return asdict(profile)
+
+
+@app.get("/api/clarify/questions")
+async def clarify_questions(user_id: str = "", destination: str = ""):
+    """Return 1-2 adaptive clarifying questions based on the user's taste profile gaps."""
+    from nodes import get_clarify_questions
+    questions = get_clarify_questions(user_id, destination)
+    return {"questions": questions}
 
 
 @app.post("/api/plan")
@@ -144,25 +207,7 @@ async def start_plan(req: PlanRequest):
     """Start a new planning session. Runs the full pipeline and interrupts at plan review."""
     thread_id = str(uuid4())
     config = {"configurable": {"thread_id": thread_id}}
-
-    initial_state = {
-        "destination": req.destination,
-        "trip_parameters": req.trip_parameters,
-        "onboarding_answers": req.onboarding_answers,
-        "user_profile": None,
-        "research_synthesis": None,
-        "plan": None,
-        "user_feedback": None,
-        "refinement_count": 0,
-        "refinement_history": [],
-        "regenerate_requested": False,
-        "awaiting_feedback": False,
-        "current_node": "persona_classification",
-        "stage_label": "Understanding your profile",
-        "error": None,
-    }
-
-    graph.invoke(initial_state, config=config)
+    graph.invoke(_build_initial_state(req), config=config)
     state = _get_state(config)
     return _plan_response(state, thread_id)
 
@@ -173,27 +218,10 @@ async def stream_plan(req: PlanRequest):
     thread_id = str(uuid4())
     config = {"configurable": {"thread_id": thread_id}}
 
-    initial_state = {
-        "destination": req.destination,
-        "trip_parameters": req.trip_parameters,
-        "onboarding_answers": req.onboarding_answers,
-        "user_profile": None,
-        "research_synthesis": None,
-        "plan": None,
-        "user_feedback": None,
-        "refinement_count": 0,
-        "refinement_history": [],
-        "regenerate_requested": False,
-        "awaiting_feedback": False,
-        "current_node": "persona_classification",
-        "stage_label": "Understanding your profile",
-        "error": None,
-    }
-
     async def generate():
         yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
         try:
-            async for chunk in graph.astream(initial_state, config=config, stream_mode="updates"):
+            async for chunk in graph.astream(_build_initial_state(req), config=config, stream_mode="updates"):
                 for _node, update in chunk.items():
                     stage = update.get("stage_label")
                     if stage:

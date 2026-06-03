@@ -13,16 +13,6 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function getOrCreateUserId(): string {
-  const key = "tripsathi_user_id";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = `anon_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-    localStorage.setItem(key, id);
-  }
-  return id;
-}
-
 export async function parseIntent(text: string): Promise<TripParameters & { onboarding_summary: string }> {
   const res = await fetch(`${API_BASE}/api/parse`, {
     method: "POST",
@@ -63,9 +53,48 @@ export async function generatePlan(params: TripParameters): Promise<PlanResponse
         elderly: params.elderly,
         budget: params.budget_bracket,
         trip_style: params.trip_style,
+      },
+      onboarding_answers,
+    }),
+  });
+  if (!res.ok) throw new Error(`/api/plan failed: ${res.status}`);
+  return res.json();
+}
+
+export async function generatePlan(params: TripParameters): Promise<PlanResponse> {
+  if (USE_MOCK) {
+    await delay(200);
+    return mockPlan as PlanResponse;
+  }
+
+  const kidPart = params.kid_ages.length > 0
+    ? ` with ${params.kid_ages.length} child${params.kid_ages.length > 1 ? "ren" : ""} aged ${params.kid_ages.join(", ")}`
+    : "";
+  const groupAnswer = `${params.party_size} adult${params.party_size > 1 ? "s" : ""}${kidPart}`;
+
+  const onboarding_answers = [
+    { question: "Trip style preferences", answer: params.trip_style.length ? params.trip_style.join(", ") : "general sightseeing" },
+    { question: "Group composition", answer: groupAnswer },
+    ...(params.special_needs ? [{ question: "Special needs or requirements", answer: params.special_needs }] : []),
+  ];
+
+  const res = await fetch(`${API_BASE}/api/plan`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      destination: params.destination,
+      trip_parameters: {
+        duration_days: params.duration_days,
+        start_date: params.start_date,
+        party_size: params.party_size,
+        kid_ages: params.kid_ages,
+        elderly: params.elderly,
+        budget: params.budget_bracket,
+        trip_style: params.trip_style,
         user_id: getOrCreateUserId(),
       },
       onboarding_answers,
+      traveler_notes: params.traveler_notes || "",
     }),
   });
   if (!res.ok) throw new Error(`/api/plan failed: ${res.status}`);
@@ -111,6 +140,7 @@ export async function streamPlan(
         user_id: getOrCreateUserId(),
       },
       onboarding_answers,
+      traveler_notes: params.traveler_notes || "",
     }),
   });
 
@@ -202,18 +232,24 @@ export async function bookItem(
   return res.json();
 }
 
+export function getOrCreateUserId(): string {
+  let userId = localStorage.getItem("tripsathi_user_id");
+  if (!userId) {
+    userId = `anon_${Math.random().toString(36).slice(2, 14)}`;
+    localStorage.setItem("tripsathi_user_id", userId);
+  }
+  return userId;
+}
+
 export async function onboard(params: {
-  name: string;
-  age_range: string;
-  home_city: string;
-  persona_type: string;
-  kid_ages: number[];
-}): Promise<{ user_id: string; user_profile: UserProfile }> {
+  user_id: string;
+  taste_data: Record<string, unknown>;
+}): Promise<{ user_id: string; taste_profile: Record<string, unknown> | null }> {
   if (USE_MOCK) {
     await delay(200);
     return {
-      user_id: mockAuth.user_id,
-      user_profile: mockProfile.user_profile as UserProfile,
+      user_id: params.user_id || mockAuth.user_id,
+      taste_profile: null,
     };
   }
   const res = await fetch(`${API_BASE}/api/onboard`, {
@@ -222,6 +258,27 @@ export async function onboard(params: {
     body: JSON.stringify(params),
   });
   if (!res.ok) throw new Error(`/api/onboard failed: ${res.status}`);
+  return res.json();
+}
+
+export async function getClarifyQuestions(userId: string, destination: string): Promise<string[]> {
+  if (USE_MOCK) return [];
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/clarify/questions?user_id=${encodeURIComponent(userId)}&destination=${encodeURIComponent(destination)}`
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data.questions) ? data.questions : [];
+  } catch {
+    return [];  // non-fatal — skip clarify on network error
+  }
+}
+
+export async function getTasteProfile(userId: string): Promise<Record<string, unknown> | null> {
+  const res = await fetch(`${API_BASE}/api/taste/${encodeURIComponent(userId)}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`/api/taste failed: ${res.status}`);
   return res.json();
 }
 

@@ -92,6 +92,7 @@ export interface TripParameters {
   budget_bracket: "budget" | "mid" | "premium";
   trip_style: string[];
   special_needs: string;
+  traveler_notes?: string;  // verbatim NL input from the user; preserved through to plan-gen
 }
 
 // UserContext — tracks live UI state (not persisted)
