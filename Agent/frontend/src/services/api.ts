@@ -53,44 +53,6 @@ export async function generatePlan(params: TripParameters): Promise<PlanResponse
         elderly: params.elderly,
         budget: params.budget_bracket,
         trip_style: params.trip_style,
-      },
-      onboarding_answers,
-    }),
-  });
-  if (!res.ok) throw new Error(`/api/plan failed: ${res.status}`);
-  return res.json();
-}
-
-export async function generatePlan(params: TripParameters): Promise<PlanResponse> {
-  if (USE_MOCK) {
-    await delay(200);
-    return mockPlan as PlanResponse;
-  }
-
-  const kidPart = params.kid_ages.length > 0
-    ? ` with ${params.kid_ages.length} child${params.kid_ages.length > 1 ? "ren" : ""} aged ${params.kid_ages.join(", ")}`
-    : "";
-  const groupAnswer = `${params.party_size} adult${params.party_size > 1 ? "s" : ""}${kidPart}`;
-
-  const onboarding_answers = [
-    { question: "Trip style preferences", answer: params.trip_style.length ? params.trip_style.join(", ") : "general sightseeing" },
-    { question: "Group composition", answer: groupAnswer },
-    ...(params.special_needs ? [{ question: "Special needs or requirements", answer: params.special_needs }] : []),
-  ];
-
-  const res = await fetch(`${API_BASE}/api/plan`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      destination: params.destination,
-      trip_parameters: {
-        duration_days: params.duration_days,
-        start_date: params.start_date,
-        party_size: params.party_size,
-        kid_ages: params.kid_ages,
-        elderly: params.elderly,
-        budget: params.budget_bracket,
-        trip_style: params.trip_style,
         user_id: getOrCreateUserId(),
       },
       onboarding_answers,

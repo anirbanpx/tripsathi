@@ -190,6 +190,16 @@ function journalLines(stage: string, p: TripParameters | null | undefined, desti
     return l;
   }
 
+  if (sl.includes("refin")) {
+    const l: string[] = [`Running quality checks on your ${dest} plan...`];
+    if (toddler)      l.push(`Toddler rules re-verified — houseboat swap and midday rest confirmed`);
+    else if (elderly) l.push(`Accessibility constraints re-checked — no steep terrain or long walks`);
+    else if (hasKids) l.push(`Child-safe pacing confirmed — activity count and meal gaps verified`);
+    else              l.push(`Taste alignment checked — crowd, pace, and accommodation preferences honoured`);
+    l.push(`Applying fixes before sending to you...`);
+    return l;
+  }
+
   return [`Crafting your ${dest} plan...`];
 }
 

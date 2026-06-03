@@ -119,4 +119,5 @@ export interface UserContext {
   interpreted_change: string | null;
   kid_ages: number[];
   destination: string;
+  trip_params: TripParameters | null;
 }

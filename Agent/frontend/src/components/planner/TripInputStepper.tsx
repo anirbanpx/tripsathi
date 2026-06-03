@@ -251,7 +251,24 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
           <div className="journal-page">
             <div className="journal-page-header">
               <span className="journal-title">trip notes ✦</span>
-              <span className="journal-badge">open journal</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  id="mic-btn-nl"
+                  type="button"
+                  disabled
+                  title="Voice input (coming soon)"
+                  style={{
+                    background: "none", border: "1.5px solid var(--border-strong)",
+                    borderRadius: "50%", width: 28, height: 28,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: "not-allowed", opacity: 0.35, color: "var(--fg-2)",
+                    fontSize: 14, flexShrink: 0,
+                  }}
+                >
+                  🎙
+                </button>
+                <span className="journal-badge">open journal</span>
+              </div>
             </div>
             <textarea
               className="journal-textarea"
@@ -336,22 +353,36 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
               <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
                 {q}
               </label>
-              <textarea
-                rows={2}
-                style={{
-                  background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                  borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)",
-                  fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
-                  outline: "none",
-                }}
-                placeholder="(optional)"
-                value={clarifyAnswers[i]}
-                onChange={e => {
-                  const next = [...clarifyAnswers];
-                  next[i] = e.target.value;
-                  setClarifyAnswers(next);
-                }}
-              />
+              <div style={{ position: "relative" }}>
+                <textarea
+                  rows={2}
+                  style={{
+                    width: "100%", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+                    borderRadius: 10, padding: "10px 40px 10px 12px", color: "var(--fg-1)",
+                    fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
+                    outline: "none", boxSizing: "border-box",
+                  }}
+                  placeholder="(optional)"
+                  value={clarifyAnswers[i]}
+                  onChange={e => {
+                    const next = [...clarifyAnswers];
+                    next[i] = e.target.value;
+                    setClarifyAnswers(next);
+                  }}
+                />
+                <button
+                  id={`mic-btn-clarify-${i}`}
+                  type="button"
+                  disabled
+                  style={{
+                    position: "absolute", right: 8, top: 8,
+                    background: "none", border: "none", cursor: "not-allowed",
+                    opacity: 0.35, fontSize: 16, color: "var(--fg-2)",
+                  }}
+                >
+                  🎙
+                </button>
+              </div>
             </div>
           ))}
 
