@@ -659,7 +659,10 @@ def candidate_gen(state: TripSathiState) -> dict:
         f"Trip parameters: {json.dumps(state['trip_parameters'])}"
     )
     try:
-        raw = _call_llm(CANDIDATE_GEN_SYSTEM, extraction_input, max_tokens=2048)
+        # 4096 (not 2048): the prompt asks for 15-25 items × ~10 fields each,
+        # which overflows a 2048 cap and truncates the JSON mid-string. Retries
+        # can't recover a hard length cap, so the pool ended up empty.
+        raw = _call_llm(CANDIDATE_GEN_SYSTEM, extraction_input, max_tokens=4096)
     except Exception as e:
         logger.warning("candidate_gen LLM failed (%s) — proceeding with empty pool", e)
         raw = []
