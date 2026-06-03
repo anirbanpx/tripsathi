@@ -40,6 +40,7 @@ export interface Plan {
   hotels: Hotel[];
   budget_breakdown: BudgetBreakdown;
   warnings: string[];
+  personalization_notes?: string[];
 }
 
 export interface PlanResponse {
@@ -92,7 +93,6 @@ export interface TripParameters {
   budget_bracket: "budget" | "mid" | "premium";
   trip_style: string[];
   special_needs: string;
-  traveler_notes?: string;  // verbatim NL input from the user; preserved through to plan-gen
 }
 
 // UserContext — tracks live UI state (not persisted)
@@ -108,7 +108,6 @@ export type AppStage =
 export interface UserContext {
   mode: AppMode;
   user_id: string | null;
-  trip_params: TripParameters | null;
   thread_id: string | null;
   current_stage: AppStage;
   generation_active: boolean;

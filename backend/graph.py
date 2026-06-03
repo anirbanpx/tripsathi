@@ -8,6 +8,8 @@ from nodes import (
     candidate_gen,
     ranker,
     plan_assembly,
+    critic,
+    route_after_critic,
     human_feedback,
     finalize,
     route_after_feedback,
@@ -22,6 +24,7 @@ def build_graph():
     builder.add_node("candidate_gen", candidate_gen)
     builder.add_node("ranker", ranker)
     builder.add_node("plan_assembly", plan_assembly)
+    builder.add_node("critic", critic)
     builder.add_node("human_feedback", human_feedback)
     builder.add_node("finalize", finalize)
 
@@ -30,7 +33,11 @@ def build_graph():
     builder.add_edge("destination_intelligence", "candidate_gen")
     builder.add_edge("candidate_gen", "ranker")
     builder.add_edge("ranker", "plan_assembly")
-    builder.add_edge("plan_assembly", "human_feedback")
+    builder.add_edge("plan_assembly", "critic")
+    builder.add_conditional_edges("critic", route_after_critic, {
+        "plan_assembly": "plan_assembly",
+        "human_feedback": "human_feedback",
+    })
     builder.add_conditional_edges("human_feedback", route_after_feedback, {
         "plan_assembly": "plan_assembly",
         "finalize": "finalize",

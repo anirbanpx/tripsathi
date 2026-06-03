@@ -10,7 +10,9 @@ from state import TripSathiState
 from prompts import (
     CANDIDATE_GEN_SYSTEM,
     CLARIFY_SYSTEM,
+    CRITIC_SYSTEM,
     PERSONA_CLASSIFICATION_SYSTEM,
+    TASTE_DELTA_SYSTEM,
     QUERY_EXPANSION_SYSTEM,
     RESEARCH_SYNTHESIS_SYSTEM,
     PLAN_GENERATION_SYSTEM,
@@ -510,6 +512,8 @@ def human_feedback(state: TripSathiState) -> dict:
 
 
 def finalize(state: TripSathiState) -> dict:
+    """Mark plan as done and persist taste deltas extracted from refinements."""
+    _persist_taste_deltas(state)
     return {
         "awaiting_feedback": False,
         "current_node": "done",
@@ -746,6 +750,97 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
     except Exception:
         pass
     return []
+
+
+def critic(state: TripSathiState) -> dict:
+    """Red-team the assembled plan against the user's taste + constraints."""
+    plan = state.get("plan")
+    if not plan:
+        return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
+
+    critic_input = (
+        f"Plan: {json.dumps(plan)}\n"
+        f"User profile: {json.dumps(state.get('user_profile'))}\n"
+        f"Taste profile: {json.dumps(state.get('taste_profile'))}\n"
+        f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
+        f"Seasonal context: {json.dumps((state.get('research_synthesis') or {}).get('seasonal_context', ''))}"
+    )
+    try:
+        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024)
+    except Exception as e:
+        logger.warning("critic failed (%s) — passing through", e)
+        return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
+
+    issues = result.get("issues", []) if isinstance(result, dict) else []
+    verdict = result.get("verdict", "pass") if isinstance(result, dict) else "pass"
+    passes = state.get("critic_passes", 0) + 1
+
+    if verdict == "fail" and issues and passes <= 2:
+        correction = (
+            "CRITIC REVIEW — fix ALL of the following before presenting to user:\n"
+            + "\n".join(f"- {issue}" for issue in issues)
+        )
+        logger.info("critic pass=%d issues=%d — looping to plan_assembly", passes, len(issues))
+        return {
+            "critic_passes": passes,
+            "user_feedback": correction,
+            "current_node": "plan_assembly",
+            "stage_label": "Refining your plan",
+            "error": None,
+        }
+
+    if passes > 2:
+        logger.info("critic max passes reached — proceeding to human_feedback")
+    return {
+        "critic_passes": passes,
+        "user_feedback": None,
+        "current_node": "human_feedback",
+        "stage_label": "Review your plan",
+        "error": None,
+    }
+
+
+def route_after_critic(state: TripSathiState) -> str:
+    """Route after critic: loop to plan_assembly for fixes, or proceed to human_feedback."""
+    return state.get("current_node", "human_feedback")
+
+
+def _persist_taste_deltas(state: TripSathiState) -> None:
+    """Extract taste signals from refinement history and merge into the stored TasteProfile."""
+    user_id = state["trip_parameters"].get("user_id", "")
+    refinements = state.get("refinement_history", [])
+    if not user_id or not refinements:
+        return
+
+    from taste import load_taste, save_taste, merge_taste, TasteProfile
+
+    refinement_text = "\n".join(f"- {r}" for r in refinements)
+    try:
+        deltas = _call_llm(TASTE_DELTA_SYSTEM, f"Refinements:\n{refinement_text}", max_tokens=512)
+    except Exception as e:
+        logger.warning("taste delta extraction failed: %s", e)
+        return
+
+    if not isinstance(deltas, dict) or not deltas:
+        return
+
+    profile = load_taste(user_id)
+    if profile is None:
+        profile = TasteProfile(user_id=user_id)
+
+    updated = merge_taste(profile, deltas)
+    save_taste(updated)
+    logger.info(
+        "taste deltas persisted user_id=%s refinements=%d deltas_keys=%s",
+        user_id, len(refinements), list(deltas.keys()),
+    )
+
+    try:
+        from memory import write_memory
+        taste_summary = f"Trip to {state.get('destination', '')}: refined {len(refinements)} times. Signals: {list(deltas.keys())}"
+        write_memory(user_id, taste_summary)
+    except Exception:
+        pass
 
 
 def route_after_feedback(state: TripSathiState) -> str:

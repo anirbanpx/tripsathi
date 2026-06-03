@@ -21,7 +21,6 @@ import { refinePlan, regeneratePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
-import { getPlaceImageUrl } from "../../lib/placeImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
 import type { UserContext, DayPlan, Hotel } from "../../types";
 
@@ -195,6 +194,37 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         </div>
       )}
 
+      {/* Tailored for you */}
+      {plan.personalization_notes && plan.personalization_notes.length > 0 && (
+        <div style={{
+          background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))",
+          border: "1.5px solid rgba(139,92,246,0.3)",
+          borderRadius: 12,
+          padding: "14px 16px",
+          marginBottom: 16,
+        }}>
+          <div style={{
+            fontSize: 11, fontWeight: 800, letterSpacing: "0.08em",
+            color: "rgba(139,92,246,0.9)", marginBottom: 8,
+            fontFamily: "var(--font-body)",
+            textTransform: "uppercase",
+          }}>
+            ✦ tailored for you
+          </div>
+          <ul style={{ margin: 0, padding: "0 0 0 16px" }}>
+            {plan.personalization_notes.map((note, i) => (
+              <li key={i} style={{
+                fontSize: 13, color: "var(--fg-2)",
+                fontFamily: "var(--font-body)", lineHeight: 1.5,
+                marginBottom: i < plan.personalization_notes!.length - 1 ? 4 : 0,
+              }}>
+                {note}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Warnings */}
       {plan.warnings.length > 0 && <WarningsCarousel warnings={plan.warnings.slice(0, 5)} />}
 
@@ -295,39 +325,30 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           </div>
 
           <div className="budget">
-            {(() => {
-              const b = plan.budget_breakdown;
-              const partsSum = b.accommodation + b.transport + b.food + b.activities;
-              const displayTotal = Math.max(b.total, partsSum);
-              return (
-                <>
-                  <h3>budget <span className="total">~ ₹{displayTotal.toLocaleString()}</span></h3>
-                  <div className="budget-bar">
-                    <div className="seg acc" style={{ flex: b.accommodation }} />
-                    <div className="seg tra" style={{ flex: b.transport }} />
-                    <div className="seg foo" style={{ flex: b.food }} />
-                    <div className="seg act" style={{ flex: b.activities }} />
-                  </div>
-                  <div className="budget-rows">
-                    {([
-                      ["accommodation", Bed, b.accommodation],
-                      ["transport", Car, b.transport],
-                      ["food", Utensils, b.food],
-                      ["activities", Sparkles, b.activities],
-                    ] as const).map(([key, Icon, val]) => (
-                      <div key={key} className="budget-row">
-                        <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
-                        <span className="val">₹{(val as number).toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="budget-disc">
-                    <AlertCircle size={12} strokeWidth={2} />
-                    estimates only — book to see actual prices.
-                  </div>
-                </>
-              );
-            })()}
+            <h3>budget <span className="total">~ ₹{plan.budget_breakdown.total.toLocaleString()}</span></h3>
+            <div className="budget-bar">
+              <div className="seg acc" style={{ flex: plan.budget_breakdown.accommodation }} />
+              <div className="seg tra" style={{ flex: plan.budget_breakdown.transport }} />
+              <div className="seg foo" style={{ flex: plan.budget_breakdown.food }} />
+              <div className="seg act" style={{ flex: plan.budget_breakdown.activities }} />
+            </div>
+            <div className="budget-rows">
+              {([
+                ["accommodation", Bed, plan.budget_breakdown.accommodation],
+                ["transport", Car, plan.budget_breakdown.transport],
+                ["food", Utensils, plan.budget_breakdown.food],
+                ["activities", Sparkles, plan.budget_breakdown.activities],
+              ] as const).map(([key, Icon, val]) => (
+                <div key={key} className="budget-row">
+                  <span className="lab"><Icon size={13} strokeWidth={2} />{key}</span>
+                  <span className="val">₹{(val as number).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+            <div className="budget-disc">
+              <AlertCircle size={12} strokeWidth={2} />
+              estimates only — book to see actual prices.
+            </div>
           </div>
         </div>
 
@@ -593,9 +614,7 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
 
       {/* Activities — journal entry style */}
       <div style={{ padding: "0 16px" }}>
-        {day.activities.map((a, i) => {
-          const placeImg = getPlaceImageUrl(cleanName(a.name), day.location.split(",")[0].trim());
-          return (
+        {day.activities.map((a, i) => (
           <div key={a.name} style={{
             display: "flex", gap: 10, alignItems: "flex-start",
             padding: "9px 0",
@@ -608,16 +627,6 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
             }}>
               {i + 1}.
             </span>
-            {placeImg && (
-              <img
-                src={placeImg}
-                alt=""
-                style={{
-                  width: 40, height: 40, borderRadius: 6, objectFit: "cover",
-                  flexShrink: 0, border: "1px solid rgba(62,47,35,0.15)",
-                }}
-              />
-            )}
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13.5, color: "var(--fg)", lineHeight: 1.3 }}>
                 {cleanName(a.name)}
@@ -634,8 +643,7 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
               </div>
             </div>
           </div>
-          );
-        })}
+        ))}
       </div>
 
       {/* Meals — postage-stamp style row */}

@@ -70,9 +70,9 @@ class OnboardRequest(BaseModel):
 
 class PlanRequest(BaseModel):
     destination: str
-    trip_parameters: dict  # {duration_nights, budget_total, travel_dates, group_size}
+    trip_parameters: dict
     onboarding_answers: list[dict]
-    traveler_notes: str = ""  # verbatim NL input; empty string when stepper mode
+    traveler_notes: str = ""
 
 
 class RefineRequest(BaseModel):
@@ -86,7 +86,7 @@ class RegenerateRequest(BaseModel):
 
 class BookRequest(BaseModel):
     user_id: str
-    item: dict  # {item_type, name, location, approx_cost, check_in?, check_out?}
+    item: dict
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -124,6 +124,7 @@ def _build_initial_state(req: PlanRequest) -> dict:
         "refinement_count": 0,
         "refinement_history": [],
         "regenerate_requested": False,
+        "critic_passes": 0,
         "awaiting_feedback": False,
         "current_node": "persona_classification",
         "stage_label": "Understanding your profile",
@@ -135,7 +136,6 @@ def _build_initial_state(req: PlanRequest) -> dict:
 
 @app.post("/api/parse")
 async def parse_intent(req: ParseRequest):
-    """Extract structured trip parameters from a natural language description."""
     from nodes import _call_llm
     from prompts import INTENT_PARSE_SYSTEM
     try:
@@ -147,7 +147,6 @@ async def parse_intent(req: ParseRequest):
 
 @app.post("/api/onboard")
 async def onboard(req: OnboardRequest):
-    """Classify user persona from onboarding answers and persist taste profile."""
     from taste import TasteProfile, save_taste
 
     user_id = req.user_id.strip() if req.user_id.strip() else f"anon_{uuid4().hex[:12]}"
@@ -156,13 +155,9 @@ async def onboard(req: OnboardRequest):
     if req.onboarding_answers:
         from nodes import _call_llm
         from prompts import PERSONA_CLASSIFICATION_SYSTEM
-
-        answers_text = "\n".join(
-            f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers
-        )
+        answers_text = "\n".join(f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers)
         if req.destination_hint:
             answers_text += f"\nDestination hint: {req.destination_hint}"
-
         try:
             user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
         except Exception as e:
@@ -171,25 +166,16 @@ async def onboard(req: OnboardRequest):
     taste_profile_dict = None
     if req.taste_data:
         profile_data = {"user_id": user_id, **req.taste_data}
-        profile = TasteProfile(**{
-            k: v for k, v in profile_data.items()
-            if k in TasteProfile.__dataclass_fields__
-        })
+        profile = TasteProfile(**{k: v for k, v in profile_data.items() if k in TasteProfile.__dataclass_fields__})
         save_taste(profile)
         taste_profile_dict = asdict(profile)
 
-    return {
-        "user_id": user_id,
-        "user_profile": user_profile,
-        "taste_profile": taste_profile_dict,
-    }
+    return {"user_id": user_id, "user_profile": user_profile, "taste_profile": taste_profile_dict}
 
 
 @app.get("/api/taste/{user_id}")
 async def get_taste(user_id: str):
-    """Return the stored taste profile for a user (404 if not found)."""
     from taste import load_taste
-
     profile = load_taste(user_id)
     if profile is None:
         raise HTTPException(status_code=404, detail="Taste profile not found")
@@ -198,15 +184,12 @@ async def get_taste(user_id: str):
 
 @app.get("/api/clarify/questions")
 async def clarify_questions(user_id: str = "", destination: str = ""):
-    """Return 1-2 adaptive clarifying questions based on the user's taste profile gaps."""
     from nodes import get_clarify_questions
-    questions = get_clarify_questions(user_id, destination)
-    return {"questions": questions}
+    return {"questions": get_clarify_questions(user_id, destination)}
 
 
 @app.post("/api/plan")
 async def start_plan(req: PlanRequest):
-    """Start a new planning session. Runs the full pipeline and interrupts at plan review."""
     thread_id = str(uuid4())
     config = {"configurable": {"thread_id": thread_id}}
     graph.invoke(_build_initial_state(req), config=config)
@@ -216,7 +199,6 @@ async def start_plan(req: PlanRequest):
 
 @app.post("/api/plan/stream")
 async def stream_plan(req: PlanRequest):
-    """SSE stream for plan generation — emits stage labels as nodes complete, then the final plan."""
     thread_id = str(uuid4())
     config = {"configurable": {"thread_id": thread_id}}
 
@@ -230,7 +212,7 @@ async def stream_plan(req: PlanRequest):
                         yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
                         await asyncio.sleep(0)
         except Exception:
-            pass  # graph interrupted at human_feedback — read final state below
+            pass
 
         state = _get_state(config)
         if state.get("error"):
@@ -238,44 +220,34 @@ async def stream_plan(req: PlanRequest):
         else:
             yield f"data: {json.dumps({'type': 'done', 'plan': state.get('plan'), 'thread_id': thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
 
-    return StreamingResponse(
-        generate(),
-        media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
+    return StreamingResponse(generate(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
 @app.post("/api/refine")
 async def refine_plan(req: RefineRequest):
-    """Continue a planning session with user feedback or approval."""
     config = {"configurable": {"thread_id": req.thread_id}}
-
     try:
         graph.invoke(Command(resume=req.user_feedback), config=config)
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Session not found or expired: {e}")
-
     state = _get_state(config)
     return _plan_response(state, req.thread_id)
 
 
 @app.post("/api/regenerate")
 async def regenerate_plan(req: RegenerateRequest):
-    """Regenerate a notably different plan without specific feedback."""
     config = {"configurable": {"thread_id": req.thread_id}}
-
     try:
         graph.invoke(Command(resume={"regenerate": True}), config=config)
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Session not found or expired: {e}")
-
     state = _get_state(config)
     return _plan_response(state, req.thread_id)
 
 
 @app.post("/api/book")
 async def book_item(req: BookRequest):
-    """Sprint 2: mock booking confirmation. Sprint 3: integrate OTA partner API."""
     confirmation_id = f"TRP-DEMO-{str(uuid4())[:8].upper()}"
     return {
         "confirmation_id": confirmation_id,
