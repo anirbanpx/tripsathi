@@ -237,6 +237,15 @@ export async function getClarifyQuestions(userId: string, destination: string): 
   }
 }
 
+export async function transcribeAudio(blob: Blob): Promise<string> {
+  const form = new FormData();
+  form.append("file", blob, "recording.webm");
+  const res = await fetch(`${API_BASE}/api/transcribe`, { method: "POST", body: form });
+  if (!res.ok) throw new Error("transcription_failed");
+  const data = await res.json();
+  return (data.text as string) ?? "";
+}
+
 export async function getTasteProfile(userId: string): Promise<Record<string, unknown> | null> {
   const res = await fetch(`${API_BASE}/api/taste/${encodeURIComponent(userId)}`);
   if (res.status === 404) return null;
