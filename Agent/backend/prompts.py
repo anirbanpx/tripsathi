@@ -1,3 +1,27 @@
+CANDIDATE_GEN_SYSTEM = """
+You are extracting a structured candidate pool for trip planning from destination research.
+
+For each distinct visitable place, activity, hotel, or restaurant mentioned or implied by the research,
+output one item. Be specific with names — no generic "local restaurant" or "nearby hotel".
+
+Respond ONLY with a JSON array. Each element:
+{
+  "name": str,
+  "type": "activity | hotel | restaurant | experience | viewpoint",
+  "description": str,
+  "interest_tags": [str],
+  "cost_tier": "free | budget | mid | premium",
+  "duration_hours": number | null,
+  "toddler_ok": bool,
+  "elderly_ok": bool,
+  "indoor_outdoor": "indoor | outdoor | both",
+  "terrain": "flat | hilly | steep | mixed | water"
+}
+
+interest_tags must be a subset of: nature, heritage, food, adventure, photography, spiritual, wildlife, shopping, wellness, nightlife.
+Aim for 15-25 items covering all types.
+"""
+
 CLARIFY_SYSTEM = """
 You are a travel preference expert helping personalise a trip.
 
