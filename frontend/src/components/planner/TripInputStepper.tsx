@@ -1,13 +1,111 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
-  Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
+  Home, Heart, User, Baby, Ear, ArrowRight, Pencil, Loader2,
 } from "lucide-react";
-import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId } from "../../services/api";
+import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId, transcribeAudio } from "../../services/api";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
+
+type MicState = "idle" | "recording" | "transcribing";
+
+function useMicRecorder(onTranscript: (text: string) => void) {
+  const [state, setState] = useState<MicState>("idle");
+  const mediaRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  async function toggle() {
+    if (state === "idle") {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const rec = new MediaRecorder(stream);
+        chunksRef.current = [];
+        rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+        rec.onstop = async () => {
+          setState("transcribing");
+          const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+          stream.getTracks().forEach(t => t.stop());
+          try {
+            const text = await transcribeAudio(blob);
+            if (text) onTranscript(text);
+          } catch { /* silent — user sees nothing, field unchanged */ }
+          setState("idle");
+        };
+        rec.start();
+        mediaRef.current = rec;
+        setState("recording");
+      } catch { setState("idle"); }
+    } else if (state === "recording") {
+      mediaRef.current?.stop();
+    }
+  }
+
+  return { state, toggle };
+}
+
+function MicButton({ state, toggle, id, style }: { state: MicState; toggle: () => void; id: string; style?: React.CSSProperties }) {
+  const isRecording = state === "recording";
+  const isTranscribing = state === "transcribing";
+  return (
+    <button
+      id={id}
+      type="button"
+      onClick={toggle}
+      disabled={isTranscribing}
+      title={isRecording ? "Stop recording" : isTranscribing ? "Transcribing..." : "Voice input"}
+      style={{
+        background: isRecording ? "rgba(255,195,100,0.18)" : "none",
+        border: `1.5px solid ${isRecording ? "rgba(255,195,100,0.7)" : "var(--border-strong)"}`,
+        borderRadius: "50%", width: 28, height: 28,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: isTranscribing ? "not-allowed" : "pointer",
+        opacity: isTranscribing ? 0.5 : 1,
+        color: isRecording ? "rgba(255,195,100,0.9)" : "var(--fg-2)",
+        fontSize: 14, flexShrink: 0,
+        boxShadow: isRecording ? "0 0 0 4px rgba(255,195,100,0.2)" : "none",
+        transition: "all 0.2s",
+        ...style,
+      }}
+    >
+      {isTranscribing ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} /> : "🎙"}
+    </button>
+  );
+}
+
+function ClarifyQuestion({ index, question, value, onChange }: {
+  index: number; question: string; value: string; onChange: (v: string) => void;
+}) {
+  const mic = useMicRecorder(text => onChange(value ? `${value} ${text}` : text));
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
+        {question}
+      </label>
+      <div style={{ position: "relative" }}>
+        <textarea
+          rows={2}
+          style={{
+            width: "100%", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+            borderRadius: 10, padding: "10px 40px 10px 12px", color: "var(--fg-1)",
+            fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
+            outline: "none", boxSizing: "border-box",
+          }}
+          placeholder="(optional)"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+        />
+        <MicButton
+          id={`mic-btn-clarify-${index}`}
+          state={mic.state}
+          toggle={mic.toggle}
+          style={{ position: "absolute", right: 8, top: 8, borderRadius: "50%" }}
+        />
+      </div>
+    </div>
+  );
+}
 
 const DEMO_PARAMS: TripParameters = {
   destination: "Kerala",
@@ -30,6 +128,7 @@ const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
+  const nlMic = useMicRecorder(text => setNlText(prev => prev ? `${prev} ${text}` : text));
   const [inputMode, setInputMode] = useState<"stepper" | "natural" | "clarify">(ctx.mode === "demo" ? "stepper" : "natural");
   const [clarifyQuestions, setClarifyQuestions] = useState<string[]>([]);
   const [clarifyAnswers, setClarifyAnswers] = useState<string[]>([]);
@@ -252,21 +351,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
             <div className="journal-page-header">
               <span className="journal-title">trip notes ✦</span>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <button
-                  id="mic-btn-nl"
-                  type="button"
-                  disabled
-                  title="Voice input (coming soon)"
-                  style={{
-                    background: "none", border: "1.5px solid var(--border-strong)",
-                    borderRadius: "50%", width: 28, height: 28,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: "not-allowed", opacity: 0.35, color: "var(--fg-2)",
-                    fontSize: 14, flexShrink: 0,
-                  }}
-                >
-                  🎙
-                </button>
+                <MicButton id="mic-btn-nl" state={nlMic.state} toggle={nlMic.toggle} />
                 <span className="journal-badge">open journal</span>
               </div>
             </div>
@@ -349,41 +434,17 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
           </div>
 
           {clarifyQuestions.map((q, i) => (
-            <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
-                {q}
-              </label>
-              <div style={{ position: "relative" }}>
-                <textarea
-                  rows={2}
-                  style={{
-                    width: "100%", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                    borderRadius: 10, padding: "10px 40px 10px 12px", color: "var(--fg-1)",
-                    fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
-                    outline: "none", boxSizing: "border-box",
-                  }}
-                  placeholder="(optional)"
-                  value={clarifyAnswers[i]}
-                  onChange={e => {
-                    const next = [...clarifyAnswers];
-                    next[i] = e.target.value;
-                    setClarifyAnswers(next);
-                  }}
-                />
-                <button
-                  id={`mic-btn-clarify-${i}`}
-                  type="button"
-                  disabled
-                  style={{
-                    position: "absolute", right: 8, top: 8,
-                    background: "none", border: "none", cursor: "not-allowed",
-                    opacity: 0.35, fontSize: 16, color: "var(--fg-2)",
-                  }}
-                >
-                  🎙
-                </button>
-              </div>
-            </div>
+            <ClarifyQuestion
+              key={i}
+              index={i}
+              question={q}
+              value={clarifyAnswers[i]}
+              onChange={val => {
+                const next = [...clarifyAnswers];
+                next[i] = val;
+                setClarifyAnswers(next);
+              }}
+            />
           ))}
 
           <div className="bottom-bar">

@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
 import asyncio
 import json
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -186,6 +186,32 @@ async def get_taste(user_id: str):
 async def clarify_questions(user_id: str = "", destination: str = ""):
     from nodes import get_clarify_questions
     return {"questions": get_clarify_questions(user_id, destination)}
+
+
+@app.post("/api/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    import tempfile, groq as _groq
+    audio_bytes = await file.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="empty_audio")
+    suffix = "." + (file.filename or "recording.webm").rsplit(".", 1)[-1]
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        tmp.write(audio_bytes)
+        tmp_path = tmp.name
+    try:
+        client = _groq.Groq(api_key=os.getenv("LLM_API_KEY"))
+        with open(tmp_path, "rb") as f:
+            result = client.audio.transcriptions.create(
+                file=(file.filename or "recording.webm", f),
+                model="whisper-large-v3-turbo",
+                response_format="text",
+            )
+        return {"text": result.strip() if isinstance(result, str) else result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"transcription_failed: {e}")
+    finally:
+        import os as _os
+        _os.unlink(tmp_path)
 
 
 @app.post("/api/plan")
