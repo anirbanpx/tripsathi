@@ -237,8 +237,9 @@ async def stream_plan(req: PlanRequest):
                     if stage:
                         yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
                         await asyncio.sleep(0)
-        except Exception:
-            pass
+        except Exception as e:
+            yield f"data: {json.dumps({'type': 'error', 'detail': str(e)})}\n\n"
+            return
 
         state = _get_state(config)
         if state.get("error"):

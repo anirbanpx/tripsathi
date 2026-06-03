@@ -198,6 +198,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
         onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
       });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -221,6 +222,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
         onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
       });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -250,6 +252,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
         onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
       });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
       onSetContext({ current_stage: "plan_display", generation_active: false, plan: res.plan, thread_id: res.thread_id, fake_stage_label: "Done" });
     } catch (err) {
       onSetContext({ current_stage: "trip_input", generation_active: false });
