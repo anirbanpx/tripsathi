@@ -24,10 +24,14 @@ function SliderField({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium text-white">{label}</label>
-      <div className="flex items-center gap-3">
-        <span className="text-xs text-slate-400 w-28 text-right">{leftLabel}</span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <label style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)" }}>
+        {label}
+      </label>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)", width: 90, textAlign: "right", flexShrink: 0 }}>
+          {leftLabel}
+        </span>
         <input
           type="range"
           min={1}
@@ -35,15 +39,21 @@ function SliderField({
           step={1}
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="flex-1 accent-indigo-500"
+          style={{ flex: 1, accentColor: "var(--accent)" }}
         />
-        <span className="text-xs text-slate-400 w-28">{rightLabel}</span>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)", width: 90, flexShrink: 0 }}>
+          {rightLabel}
+        </span>
       </div>
-      <div className="flex justify-between px-8">
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "0 90px 0 100px" }}>
         {[1, 2, 3, 4, 5].map((n) => (
           <span
             key={n}
-            className={`text-xs w-5 text-center ${value === n ? "text-indigo-400 font-bold" : "text-slate-600"}`}
+            style={{
+              fontFamily: "var(--font-body)", fontSize: 11,
+              color: value === n ? "var(--accent)" : "var(--fg-3)",
+              fontWeight: value === n ? 800 : 400,
+            }}
           >
             {n}
           </span>
@@ -53,22 +63,28 @@ function SliderField({
   );
 }
 
+const CARD_STYLE: React.CSSProperties = {
+  background: "var(--surface)",
+  border: "1.5px solid var(--border)",
+  borderRadius: 16,
+  padding: "18px 20px",
+  display: "flex",
+  flexDirection: "column",
+  gap: 16,
+};
+
 export default function OnboardingPage() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
-  // Taste dimensions
   const [pace, setPace] = useState(3);
   const [crowdTolerance, setCrowdTolerance] = useState(3);
   const [foodAdventurousness, setFoodAdventurousness] = useState(3);
+  const [walkingTolerance, setWalkingTolerance] = useState(3);
+  const [accommodationTaste, setAccommodationTaste] = useState(3);
 
-  // Interests checkboxes
   const [selectedInterests, setSelectedInterests] = useState<Set<string>>(new Set());
-
-  // Dietary restrictions
   const [selectedDietary, setSelectedDietary] = useState<Set<string>>(new Set());
-
-  // Free text
   const [hardAvoids, setHardAvoids] = useState("");
 
   function toggleInterest(interest: string) {
@@ -83,9 +99,7 @@ export default function OnboardingPage() {
   function toggleDietary(option: string) {
     setSelectedDietary((prev) => {
       const next = new Set(prev);
-      if (option === "None") {
-        return new Set(["None"]);
-      }
+      if (option === "None") return new Set(["None"]);
       next.delete("None");
       if (next.has(option)) next.delete(option);
       else next.add(option);
@@ -100,14 +114,8 @@ export default function OnboardingPage() {
       for (const interest of INTERESTS) {
         interestsMap[interest] = selectedInterests.has(interest) ? 0.9 : 0.1;
       }
-
       const dietary = Array.from(selectedDietary).filter((d) => d !== "None").map((d) => d.toLowerCase());
-
-      const hard_avoids_list = hardAvoids
-        .split(/[,\n]+/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-
+      const hard_avoids_list = hardAvoids.split(/[,\n]+/).map((s) => s.trim()).filter(Boolean);
       const userId = getOrCreateUserId();
 
       const result = await onboard({
@@ -116,40 +124,43 @@ export default function OnboardingPage() {
           pace,
           crowd_tolerance: crowdTolerance,
           food_adventurousness: foodAdventurousness,
+          walking_tolerance: walkingTolerance,
+          accommodation_taste: accommodationTaste,
           interests: interestsMap,
           dietary_restrictions: dietary,
           hard_avoids: hard_avoids_list,
         },
       });
 
-      // Persist returned user_id
       localStorage.setItem("tripsathi_user_id", result.user_id);
-
       navigate("/planner");
     } catch (err) {
       console.error("Onboarding submit failed:", err);
-      // Don't block the user — navigate anyway
       navigate("/planner");
     } finally {
       setSubmitting(false);
     }
   }
 
-  function handleSkip() {
-    navigate("/planner");
-  }
-
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex items-start justify-center py-12 px-4">
-      <div className="w-full max-w-xl space-y-6">
+    <div style={{ minHeight: "100svh", background: "var(--paper)", display: "flex", justifyContent: "center", padding: "40px 16px 60px" }}>
+      <div style={{ width: "100%", maxWidth: 520, display: "flex", flexDirection: "column", gap: 16 }}>
+
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-white">Tell us your travel style</h1>
-          <p className="text-slate-400 text-sm">Takes about 90 seconds — helps us personalise your trips</p>
+        <div style={{ textAlign: "center", marginBottom: 16 }}>
+          <div className="brand-mini" style={{ marginBottom: 12 }}>
+            <span className="word">trip<i>sathi</i></span>
+          </div>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: 26, color: "var(--ink)", marginBottom: 6, fontWeight: 700 }}>
+            your travel <span style={{ fontStyle: "italic" }}>DNA</span>
+          </h1>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-2)", margin: 0 }}>
+            90 seconds · shapes every plan we build for you
+          </p>
         </div>
 
         {/* Card: Pace */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-4">
+        <div style={CARD_STYLE}>
           <SliderField
             label="How do you like to travel?"
             leftLabel="Slow & relaxed"
@@ -160,7 +171,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Card: Crowd tolerance */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-4">
+        <div style={CARD_STYLE}>
           <SliderField
             label="Busy spots?"
             leftLabel="Avoid crowds"
@@ -171,7 +182,7 @@ export default function OnboardingPage() {
         </div>
 
         {/* Card: Food adventurousness */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-4">
+        <div style={CARD_STYLE}>
           <SliderField
             label="Eating habits?"
             leftLabel="Stick to safe"
@@ -181,90 +192,146 @@ export default function OnboardingPage() {
           />
         </div>
 
+        {/* Card: Walking tolerance */}
+        <div style={CARD_STYLE}>
+          <SliderField
+            label="How much walking?"
+            leftLabel="Car everywhere"
+            rightLabel="Love long walks"
+            value={walkingTolerance}
+            onChange={setWalkingTolerance}
+          />
+        </div>
+
+        {/* Card: Accommodation taste */}
+        <div style={CARD_STYLE}>
+          <SliderField
+            label="Where do you like to stay?"
+            leftLabel="Major chain hotel"
+            rightLabel="Homestay / camping"
+            value={accommodationTaste}
+            onChange={setAccommodationTaste}
+          />
+        </div>
+
         {/* Card: Interests */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3">
-          <p className="text-sm font-medium text-white">What do you love doing on a trip?</p>
-          <div className="grid grid-cols-2 gap-2">
-            {INTERESTS.map((interest) => (
-              <button
-                key={interest}
-                type="button"
-                onClick={() => toggleInterest(interest)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm capitalize transition-colors ${
-                  selectedInterests.has(interest)
-                    ? "bg-indigo-600 border-indigo-500 text-white"
-                    : "bg-slate-700 border-slate-600 text-slate-300 hover:border-indigo-500"
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center text-xs ${
-                    selectedInterests.has(interest)
-                      ? "bg-white border-white text-indigo-600"
-                      : "border-slate-500"
-                  }`}
+        <div style={CARD_STYLE}>
+          <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
+            What do you love doing on a trip?
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {INTERESTS.map((interest) => {
+              const active = selectedInterests.has(interest);
+              return (
+                <button
+                  key={interest}
+                  type="button"
+                  onClick={() => toggleInterest(interest)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "9px 12px", borderRadius: 10,
+                    border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
+                    background: active ? "rgba(176,73,47,0.08)" : "var(--paper)",
+                    color: active ? "var(--accent)" : "var(--fg-2)",
+                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13,
+                    cursor: "pointer", textTransform: "capitalize", textAlign: "left",
+                    transition: "all 0.15s",
+                  }}
                 >
-                  {selectedInterests.has(interest) ? "✓" : ""}
-                </span>
-                {interest}
-              </button>
-            ))}
+                  <span style={{
+                    width: 16, height: 16, borderRadius: 4, flexShrink: 0,
+                    border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 10, color: active ? "var(--accent)" : "transparent",
+                    background: active ? "rgba(176,73,47,0.12)" : "transparent",
+                  }}>
+                    {active ? "✓" : ""}
+                  </span>
+                  {interest}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Card: Dietary restrictions */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3">
-          <p className="text-sm font-medium text-white">Dietary restrictions?</p>
-          <div className="flex flex-wrap gap-2">
-            {DIETARY_OPTIONS.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => toggleDietary(option)}
-                className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                  selectedDietary.has(option)
-                    ? "bg-indigo-600 border-indigo-500 text-white"
-                    : "bg-slate-700 border-slate-600 text-slate-300 hover:border-indigo-500"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
+        <div style={CARD_STYLE}>
+          <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
+            Dietary restrictions?
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {DIETARY_OPTIONS.map((option) => {
+              const active = selectedDietary.has(option);
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => toggleDietary(option)}
+                  style={{
+                    padding: "6px 14px", borderRadius: 999,
+                    border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
+                    background: active ? "rgba(176,73,47,0.08)" : "var(--paper)",
+                    color: active ? "var(--accent)" : "var(--fg-2)",
+                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
+                    cursor: "pointer", transition: "all 0.15s",
+                  }}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Card: Hard avoids */}
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3">
-          <label htmlFor="hard-avoids" className="block text-sm font-medium text-white">
+        <div style={CARD_STYLE}>
+          <label style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)" }}>
             Anything else we should know?
           </label>
           <textarea
-            id="hard-avoids"
             rows={3}
             placeholder="e.g. extreme heat, long bus rides, crowded markets..."
             value={hardAvoids}
             onChange={(e) => setHardAvoids(e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+            style={{
+              width: "100%", background: "var(--paper-3)", border: "1.5px solid var(--border-strong)",
+              borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)",
+              fontFamily: "var(--font-body)", fontSize: 13, resize: "none", outline: "none",
+              boxSizing: "border-box",
+            }}
           />
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col gap-3 pb-8">
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, paddingBottom: 16 }}>
           <button
             type="button"
             disabled={submitting}
             onClick={handleSubmit}
-            className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors"
+            style={{
+              width: "100%", padding: "14px", borderRadius: "var(--radius-pill)",
+              background: "var(--ink)", color: "var(--paper)",
+              fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14,
+              border: "none", cursor: submitting ? "not-allowed" : "pointer",
+              opacity: submitting ? 0.6 : 1, letterSpacing: "0.04em",
+            }}
           >
-            {submitting ? "Saving..." : "Save my preferences"}
+            {submitting ? "saving..." : "save my travel DNA ✦"}
           </button>
           <button
             type="button"
-            onClick={handleSkip}
-            className="w-full py-2 text-slate-400 hover:text-slate-300 text-sm transition-colors"
+            onClick={() => navigate("/planner")}
+            style={{
+              width: "100%", padding: "10px",
+              background: "none", border: "none",
+              fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-3)",
+              cursor: "pointer",
+            }}
           >
-            Skip for now
+            skip for now
           </button>
         </div>
+
       </div>
     </div>
   );
