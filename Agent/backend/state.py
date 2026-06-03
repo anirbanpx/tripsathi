@@ -24,6 +24,9 @@ class TripSathiState(TypedDict):
     candidates: Optional[list]          # raw candidate pool from candidate_gen
     ranked_candidates: Optional[list]   # taste-scored pool from ranker
 
+    # Critic loop control
+    critic_passes: int                  # increments each critic pass; caps at 2
+
     # Control/meta
     awaiting_feedback: bool
     current_node: str                   # internal id
