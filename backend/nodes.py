@@ -667,7 +667,11 @@ def plan_assembly(state: TripSathiState) -> dict:
         try:
             new_plan = _call_llm(PLAN_REGENERATE_SYSTEM, regen_prompt, task="plan")
         except Exception as e:
-            return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
+            logger.warning("plan_assembly regeneration failed (%s) — retrying with reduced budget", e)
+            try:
+                new_plan = _call_llm(PLAN_REGENERATE_SYSTEM, regen_prompt, max_tokens=2048, task="plan")
+            except Exception as e2:
+                return {"error": f"plan_assembly_failed: {e2}", "current_node": "error"}
         new_plan = _enforce_plan_quality(new_plan, _get_kid_ages(state), state.get("research_synthesis"), state["destination"], elderly=_get_elderly(state))
         return {
             "plan": new_plan,
@@ -696,14 +700,27 @@ def plan_assembly(state: TripSathiState) -> dict:
         try:
             updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt, task="plan")
         except Exception as e:
-            # Non-fatal: keep current plan, surface error as warning
-            return {
-                "user_feedback": None,
-                "error": f"refinement_failed: {e}",
-                "awaiting_feedback": True,
-                "current_node": "awaiting_feedback",
-                "stage_label": "Review your plan",
-            }
+            logger.warning("plan_assembly refinement failed (%s) — retrying with reduced budget", e)
+            retry_history = state.get("refinement_history", [])[-1:]
+            retry_refinement_prompt = (
+                f"Current plan: {json.dumps(state.get('plan'))}\n"
+                f"User change request: {feedback}\n"
+                f"Previous changes: {json.dumps(retry_history)}\n"
+                f"User profile: {json.dumps(state.get('user_profile'))}\n"
+                f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+                + (f"\nRAG risks — preserve verbatim in refined plan: {json.dumps(rag_risks)}" if rag_risks else "")
+            )
+            try:
+                updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, retry_refinement_prompt, max_tokens=2048, task="plan")
+            except Exception as e2:
+                # Non-fatal: keep current plan, surface error as warning
+                return {
+                    "user_feedback": None,
+                    "error": f"refinement_failed: {e2}",
+                    "awaiting_feedback": True,
+                    "current_node": "awaiting_feedback",
+                    "stage_label": "Review your plan",
+                }
         updated_plan = _enforce_plan_quality(updated_plan, _get_kid_ages(state), synthesis or None, state["destination"], elderly=_get_elderly(state))
         return {
             "plan": updated_plan,
@@ -788,7 +805,26 @@ def plan_assembly(state: TripSathiState) -> dict:
     try:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt, task="plan")
     except Exception as e:
-        return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
+        logger.warning("plan_assembly initial generation failed (%s) — retrying with reduced budget", e)
+        _synth = state.get("research_synthesis") or {}
+        _slim_synth = {
+            "local_risks": _synth.get("local_risks", []),
+            "routing": _synth.get("routing", ""),
+        }
+        retry_generation_prompt = (
+            f"Destination: {state['destination']}\n"
+            f"User profile: {json.dumps(state.get('user_profile'))}\n"
+            f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+            f"{notes_block}"
+            f"{req_block}"
+            f"{toddler_block}"
+            f"{ranked_block}"
+            f"\nResearch (condensed): {json.dumps(_slim_synth)}"
+        )
+        try:
+            plan = _call_llm(PLAN_GENERATION_SYSTEM, retry_generation_prompt, max_tokens=2048, task="plan")
+        except Exception as e2:
+            return {"error": f"plan_assembly_failed: {e2}", "current_node": "error"}
     is_elderly = _get_elderly(state)
     plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
     return {

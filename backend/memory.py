@@ -1,18 +1,12 @@
-"""Long-term user memory via Mem0.
+"""Long-term user memory via Mem0 Cloud.
 
-Prefers Mem0 Cloud (MEM0_API_KEY env var) — cloud handles LLM extraction on
-their side so we don't burn Groq tokens on Mem0's large internal prompts.
-Falls back to local OSS mode (ChromaDB + HuggingFace) if no API key is set,
-but note: local mode requires a Groq model with >9k TPM which the free tier
-doesn't provide, so cloud is strongly preferred.
+Requires MEM0_API_KEY env var. Without it, memory calls are silently no-ops
+so the rest of the pipeline runs unaffected.
 """
 import logging
 import os
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
-
-MEMORY_DB_PATH = Path(__file__).parent / "data" / "memory_db"
 
 _memory = None
 
@@ -23,39 +17,12 @@ def _get_memory():
         return _memory
 
     mem0_api_key = os.environ.get("MEM0_API_KEY", "")
+    if not mem0_api_key:
+        return None
 
-    if mem0_api_key:
-        from mem0 import MemoryClient
-        _memory = MemoryClient(api_key=mem0_api_key)
-        logger.info("Mem0 using Cloud API")
-    else:
-        # Local OSS fallback — requires high TPM Groq quota
-        from mem0 import Memory
-        MEMORY_DB_PATH.mkdir(parents=True, exist_ok=True)
-        config = {
-            "llm": {
-                "provider": "openai",
-                "config": {
-                    "model": os.environ.get("MEM0_LLM_MODEL", "llama-3.1-8b-instant"),
-                    "api_key": os.environ.get("LLM_API_KEY", ""),
-                    "openai_base_url": os.environ.get("LLM_BASE_URL", ""),
-                },
-            },
-            "embedder": {
-                "provider": "huggingface",
-                "config": {"model": "BAAI/bge-small-en-v1.5"},
-            },
-            "vector_store": {
-                "provider": "chroma",
-                "config": {
-                    "collection_name": "tripsathi_memories",
-                    "path": str(MEMORY_DB_PATH),
-                },
-            },
-        }
-        _memory = Memory.from_config(config)
-        logger.info("Mem0 using local OSS mode")
-
+    from mem0 import MemoryClient
+    _memory = MemoryClient(api_key=mem0_api_key)
+    logger.info("Mem0 Cloud API initialised")
     return _memory
 
 
@@ -65,6 +32,8 @@ def read_memories(user_id: str) -> str:
         return ""
     try:
         mem = _get_memory()
+        if mem is None:
+            return ""
         results = mem.search("travel preferences past trips", filters={"user_id": user_id}, limit=10)
         memories = results.get("results", []) if isinstance(results, dict) else results
         if not memories:
@@ -82,6 +51,8 @@ def write_memory(user_id: str, summary: str) -> None:
         return
     try:
         mem = _get_memory()
+        if mem is None:
+            return
         mem.add([{"role": "user", "content": summary}], user_id=user_id)
         logger.info("memory written user_id=%r", user_id)
     except Exception as e:
