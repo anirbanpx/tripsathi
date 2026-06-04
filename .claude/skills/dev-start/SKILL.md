@@ -6,13 +6,27 @@ description: Start TripSathi backend (FastAPI/uvicorn) and frontend (Vite) for l
 
 Start both services for local development. Follow every step exactly — the ordering and PowerShell forms below are proven to work on this Windows 11 machine.
 
+## ⚠️ Python version requirement
+
+**RAG only works on Python 3.12 (or 3.11).** Python 3.13+ breaks LlamaIndex's internal pydantic v1 compat shim with a `RuntimeError: error checking inheritance of ChatMessage.dict` at import time. The venv MUST be created with Python 3.12.
+
+To check: `.\venv\Scripts\python.exe --version` — it must say `3.12.x`.  
+To fix a broken venv: install Python 3.12 from https://www.python.org/downloads/ (or `winget install Python.Python.3.12`), then:
+```
+cd backend
+Remove-Item -Recurse -Force venv
+py -3.12 -m venv venv
+venv\Scripts\pip install -r requirements.txt
+```
+
 ## Preflight checks (run in parallel)
 
 Before launching, verify prerequisites are in place:
 
 ```powershell
-# 1 — backend venv exists
-Test-Path D:\Workspace\Agent\backend\venv\Scripts\uvicorn.exe
+# 1 — backend venv exists AND is Python 3.12
+$v = & D:\Workspace\Agent\backend\venv\Scripts\python.exe --version 2>&1
+if ($v -notmatch "^Python 3\.12") { Write-Host "WRONG PYTHON: $v — venv must be 3.12" } else { Write-Host "venv OK: $v" }
 
 # 2 — backend .env exists
 Test-Path D:\Workspace\Agent\backend\.env
@@ -22,7 +36,7 @@ Test-Path D:\Workspace\Agent\frontend\node_modules
 ```
 
 **If any check fails:**
-- Missing venv: tell the user to run `cd backend && python -m venv venv && venv\Scripts\pip install -r requirements.txt`
+- Wrong Python version or missing venv: install Python 3.12 (see ⚠️ section above), then recreate the venv
 - Missing .env: tell the user to create `backend/.env` with keys: `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY`, `RESEARCH_MODEL`, `TAVILY_API_KEY`, `OPENWEATHER_API_KEY`, `GOOGLE_MAPS_API_KEY`, `UNSPLASH_ACCESS_KEY`
 - Missing node_modules: tell the user to run `cd frontend && npm install`
 
@@ -160,7 +174,7 @@ Logs:
 - **Never** use system Python or pip — always `.\venv\Scripts\uvicorn.exe` and `.\venv\Scripts\python.exe`.
 - **Never** use `-RedirectStandardError "2>&1"` syntax — PowerShell 5.1 wraps native stderr as ErrorRecords; redirect to a separate file instead.
 - The Vite proxy forwards `/api/*` → `http://localhost:8000` (configured in `frontend/vite.config.ts`). No CORS config needed for local dev.
-- HuggingFace embedding model (`BAAI/bge-small-en-v1.5`) loads from cache on startup — expect a `Loading weights` line in backend logs, that's normal.
+- Voyage AI embeddings (`voyage-3.5-lite`) are used for RAG — requires `VOYAGE_API_KEY` in `.env`. There is no local model load on startup.
 - **Docker bin is not on PATH by default** — always set `$env:PATH += ";C:\Program Files\Docker\Docker\resources\bin"` before running any `docker` command in PowerShell.
 - **Phoenix container name is `phoenix`** — use `docker start phoenix` to restart after a reboot (do not `docker run` again, it will fail with "name already in use").
 - **Phoenix Cloud vs local:** local dev uses Docker at `http://localhost:6006`; production uses Phoenix Cloud. Controlled by `.env`: set `PHOENIX_COLLECTOR_ENDPOINT` + `PHOENIX_API_KEY` for cloud, leave defaults for local.
