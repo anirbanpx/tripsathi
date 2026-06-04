@@ -1,11 +1,10 @@
-import type { PlanResponse, BookingResponse, UserProfile, AuthResponse, TripParameters, SavedTrip, WishlistItem, SavedHotel, AuthUser } from "../types";
+import type { PlanResponse, BookingResponse, AuthResponse, TripParameters, SavedTrip, WishlistItem, SavedHotel, AuthUser } from "../types";
 import { getAuthHeaders, getAuthState } from "../lib/auth";
 
 import mockPlan from "../mocks/plan.json";
 import mockRefine from "../mocks/refine.json";
 import mockBooking from "../mocks/booking.json";
 import mockAuth from "../mocks/auth.json";
-import mockProfile from "../mocks/profile.json";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 const API_BASE = import.meta.env.DEV ? "" : (import.meta.env.VITE_API_URL || "https://tripsathi-production.up.railway.app");

@@ -90,7 +90,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       } catch (e) { console.error("toggleHotel failed:", e); }
     } else {
       const next = !isBookmarked(hotel.name);
-      toggleBookmark(hotel.name, hotel.location);
+      toggleBookmark({ name: hotel.name, location: hotel.location, type: "hotel" });
       setHotelSaved((prev) => ({ ...prev, [key]: next }));
     }
   }
