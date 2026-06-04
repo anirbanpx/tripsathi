@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { onboard, getOrCreateUserId } from "../services/api";
+import { onboard, getUserId } from "../services/api";
 
 const INTERESTS = [
   "nature", "heritage", "food", "adventure",
@@ -116,7 +116,7 @@ export default function OnboardingPage() {
       }
       const dietary = Array.from(selectedDietary).filter((d) => d !== "None").map((d) => d.toLowerCase());
       const hard_avoids_list = hardAvoids.split(/[,\n]+/).map((s) => s.trim()).filter(Boolean);
-      const userId = getOrCreateUserId();
+      const userId = getUserId();
 
       const result = await onboard({
         user_id: userId,
@@ -145,6 +145,21 @@ export default function OnboardingPage() {
   return (
     <div style={{ minHeight: "100svh", background: "var(--paper)", display: "flex", justifyContent: "center", padding: "40px 16px 60px" }}>
       <div style={{ width: "100%", maxWidth: 520, display: "flex", flexDirection: "column", gap: 16 }}>
+
+        {/* Skip link — always visible */}
+        <div style={{ textAlign: "right" }}>
+          <button
+            type="button"
+            onClick={() => navigate("/planner")}
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-3)",
+              fontWeight: 600, padding: "4px 0",
+            }}
+          >
+            Skip for now →
+          </button>
+        </div>
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 16 }}>

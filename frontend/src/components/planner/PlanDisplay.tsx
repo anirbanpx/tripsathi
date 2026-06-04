@@ -17,7 +17,7 @@ function cleanName(name: string): string {
     .trim();
 }
 import { getIllustration } from "./TravelIllustrations";
-import { refinePlan, regeneratePlan } from "../../services/api";
+import { refinePlan, regeneratePlan, saveTrip, toggleHotel } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
@@ -40,6 +40,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [saveFlash, setSaveFlash] = useState(false);
   const [tasteToast, setTasteToast] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [hotelSaved, setHotelSaved] = useState<Record<string, boolean>>({});
 
   const saved = (() => {
     try {
@@ -48,17 +49,50 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
     } catch { return false; }
   })();
 
-  function handleSave() {
-    try {
-      localStorage.setItem("tripsathi_saved_plan", JSON.stringify({
-        plan: ctx.plan,
-        thread_id: ctx.thread_id,
-        kid_ages: ctx.kid_ages,
-        savedAt: new Date().toISOString(),
-      }));
-      setSaveFlash(true);
-      setTimeout(() => setSaveFlash(false), 2000);
-    } catch { /* storage quota */ }
+  async function handleSave() {
+    if (ctx.mode === "authenticated") {
+      try {
+        await saveTrip({
+          thread_id: ctx.thread_id,
+          destination: plan.days[0]?.location.split(",")[0] ?? ctx.destination ?? "Unknown",
+          duration_days: plan.days.length,
+          plan_json: plan as unknown as object,
+        });
+        setSaveFlash(true);
+        setTimeout(() => setSaveFlash(false), 2000);
+      } catch (e) { console.error("saveTrip failed:", e); }
+    } else {
+      try {
+        localStorage.setItem("tripsathi_saved_plan", JSON.stringify({
+          plan: ctx.plan,
+          thread_id: ctx.thread_id,
+          kid_ages: ctx.kid_ages,
+          savedAt: new Date().toISOString(),
+        }));
+        setSaveFlash(true);
+        setTimeout(() => setSaveFlash(false), 2000);
+      } catch { /* storage quota */ }
+    }
+  }
+
+  async function handleHotelBookmark(hotel: Hotel) {
+    const key = hotel.name + hotel.location;
+    if (ctx.mode === "authenticated") {
+      try {
+        const added = await toggleHotel({
+          name: hotel.name,
+          location: hotel.location,
+          approx_cost_per_night: hotel.approx_cost_per_night,
+          reasoning: hotel.reasoning,
+          content_source: hotel.content_source,
+        });
+        setHotelSaved((prev) => ({ ...prev, [key]: added }));
+      } catch (e) { console.error("toggleHotel failed:", e); }
+    } else {
+      const next = !isBookmarked(hotel.name);
+      toggleBookmark(hotel.name, hotel.location);
+      setHotelSaved((prev) => ({ ...prev, [key]: next }));
+    }
   }
 
   async function handleShare() {
@@ -325,7 +359,29 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         <div className="plan-col-right">
           <div className="day-section" style={{ marginTop: 22 }}>
             <div className="label"><span>Accommodation</span><span className="line" /></div>
-            {plan.hotels.map((h) => <HotelCard key={h.name} hotel={h} />)}
+            {plan.hotels.map((h) => {
+              const key = h.name + h.location;
+              const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
+              return (
+                <div key={h.name} style={{ position: "relative" }}>
+                  <HotelCard hotel={h} />
+                  <button
+                    onClick={() => handleHotelBookmark(h)}
+                    title={bookmarked ? "Unsave hotel" : "Save hotel"}
+                    style={{
+                      position: "absolute", top: 10, right: 10,
+                      background: "none", border: "none", cursor: "pointer",
+                      color: bookmarked ? "var(--accent)" : "var(--fg-3)",
+                      padding: 4, lineHeight: 0,
+                    }}
+                  >
+                    {bookmarked
+                      ? <BookmarkCheck size={16} strokeWidth={1.75} />
+                      : <Bookmark size={16} strokeWidth={1.75} />}
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           <div className="budget">

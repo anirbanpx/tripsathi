@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { Heart } from "lucide-react";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
+import { toggleWishlistItem } from "../../services/api";
 
 // Fix Leaflet's broken default icon paths in Vite
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -91,7 +94,11 @@ const DESTINATIONS: Array<{ name: string; label: string; coord: [number, number]
   { name: "kaziranga",    label: "Kaziranga",     coord: [26.5775, 93.1711] },
 ];
 
-export default function IndiaDestinationsMap() {
+interface MapProps {
+  isAuthenticated?: boolean;
+}
+
+export default function IndiaDestinationsMap({ isAuthenticated = false }: MapProps) {
   return (
     <div style={{
       borderRadius: 18,
@@ -114,7 +121,7 @@ export default function IndiaDestinationsMap() {
         {DESTINATIONS.map((dest) => (
           <Marker key={dest.name} position={dest.coord} icon={dotIcon}>
             <Popup>
-              <DestinationPopup name={dest.name} label={dest.label} />
+              <DestinationPopup name={dest.name} label={dest.label} coord={dest.coord} isAuthenticated={isAuthenticated} />
             </Popup>
           </Marker>
         ))}
@@ -123,8 +130,26 @@ export default function IndiaDestinationsMap() {
   );
 }
 
-function DestinationPopup({ name, label }: { name: string; label: string }) {
+function DestinationPopup({ name, label, coord, isAuthenticated }: { name: string; label: string; coord: [number, number]; isAuthenticated: boolean }) {
   const imgUrl = getDestinationImageUrl(name);
+  const [wishlisted, setWishlisted] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  async function handleWishlist() {
+    if (!isAuthenticated) return;
+    setSaving(true);
+    try {
+      const added = await toggleWishlistItem({
+        item_type: "destination",
+        name: label,
+        location: `${coord[0].toFixed(2)}, ${coord[1].toFixed(2)}`,
+        metadata: { name },
+      });
+      setWishlisted(added);
+    } catch (e) { console.error(e); }
+    finally { setSaving(false); }
+  }
+
   return (
     <div style={{ fontFamily: "Nunito, sans-serif", width: 160 }}>
       {imgUrl && (
@@ -137,7 +162,23 @@ function DestinationPopup({ name, label }: { name: string; label: string }) {
           />
         </div>
       )}
-      <div style={{ fontWeight: 800, fontSize: 13, color: "#3E2F23" }}>{label}</div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ fontWeight: 800, fontSize: 13, color: "#3E2F23" }}>{label}</div>
+        {isAuthenticated && (
+          <button
+            onClick={handleWishlist}
+            disabled={saving}
+            title={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            style={{
+              background: "none", border: "none", cursor: "pointer", padding: 2, lineHeight: 0,
+              color: wishlisted ? "#B0492F" : "#aaa",
+              opacity: saving ? 0.5 : 1,
+            }}
+          >
+            <Heart size={14} strokeWidth={2} fill={wishlisted ? "#B0492F" : "none"} />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -11,13 +11,15 @@ from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
 import asyncio
 import json
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from langgraph.types import Command
 
 load_dotenv()
+
+from auth import get_current_user  # noqa: E402 — import after load_dotenv so env vars are set
 
 if os.getenv("PHOENIX_ENABLED") == "true":
     try:
@@ -100,6 +102,8 @@ async def _cleanup_loop() -> None:
 async def _lifespan(app: FastAPI):
     _init_thread_registry()
     _cleanup_expired_threads()  # clean up any lingering sessions on startup
+    from saves import _ensure_saves_db
+    _ensure_saves_db()
     task = asyncio.create_task(_cleanup_loop())
     yield
     task.cancel()
@@ -152,6 +156,36 @@ class RegenerateRequest(BaseModel):
 class BookRequest(BaseModel):
     user_id: str
     item: dict
+
+
+class GoogleAuthRequest(BaseModel):
+    id_token: str
+
+
+class SaveTripRequest(BaseModel):
+    thread_id: str | None = None
+    destination: str
+    duration_days: int = 0
+    plan_json: dict = {}
+
+
+class WishlistRequest(BaseModel):
+    item_type: str  # "destination" | "activity"
+    name: str
+    location: str | None = None
+    metadata: dict = {}
+
+
+class HotelSaveRequest(BaseModel):
+    name: str
+    location: str
+    approx_cost_per_night: int | None = None
+    reasoning: str | None = None
+    content_source: str | None = None
+
+
+class PreferencesRequest(BaseModel):
+    taste_data: dict
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -361,6 +395,133 @@ async def regenerate_plan(req: RegenerateRequest):
         raise HTTPException(status_code=404, detail=f"Session not found or expired: {e}")
     state = _get_state(config)
     return _plan_response(state, req.thread_id)
+
+
+@app.post("/api/auth/google")
+async def auth_google(req: GoogleAuthRequest):
+    from auth import verify_google_token, create_app_token
+    from saves import upsert_user
+    info = verify_google_token(req.id_token)
+    user_id = upsert_user(info["sub"], info["email"], info["name"], info.get("picture", ""))
+    token = create_app_token(user_id, info["email"])
+    return {
+        "access_token": token,
+        "user": {"user_id": user_id, "name": info["name"], "email": info["email"], "avatar_url": info.get("picture")},
+    }
+
+
+@app.get("/api/profile")
+async def get_profile(current_user: dict = Depends(get_current_user)):
+    from saves import get_user, _derive_traveler_label
+    from taste import load_taste, taste_to_summary
+    user_id = current_user["sub"]
+    user = get_user(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="user_not_found")
+    profile = load_taste(user_id)
+    return {
+        "user_id": user_id,
+        "name": user["name"],
+        "email": user["email"],
+        "avatar_url": user.get("avatar_url"),
+        "traveler_type_label": _derive_traveler_label(profile) if profile else "Explorer",
+        "taste_summary": taste_to_summary(profile) if profile else None,
+    }
+
+
+@app.patch("/api/profile/preferences")
+async def update_preferences(req: PreferencesRequest, current_user: dict = Depends(get_current_user)):
+    from taste import TasteProfile, load_taste, save_taste, merge_taste
+    user_id = current_user["sub"]
+    existing = load_taste(user_id)
+    if existing:
+        updated = merge_taste(existing, req.taste_data)
+    else:
+        profile_data = {"user_id": user_id, **req.taste_data}
+        updated = TasteProfile(**{k: v for k, v in profile_data.items() if k in TasteProfile.__dataclass_fields__})
+    save_taste(updated)
+    from dataclasses import asdict
+    return asdict(updated)
+
+
+@app.post("/api/saves/trips")
+async def save_trip_endpoint(req: SaveTripRequest, current_user: dict = Depends(get_current_user)):
+    from saves import save_trip
+    trip_id = save_trip(current_user["sub"], req.thread_id, req.destination, req.duration_days, req.plan_json)
+    return {"id": trip_id}
+
+
+@app.get("/api/saves/trips")
+async def list_trips(current_user: dict = Depends(get_current_user)):
+    from saves import get_saved_trips
+    return get_saved_trips(current_user["sub"])
+
+
+@app.delete("/api/saves/trips/{trip_id}")
+async def delete_trip(trip_id: str, current_user: dict = Depends(get_current_user)):
+    from saves import delete_saved_trip
+    if not delete_saved_trip(current_user["sub"], trip_id):
+        raise HTTPException(status_code=404, detail="trip_not_found")
+    return {"ok": True}
+
+
+@app.post("/api/saves/wishlist")
+async def toggle_wishlist(req: WishlistRequest, current_user: dict = Depends(get_current_user)):
+    from saves import toggle_wishlist_item
+    added = toggle_wishlist_item(current_user["sub"], req.item_type, req.name, req.location, req.metadata)
+    return {"added": added}
+
+
+@app.get("/api/saves/wishlist")
+async def list_wishlist(current_user: dict = Depends(get_current_user)):
+    from saves import get_wishlist
+    return get_wishlist(current_user["sub"])
+
+
+@app.delete("/api/saves/wishlist/{item_id}")
+async def delete_wishlist(item_id: str, current_user: dict = Depends(get_current_user)):
+    from saves import delete_wishlist_item
+    if not delete_wishlist_item(current_user["sub"], item_id):
+        raise HTTPException(status_code=404, detail="item_not_found")
+    return {"ok": True}
+
+
+@app.post("/api/saves/hotels")
+async def toggle_hotel_endpoint(req: HotelSaveRequest, current_user: dict = Depends(get_current_user)):
+    from saves import toggle_hotel
+    added = toggle_hotel(current_user["sub"], req.name, req.location, req.approx_cost_per_night, req.reasoning, req.content_source)
+    return {"added": added}
+
+
+@app.get("/api/saves/hotels")
+async def list_hotels(current_user: dict = Depends(get_current_user)):
+    from saves import get_saved_hotels
+    return get_saved_hotels(current_user["sub"])
+
+
+@app.delete("/api/saves/hotels/{hotel_id}")
+async def delete_hotel_endpoint(hotel_id: str, current_user: dict = Depends(get_current_user)):
+    from saves import delete_hotel
+    if not delete_hotel(current_user["sub"], hotel_id):
+        raise HTTPException(status_code=404, detail="hotel_not_found")
+    return {"ok": True}
+
+
+@app.post("/api/parse-taste")
+async def parse_taste(req: ParseRequest):
+    from nodes import _call_llm
+    _TASTE_PARSE_SYSTEM = (
+        "Extract travel preferences from the user's text. Return JSON with any of these keys that you can infer: "
+        "pace (1-5), crowd_tolerance (1-5), immersion_style (1-5), food_adventurousness (1-5), "
+        "walking_tolerance (1-5), accommodation_taste (1-5), "
+        "interests (object with keys: nature, heritage, food, adventure, photography, spiritual, wildlife, shopping, wellness, nightlife; values 0.0-1.0). "
+        "Only include keys you are confident about. Return {} if nothing can be inferred."
+    )
+    try:
+        result = _call_llm(_TASTE_PARSE_SYSTEM, req.text, max_tokens=512)
+        return result if isinstance(result, dict) else {}
+    except Exception:
+        return {}
 
 
 @app.post("/api/book")
