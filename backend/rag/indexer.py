@@ -75,6 +75,12 @@ def get_index() -> VectorStoreIndex:
             f"Qdrant collection '{COLLECTION_NAME}' is empty. Run: python reindex.py"
         )
 
+    # Ensure keyword index exists on destination field (idempotent — safe to call every startup)
+    try:
+        client.create_payload_index(COLLECTION_NAME, "destination", "keyword")
+    except Exception:
+        pass  # index already exists — that's fine
+
     vector_store = QdrantVectorStore(client=client, collection_name=COLLECTION_NAME)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
     _index = VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
