@@ -80,7 +80,7 @@ def _cleanup_expired_threads() -> None:
         expired = [row[0] for row in cur.fetchall()]
         for tid in expired:
             cur.execute("DELETE FROM checkpoints WHERE thread_id = ?", (tid,))
-            cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = ?", (tid,))
+            cur.execute("DELETE FROM writes WHERE thread_id = ?", (tid,))
             cur.execute("DELETE FROM thread_registry WHERE thread_id = ?", (tid,))
         conn.commit()
         conn.close()
