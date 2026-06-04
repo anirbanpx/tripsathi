@@ -76,32 +76,13 @@ def read_memories(user_id: str) -> str:
         return ""
 
 
-def write_memory(user_id: str, plan: dict, trip_parameters: dict, user_profile: dict) -> None:
-    """Extract travel preferences from a completed session and persist to Mem0."""
-    if not user_id or not plan:
+def write_memory(user_id: str, summary: str) -> None:
+    """Persist a free-text travel preference summary for this user to Mem0."""
+    if not user_id or not summary:
         return
     try:
         mem = _get_memory()
-        destination = trip_parameters.get("destination", "unknown")
-        budget = trip_parameters.get("budget", "mid")
-        trip_style = trip_parameters.get("trip_style", [])
-        persona = user_profile.get("persona_type", "")
-        constraints = user_profile.get("constraints", {})
-
-        messages = [
-            {
-                "role": "user",
-                "content": (
-                    f"I planned a trip to {destination}. "
-                    f"Budget: {budget}. Style: {', '.join(trip_style) if trip_style else 'general'}. "
-                    f"Group: {persona}. "
-                    f"Constraints: elderly={constraints.get('elderly', False)}, "
-                    f"kid_ages={constraints.get('kid_ages', [])}, "
-                    f"pace={constraints.get('pace', 'moderate')}."
-                ),
-            }
-        ]
-        mem.add(messages, user_id=user_id)
-        logger.info("memory written user_id=%r destination=%r", user_id, destination)
+        mem.add([{"role": "user", "content": summary}], user_id=user_id)
+        logger.info("memory written user_id=%r", user_id)
     except Exception as e:
         logger.warning("write_memory failed user_id=%r: %s", user_id, e)
