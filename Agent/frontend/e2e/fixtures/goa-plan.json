@@ -1,0 +1,60 @@
+{
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "North Goa",
+        "activities": [
+          { "name": "Fontainhas Latin Quarter", "bookable": false, "approx_cost": null },
+          { "name": "Basilica of Bom Jesus", "bookable": false, "approx_cost": null }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Ritz Classic", "dinner": "Thalassa" },
+        "notes": "Heritage quarter in the morning, beach in the late afternoon"
+      },
+      {
+        "day_number": 2,
+        "location": "South Goa",
+        "activities": [
+          { "name": "Palolem Beach", "bookable": false, "approx_cost": null },
+          { "name": "Cotigao Wildlife Sanctuary", "bookable": true, "approx_cost": 300 }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Ourem 88", "dinner": "Hotel" },
+        "notes": "Quieter south — great for a relaxed day"
+      },
+      {
+        "day_number": 3,
+        "location": "North Goa",
+        "activities": [
+          { "name": "Anjuna Flea Market", "bookable": false, "approx_cost": null },
+          { "name": "Vagator Beach", "bookable": false, "approx_cost": null }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Florentine", "dinner": "Britto's" },
+        "notes": "Market day — best energy in the late morning"
+      }
+    ],
+    "hotels": [
+      {
+        "location": "North Goa",
+        "name": "Casa de Goa",
+        "reasoning": "Boutique property in Candolim; walking distance to the beach; good value for mid-range",
+        "approx_cost_per_night": 4500,
+        "content_source": "rag",
+        "bookable": true
+      }
+    ],
+    "budget_breakdown": {
+      "accommodation": 13500,
+      "transport": 3000,
+      "activities": 1200,
+      "food": 7000,
+      "total": 24700
+    },
+    "warnings": [
+      "North Goa beaches get crowded after 11 AM — arrive early",
+      "Anjuna market runs Wednesday only — check day of visit"
+    ]
+  },
+  "thread_id": "test_goa_001",
+  "status": "awaiting_feedback",
+  "stage_label": "Your plan is ready!"
+}
