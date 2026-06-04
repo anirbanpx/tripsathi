@@ -1,8 +1,10 @@
 import json
 import logging
 import os
+import re
 import time
-from openai import OpenAI
+from dataclasses import dataclass
+from openai import OpenAI, RateLimitError, APIStatusError, BadRequestError
 
 logger = logging.getLogger(__name__)
 from langgraph.types import interrupt
@@ -20,11 +22,75 @@ from prompts import (
     PLAN_REGENERATE_SYSTEM,
 )
 
-_client = OpenAI(
-    base_url=os.environ.get("LLM_BASE_URL", "http://localhost:1234/v1"),
-    api_key=os.environ.get("LLM_API_KEY", "lm-studio"),
-)
-_MODEL = os.environ.get("LLM_MODEL", "local-model")
+
+@dataclass
+class _Provider:
+    name: str
+    client: OpenAI
+    model: str
+
+
+def _build_provider(name, base_env, key_env, model_env, base_default, model_default):
+    key = os.environ.get(key_env)
+    if not key:
+        return None
+    return _Provider(
+        name=name,
+        client=OpenAI(
+            base_url=os.environ.get(base_env, base_default),
+            api_key=key,
+            max_retries=0,
+        ),
+        model=os.environ.get(model_env, model_default),
+    )
+
+
+_PROVIDERS = [p for p in [
+    _build_provider("groq",     "LLM_BASE_URL",           "LLM_API_KEY",           "LLM_MODEL",
+                    "http://localhost:1234/v1", "local-model"),
+    _build_provider("cerebras", "FALLBACK1_LLM_BASE_URL",  "FALLBACK1_LLM_API_KEY", "FALLBACK1_LLM_MODEL",
+                    "https://api.cerebras.ai/v1", "gpt-oss-120b"),
+    _build_provider("gemini",   "FALLBACK2_LLM_BASE_URL",  "FALLBACK2_LLM_API_KEY", "FALLBACK2_LLM_MODEL",
+                    "https://generativelanguage.googleapis.com/v1beta/openai/", "gemini-2.5-flash"),
+] if p]
+
+# session stickiness: provider name -> epoch time it becomes usable again
+_disabled_until: dict[str, float] = {}
+
+# Task-based provider ordering: routes each call type to its best-fit model first.
+# synthesis/candidate_gen → Gemini-first (long-context + clean JSON, huge free quota)
+# plan/critic → gpt-oss-first (deliberate reasoning is gpt-oss's strength)
+# default → Groq-first (primary for everything not explicitly routed)
+_TASK_CHAINS: dict[str, list[str]] = {
+    "synthesis":     ["gemini", "groq", "cerebras"],
+    "candidate_gen": ["gemini", "groq", "cerebras"],
+    "plan":          ["groq", "cerebras", "gemini"],
+    "critic":        ["groq", "cerebras", "gemini"],
+    "default":       ["groq", "cerebras", "gemini"],
+}
+
+
+def _classify_error(e) -> str:
+    if isinstance(e, RateLimitError):
+        return "quota"
+    if isinstance(e, APIStatusError) and e.status_code == 429:
+        return "quota"
+    if isinstance(e, APIStatusError):
+        msg = str(e).lower()
+        if "rate_limit_exceeded" in msg or "tokens per day" in msg:
+            return "quota"
+        if "context" in msg or "too many tokens" in msg or "input is too long" in msg:
+            return "context"
+    if isinstance(e, BadRequestError):
+        msg = str(e).lower()
+        if "context" in msg or "too many tokens" in msg or "input is too long" in msg:
+            return "context"
+    return "other"
+
+
+def _parse_cooldown(e) -> float:
+    match = re.search(r"try again in (\d+(?:\.\d+)?)s", str(e), re.IGNORECASE)
+    return float(match.group(1)) if match else 600.0
 
 APPROVAL_SIGNALS = {
     "looks good", "approve", "approved", "perfect", "that's fine", "yes",
@@ -208,46 +274,73 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
     return plan
 
 
-def _call_llm(system: str, user_message: str, max_tokens: int = 4096) -> dict | list:
-    for attempt in range(3):
-        extra_instruction = (
-            "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown, no prose, no code fences."
-            if attempt > 0
-            else ""
-        )
-        if attempt > 0:
-            time.sleep(8 * attempt)  # 8s, 16s backoff — rate-limit recovery
-        response = _client.chat.completions.create(
-            model=_MODEL,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_message + extra_instruction},
-            ],
-            max_tokens=max_tokens,
-        )
-        if response.usage:
-            logger.info(
-                "llm_call model=%s prompt_tokens=%d completion_tokens=%d total_tokens=%d",
-                _MODEL,
-                response.usage.prompt_tokens,
-                response.usage.completion_tokens,
-                response.usage.total_tokens,
+def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str = "default") -> dict | list:
+    now = time.time()
+    chain = _TASK_CHAINS.get(task, _TASK_CHAINS["default"])
+    provider_map = {p.name: p for p in _PROVIDERS}
+    ordered = [provider_map[name] for name in chain if name in provider_map]
+    available = [p for p in ordered if _disabled_until.get(p.name, 0) <= now]
+    if not available:
+        raise RuntimeError("all LLM providers are currently rate-limited")
+
+    for provider in available:
+        for attempt in range(3):
+            extra_instruction = (
+                "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown, no prose, no code fences."
+                if attempt > 0
+                else ""
             )
-        raw = (response.choices[0].message.content or "").strip()
-        if not raw:
-            continue  # empty response — retry with backoff
-        if raw.startswith("```"):
-            parts = raw.split("```")
-            raw = parts[1]
-            if raw.startswith("json"):
-                raw = raw[4:]
-            raw = raw.strip()
-        try:
-            return json.loads(raw)
-        except json.JSONDecodeError:
-            if attempt == 2:
-                raise
-    raise RuntimeError("LLM returned empty or unparseable JSON after 3 attempts")
+            if attempt > 0:
+                time.sleep(8 * attempt)
+            try:
+                response = provider.client.chat.completions.create(
+                    model=provider.model,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user_message + extra_instruction},
+                    ],
+                    max_tokens=max_tokens,
+                )
+            except Exception as e:
+                kind = _classify_error(e)
+                if kind == "quota":
+                    cooldown = _parse_cooldown(e)
+                    _disabled_until[provider.name] = time.time() + cooldown
+                    logger.warning("provider %s exhausted → failing over (cooldown %.0fs)", provider.name, cooldown)
+                    break  # try next provider
+                if kind == "context":
+                    logger.warning("provider %s context-length error → failing over", provider.name)
+                    break  # try next provider (don't disable — request-specific)
+                if attempt == 2:
+                    raise
+                continue
+
+            if response.usage:
+                logger.info(
+                    "llm_call provider=%s model=%s prompt_tokens=%d completion_tokens=%d total_tokens=%d",
+                    provider.name,
+                    provider.model,
+                    response.usage.prompt_tokens,
+                    response.usage.completion_tokens,
+                    response.usage.total_tokens,
+                )
+            raw = (response.choices[0].message.content or "").strip()
+            if not raw:
+                continue
+            if raw.startswith("```"):
+                parts = raw.split("```")
+                raw = parts[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+                raw = raw.strip()
+            try:
+                return json.loads(raw)
+            except json.JSONDecodeError:
+                if attempt == 2:
+                    break  # exhausted retries for this provider, try next
+                continue
+
+    raise RuntimeError("all LLM providers exhausted — no valid JSON response")
 
 
 def persona_classification(state: TripSathiState) -> dict:
@@ -268,7 +361,7 @@ def persona_classification(state: TripSathiState) -> dict:
         answers_text += f"\n\n{past_memories}"
 
     try:
-        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
+        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024, task="default")
     except Exception as e:
         return {"error": f"persona_classification_failed: {e}", "current_node": "error"}
 
@@ -290,7 +383,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Trip: {json.dumps(state['trip_parameters'])}"
     )
     try:
-        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024)
+        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024, task="default")
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
@@ -325,7 +418,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Retrieved knowledge:\n{knowledge_block}"
     )
     try:
-        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096)
+        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096, task="synthesis")
     except Exception as e:
         return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
@@ -357,7 +450,7 @@ def plan_assembly(state: TripSathiState) -> dict:
             f"Trip parameters: {json.dumps(state['trip_parameters'])}"
         )
         try:
-            new_plan = _call_llm(PLAN_REGENERATE_SYSTEM, regen_prompt)
+            new_plan = _call_llm(PLAN_REGENERATE_SYSTEM, regen_prompt, task="plan")
         except Exception as e:
             return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
         new_plan = _enforce_plan_quality(new_plan, _get_kid_ages(state), state.get("research_synthesis"), state["destination"], elderly=_get_elderly(state))
@@ -386,7 +479,7 @@ def plan_assembly(state: TripSathiState) -> dict:
             + (f"\nRAG risks — preserve verbatim in refined plan: {json.dumps(rag_risks)}" if rag_risks else "")
         )
         try:
-            updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt)
+            updated_plan = _call_llm(PLAN_REFINEMENT_SYSTEM, refinement_prompt, task="plan")
         except Exception as e:
             # Non-fatal: keep current plan, surface error as warning
             return {
@@ -469,16 +562,16 @@ def plan_assembly(state: TripSathiState) -> dict:
 
     generation_prompt = (
         f"Destination: {state['destination']}\n"
-        f"Research: {json.dumps(state.get('research_synthesis'))}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}"
         f"{notes_block}"
-        f"{ranked_block}"
         f"{req_block}"
         f"{toddler_block}"
+        f"{ranked_block}"
+        f"\nResearch: {json.dumps(state.get('research_synthesis'))}"
     )
     try:
-        plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt)
+        plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt, task="plan")
     except Exception as e:
         return {"error": f"plan_assembly_failed: {e}", "current_node": "error"}
     is_elderly = _get_elderly(state)
@@ -652,17 +745,17 @@ def candidate_gen(state: TripSathiState) -> dict:
     synthesis = state.get("research_synthesis") or {}
     extraction_input = (
         f"Destination: {state['destination']}\n"
+        f"User profile: {json.dumps(state.get('user_profile'))}\n"
+        f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Key places: {json.dumps(synthesis.get('key_places', []))}\n"
         f"Routing: {synthesis.get('routing', '')}\n"
-        f"Seasonal context: {synthesis.get('seasonal_context', '')}\n"
-        f"User profile: {json.dumps(state.get('user_profile'))}\n"
-        f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+        f"Seasonal context: {synthesis.get('seasonal_context', '')}"
     )
     try:
         # 4096 (not 2048): the prompt asks for 15-25 items × ~10 fields each,
         # which overflows a 2048 cap and truncates the JSON mid-string. Retries
         # can't recover a hard length cap, so the pool ended up empty.
-        raw = _call_llm(CANDIDATE_GEN_SYSTEM, extraction_input, max_tokens=4096)
+        raw = _call_llm(CANDIDATE_GEN_SYSTEM, extraction_input, max_tokens=4096, task="candidate_gen")
     except Exception as e:
         logger.warning("candidate_gen LLM failed (%s) — proceeding with empty pool", e)
         raw = []
@@ -747,7 +840,7 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
         f"  interests top: {sorted(profile.interests.items(), key=lambda x: -x[1])[:3]}"
     )
     try:
-        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=1024)
+        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=1024, task="default")
         if isinstance(result, list):
             return [str(q) for q in result[:2] if q]
     except Exception:
@@ -762,14 +855,14 @@ def critic(state: TripSathiState) -> dict:
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
 
     critic_input = (
-        f"Plan: {json.dumps(plan)}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
         f"Taste profile: {json.dumps(state.get('taste_profile'))}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
-        f"Seasonal context: {json.dumps((state.get('research_synthesis') or {}).get('seasonal_context', ''))}"
+        f"Seasonal context: {json.dumps((state.get('research_synthesis') or {}).get('seasonal_context', ''))}\n"
+        f"Plan: {json.dumps(plan)}"
     )
     try:
-        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024)
+        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024, task="critic")
     except Exception as e:
         logger.warning("critic failed (%s) — passing through", e)
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
@@ -819,7 +912,7 @@ def _persist_taste_deltas(state: TripSathiState) -> None:
 
     refinement_text = "\n".join(f"- {r}" for r in refinements)
     try:
-        deltas = _call_llm(TASTE_DELTA_SYSTEM, f"Refinements:\n{refinement_text}", max_tokens=512)
+        deltas = _call_llm(TASTE_DELTA_SYSTEM, f"Refinements:\n{refinement_text}", max_tokens=512, task="default")
     except Exception as e:
         logger.warning("taste delta extraction failed: %s", e)
         return
