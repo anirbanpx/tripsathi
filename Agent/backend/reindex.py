@@ -31,6 +31,22 @@ CHUNK_OVERLAP = 100
 
 # ── Embedding providers ──────────────────────────────────────────────────────
 
+def _retry_batch(call, label: str, max_retries: int = 3, base_delay: float = 10.0):
+    """Run `call()` with exponential backoff. Exits loudly on exhaustion so the
+    index is never left silently partial."""
+    for attempt in range(max_retries):
+        try:
+            return call()
+        except Exception as e:
+            if attempt == max_retries - 1:
+                print(f"\nERROR: batch {label} failed after {max_retries} attempts: {e}")
+                print("Index may be partial — re-run reindex.py (or with --destination) to retry.")
+                sys.exit(1)
+            delay = base_delay * (2 ** attempt)
+            print(f"    batch {label} failed ({e}) — retrying in {delay:.0f}s …")
+            time.sleep(delay)
+
+
 def _embed_voyage(texts: list[str]) -> list[list[float]]:
     import voyageai
     voyage = voyageai.Client(api_key=os.environ["VOYAGE_API_KEY"])
@@ -39,9 +55,13 @@ def _embed_voyage(texts: list[str]) -> list[list[float]]:
     vectors = []
     for i in range(0, len(texts), BATCH):
         batch = texts[i:i + BATCH]
-        result = voyage.embed(batch, model="voyage-3.5-lite", input_type="document")
-        vectors.extend(result.embeddings)
         done = min(i + BATCH, len(texts))
+        label = f"{i + 1}-{done}/{len(texts)}"
+        result = _retry_batch(
+            lambda b=batch: voyage.embed(b, model="voyage-3.5-lite", input_type="document"),
+            label,
+        )
+        vectors.extend(result.embeddings)
         print(f"    {done}/{len(texts)} embedded")
         if done < len(texts):
             time.sleep(RPM_SLEEP)
@@ -56,9 +76,13 @@ def _embed_cohere(texts: list[str]) -> list[list[float]]:
     vectors = []
     for i in range(0, len(texts), BATCH):
         batch = texts[i:i + BATCH]
-        result = co.embed(texts=batch, model="embed-english-v3.0", input_type="search_document")
-        vectors.extend(result.embeddings)
         done = min(i + BATCH, len(texts))
+        label = f"{i + 1}-{done}/{len(texts)}"
+        result = _retry_batch(
+            lambda b=batch: co.embed(texts=b, model="embed-english-v3.0", input_type="search_document"),
+            label,
+        )
+        vectors.extend(result.embeddings)
         print(f"    {done}/{len(texts)} embedded")
     return vectors
 

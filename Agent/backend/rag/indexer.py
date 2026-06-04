@@ -81,7 +81,7 @@ def get_index() -> VectorStoreIndex:
     return _index
 
 
-def get_query_engine(similarity_top_k: int = 5, destination: str | None = None):
+def get_query_engine(similarity_top_k: int = 12, destination: str | None = None):
     """Return a query engine. Pass destination to restrict to that destination's chunks."""
     index = get_index()
     if destination:
