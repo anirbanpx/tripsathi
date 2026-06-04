@@ -5,6 +5,7 @@ import os
 import re
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from openai import OpenAI, RateLimitError, APIStatusError, BadRequestError
 
@@ -416,7 +417,16 @@ def destination_intelligence(state: TripSathiState) -> dict:
     try:
         expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024, task="default")
     except Exception as e:
-        return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
+        # Graceful degradation: LLM down → fall back to generic queries so RAG still runs
+        logger.warning("query expansion failed (%s) — using fallback queries", e)
+        _dest = state["destination"]
+        expanded_queries = [
+            f"{_dest} top attractions sightseeing",
+            f"{_dest} local food restaurants",
+            f"{_dest} travel tips safety warnings",
+            f"{_dest} hotels accommodation",
+            f"{_dest} things to do activities itinerary",
+        ]
 
     # LlamaIndex retrieval (local variable — not state)
     retrieved_content = []
@@ -425,11 +435,16 @@ def destination_intelligence(state: TripSathiState) -> dict:
     dest_slug = state["destination"].lower().split(",")[0].strip().replace(" ", "_")
     try:
         query_engine = get_query_engine(destination=dest_slug)
-        for q in expanded_queries:
-            result = query_engine.query(q)
-            text = str(result).strip()
-            if text:
-                retrieved_content.append(text)
+
+        def _run_query(q: str) -> str:
+            try:
+                return str(query_engine.query(q)).strip()
+            except Exception as _e:
+                logger.warning("RAG sub-query failed q=%r: %s", q, _e)
+                return ""
+
+        with ThreadPoolExecutor(max_workers=min(len(expanded_queries), 7)) as _pool:
+            retrieved_content = [t for t in _pool.map(_run_query, expanded_queries) if t]
     except Exception as e:
         logger.error("RAG query failed for destination=%s: %s", dest_slug, e)
         rag_failed = True  # Graceful degradation: proceed with empty corpus
@@ -474,11 +489,10 @@ def destination_intelligence(state: TripSathiState) -> dict:
         ]
         _risk_content = []
         try:
-            for q in _risk_queries:
-                result = query_engine.query(q)
-                text = str(result).strip()
-                if text:
-                    _risk_content.append(text)
+            with ThreadPoolExecutor(max_workers=len(_risk_queries)) as _pool:
+                _risk_content = [
+                    t for t in _pool.map(lambda q: str(query_engine.query(q)).strip(), _risk_queries) if t
+                ]
         except Exception as e:
             logger.warning("retrieval quality gate query failed: %s", e)
 
@@ -1036,9 +1050,19 @@ def _persist_taste_deltas(state: TripSathiState) -> None:
 
 
 def error_node(state: TripSathiState) -> dict:
-    logger.error("graph_error node=%s error=%s", state.get("current_node"), state.get("error"))
+    raw = state.get("error", "")
+    logger.error("graph_error node=%s error=%s", state.get("current_node"), raw)
+    if "rate-limited" in raw or "quota" in raw.lower():
+        friendly = "All AI providers are temporarily at capacity. Please wait a minute and try again."
+    elif "exhausted" in raw:
+        friendly = "Could not generate a valid response after multiple attempts. Please try again."
+    elif raw:
+        friendly = f"Planning failed: {raw}"
+    else:
+        friendly = "An unexpected error occurred. Please try again."
     return {
-        "stage_label": "Something went wrong",
+        "error": friendly,
+        "stage_label": "Planning could not complete",
         "awaiting_feedback": False,
     }
 

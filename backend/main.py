@@ -1,5 +1,8 @@
 import logging
 import os
+import sqlite3
+import time
+from contextlib import asynccontextmanager
 from dataclasses import asdict
 from uuid import uuid4
 
@@ -40,7 +43,69 @@ if not os.getenv("LLM_API_KEY"):
 
 from graph import graph  # noqa: E402 — import after env check
 
-app = FastAPI(title="TripSathi API")
+_logger = logging.getLogger(__name__)
+_CHECKPOINTS_DB = "checkpoints.db"
+_SESSION_TTL_SECONDS = 86400  # 24 hours
+
+
+def _init_thread_registry() -> None:
+    conn = sqlite3.connect(_CHECKPOINTS_DB)
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS thread_registry "
+        "(thread_id TEXT PRIMARY KEY, created_at REAL NOT NULL)"
+    )
+    conn.commit()
+    conn.close()
+
+
+def _register_thread(thread_id: str) -> None:
+    try:
+        conn = sqlite3.connect(_CHECKPOINTS_DB)
+        conn.execute(
+            "INSERT OR IGNORE INTO thread_registry (thread_id, created_at) VALUES (?, ?)",
+            (thread_id, time.time()),
+        )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        _logger.warning("thread_registry insert failed: %s", e)
+
+
+def _cleanup_expired_threads() -> None:
+    cutoff = time.time() - _SESSION_TTL_SECONDS
+    try:
+        conn = sqlite3.connect(_CHECKPOINTS_DB)
+        cur = conn.cursor()
+        cur.execute("SELECT thread_id FROM thread_registry WHERE created_at < ?", (cutoff,))
+        expired = [row[0] for row in cur.fetchall()]
+        for tid in expired:
+            cur.execute("DELETE FROM checkpoints WHERE thread_id = ?", (tid,))
+            cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = ?", (tid,))
+            cur.execute("DELETE FROM thread_registry WHERE thread_id = ?", (tid,))
+        conn.commit()
+        conn.close()
+        if expired:
+            _logger.info("ttl_cleanup expired_threads=%d", len(expired))
+    except Exception as e:
+        _logger.warning("ttl_cleanup failed: %s", e)
+
+
+async def _cleanup_loop() -> None:
+    while True:
+        await asyncio.sleep(3600)  # run hourly
+        _cleanup_expired_threads()
+
+
+@asynccontextmanager
+async def _lifespan(app: FastAPI):
+    _init_thread_registry()
+    _cleanup_expired_threads()  # clean up any lingering sessions on startup
+    task = asyncio.create_task(_cleanup_loop())
+    yield
+    task.cancel()
+
+
+app = FastAPI(title="TripSathi API", lifespan=_lifespan)
 
 _cors_origins = ["http://localhost:5173", "http://localhost:5174"]
 _frontend_url = os.getenv("FRONTEND_URL")
@@ -217,6 +282,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
 @app.post("/api/plan")
 async def start_plan(req: PlanRequest):
     thread_id = str(uuid4())
+    _register_thread(thread_id)
     config = {"configurable": {"thread_id": thread_id}}
     graph.invoke(_build_initial_state(req), config=config)
     state = _get_state(config)
@@ -226,6 +292,7 @@ async def start_plan(req: PlanRequest):
 @app.post("/api/plan/stream")
 async def stream_plan(req: PlanRequest):
     thread_id = str(uuid4())
+    _register_thread(thread_id)
     config = {"configurable": {"thread_id": thread_id}}
 
     async def generate():
