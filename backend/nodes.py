@@ -82,6 +82,8 @@ def _classify_error(e) -> str:
         return "quota"
     if isinstance(e, APIStatusError) and e.status_code == 429:
         return "quota"
+    if isinstance(e, APIStatusError) and e.status_code == 403:
+        return "quota"  # permission denied / project blocked — skip provider, try next
     if isinstance(e, APIStatusError):
         msg = str(e).lower()
         if "rate_limit_exceeded" in msg or "tokens per day" in msg:
