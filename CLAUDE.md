@@ -58,7 +58,7 @@ mcp__sherpa-b__activity__get-bootcamp-info
 **Tech stack:**
 | Layer | Tech |
 |---|---|
-| LLM | Claude (Anthropic) |
+| LLM | Groq (openai/gpt-oss-120b, OpenAI-compatible API) |
 | RAG / Indexing | LlamaIndex |
 | Orchestration | LangGraph (overall) + LangChain DeepAgents (research subagent) |
 | Tool integration | MCP servers (web search, Google Maps, weather, Brave/Tavily) |
@@ -108,6 +108,7 @@ Keep this section updated. Before starting any task, check here first to avoid r
 - Uses 600+ internal tokens before producing output. Any `max_tokens < 1024` for query expansion returns empty string. Synthesis needs 4096.
 - `response_format={"type": "json_object"}` causes `json_validate_failed` on Unicode chars — don't use it, rely on prompt + retry.
 - Rate limits exhaust fast — wait 60–90s between full pipeline runs in eval scripts.
+- **Free tier = 200k tokens/day (TPD).** A few full pipeline runs exhaust it; surfaces as `429 ... tokens per day: Limit 200000, Used 200000`. The app now auto-fails over: Groq → Cerebras (`gpt-oss-120b`, 1M tok/day) → Gemini (`gemini-2.5-flash`, 1500 req/day). Enable via env vars — see `.env.example` for `FALLBACK1_*` / `FALLBACK2_*` keys.
 
 ### Leaflet in Vite
 - Default icon paths break in Vite. Fix already applied in both map components: delete `_getIconUrl` and call `L.Icon.Default.mergeOptions(...)` with unpkg URLs.
