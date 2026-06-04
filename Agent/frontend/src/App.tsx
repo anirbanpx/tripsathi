@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DemoEntryPage from "./pages/DemoEntryPage";
 import PlannerPage from "./pages/PlannerPage";
 import OnboardingPage from "./pages/OnboardingPage";
+import ProfilePage from "./pages/ProfilePage";
 import type { UserContext } from "./types";
+import { getOrCreateUserId } from "./services/api";
+import { getAuthState } from "./lib/auth";
 
 const INITIAL_CONTEXT: UserContext = {
   mode: "demo",
   user_id: null,
+  auth_user: null,
   trip_params: null,
   thread_id: null,
   current_stage: "entry",
@@ -25,6 +29,23 @@ const INITIAL_CONTEXT: UserContext = {
 export default function App() {
   const [ctx, setCtx] = useState<UserContext>(INITIAL_CONTEXT);
 
+  useEffect(() => {
+    const auth = getAuthState();
+    if (auth) {
+      setCtx((prev) => ({
+        ...prev,
+        mode: "authenticated",
+        user_id: auth.user.user_id,
+        auth_user: auth.user,
+      }));
+    } else {
+      setCtx((prev) => ({
+        ...prev,
+        user_id: getOrCreateUserId(),
+      }));
+    }
+  }, []);
+
   function handleSetContext(patch: Partial<UserContext>) {
     setCtx((prev) => ({ ...prev, ...patch }));
   }
@@ -32,9 +53,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DemoEntryPage onSetContext={handleSetContext} />} />
+        <Route path="/" element={<DemoEntryPage ctx={ctx} onSetContext={handleSetContext} />} />
         <Route path="/planner" element={<PlannerPage ctx={ctx} onSetContext={handleSetContext} />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/profile" element={<ProfilePage ctx={ctx} onSetContext={handleSetContext} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

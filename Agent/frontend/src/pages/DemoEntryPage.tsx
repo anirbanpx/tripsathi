@@ -1,24 +1,45 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, MessageCircle, Globe, ShieldCheck, Lock } from "lucide-react";
+import { ArrowRight, Globe, ShieldCheck, Lock } from "lucide-react";
 import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
+import GoogleSignInButton from "../components/auth/GoogleSignInButton";
+import AuthNav from "../components/auth/AuthNav";
 import { getDestinationImageUrl } from "../lib/destinationImage";
 import type { UserContext } from "../types";
+import { googleSignIn } from "../services/api";
+import { setAuthState } from "../lib/auth";
 
 interface Props {
+  ctx: UserContext;
   onSetContext: (patch: Partial<UserContext>) => void;
 }
 
-export default function DemoEntryPage({ onSetContext }: Props) {
+export default function DemoEntryPage({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
+  const [signingIn, setSigningIn] = useState(false);
 
   function handleDemo() {
     onSetContext({ mode: "demo", current_stage: "trip_input" });
     navigate("/planner");
   }
 
-  function handleSignIn() {
-    onSetContext({ mode: "authenticated", current_stage: "trip_input" });
-    navigate("/onboarding");
+  async function handleGoogleToken(credential: string) {
+    setSigningIn(true);
+    try {
+      const data = await googleSignIn(credential);
+      setAuthState(data);
+      onSetContext({
+        mode: "authenticated",
+        user_id: data.user.user_id,
+        auth_user: data.user,
+        current_stage: "onboarding",
+      });
+      navigate("/onboarding");
+    } catch (e) {
+      console.error("Google sign-in failed:", e);
+    } finally {
+      setSigningIn(false);
+    }
   }
 
   return (
@@ -31,10 +52,16 @@ export default function DemoEntryPage({ onSetContext }: Props) {
             <div className="brand">
               <span className="word">trip<i>sathi</i></span>
             </div>
-            <button className="lang-btn">
-              <Globe size={12} strokeWidth={2} />
-              EN · हिं
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {ctx.mode === "authenticated" && ctx.auth_user ? (
+                <AuthNav user={ctx.auth_user} onSetContext={onSetContext} />
+              ) : (
+                <button className="lang-btn">
+                  <Globe size={12} strokeWidth={2} />
+                  EN · हिं
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="entry-grid">
@@ -56,10 +83,15 @@ export default function DemoEntryPage({ onSetContext }: Props) {
                   </div>
                   <ArrowRight size={16} strokeWidth={2.5} />
                 </button>
-                <button className="entry-cta-secondary" onClick={handleSignIn}>
-                  <MessageCircle size={16} strokeWidth={2} />
-                  Sign in to plan your own
-                </button>
+                {ctx.mode !== "authenticated" && (
+                  <GoogleSignInButton onToken={handleGoogleToken} loading={signingIn} />
+                )}
+                {ctx.mode === "authenticated" && ctx.auth_user && (
+                  <button className="entry-cta-secondary" onClick={() => navigate("/planner")}>
+                    <ArrowRight size={16} strokeWidth={2} />
+                    Plan your next trip
+                  </button>
+                )}
               </div>
 
               <div className="entry-trust">
@@ -67,7 +99,7 @@ export default function DemoEntryPage({ onSetContext }: Props) {
                 <span>no spam</span>
                 <span className="dot" />
                 <Lock size={13} strokeWidth={1.75} />
-                <span>your numbers stay yours</span>
+                <span>your data stays yours</span>
               </div>
 
               <div className="footer-note">made for Indian trips, in India ✦</div>
@@ -111,7 +143,7 @@ export default function DemoEntryPage({ onSetContext }: Props) {
         }}>
           Explore India · 50+ destinations
         </div>
-        <IndiaDestinationsMap />
+        <IndiaDestinationsMap isAuthenticated={ctx.mode === "authenticated"} />
       </div>
 
     </div>

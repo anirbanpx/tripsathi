@@ -83,6 +83,38 @@ export interface AuthResponse {
   name: string;
 }
 
+export interface AuthUser {
+  user_id: string;
+  name: string;
+  email: string;
+  avatar_url: string | null;
+}
+
+export interface SavedTrip {
+  id: string;
+  destination: string;
+  duration_days: number;
+  saved_at: string;
+}
+
+export interface WishlistItem {
+  id: string;
+  item_type: "destination" | "activity";
+  name: string;
+  location: string | null;
+  saved_at: string;
+}
+
+export interface SavedHotel {
+  id: string;
+  name: string;
+  location: string;
+  approx_cost_per_night: number | null;
+  reasoning: string | null;
+  content_source: string | null;
+  saved_at: string;
+}
+
 export interface TripParameters {
   destination: string;
   start_date: string;
@@ -108,6 +140,7 @@ export type AppStage =
 export interface UserContext {
   mode: AppMode;
   user_id: string | null;
+  auth_user: AuthUser | null;
   thread_id: string | null;
   current_stage: AppStage;
   generation_active: boolean;

@@ -1,4 +1,5 @@
-import type { PlanResponse, BookingResponse, UserProfile, AuthResponse, TripParameters } from "../types";
+import type { PlanResponse, BookingResponse, UserProfile, AuthResponse, TripParameters, SavedTrip, WishlistItem, SavedHotel, AuthUser } from "../types";
+import { getAuthHeaders, getAuthState } from "../lib/auth";
 
 import mockPlan from "../mocks/plan.json";
 import mockRefine from "../mocks/refine.json";
@@ -201,6 +202,127 @@ export function getOrCreateUserId(): string {
     localStorage.setItem("tripsathi_user_id", userId);
   }
   return userId;
+}
+
+export function getUserId(): string {
+  return getAuthState()?.user.user_id ?? getOrCreateUserId();
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+export async function googleSignIn(idToken: string): Promise<{ access_token: string; user: AuthUser }> {
+  const res = await fetch(`${API_BASE}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_token: idToken }),
+  });
+  if (!res.ok) throw new Error(`/api/auth/google failed: ${res.status}`);
+  return res.json();
+}
+
+export async function getProfile(): Promise<{ user_id: string; name: string; email: string; avatar_url: string | null; traveler_type_label: string; taste_summary: string | null }> {
+  const res = await fetch(`${API_BASE}/api/profile`, { headers: getAuthHeaders() });
+  if (!res.ok) throw new Error(`/api/profile failed: ${res.status}`);
+  return res.json();
+}
+
+export async function updatePreferences(tasteData: Record<string, unknown>): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/profile/preferences`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+    body: JSON.stringify({ taste_data: tasteData }),
+  });
+  if (!res.ok) throw new Error(`/api/profile/preferences failed: ${res.status}`);
+}
+
+// ── Saves: trips ─────────────────────────────────────────────────────────────
+
+export async function saveTrip(params: { thread_id: string | null; destination: string; duration_days: number; plan_json: object }): Promise<{ id: string }> {
+  const res = await fetch(`${API_BASE}/api/saves/trips`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error(`/api/saves/trips failed: ${res.status}`);
+  return res.json();
+}
+
+export async function getSavedTrips(): Promise<SavedTrip[]> {
+  const res = await fetch(`${API_BASE}/api/saves/trips`, { headers: getAuthHeaders() });
+  if (!res.ok) throw new Error(`/api/saves/trips failed: ${res.status}`);
+  return res.json();
+}
+
+export async function deleteSavedTrip(tripId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/saves/trips/${tripId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`/api/saves/trips DELETE failed: ${res.status}`);
+}
+
+// ── Saves: wishlist ──────────────────────────────────────────────────────────
+
+export async function toggleWishlistItem(params: { item_type: "destination" | "activity"; name: string; location?: string; metadata?: object }): Promise<boolean> {
+  const res = await fetch(`${API_BASE}/api/saves/wishlist`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error(`/api/saves/wishlist failed: ${res.status}`);
+  const data = await res.json();
+  return data.added as boolean;
+}
+
+export async function getWishlist(): Promise<WishlistItem[]> {
+  const res = await fetch(`${API_BASE}/api/saves/wishlist`, { headers: getAuthHeaders() });
+  if (!res.ok) throw new Error(`/api/saves/wishlist failed: ${res.status}`);
+  return res.json();
+}
+
+export async function deleteWishlistItem(itemId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/saves/wishlist/${itemId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`/api/saves/wishlist DELETE failed: ${res.status}`);
+}
+
+// ── Saves: hotels ────────────────────────────────────────────────────────────
+
+export async function toggleHotel(params: { name: string; location: string; approx_cost_per_night?: number; reasoning?: string; content_source?: string }): Promise<boolean> {
+  const res = await fetch(`${API_BASE}/api/saves/hotels`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error(`/api/saves/hotels failed: ${res.status}`);
+  const data = await res.json();
+  return data.added as boolean;
+}
+
+export async function getSavedHotels(): Promise<SavedHotel[]> {
+  const res = await fetch(`${API_BASE}/api/saves/hotels`, { headers: getAuthHeaders() });
+  if (!res.ok) throw new Error(`/api/saves/hotels failed: ${res.status}`);
+  return res.json();
+}
+
+export async function deleteHotel(hotelId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/saves/hotels/${hotelId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error(`/api/saves/hotels DELETE failed: ${res.status}`);
+}
+
+export async function parseTaste(text: string, userId: string): Promise<Record<string, unknown>> {
+  const res = await fetch(`${API_BASE}/api/parse-taste`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, user_id: userId }),
+  });
+  if (!res.ok) return {};
+  return res.json();
 }
 
 export async function onboard(params: {
