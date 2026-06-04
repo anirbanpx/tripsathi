@@ -17,7 +17,7 @@
 
 | Layer | Tech |
 |---|---|
-| LLM | Claude (claude-sonnet-4-6) |
+| LLM | Groq (openai/gpt-oss-120b, OpenAI-compatible API) |
 | Orchestration | LangGraph |
 | RAG / Indexing | LlamaIndex |
 | Backend API | FastAPI |
@@ -356,7 +356,7 @@ LangGraph's `interrupt()` function pauses graph execution and returns control to
 flowchart TD
     Start([FastAPI: graph.invoke with thread_id]) --> Init[Initialize state\ndestination, trip_parameters, onboarding_answers]
 
-    Init --> Node1[Node 1: Persona Classification\nCall 1 — claude-sonnet-4-6\nIn: onboarding_answers\nOut: user_profile → state]
+    Init --> Node1[Node 1: Persona Classification\nCall 1 — openai/gpt-oss-120b\nIn: onboarding_answers\nOut: user_profile → state]
 
     Node1 --> Check1{user_profile valid?}
     Check1 -->|Error| Err1[Set error: persona_classification_failed\nreturn to FastAPI]
@@ -364,7 +364,7 @@ flowchart TD
 
     Node23 --> Check2{research_synthesis valid?}
     Check2 -->|Error| Err2[Set error: destination_intelligence_failed\nreturn to FastAPI]
-    Check2 -->|Valid| GenPlan[Plan Assembly: generate_plan\nCall 4 — claude-sonnet-4-6\nIn: research_synthesis + user_profile + trip_parameters\nOut: plan → state\nrefinement_count += 1]
+    Check2 -->|Valid| GenPlan[Plan Assembly: generate_plan\nCall 4 — openai/gpt-oss-120b\nIn: research_synthesis + user_profile + trip_parameters\nOut: plan → state\nrefinement_count += 1]
 
     GenPlan --> Interrupt{interrupt — pause graph\nreturn plan + thread_id to FastAPI → React}
 
@@ -373,7 +373,7 @@ flowchart TD
 
     ReadFeedback --> MaxCheck{refinement_count >= 5?}
     MaxCheck -->|Yes — guard| Done
-    MaxCheck -->|No| Refine[Plan Assembly: refine_plan\nCall 4 again — claude-sonnet-4-6\nIn: current plan + user_feedback + user_profile\nOut: updated plan → state\nrefinement_count += 1]
+    MaxCheck -->|No| Refine[Plan Assembly: refine_plan\nCall 4 again — openai/gpt-oss-120b\nIn: current plan + user_feedback + user_profile\nOut: updated plan → state\nrefinement_count += 1]
 
     Refine --> Interrupt
 ```
@@ -516,19 +516,19 @@ Pattern summary: **Linear pipeline into a HITL refinement loop, all within one L
 - FastAPI returns `{plan, status: "done"}` on termination
 - **Stage labels:** Each node writes `state["stage_label"]` to a human-readable string before its main work; FastAPI does not translate `current_node` — React reads `stage_label` directly
 
-**LangGraph Node 1 ↔ Claude API**
-- Anthropic SDK call: `client.messages.create(model, system_prompt, messages=[{role: "user", content: formatted_onboarding}])`
+**LangGraph Node 1 ↔ LLM API (Groq)**
+- OpenAI SDK call: `client.chat.completions.create(model, messages=[{role: "system", ...}, {role: "user", content: formatted_onboarding}])`
 - Expects structured JSON output (persona_type, autonomy_mode, constraints)
 - Writes result to `state["user_profile"]`
 
-**LangGraph Node 2/3 ↔ Claude API + LlamaIndex**
-- Sub-step 1: Claude API call (Call 2) to expand queries — returns `expanded_queries` list (local var)
+**LangGraph Node 2/3 ↔ LLM API (Groq) + LlamaIndex**
+- Sub-step 1: LLM API call (Call 2) to expand queries — returns `expanded_queries` list (local var)
 - Sub-step 2: LlamaIndex `QueryEngine.query()` or batch query per expanded query — returns `retrieved_content` (local var)
-- Sub-step 3: Claude API call (Call 3) with retrieved_content + user_profile + destination + trip_parameters — returns `research_synthesis`
+- Sub-step 3: LLM API call (Call 3) with retrieved_content + user_profile + destination + trip_parameters — returns `research_synthesis`
 - Writes `research_synthesis` to state; `expanded_queries` and `retrieved_content` are discarded (local vars only)
 
-**LangGraph Node 4 ↔ Claude API**
-- Anthropic SDK call (Call 4): full state context → structured plan JSON
+**LangGraph Node 4 ↔ LLM API (Groq)**
+- OpenAI SDK call (Call 4): full state context → structured plan JSON
 - Writes result to `state["plan"]`
 
 **LlamaIndex ↔ Chroma**
@@ -591,7 +591,7 @@ flowchart TD
 | LangGraph MemorySaver | Checkpointer | Persists LangGraph state between interrupt and resume across HTTP requests | Sprint 2 |
 | LlamaIndex Query Engine | External service | Retrieves relevant content chunks given queries | Sprint 2 |
 | Chroma | External service | Local vector store for travel content corpus | Sprint 2 |
-| Claude API (claude-sonnet-4-6) | External service | Powers all 4+ LLM calls (4 base + up to 5 refinement calls) via Anthropic SDK | Sprint 2 |
+| Groq API (openai/gpt-oss-120b) | External service | Powers all 4+ LLM calls (4 base + up to 5 refinement calls) via OpenAI-compatible SDK | Sprint 2 |
 | DeepEval | External service | Evaluates plan quality against 10 CSV test cases | Sprint 2 |
 
 **Total: 1 agent (with 2 service nodes + 1 HITL agent loop), 7 external/supporting services**

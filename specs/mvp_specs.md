@@ -15,7 +15,7 @@
 ### Python Dependencies
 
 ```
-anthropic>=0.25.0
+openai>=1.0.0
 langgraph>=0.2.0
 langchain-core>=0.2.0
 llama-index>=0.10.0
@@ -51,7 +51,9 @@ shadcn/ui components needed: `Button`, `Input`, `Textarea`, `Card`, `Badge`, `Se
 ### Environment Variables
 
 ```
-ANTHROPIC_API_KEY=sk-ant-...
+LLM_API_KEY=gsk_...
+LLM_BASE_URL=https://api.groq.com/openai/v1
+LLM_MODEL=openai/gpt-oss-120b
 ```
 
 Place in `backend/.env`. Never commit.
@@ -94,22 +96,24 @@ tripsathi/
 
 ## Integration Specifications
 
-### Claude API (Anthropic)
+### LLM API (Groq, OpenAI-compatible)
 
-**SDK:** `anthropic` Python package  
-**Auth:** `ANTHROPIC_API_KEY` env var  
-**Model:** `claude-sonnet-4-6`  
-**Pattern:** Synchronous `.messages.create()` — all 4 calls are blocking
+**SDK:** `openai` Python package  
+**Auth:** `LLM_API_KEY` + `LLM_BASE_URL` env vars  
+**Model:** `openai/gpt-oss-120b` (via `LLM_MODEL` env var)  
+**Pattern:** Synchronous `.chat.completions.create()` — all 4 calls are blocking
 
 **Structured output pattern** (used for Call 1 and Call 4):
 ```python
-response = client.messages.create(
-    model="claude-sonnet-4-6",
+response = client.chat.completions.create(
+    model=_MODEL,
     max_tokens=4096,
-    system=SYSTEM_PROMPT,
-    messages=[{"role": "user", "content": user_message}]
+    messages=[
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user_message}
+    ]
 )
-raw = response.content[0].text
+raw = response.choices[0].message.content
 # Strip markdown code fences if present
 if raw.startswith("```"):
     raw = raw.split("```")[1]
@@ -118,7 +122,7 @@ if raw.startswith("```"):
 result = json.loads(raw.strip())
 ```
 
-**On JSON parse failure:** retry once with an explicit instruction appended. On second failure: raise to FastAPI error handler.
+**On JSON parse failure:** retry up to 3 times with an explicit JSON instruction appended and exponential backoff (8s, 16s). On third failure: raise to FastAPI error handler.
 
 ---
 
@@ -448,11 +452,12 @@ graph = build_graph()
 ```python
 from langgraph.types import interrupt
 import json
-from anthropic import Anthropic
+from openai import OpenAI
+import os
 from prompts import (PERSONA_CLASSIFICATION_SYSTEM, QUERY_EXPANSION_SYSTEM,
                      RESEARCH_SYNTHESIS_SYSTEM, PLAN_GENERATION_SYSTEM, PLAN_REFINEMENT_SYSTEM)
 
-client = Anthropic()
+client = OpenAI(base_url=os.environ["LLM_BASE_URL"], api_key=os.environ["LLM_API_KEY"])
 
 def persona_classification(state: TripSathiState) -> dict:
     answers_text = "\n".join([f"Q: {a['question']}\nA: {a['answer']}" 
@@ -461,7 +466,7 @@ def persona_classification(state: TripSathiState) -> dict:
         answers_text += f"\nDestination: {state['destination']}"
     
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="openai/gpt-oss-120b",
         max_tokens=1024,
         system=PERSONA_CLASSIFICATION_SYSTEM,
         messages=[{"role": "user", "content": answers_text}]
@@ -484,7 +489,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
     Trip: {json.dumps(state['trip_parameters'])}
     """
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="openai/gpt-oss-120b",
         max_tokens=512,
         system=QUERY_EXPANSION_SYSTEM,
         messages=[{"role": "user", "content": expansion_prompt}]
@@ -508,7 +513,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
     {chr(10).join(retrieved_content) if retrieved_content else "No destination-specific content retrieved. Use your general knowledge and flag gaps."}
     """
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="openai/gpt-oss-120b",
         max_tokens=2048,
         system=RESEARCH_SYNTHESIS_SYSTEM,
         messages=[{"role": "user", "content": synthesis_prompt}]
@@ -535,7 +540,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         Trip parameters: {json.dumps(state['trip_parameters'])}
         """
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="openai/gpt-oss-120b",
             max_tokens=4096,
             system=PLAN_REGENERATE_SYSTEM,
             messages=[{"role": "user", "content": regen_prompt}]
@@ -576,7 +581,7 @@ def plan_assembly(state: TripSathiState) -> dict:
         Trip parameters: {json.dumps(state['trip_parameters'])}
         """
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="openai/gpt-oss-120b",
             max_tokens=4096,
             system=PLAN_REFINEMENT_SYSTEM,
             messages=[{"role": "user", "content": refinement_prompt}]
@@ -604,7 +609,7 @@ def plan_assembly(state: TripSathiState) -> dict:
     Trip parameters: {json.dumps(state['trip_parameters'])}
     """
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="openai/gpt-oss-120b",
         max_tokens=4096,
         system=PLAN_GENERATION_SYSTEM,
         messages=[{"role": "user", "content": generation_prompt}]
@@ -813,8 +818,8 @@ Manual scoring using the existing 1–5 scale:
 
 | Error condition | Handling |
 |---|---|
-| `ANTHROPIC_API_KEY` not set | FastAPI startup fails with clear error message |
-| Claude API call fails (network/rate limit) | Retry once after 2s. On second failure: set `state["error"]`, return 500 |
+| `LLM_API_KEY` not set | FastAPI startup fails with clear error message |
+| LLM API call fails (network/rate limit) | Retry up to 3 times with exponential backoff. On final failure: set `state["error"]`, return 500 |
 | JSON parse failure on LLM output | Retry once with explicit JSON instruction appended. On second failure: return 500 |
 | LlamaIndex returns 0 chunks | Proceed with empty retrieved_content. Synthesis prompt instructs LLM to flag knowledge gap |
 | LangGraph graph error | Catch exception in FastAPI, return 500 with error message |
@@ -868,7 +873,7 @@ The `backend/rag/knowledge/` directory must contain at minimum:
 Chosen because:
 - Full control over state management — `TripSathiState` TypedDict is the exact data contract for testing Context Awareness Failure
 - Native `interrupt()` + `MemorySaver` + `Command(resume=...)` for HITL — no workarounds needed
-- Python ecosystem: Anthropic SDK, LlamaIndex, Chroma all integrate natively
+- Python ecosystem: OpenAI SDK (Groq-compatible), LlamaIndex, Chroma all integrate natively
 - Architecture spec already designed for LangGraph — no translation needed
 
 **Trade-offs accepted:**

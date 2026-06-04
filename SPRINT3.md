@@ -89,10 +89,9 @@
 
 ## Key context for next session
 
-### Stack reality (docs are stale on this)
-- **LLM is Groq** via OpenAI-compatible API, NOT Anthropic SDK.
+### Stack reality
+- **LLM is Groq** via OpenAI-compatible API (`openai` SDK, model: `openai/gpt-oss-120b`).
 - Env vars: `LLM_API_KEY` (Groq key), `LLM_BASE_URL` (Groq endpoint), `LLM_MODEL`.
-- `ANTHROPIC_API_KEY` mentioned in architecture docs is wrong — ignore.
 
 ### What was completed in Sprint 2
 - LangGraph pipeline: persona_classification → destination_intelligence → plan_assembly → human_feedback → finalize
@@ -107,7 +106,7 @@
 |---|---|
 | `backend/nodes.py` | All LLM calls + `_enforce_plan_quality` post-processor |
 | `backend/graph.py` | LangGraph graph definition (SqliteSaver) |
-| `backend/main.py` | FastAPI endpoints — env var is `LLM_API_KEY` not `ANTHROPIC_API_KEY` |
+| `backend/main.py` | FastAPI endpoints — env var is `LLM_API_KEY` |
 | `backend/prompts.py` | All 6 system prompts |
 | `backend/rag/knowledge/` | Kerala, Puri, Guwahati destination docs |
 | `data/evaluations_data.csv` | 10 eval test cases |
