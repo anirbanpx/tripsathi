@@ -125,44 +125,72 @@ export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props)
         <ArrowLeft size={14} strokeWidth={2} /> Back
       </button>
 
-      {/* User header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
-        {profileData?.avatar_url ? (
-          <img src={profileData.avatar_url} alt={profileData.name} style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover" }} />
-        ) : (
-          <div style={{
-            width: 56, height: 56, borderRadius: "50%", background: "var(--accent)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#fff", fontSize: 22, fontWeight: 700,
-          }}>
-            {profileData?.name?.charAt(0).toUpperCase() ?? "?"}
-          </div>
-        )}
-        <div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-head)" }}>
-            {profileData?.name}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--fg-3)", marginTop: 2 }}>{profileData?.email}</div>
-          {profileData?.traveler_type_label && (
+      {/* User header — scrapbook card with tape */}
+      <div style={{
+        position: "relative",
+        background: "var(--surface)",
+        border: "1.5px solid var(--border-strong)",
+        borderRadius: 16,
+        padding: "24px 20px 18px",
+        marginBottom: 36,
+        boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
+        transform: "rotate(-0.4deg)",
+      }}>
+        {/* Tape strip */}
+        <div style={{
+          position: "absolute", top: -10, left: "50%",
+          transform: "translateX(-50%) rotate(-1.5deg)",
+          width: 88, height: 18,
+          background: "var(--tape)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          {profileData?.avatar_url ? (
+            <img src={profileData.avatar_url} alt={profileData.name} style={{
+              width: 60, height: 60, borderRadius: "50%", objectFit: "cover",
+              border: "2px solid var(--border-strong)",
+              boxShadow: "0 2px 8px rgba(62,47,35,0.15)",
+            }} />
+          ) : (
             <div style={{
-              display: "inline-block", marginTop: 6, padding: "3px 10px",
-              background: "var(--accent-soft, #f0ede8)", borderRadius: 20,
-              fontSize: 11, fontWeight: 600, color: "var(--accent)",
-              fontFamily: "var(--font-body)", letterSpacing: "0.04em",
+              width: 60, height: 60, borderRadius: "50%", background: "var(--accent)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#fff", fontSize: 24, fontWeight: 700,
+              border: "2px solid var(--rust-deep)",
+              boxShadow: "0 2px 8px rgba(176,73,47,0.25)",
             }}>
-              {profileData.traveler_type_label}
+              {profileData?.name?.charAt(0).toUpperCase() ?? "?"}
             </div>
           )}
-          {!tasteProfile && (
-            <div style={{ fontSize: 11, color: "var(--fg-3)", marginTop: 6 }}>
-              <button
-                onClick={() => navigate("/onboarding")}
-                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 11, fontWeight: 600, padding: 0 }}
-              >
-                Set up preferences →
-              </button>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-head)" }}>
+              {profileData?.name}
             </div>
-          )}
+            <div style={{ fontSize: 12, color: "var(--fg-3)", marginTop: 2, fontFamily: "var(--font-body)" }}>
+              {profileData?.email}
+            </div>
+            {profileData?.traveler_type_label && (
+              <div style={{
+                display: "inline-block", marginTop: 6, padding: "3px 10px",
+                background: "rgba(176,73,47,0.08)", borderRadius: 20,
+                border: "1px solid rgba(176,73,47,0.2)",
+                fontSize: 11, fontWeight: 700, color: "var(--accent)",
+                fontFamily: "var(--font-body)", letterSpacing: "0.04em",
+              }}>
+                {profileData.traveler_type_label}
+              </div>
+            )}
+            {!tasteProfile && (
+              <div style={{ fontSize: 11, color: "var(--fg-3)", marginTop: 6 }}>
+                <button
+                  onClick={() => navigate("/onboarding")}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 11, fontWeight: 600, padding: 0 }}
+                >
+                  Set up preferences →
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -307,17 +335,29 @@ export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props)
 function Section({ icon, title, count, children }: { icon: React.ReactNode; title: string; count?: number; children: React.ReactNode }) {
   return (
     <div style={{ marginBottom: 40 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-        <span style={{ color: "var(--accent)" }}>{icon}</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-head)" }}>{title}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+        <span style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          width: 28, height: 28, borderRadius: "50%",
+          background: "rgba(176,73,47,0.1)", color: "var(--accent)",
+          border: "1.5px solid rgba(176,73,47,0.2)",
+          flexShrink: 0,
+        }}>{icon}</span>
+        <span style={{
+          fontSize: 11, fontWeight: 800, color: "var(--fg-2)",
+          fontFamily: "var(--font-body)", letterSpacing: "0.16em",
+          textTransform: "uppercase",
+        }}>{title}</span>
         {count !== undefined && count > 0 && (
           <span style={{
-            fontSize: 11, fontWeight: 700, background: "var(--accent-soft, #f0ede8)",
-            color: "var(--accent)", borderRadius: 10, padding: "1px 7px",
+            fontSize: 10, fontWeight: 800, background: "var(--accent)",
+            color: "#fff", borderRadius: 10, padding: "1px 7px",
+            letterSpacing: "0.04em",
           }}>
             {count}
           </span>
         )}
+        <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>{children}</div>
     </div>

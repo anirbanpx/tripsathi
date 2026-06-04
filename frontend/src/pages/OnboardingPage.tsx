@@ -222,10 +222,20 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border)",
+                position: "relative",
+                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
                 borderRadius: 16, padding: "24px 20px",
                 display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
+                transform: "rotate(-0.3deg)",
               }}>
+                {/* Tape strip */}
+                <div style={{
+                  position: "absolute", top: -10, left: "50%",
+                  transform: "translateX(-50%) rotate(1.5deg)",
+                  width: 72, height: 18, background: "var(--tape)",
+                  pointerEvents: "none",
+                }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   <p style={{
                     fontFamily: "var(--font-display)", fontSize: 17, color: "var(--ink)",
@@ -302,10 +312,19 @@ export default function OnboardingPage() {
           {step === 2 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border)",
+                position: "relative",
+                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
                 borderRadius: 16, padding: "24px 20px",
                 display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
+                transform: "rotate(0.2deg)",
               }}>
+                <div style={{
+                  position: "absolute", top: -10, right: 40,
+                  transform: "rotate(-2deg)",
+                  width: 60, height: 18, background: "var(--tape)",
+                  pointerEvents: "none",
+                }} />
                 <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
                   Which traveler are you?
                 </p>
@@ -349,9 +368,10 @@ export default function OnboardingPage() {
               </div>
 
               <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border)",
+                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
                 borderRadius: 16, padding: "20px",
                 display: "flex", flexDirection: "column", gap: 12,
+                boxShadow: "0 1px 0 0 rgba(62,47,35,0.06)",
               }}>
                 <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
                   What do you love doing on a trip?
@@ -423,10 +443,19 @@ export default function OnboardingPage() {
           {step === 3 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border)",
+                position: "relative",
+                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
                 borderRadius: 16, padding: "24px 20px",
                 display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
+                transform: "rotate(-0.2deg)",
               }}>
+                <div style={{
+                  position: "absolute", top: -10, left: 36,
+                  transform: "rotate(1deg)",
+                  width: 56, height: 18, background: "var(--tape)",
+                  pointerEvents: "none",
+                }} />
                 <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
                   Dietary restrictions?
                 </p>
@@ -455,9 +484,10 @@ export default function OnboardingPage() {
               </div>
 
               <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border)",
+                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
                 borderRadius: 16, padding: "20px",
                 display: "flex", flexDirection: "column", gap: 12,
+                boxShadow: "0 1px 0 0 rgba(62,47,35,0.06)",
               }}>
                 <label style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)" }}>
                   Anything we should avoid?
