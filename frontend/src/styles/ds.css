@@ -949,6 +949,17 @@ body {
 @keyframes slideUp { from { transform: translateY(36px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes bounce-cue { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(5px); opacity: 1; } }
 
+@keyframes pageTurnForward {
+  from { opacity: 0; transform: perspective(700px) rotateY(-18deg) translateX(20px); transform-origin: left center; }
+  to   { opacity: 1; transform: perspective(700px) rotateY(0deg)   translateX(0);    transform-origin: left center; }
+}
+@keyframes pageTurnBack {
+  from { opacity: 0; transform: perspective(700px) rotateY(18deg)  translateX(-20px); transform-origin: right center; }
+  to   { opacity: 1; transform: perspective(700px) rotateY(0deg)   translateX(0);     transform-origin: right center; }
+}
+.page-turn-forward { animation: pageTurnForward 0.35s var(--ease-out) both; }
+.page-turn-back    { animation: pageTurnBack    0.35s var(--ease-out) both; }
+
 /* ── Days horizontal swiper ─────────────────────────────────────── */
 
 .days-swiper-label {
