@@ -353,6 +353,111 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
     raise RuntimeError("all LLM providers exhausted — no valid JSON response")
 
 
+def _call_llm_with_tools(
+    system: str,
+    user_message: str,
+    tools: list,
+    max_tokens: int = 4096,
+    task: str = "default",
+    max_tool_rounds: int = 4,
+) -> dict | list:
+    """Like _call_llm but drives an OpenAI tool-call loop.
+    Executes tools locally and feeds results back until the LLM returns plain content.
+    Falls through to the next provider on any tool-calling error."""
+    from tools import execute_tool
+
+    now = time.time()
+    chain = _TASK_CHAINS.get(task, _TASK_CHAINS["default"])
+    provider_map = {p.name: p for p in _PROVIDERS}
+    ordered = [provider_map[name] for name in chain if name in provider_map]
+    available = [p for p in ordered if _disabled_until.get(p.name, 0) <= now]
+    if not available:
+        raise RuntimeError("all LLM providers are currently rate-limited")
+
+    for provider in available:
+        messages = [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user_message},
+        ]
+        tool_rounds = 0
+
+        while True:
+            # On the final allowed round stop passing tools — force a content response
+            active_tools = tools if tool_rounds < max_tool_rounds else None
+            try:
+                kwargs: dict = {"model": provider.model, "messages": messages, "max_tokens": max_tokens}
+                if active_tools:
+                    kwargs["tools"] = active_tools
+                    kwargs["tool_choice"] = "auto"
+                response = provider.client.chat.completions.create(**kwargs)
+            except Exception as e:
+                kind = _classify_error(e)
+                if kind == "quota":
+                    cooldown = _parse_cooldown(e)
+                    _disabled_until[provider.name] = time.time() + cooldown
+                    logger.warning("provider %s exhausted → failing over (cooldown %.0fs)", provider.name, cooldown)
+                    break
+                if kind == "context":
+                    logger.warning("provider %s context-length error → failing over", provider.name)
+                    break
+                logger.warning("provider %s tool_call error → failing over: %s", provider.name, e)
+                break
+
+            if response.usage:
+                _thread_tokens.count = getattr(_thread_tokens, "count", 0) + response.usage.total_tokens
+                logger.info(
+                    "llm_call provider=%s model=%s prompt_tokens=%d completion_tokens=%d total_tokens=%d",
+                    provider.name, provider.model,
+                    response.usage.prompt_tokens, response.usage.completion_tokens, response.usage.total_tokens,
+                )
+
+            msg = response.choices[0].message
+
+            # No tool calls — this is the final answer
+            if not msg.tool_calls:
+                raw = (msg.content or "").strip()
+                if not raw:
+                    break
+                if raw.startswith("```"):
+                    parts = raw.split("```")
+                    raw = parts[1]
+                    if raw.startswith("json"):
+                        raw = raw[4:]
+                    raw = raw.strip()
+                try:
+                    return json.loads(raw)
+                except json.JSONDecodeError:
+                    break  # try next provider
+
+            # Append assistant turn with tool_calls
+            messages.append({
+                "role": "assistant",
+                "content": msg.content or "",
+                "tool_calls": [
+                    {
+                        "id": tc.id,
+                        "type": "function",
+                        "function": {"name": tc.function.name, "arguments": tc.function.arguments},
+                    }
+                    for tc in msg.tool_calls
+                ],
+            })
+
+            # Execute each tool and append results
+            for tc in msg.tool_calls:
+                try:
+                    args = json.loads(tc.function.arguments)
+                except json.JSONDecodeError:
+                    args = {}
+                result = execute_tool(tc.function.name, args)
+                logger.info("tool_call name=%s result_len=%d", tc.function.name, len(result))
+                messages.append({"role": "tool", "tool_call_id": tc.id, "content": result})
+
+            tool_rounds += 1
+
+    raise RuntimeError("all LLM providers exhausted — no valid response from tool-calling agent")
+
+
 def _drain_tokens() -> int:
     """Return tokens accumulated since last drain and reset the counter."""
     count = getattr(_thread_tokens, "count", 0)
@@ -460,17 +565,30 @@ def destination_intelligence(state: TripSathiState) -> dict:
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
 
-    # Call 3: synthesize
+    # Call 3: synthesize via tool-calling agent
+    # The LLM can supplement RAG with live data (weather, place ratings, web search) for gaps.
     synthesis_prompt = (
         f"Destination: {state['destination']}\n"
         f"Traveller profile: {json.dumps(state['user_profile'])}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
-        f"Retrieved knowledge:\n{knowledge_block}"
+        f"Retrieved knowledge (RAG):\n{knowledge_block}\n\n"
+        f"Use available tools ONLY to fill gaps not already covered above — "
+        f"get_weather for current seasonal warnings, search_places for specific hotel/restaurant ratings, "
+        f"web_search for recent traveller reports or pricing not in the RAG content. "
+        f"After any tool calls, produce the synthesis JSON."
     )
     try:
-        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096, task="synthesis")
+        from tools import TOOL_SCHEMAS
+        research_synthesis = _call_llm_with_tools(
+            RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, tools=TOOL_SCHEMAS,
+            max_tokens=4096, task="synthesis",
+        )
     except Exception as e:
-        return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
+        logger.warning("tool-calling synthesis failed (%s) — falling back to plain synthesis", e)
+        try:
+            research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096, task="synthesis")
+        except Exception as e2:
+            return {"error": f"destination_intelligence_failed: {e2}", "current_node": "error"}
 
     if rag_failed:
         warnings = research_synthesis.get("implicit_warnings", [])
