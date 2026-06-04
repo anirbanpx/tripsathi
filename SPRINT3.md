@@ -70,16 +70,11 @@
 
 ### Stretch goals (do if time allows)
 
-- [ ] **SSE real streaming** (~4–5h)
-  - Replace fake `setTimeout` progress UI with real `graph.astream_events`.
-  - Frontend: `EventSource` or `fetch` with `ReadableStream`.
-  - Removes the hardcoded fake stage durations in `frontend/src/lib/fakeProgress.ts`.
+- [x] **SSE real streaming** — shipped in PR #1 (`c50cfe8`). Real stage events from `graph.stream()` via worker thread queue; fake progress replaced end-to-end.
 
-- [ ] **Voice input (Whisper STT only)** (~6–8h)
-  - Whisper API (OpenAI) or local Whisper for transcription.
-  - Add mic button to the journal textarea in `TripInputStepper.tsx`.
-  - No TTS needed for demo — just input transcription.
-  - Every doc defers this but it's the biggest demo differentiator.
+- [x] **Voice input (Whisper STT)** — fully shipped.
+  - Backend: `POST /api/transcribe` → Groq `whisper-large-v3-turbo`, same `LLM_API_KEY`, deployed to Railway.
+  - Frontend: `MicButton` (idle → recording → transcribing) wired into NL journal textarea and all clarify question fields in `TripInputStepper.tsx`.
 
 - [ ] **PDF export** (~2–3h)
   - `window.print()` already wired in `BookingSection.tsx`.
