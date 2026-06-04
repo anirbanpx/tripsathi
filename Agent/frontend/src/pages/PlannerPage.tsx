@@ -12,7 +12,7 @@ interface Props {
 export default function PlannerPage({ ctx, onSetContext }: Props) {
   return (
     <>
-      {(ctx.current_stage === "trip_input" || ctx.current_stage === "generating") && (
+      {(ctx.current_stage === "entry" || ctx.current_stage === "trip_input" || ctx.current_stage === "generating") && (
         <TripInputStepper ctx={ctx} onSetContext={onSetContext} />
       )}
       {ctx.current_stage === "generating" && (
