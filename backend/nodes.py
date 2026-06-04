@@ -531,7 +531,6 @@ def destination_intelligence(state: TripSathiState) -> dict:
             f"{_dest} top attractions sightseeing",
             f"{_dest} local food restaurants",
             f"{_dest} travel tips safety warnings",
-            f"{_dest} hotels accommodation",
             f"{_dest} things to do activities itinerary",
         ]
 
@@ -572,10 +571,11 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Traveller profile: {json.dumps(state['user_profile'])}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Retrieved knowledge (RAG):\n{knowledge_block}\n\n"
-        f"Use available tools ONLY to fill gaps not already covered above — "
-        f"get_weather for current seasonal warnings, search_places for specific hotel/restaurant ratings, "
-        f"web_search for recent traveller reports or pricing not in the RAG content. "
-        f"After any tool calls, produce the synthesis JSON."
+        f"MANDATORY tool use: call search_places for hotels (query: best hotels in {state['destination']}) "
+        f"AND call search_places for restaurants (query: best restaurants in {state['destination']}) — "
+        f"do NOT use hotel or restaurant names from the RAG block above, use search_places results exclusively. "
+        f"Also use get_weather for current seasonal warnings, and web_search for recent traveller reports or pricing not in the RAG content. "
+        f"After all tool calls, produce the synthesis JSON."
     )
     try:
         from tools import TOOL_SCHEMAS
