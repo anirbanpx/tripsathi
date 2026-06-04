@@ -20,6 +20,7 @@ import os
 import sqlite3
 import sys
 import time
+from unittest.mock import MagicMock, patch
 
 import pytest
 from dotenv import load_dotenv
@@ -194,6 +195,138 @@ class TestErrorClassification:
         assert _classify_error(e) == "quota"
 
 
+class TestCallLlmWithTools:
+    """Unit tests for the tool-call dispatch loop in _call_llm_with_tools."""
+
+    def _make_provider(self, name="groq"):
+        from nodes import _Provider
+        provider = MagicMock(spec=_Provider)
+        provider.name = name
+        provider.model = "mock-model"
+        provider.client = MagicMock()
+        return provider
+
+    def _final_response(self, content: str):
+        """Fake ChatCompletion response with plain JSON content (no tool calls)."""
+        resp = MagicMock()
+        resp.usage = None
+        msg = MagicMock()
+        msg.content = content
+        msg.tool_calls = None
+        resp.choices = [MagicMock()]
+        resp.choices[0].message = msg
+        return resp
+
+    def _tool_response(self, tool_name: str, arguments: dict):
+        """Fake ChatCompletion response with a single tool_call."""
+        resp = MagicMock()
+        resp.usage = None
+        tc = MagicMock()
+        tc.id = "call_abc"
+        tc.function.name = tool_name
+        tc.function.arguments = json.dumps(arguments)
+        msg = MagicMock()
+        msg.content = ""
+        msg.tool_calls = [tc]
+        resp.choices = [MagicMock()]
+        resp.choices[0].message = msg
+        return resp
+
+    @pytest.mark.unit
+    def test_no_tool_calls_returns_parsed_json(self):
+        """When the LLM returns plain JSON immediately, it's parsed and returned."""
+        from nodes import _call_llm_with_tools, _Provider
+        provider = self._make_provider()
+        provider.client.chat.completions.create.return_value = self._final_response(
+            '{"routing": "A→B", "key_places": [], "local_risks": [], "seasonal_context": "dry", "implicit_warnings": []}'
+        )
+        with patch("nodes._PROVIDERS", [provider]), \
+             patch("nodes._disabled_until", {}):
+            result = _call_llm_with_tools("sys", "user", tools=[], max_tokens=512)
+        assert result["routing"] == "A→B"
+        assert result["local_risks"] == []
+
+    @pytest.mark.unit
+    def test_tool_call_dispatched_and_result_fed_back(self):
+        """When LLM returns tool_calls, execute_tool is called and result is injected."""
+        from nodes import _call_llm_with_tools
+        provider = self._make_provider()
+        tool_resp = self._tool_response("web_search", {"query": "Manali weather June"})
+        final_resp = self._final_response(
+            '{"routing": "ok", "key_places": [], "local_risks": ["monsoon risk"], '
+            '"seasonal_context": "rainy", "implicit_warnings": []}'
+        )
+        provider.client.chat.completions.create.side_effect = [tool_resp, final_resp]
+
+        fake_tool_result = "Manali: heavy rain, roads closed June–July"
+        with patch("nodes._PROVIDERS", [provider]), \
+             patch("nodes._disabled_until", {}), \
+             patch("tools.execute_tool", return_value=fake_tool_result) as mock_exec:
+            result = _call_llm_with_tools("sys", "user", tools=[{"type": "function"}], max_tokens=512)
+
+        mock_exec.assert_called_once_with("web_search", {"query": "Manali weather June"})
+        assert result["local_risks"] == ["monsoon risk"]
+        # Second call must include the tool result as a "tool" role message
+        second_call_messages = provider.client.chat.completions.create.call_args_list[1][1]["messages"]
+        tool_msgs = [m for m in second_call_messages if m.get("role") == "tool"]
+        assert len(tool_msgs) == 1
+        assert fake_tool_result in tool_msgs[0]["content"]
+
+    @pytest.mark.unit
+    def test_max_tool_rounds_stops_passing_tools(self):
+        """After max_tool_rounds, tools param is omitted to force a final content response."""
+        from nodes import _call_llm_with_tools
+        provider = self._make_provider()
+
+        # Always return a tool_call until forced to stop
+        def side_effect(**kwargs):
+            if "tools" in kwargs:
+                return self._tool_response("get_weather", {"destination": "Goa"})
+            return self._final_response('{"routing":"x","key_places":[],"local_risks":[],"seasonal_context":"","implicit_warnings":[]}')
+
+        provider.client.chat.completions.create.side_effect = (
+            lambda *a, **kw: side_effect(**kw)
+        )
+        with patch("nodes._PROVIDERS", [provider]), \
+             patch("nodes._disabled_until", {}), \
+             patch("tools.execute_tool", return_value="weather: sunny"):
+            result = _call_llm_with_tools("sys", "user", tools=[{"type": "function"}], max_tokens=512, max_tool_rounds=2)
+
+        assert "routing" in result
+        # The call after max_tool_rounds must NOT include tools
+        calls = provider.client.chat.completions.create.call_args_list
+        last_call_kwargs = calls[-1][1]
+        assert "tools" not in last_call_kwargs
+
+    @pytest.mark.unit
+    def test_provider_error_raises_runtime_error(self):
+        """When the only provider fails, RuntimeError is raised."""
+        from nodes import _call_llm_with_tools
+        provider = self._make_provider()
+        provider.client.chat.completions.create.side_effect = RuntimeError("boom")
+        with patch("nodes._PROVIDERS", [provider]), \
+             patch("nodes._disabled_until", {}):
+            with pytest.raises(RuntimeError):
+                _call_llm_with_tools("sys", "user", tools=[], max_tokens=512)
+
+    @pytest.mark.unit
+    def test_fallback_to_second_provider_on_error(self):
+        """On first provider failure, second provider is tried."""
+        from nodes import _call_llm_with_tools
+        bad_provider = self._make_provider(name="groq")
+        bad_provider.client.chat.completions.create.side_effect = RuntimeError("unsupported")
+
+        good_provider = self._make_provider(name="cerebras")
+        good_provider.client.chat.completions.create.return_value = self._final_response(
+            '{"routing": "fallback", "key_places": [], "local_risks": [], "seasonal_context": "", "implicit_warnings": []}'
+        )
+        with patch("nodes._PROVIDERS", [bad_provider, good_provider]), \
+             patch("nodes._disabled_until", {}):
+            result = _call_llm_with_tools("sys", "user", tools=[], max_tokens=512)
+        assert result["routing"] == "fallback"
+        good_provider.client.chat.completions.create.assert_called_once()
+
+
 # ── Integration tests (require running server + API keys) ────────────────────
 
 def _sse_events(url: str, payload: dict, timeout: int = 240) -> list[dict]:
@@ -289,3 +422,37 @@ def test_plan_stream_error_message_is_user_friendly():
         detail = final.get("detail", "")
         assert "Traceback" not in detail, "raw Python traceback exposed to client"
         assert len(detail) < 300, "error message suspiciously long — may be raw exception"
+
+
+@pytest.mark.integration
+def test_call_llm_with_tools_returns_valid_synthesis():
+    """_call_llm_with_tools end-to-end: real LLM + tools, returns research_synthesis structure."""
+    from nodes import _call_llm_with_tools
+    from tools import TOOL_SCHEMAS
+    from prompts import RESEARCH_SYNTHESIS_SYSTEM
+
+    synthesis_prompt = (
+        "Destination: Manali, Himachal Pradesh\n"
+        "Traveller profile: {\"persona_type\": \"solo\", \"constraints\": {\"kid_ages\": null, \"elderly\": false}}\n"
+        "Trip parameters: {\"duration_nights\": 3, \"budget_total\": 15000}\n"
+        "Retrieved knowledge (RAG):\nNo destination-specific content retrieved.\n\n"
+        "Use available tools ONLY to fill gaps not already covered above — "
+        "get_weather for current seasonal warnings, search_places for specific hotel/restaurant ratings, "
+        "web_search for recent traveller reports or pricing not in the RAG content. "
+        "After any tool calls, produce the synthesis JSON."
+    )
+    try:
+        result = _call_llm_with_tools(
+            RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, tools=TOOL_SCHEMAS,
+            max_tokens=2048, task="synthesis",
+        )
+    except RuntimeError as e:
+        if "rate" in str(e).lower() or "exhausted" in str(e).lower():
+            pytest.skip(f"LLM quota — {e}")
+        raise
+
+    assert isinstance(result, dict), f"expected dict, got {type(result)}"
+    for key in ("routing", "key_places", "local_risks", "seasonal_context", "implicit_warnings"):
+        assert key in result, f"synthesis missing key: {key}"
+    assert isinstance(result["local_risks"], list)
+    assert isinstance(result["implicit_warnings"], list)
