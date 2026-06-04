@@ -21,6 +21,7 @@ import { refinePlan, regeneratePlan } from "../../services/api";
 import { startFakeProgress } from "../../lib/fakeProgress";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
+import { getPlaceImageUrl } from "../../lib/placeImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
 import type { UserContext, DayPlan, Hotel } from "../../types";
 
@@ -630,7 +631,9 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
 
       {/* Activities — journal entry style */}
       <div style={{ padding: "0 16px" }}>
-        {day.activities.map((a, i) => (
+        {day.activities.map((a, i) => {
+          const placeImg = getPlaceImageUrl(a.name, day.location.split(",")[0]);
+          return (
           <div key={a.name} style={{
             display: "flex", gap: 10, alignItems: "flex-start",
             padding: "9px 0",
@@ -658,8 +661,20 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
                   : <span className="badge">plan to visit</span>}
               </div>
             </div>
+            {placeImg && (
+              <img
+                src={placeImg}
+                alt={a.name}
+                style={{
+                  width: 52, height: 52, borderRadius: 8, objectFit: "cover",
+                  flexShrink: 0, border: "2px solid var(--paper)",
+                  boxShadow: "0 2px 6px rgba(62,47,35,0.18)",
+                }}
+              />
+            )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Meals — postage-stamp style row */}
