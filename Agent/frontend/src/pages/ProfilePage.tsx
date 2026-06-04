@@ -18,7 +18,7 @@ const INTEREST_OPTIONS = [
 ];
 const DIETARY_OPTIONS = ["Vegetarian", "Vegan", "Jain", "Halal", "Gluten-free", "None"];
 
-export default function ProfilePage({ ctx, onSetContext }: Props) {
+export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState<{ name: string; email: string; avatar_url: string | null; traveler_type_label: string } | null>(null);
