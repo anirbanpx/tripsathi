@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, RefreshCw, Check,
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export default function PlanDisplay({ ctx, onSetContext }: Props) {
+  const navigate = useNavigate();
   const plan = ctx.plan!;
   const [feedback, setFeedback] = useState("");
   const [refining, setRefining] = useState(false);
@@ -203,6 +205,31 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
               </span>
             )}
           </button>
+          {ctx.mode === "authenticated" && ctx.auth_user && (
+            <button
+              type="button"
+              onClick={() => navigate("/profile")}
+              title="My profile"
+              style={{
+                width: 36, height: 36, borderRadius: "50%", border: "1.5px solid var(--border)",
+                padding: 0, cursor: "pointer", overflow: "hidden", background: "none",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              {ctx.auth_user.avatar_url ? (
+                <img src={ctx.auth_user.avatar_url} alt={ctx.auth_user.name}
+                  style={{ width: 36, height: 36, objectFit: "cover" }} />
+              ) : (
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%", background: "var(--accent)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "#fff", fontSize: 13, fontWeight: 700,
+                }}>
+                  {ctx.auth_user.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </button>
+          )}
         </div>
       </div>
 
