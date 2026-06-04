@@ -33,3 +33,9 @@ export/
 
 # ChromaDB and SQLite generated at runtime
 backend/data/
+
+# Internal working docs (not for public repo)
+reports/
+
+# Playwright test artifacts
+frontend/test-results/
