@@ -1,12 +1,18 @@
+import functools
 import json
 import logging
 import os
 import re
+import threading
 import time
 from dataclasses import dataclass
 from openai import OpenAI, RateLimitError, APIStatusError, BadRequestError
 
 logger = logging.getLogger(__name__)
+
+_thread_tokens = threading.local()   # per-thread token accumulator
+_COST_PER_1M = 0.90                  # blended $/1M tokens (Groq gpt-oss-120b approx)
+
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
@@ -316,6 +322,7 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
                 continue
 
             if response.usage:
+                _thread_tokens.count = getattr(_thread_tokens, "count", 0) + response.usage.total_tokens
                 logger.info(
                     "llm_call provider=%s model=%s prompt_tokens=%d completion_tokens=%d total_tokens=%d",
                     provider.name,
@@ -343,7 +350,30 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
     raise RuntimeError("all LLM providers exhausted — no valid JSON response")
 
 
+def _drain_tokens() -> int:
+    """Return tokens accumulated since last drain and reset the counter."""
+    count = getattr(_thread_tokens, "count", 0)
+    _thread_tokens.count = 0
+    return count
+
+
+def _timed_node(fn):
+    """Decorator: log per-node elapsed time and token count; accumulate session_tokens in state."""
+    @functools.wraps(fn)
+    def _wrapper(state: TripSathiState) -> dict:
+        t0 = time.perf_counter()
+        result = fn(state)
+        elapsed_ms = (time.perf_counter() - t0) * 1000
+        node_tokens = _drain_tokens()
+        result["session_tokens"] = state.get("session_tokens", 0) + node_tokens
+        logger.info("node=%s elapsed_ms=%.0f tokens=%d", fn.__name__, elapsed_ms, node_tokens)
+        return result
+    return _wrapper
+
+
+@_timed_node
 def persona_classification(state: TripSathiState) -> dict:
+    _drain_tokens()  # reset any stale tokens from previous session on this thread
     from memory import read_memories
 
     answers_text = "\n".join(
@@ -373,6 +403,7 @@ def persona_classification(state: TripSathiState) -> dict:
     }
 
 
+@_timed_node
 def destination_intelligence(state: TripSathiState) -> dict:
     from rag.indexer import get_query_engine
 
@@ -390,6 +421,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
     # LlamaIndex retrieval (local variable — not state)
     retrieved_content = []
     rag_failed = False
+    query_engine = None
     dest_slug = state["destination"].lower().split(",")[0].strip().replace(" ", "_")
     try:
         query_engine = get_query_engine(destination=dest_slug)
@@ -398,7 +430,8 @@ def destination_intelligence(state: TripSathiState) -> dict:
             text = str(result).strip()
             if text:
                 retrieved_content.append(text)
-    except Exception:
+    except Exception as e:
+        logger.error("RAG query failed for destination=%s: %s", dest_slug, e)
         rag_failed = True  # Graceful degradation: proceed with empty corpus
 
     if not retrieved_content:
@@ -431,6 +464,53 @@ def destination_intelligence(state: TripSathiState) -> dict:
         ))
         research_synthesis["implicit_warnings"] = warnings
 
+    # Retrieval quality gate: if synthesis returned < 2 local_risks, re-query with
+    # targeted risk/scam/seasonal queries and supplement the synthesis.
+    if len(research_synthesis.get("local_risks", [])) < 2 and query_engine is not None:
+        _risk_queries = [
+            f"scam tourist trap warning {state['destination']}",
+            f"seasonal monsoon closure risk {state['destination']}",
+            f"safety concern travel advisory {state['destination']}",
+        ]
+        _risk_content = []
+        try:
+            for q in _risk_queries:
+                result = query_engine.query(q)
+                text = str(result).strip()
+                if text:
+                    _risk_content.append(text)
+        except Exception as e:
+            logger.warning("retrieval quality gate query failed: %s", e)
+
+        if _risk_content:
+            _risk_gate_system = (
+                "You are a travel safety analyst. Extract local risks, scams, and seasonal warnings "
+                "from the retrieved content below. Return ONLY valid JSON: "
+                "{\"local_risks\": [\"...\"], \"implicit_warnings\": [\"...\"]}"
+            )
+            _risk_prompt = (
+                f"Destination: {state['destination']}\n"
+                f"Traveller profile: {json.dumps(state['user_profile'])}\n"
+                f"Existing risks already identified (do NOT repeat these): "
+                f"{json.dumps(research_synthesis.get('local_risks', []))}\n"
+                f"Retrieved content:\n" + "\n\n---\n\n".join(_risk_content)
+            )
+            try:
+                _supplement = _call_llm(_risk_gate_system, _risk_prompt, max_tokens=1024, task="synthesis")
+                if isinstance(_supplement, dict):
+                    _existing = research_synthesis.get("local_risks", [])
+                    _new_risks = [r for r in _supplement.get("local_risks", []) if r not in _existing]
+                    _existing_warn = research_synthesis.get("implicit_warnings", [])
+                    _new_warn = [w for w in _supplement.get("implicit_warnings", []) if w not in _existing_warn]
+                    research_synthesis["local_risks"] = _existing + _new_risks
+                    research_synthesis["implicit_warnings"] = _existing_warn + _new_warn
+                    logger.info(
+                        "retrieval_quality_gate destination=%s added_risks=%d added_warnings=%d",
+                        state["destination"], len(_new_risks), len(_new_warn),
+                    )
+            except Exception as e:
+                logger.warning("retrieval quality gate synthesis failed: %s", e)
+
     return {
         "research_synthesis": research_synthesis,
         "current_node": "plan_assembly",
@@ -439,6 +519,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
     }
 
 
+@_timed_node
 def plan_assembly(state: TripSathiState) -> dict:
     """Generate, refine, or regenerate the plan based on state. No interrupt here — that's human_feedback's job."""
     if state.get("regenerate_requested"):
@@ -605,9 +686,21 @@ def human_feedback(state: TripSathiState) -> dict:
 
 
 def finalize(state: TripSathiState) -> dict:
-    """Mark plan as done and persist taste deltas extracted from refinements."""
+    """Mark plan as done, persist taste deltas, and log session cost."""
+    t0 = time.perf_counter()
     _persist_taste_deltas(state)
+    node_tokens = _drain_tokens()
+    total_tokens = state.get("session_tokens", 0) + node_tokens
+    elapsed_ms = (time.perf_counter() - t0) * 1000
+    cost_usd = total_tokens * _COST_PER_1M / 1_000_000
+    logger.info(
+        "node=finalize elapsed_ms=%.0f tokens=%d | session destination=%s "
+        "total_tokens=%d estimated_cost_usd=%.4f estimated_cost_inr=%.2f",
+        elapsed_ms, node_tokens,
+        state.get("destination", "?"), total_tokens, cost_usd, cost_usd * 84,
+    )
     return {
+        "session_tokens": total_tokens,
         "awaiting_feedback": False,
         "current_node": "done",
         "stage_label": "Plan finalised",
@@ -740,6 +833,7 @@ def _candidate_to_doc(c: dict) -> str:
     )
 
 
+@_timed_node
 def candidate_gen(state: TripSathiState) -> dict:
     """Extract a structured item pool from research_synthesis using the LLM."""
     synthesis = state.get("research_synthesis") or {}
@@ -772,6 +866,7 @@ def candidate_gen(state: TripSathiState) -> dict:
     }
 
 
+@_timed_node
 def ranker(state: TripSathiState) -> dict:
     """Score candidates against the user's taste profile via Voyage/Cohere rerank."""
     candidates = state.get("candidates") or []
@@ -848,6 +943,7 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
     return []
 
 
+@_timed_node
 def critic(state: TripSathiState) -> dict:
     """Red-team the assembled plan against the user's taste + constraints."""
     plan = state.get("plan")
@@ -937,6 +1033,14 @@ def _persist_taste_deltas(state: TripSathiState) -> None:
         write_memory(user_id, taste_summary)
     except Exception:
         pass
+
+
+def error_node(state: TripSathiState) -> dict:
+    logger.error("graph_error node=%s error=%s", state.get("current_node"), state.get("error"))
+    return {
+        "stage_label": "Something went wrong",
+        "awaiting_feedback": False,
+    }
 
 
 def route_after_feedback(state: TripSathiState) -> str:

@@ -32,3 +32,6 @@ class TripSathiState(TypedDict):
     current_node: str                   # internal id
     stage_label: str                    # human-readable label for React
     error: Optional[str]
+
+    # Observability
+    session_tokens: int                 # cumulative tokens across all LLM calls this session
