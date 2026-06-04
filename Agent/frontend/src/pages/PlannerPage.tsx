@@ -17,7 +17,7 @@ export default function PlannerPage({ ctx, onSetContext }: Props) {
       )}
       {ctx.current_stage === "generating" && (
         <div style={{ position: "fixed", inset: 0, background: "var(--paper)", zIndex: 110, overflowY: "auto" }}>
-          <GenerationProgress stageIndex={ctx.fake_stage_index} stageLabel={ctx.fake_stage_label} destination={ctx.destination} />
+          <GenerationProgress stageIndex={ctx.fake_stage_index} stageLabel={ctx.fake_stage_label} destination={ctx.destination} tripParams={ctx.trip_params} />
         </div>
       )}
       {ctx.current_stage === "plan_display" && ctx.plan && (

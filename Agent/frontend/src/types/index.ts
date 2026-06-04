@@ -40,6 +40,7 @@ export interface Plan {
   hotels: Hotel[];
   budget_breakdown: BudgetBreakdown;
   warnings: string[];
+  personalization_notes?: string[];
 }
 
 export interface PlanResponse {
@@ -118,4 +119,5 @@ export interface UserContext {
   interpreted_change: string | null;
   kid_ages: number[];
   destination: string;
+  trip_params: TripParameters | null;
 }

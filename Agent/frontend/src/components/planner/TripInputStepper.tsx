@@ -1,13 +1,111 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
-  Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
+  Home, Heart, User, Baby, Ear, ArrowRight, Pencil, Loader2,
 } from "lucide-react";
-import { generatePlan, parseIntent } from "../../services/api";
-import { startFakeProgress } from "../../lib/fakeProgress";
+import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId, transcribeAudio } from "../../services/api";
+import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
+
+type MicState = "idle" | "recording" | "transcribing";
+
+function useMicRecorder(onTranscript: (text: string) => void) {
+  const [state, setState] = useState<MicState>("idle");
+  const mediaRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  async function toggle() {
+    if (state === "idle") {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const rec = new MediaRecorder(stream);
+        chunksRef.current = [];
+        rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+        rec.onstop = async () => {
+          setState("transcribing");
+          const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+          stream.getTracks().forEach(t => t.stop());
+          try {
+            const text = await transcribeAudio(blob);
+            if (text) onTranscript(text);
+          } catch { /* silent — user sees nothing, field unchanged */ }
+          setState("idle");
+        };
+        rec.start();
+        mediaRef.current = rec;
+        setState("recording");
+      } catch { setState("idle"); }
+    } else if (state === "recording") {
+      mediaRef.current?.stop();
+    }
+  }
+
+  return { state, toggle };
+}
+
+function MicButton({ state, toggle, id, style }: { state: MicState; toggle: () => void; id: string; style?: React.CSSProperties }) {
+  const isRecording = state === "recording";
+  const isTranscribing = state === "transcribing";
+  return (
+    <button
+      id={id}
+      type="button"
+      onClick={toggle}
+      disabled={isTranscribing}
+      title={isRecording ? "Stop recording" : isTranscribing ? "Transcribing..." : "Voice input"}
+      style={{
+        background: isRecording ? "rgba(255,195,100,0.18)" : "none",
+        border: `1.5px solid ${isRecording ? "rgba(255,195,100,0.7)" : "var(--border-strong)"}`,
+        borderRadius: "50%", width: 28, height: 28,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: isTranscribing ? "not-allowed" : "pointer",
+        opacity: isTranscribing ? 0.5 : 1,
+        color: isRecording ? "rgba(255,195,100,0.9)" : "var(--fg-2)",
+        fontSize: 14, flexShrink: 0,
+        boxShadow: isRecording ? "0 0 0 4px rgba(255,195,100,0.2)" : "none",
+        transition: "all 0.2s",
+        ...style,
+      }}
+    >
+      {isTranscribing ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} /> : "🎙"}
+    </button>
+  );
+}
+
+function ClarifyQuestion({ index, question, value, onChange }: {
+  index: number; question: string; value: string; onChange: (v: string) => void;
+}) {
+  const mic = useMicRecorder(text => onChange(value ? `${value} ${text}` : text));
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
+        {question}
+      </label>
+      <div style={{ position: "relative" }}>
+        <textarea
+          rows={2}
+          style={{
+            width: "100%", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+            borderRadius: 10, padding: "10px 40px 10px 12px", color: "var(--fg-1)",
+            fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
+            outline: "none", boxSizing: "border-box",
+          }}
+          placeholder="(optional)"
+          value={value}
+          onChange={e => onChange(e.target.value)}
+        />
+        <MicButton
+          id={`mic-btn-clarify-${index}`}
+          state={mic.state}
+          toggle={mic.toggle}
+          style={{ position: "absolute", right: 8, top: 8, borderRadius: "50%" }}
+        />
+      </div>
+    </div>
+  );
+}
 
 const DEMO_PARAMS: TripParameters = {
   destination: "Kerala",
@@ -30,7 +128,11 @@ const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
-  const [inputMode, setInputMode] = useState<"stepper" | "natural">(ctx.mode === "demo" ? "stepper" : "natural");
+  const nlMic = useMicRecorder(text => setNlText(prev => prev ? `${prev} ${text}` : text));
+  const [inputMode, setInputMode] = useState<"stepper" | "natural" | "clarify">(ctx.mode === "demo" ? "stepper" : "natural");
+  const [clarifyQuestions, setClarifyQuestions] = useState<string[]>([]);
+  const [clarifyAnswers, setClarifyAnswers] = useState<string[]>([]);
+  const [pendingParams, setPendingParams] = useState<TripParameters | null>(null);
   const [nlText, setNlText] = useState("");
   const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
   const [groupType, setGroupType] = useState<string | null>(null);
@@ -62,11 +164,8 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleNaturalGenerate() {
     if (!nlText.trim() || ctx.generation_active) return;
-    const handle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText });
+    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: null });
+    let stageIndex = 0;
     try {
       const parsed = await parseIntent(nlText);
       if (parsed.destination) onSetContext({ destination: parsed.destination });
@@ -80,9 +179,26 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         budget_bracket:  parsed.budget_bracket || "mid",
         trip_style:      parsed.trip_style || [],
         special_needs:   parsed.special_needs || "",
+        traveler_notes:  nlText.trim(),
       };
-      const res = await generatePlan(merged);
-      handle.stop();
+
+      // Fetch adaptive clarify questions based on taste profile gaps
+      const userId = getOrCreateUserId();
+      const questions = await getClarifyQuestions(userId, merged.destination);
+      if (questions.length > 0) {
+        setPendingParams(merged);
+        setClarifyQuestions(questions);
+        setClarifyAnswers(new Array(questions.length).fill(""));
+        setInputMode("clarify");
+        onSetContext({ current_stage: "trip_input", generation_active: false });
+        return;
+      }
+
+      const res = await streamPlan(merged, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -92,7 +208,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch (err) {
-      handle.stop();
       onSetContext({ current_stage: "trip_input", generation_active: false });
       alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }
@@ -100,14 +215,14 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
   async function handleGenerate() {
     if (ctx.generation_active) return;
-    const handle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination });
+    onSetContext({ current_stage: "generating", generation_active: true, kid_ages: params.kid_ages, destination: params.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: params });
+    let stageIndex = 0;
     try {
-      const res = await generatePlan(params);
-      handle.stop();
+      const res = await streamPlan(params, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -116,8 +231,32 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch (err) {
-      handle.stop();
       onSetContext({ current_stage: "trip_input", generation_active: false });
+      alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
+    }
+  }
+
+  async function handleClarifySubmit() {
+    if (!pendingParams || ctx.generation_active) return;
+    const qaBlock = clarifyQuestions
+      .map((q, i) => `Q: ${q}\nA: ${clarifyAnswers[i] || "(skipped)"}`)
+      .join("\n\n");
+    const finalParams: TripParameters = {
+      ...pendingParams,
+      traveler_notes: `${pendingParams.traveler_notes || ""}\n\n--- Quick questions ---\n${qaBlock}`.trim(),
+    };
+    let stageIndex = 0;
+    onSetContext({ current_stage: "generating", generation_active: true, destination: finalParams.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: finalParams });
+    try {
+      const res = await streamPlan(finalParams, (label) => {
+        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
+      if (!res.plan) throw new Error("Plan generation failed — please try again");
+      onSetContext({ current_stage: "plan_display", generation_active: false, plan: res.plan, thread_id: res.thread_id, fake_stage_label: "Done" });
+    } catch (err) {
+      onSetContext({ current_stage: "trip_input", generation_active: false });
+      setInputMode("natural");
       alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
     }
   }
@@ -139,15 +278,22 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     ? (step === 0 ? !!params.destination : step === 1 ? !!params.start_date : true)
     : true;
 
-  // Scroll on step change — top for most steps, bottom for the last step
-  // so the textarea isn't hidden behind the sticky bar when 5 recap rows stack up.
+  // Scroll on step change — top for most steps, bottom for step 5 (recap chips stack up)
+  // and bottom for step 2 when kids are pre-filled so the age inputs aren't hidden behind the bar.
   useEffect(() => {
-    if (step === 5) {
+    if (step === 5 || (step === 2 && params.kid_ages.length > 0)) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [step]);
+
+  // Also scroll to bottom when user adds a kid mid-step so the new age input is visible.
+  useEffect(() => {
+    if (step === 2 && params.kid_ages.length > 0) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+  }, [params.kid_ages.length]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -207,7 +353,10 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
           <div className="journal-page">
             <div className="journal-page-header">
               <span className="journal-title">trip notes ✦</span>
-              <span className="journal-badge">open journal</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <MicButton id="mic-btn-nl" state={nlMic.state} toggle={nlMic.toggle} />
+                <span className="journal-badge">open journal</span>
+              </div>
             </div>
             <textarea
               className="journal-textarea"
@@ -268,6 +417,53 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                 disabled={!nlText.trim()}
                 onClick={handleNaturalGenerate}
               >
+                sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Clarify mode — adaptive follow-up questions before generation */}
+      {inputMode === "clarify" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, flex: 1 }}>
+          <div className="question" style={{ marginTop: 8 }}>
+            <div className="q-eyebrow">
+              <Sparkles size={13} strokeWidth={2.5} />
+              one moment
+            </div>
+            <h1>a couple of<br /><span className="sw">quick questions.</span></h1>
+            <div className="hint">helps us personalise your plan — skip any you want</div>
+          </div>
+
+          {clarifyQuestions.map((q, i) => (
+            <ClarifyQuestion
+              key={i}
+              index={i}
+              question={q}
+              value={clarifyAnswers[i]}
+              onChange={val => {
+                const next = [...clarifyAnswers];
+                next[i] = val;
+                setClarifyAnswers(next);
+              }}
+            />
+          ))}
+
+          <div className="bottom-bar">
+            <div className="inner">
+              <button
+                style={{
+                  padding: "6px 12px", border: "1.5px solid var(--border-strong)",
+                  borderRadius: "var(--radius-pill)", background: "var(--surface)",
+                  fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
+                  color: "var(--fg-2)", cursor: "pointer", letterSpacing: "0.04em",
+                }}
+                onClick={() => setInputMode("natural")}
+              >
+                ← back
+              </button>
+              <button className="cta-primary" onClick={handleClarifySubmit}>
                 sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
               </button>
             </div>

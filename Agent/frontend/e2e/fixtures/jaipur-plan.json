@@ -1,0 +1,51 @@
+{
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Jaipur",
+        "activities": [
+          { "name": "Amber Fort", "bookable": true, "approx_cost": 500 },
+          { "name": "Nahargarh Fort", "bookable": false, "approx_cost": null }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Lassiwala", "dinner": "Chokhi Dhani" },
+        "notes": "Arrive morning; start with the fort circuit"
+      },
+      {
+        "day_number": 2,
+        "location": "Jaipur",
+        "activities": [
+          { "name": "Hawa Mahal", "bookable": false, "approx_cost": null },
+          { "name": "City Palace", "bookable": true, "approx_cost": 700 },
+          { "name": "Jantar Mantar", "bookable": true, "approx_cost": 200 }
+        ],
+        "meals": { "breakfast": "Hotel", "lunch": "Peacock Rooftop", "dinner": "Hotel" },
+        "notes": "Old city walk — all three are within 10-min walk of each other"
+      }
+    ],
+    "hotels": [
+      {
+        "location": "Jaipur",
+        "name": "Samode Haveli",
+        "reasoning": "Heritage property inside the old city walls; rooftop pool; walking distance to all Day 2 sites",
+        "approx_cost_per_night": 6500,
+        "content_source": "rag",
+        "bookable": true
+      }
+    ],
+    "budget_breakdown": {
+      "accommodation": 13000,
+      "transport": 4000,
+      "activities": 2800,
+      "food": 5000,
+      "total": 24800
+    },
+    "warnings": [
+      "Amber Fort: hire a guide inside — the audio tour doesn't cover the hidden stepwells",
+      "Jantar Mantar closes early on Fridays"
+    ]
+  },
+  "thread_id": "test_jaipur_001",
+  "status": "awaiting_feedback",
+  "stage_label": "Your plan is ready!"
+}

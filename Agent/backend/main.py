@@ -1,8 +1,16 @@
+import logging
 import os
+from dataclasses import asdict
 from uuid import uuid4
+
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s — %(message)s")
+import asyncio
+import json
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from langgraph.types import Command
 
@@ -10,14 +18,22 @@ load_dotenv()
 
 if os.getenv("PHOENIX_ENABLED") == "true":
     try:
-        import phoenix as px
+        from phoenix.otel import register
         from openinference.instrumentation.langchain import LangChainInstrumentor
         from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
-        px.launch_app()
+        from openinference.instrumentation.openai import OpenAIInstrumentor
+        _phoenix_kwargs = dict(
+            project_name="tripsathi",
+            endpoint=os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006/v1/traces"),
+        )
+        if os.getenv("PHOENIX_API_KEY"):
+            _phoenix_kwargs["headers"] = {"api_key": os.getenv("PHOENIX_API_KEY")}
+        register(**_phoenix_kwargs)
         LangChainInstrumentor().instrument()
         LlamaIndexInstrumentor().instrument()
+        OpenAIInstrumentor().instrument()
     except ImportError:
-        pass  # pip install arize-phoenix openinference-instrumentation-langchain openinference-instrumentation-llama-index
+        pass
 
 if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")
@@ -39,7 +55,6 @@ app.add_middleware(
 )
 
 
-
 # ── Request / Response models ────────────────────────────────────────────────
 
 class ParseRequest(BaseModel):
@@ -47,14 +62,17 @@ class ParseRequest(BaseModel):
 
 
 class OnboardRequest(BaseModel):
-    onboarding_answers: list[dict]
+    onboarding_answers: list[dict] = []
     destination_hint: str = ""
+    taste_data: dict = {}
+    user_id: str = ""
 
 
 class PlanRequest(BaseModel):
     destination: str
-    trip_parameters: dict  # {duration_nights, budget_total, travel_dates, group_size}
+    trip_parameters: dict
     onboarding_answers: list[dict]
+    traveler_notes: str = ""
 
 
 class RefineRequest(BaseModel):
@@ -68,7 +86,7 @@ class RegenerateRequest(BaseModel):
 
 class BookRequest(BaseModel):
     user_id: str
-    item: dict  # {item_type, name, location, approx_cost, check_in?, check_out?}
+    item: dict
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -90,11 +108,34 @@ def _plan_response(state: dict, thread_id: str) -> dict:
     }
 
 
+def _build_initial_state(req: PlanRequest) -> dict:
+    return {
+        "destination": req.destination,
+        "trip_parameters": req.trip_parameters,
+        "onboarding_answers": req.onboarding_answers,
+        "traveler_notes": req.traveler_notes or None,
+        "taste_profile": None,
+        "candidates": None,
+        "ranked_candidates": None,
+        "user_profile": None,
+        "research_synthesis": None,
+        "plan": None,
+        "user_feedback": None,
+        "refinement_count": 0,
+        "refinement_history": [],
+        "regenerate_requested": False,
+        "critic_passes": 0,
+        "awaiting_feedback": False,
+        "current_node": "persona_classification",
+        "stage_label": "Understanding your profile",
+        "error": None,
+    }
+
+
 # ── Endpoints ────────────────────────────────────────────────────────────────
 
 @app.post("/api/parse")
 async def parse_intent(req: ParseRequest):
-    """Extract structured trip parameters from a natural language description."""
     from nodes import _call_llm
     from prompts import INTENT_PARSE_SYSTEM
     try:
@@ -106,83 +147,157 @@ async def parse_intent(req: ParseRequest):
 
 @app.post("/api/onboard")
 async def onboard(req: OnboardRequest):
-    """Classify user persona from onboarding answers only (no full graph run)."""
-    from nodes import _call_llm
-    from prompts import PERSONA_CLASSIFICATION_SYSTEM
+    from taste import TasteProfile, save_taste
 
-    answers_text = "\n".join(
-        f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers
-    )
-    if req.destination_hint:
-        answers_text += f"\nDestination hint: {req.destination_hint}"
+    user_id = req.user_id.strip() if req.user_id.strip() else f"anon_{uuid4().hex[:12]}"
 
+    user_profile = None
+    if req.onboarding_answers:
+        from nodes import _call_llm
+        from prompts import PERSONA_CLASSIFICATION_SYSTEM
+        answers_text = "\n".join(f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers)
+        if req.destination_hint:
+            answers_text += f"\nDestination hint: {req.destination_hint}"
+        try:
+            user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"persona_classification_failed: {e}")
+
+    taste_profile_dict = None
+    if req.taste_data:
+        profile_data = {"user_id": user_id, **req.taste_data}
+        profile = TasteProfile(**{k: v for k, v in profile_data.items() if k in TasteProfile.__dataclass_fields__})
+        save_taste(profile)
+        taste_profile_dict = asdict(profile)
+
+    return {"user_id": user_id, "user_profile": user_profile, "taste_profile": taste_profile_dict}
+
+
+@app.get("/api/taste/{user_id}")
+async def get_taste(user_id: str):
+    from taste import load_taste
+    profile = load_taste(user_id)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Taste profile not found")
+    return asdict(profile)
+
+
+@app.get("/api/clarify/questions")
+async def clarify_questions(user_id: str = "", destination: str = ""):
+    from nodes import get_clarify_questions
+    return {"questions": get_clarify_questions(user_id, destination)}
+
+
+@app.post("/api/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    import tempfile, groq as _groq
+    audio_bytes = await file.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="empty_audio")
+    suffix = "." + (file.filename or "recording.webm").rsplit(".", 1)[-1]
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        tmp.write(audio_bytes)
+        tmp_path = tmp.name
     try:
-        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
+        client = _groq.Groq(api_key=os.getenv("LLM_API_KEY"))
+        with open(tmp_path, "rb") as f:
+            result = client.audio.transcriptions.create(
+                file=(file.filename or "recording.webm", f),
+                model="whisper-large-v3-turbo",
+                response_format="text",
+            )
+        return {"text": result.strip() if isinstance(result, str) else result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"persona_classification_failed: {e}")
-
-    return {"user_profile": user_profile}
+        raise HTTPException(status_code=500, detail=f"transcription_failed: {e}")
+    finally:
+        import os as _os
+        _os.unlink(tmp_path)
 
 
 @app.post("/api/plan")
 async def start_plan(req: PlanRequest):
-    """Start a new planning session. Runs the full pipeline and interrupts at plan review."""
     thread_id = str(uuid4())
     config = {"configurable": {"thread_id": thread_id}}
-
-    initial_state = {
-        "destination": req.destination,
-        "trip_parameters": req.trip_parameters,
-        "onboarding_answers": req.onboarding_answers,
-        "user_profile": None,
-        "research_synthesis": None,
-        "plan": None,
-        "user_feedback": None,
-        "refinement_count": 0,
-        "refinement_history": [],
-        "regenerate_requested": False,
-        "awaiting_feedback": False,
-        "current_node": "persona_classification",
-        "stage_label": "Understanding your profile",
-        "error": None,
-    }
-
-    graph.invoke(initial_state, config=config)
+    graph.invoke(_build_initial_state(req), config=config)
     state = _get_state(config)
     return _plan_response(state, thread_id)
 
 
+@app.post("/api/plan/stream")
+async def stream_plan(req: PlanRequest):
+    thread_id = str(uuid4())
+    config = {"configurable": {"thread_id": thread_id}}
+
+    async def generate():
+        yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
+
+        loop = asyncio.get_event_loop()
+        queue: asyncio.Queue = asyncio.Queue()
+        _SENTINEL = object()
+
+        # graph.stream is a *sync* generator and the SqliteSaver checkpointer is
+        # incompatible with astream, so we drive it in a worker thread and push
+        # each chunk onto an asyncio.Queue as it's produced — yielding stage
+        # events incrementally instead of buffering the whole pipeline first.
+        def run_graph():
+            try:
+                for chunk in graph.stream(_build_initial_state(req), config=config, stream_mode="updates"):
+                    loop.call_soon_threadsafe(queue.put_nowait, chunk)
+            except Exception as e:  # noqa: BLE001 — surfaced to client below
+                loop.call_soon_threadsafe(queue.put_nowait, e)
+            finally:
+                loop.call_soon_threadsafe(queue.put_nowait, _SENTINEL)
+
+        loop.run_in_executor(None, run_graph)
+
+        while True:
+            item = await queue.get()
+            if item is _SENTINEL:
+                break
+            if isinstance(item, Exception):
+                yield f"data: {json.dumps({'type': 'error', 'detail': str(item)})}\n\n"
+                return
+            for _node, update in item.items():
+                if not isinstance(update, dict):
+                    continue
+                stage = update.get("stage_label")
+                if stage:
+                    yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
+
+        state = _get_state(config)
+        if state.get("error"):
+            yield f"data: {json.dumps({'type': 'error', 'detail': state['error']})}\n\n"
+        else:
+            yield f"data: {json.dumps({'type': 'done', 'plan': state.get('plan'), 'thread_id': thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
+
+    return StreamingResponse(generate(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
 @app.post("/api/refine")
 async def refine_plan(req: RefineRequest):
-    """Continue a planning session with user feedback or approval."""
     config = {"configurable": {"thread_id": req.thread_id}}
-
     try:
         graph.invoke(Command(resume=req.user_feedback), config=config)
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Session not found or expired: {e}")
-
     state = _get_state(config)
     return _plan_response(state, req.thread_id)
 
 
 @app.post("/api/regenerate")
 async def regenerate_plan(req: RegenerateRequest):
-    """Regenerate a notably different plan without specific feedback."""
     config = {"configurable": {"thread_id": req.thread_id}}
-
     try:
         graph.invoke(Command(resume={"regenerate": True}), config=config)
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Session not found or expired: {e}")
-
     state = _get_state(config)
     return _plan_response(state, req.thread_id)
 
 
 @app.post("/api/book")
 async def book_item(req: BookRequest):
-    """Sprint 2: mock booking confirmation. Sprint 3: integrate OTA partner API."""
     confirmation_id = f"TRP-DEMO-{str(uuid4())[:8].upper()}"
     return {
         "confirmation_id": confirmation_id,

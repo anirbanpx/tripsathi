@@ -37,6 +37,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [dayView, setDayView] = useState<"swipe" | "list" | "map">("map");
   const [mapDay, setMapDay] = useState(0); // 0 = all stops, 1-N = specific day
   const [saveFlash, setSaveFlash] = useState(false);
+  const [tasteToast, setTasteToast] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const saved = (() => {
@@ -101,6 +102,8 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         refinement_warning_shown:
           (res.refinement_count ?? ctx.refinement_count + 1) >= 4 || ctx.refinement_warning_shown,
       });
+      setTasteToast(true);
+      setTimeout(() => setTasteToast(false), 3000);
       setFeedback("");
     } finally {
       setRefining(false);
@@ -191,6 +194,37 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
             </span>
             {ctx.interpreted_change}
           </div>
+        </div>
+      )}
+
+      {/* Tailored for you */}
+      {plan.personalization_notes && plan.personalization_notes.length > 0 && (
+        <div style={{
+          background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))",
+          border: "1.5px solid rgba(139,92,246,0.3)",
+          borderRadius: 12,
+          padding: "14px 16px",
+          marginBottom: 16,
+        }}>
+          <div style={{
+            fontSize: 11, fontWeight: 800, letterSpacing: "0.08em",
+            color: "rgba(139,92,246,0.9)", marginBottom: 8,
+            fontFamily: "var(--font-body)",
+            textTransform: "uppercase",
+          }}>
+            ✦ tailored for you
+          </div>
+          <ul style={{ margin: 0, padding: "0 0 0 16px" }}>
+            {plan.personalization_notes.map((note, i) => (
+              <li key={i} style={{
+                fontSize: 13, color: "var(--fg-2)",
+                fontFamily: "var(--font-body)", lineHeight: 1.5,
+                marginBottom: i < plan.personalization_notes!.length - 1 ? 4 : 0,
+              }}>
+                {note}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
@@ -369,6 +403,19 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           </button>
         </div>
       </div>
+      {tasteToast && (
+        <div style={{
+          position: "fixed", bottom: 88, right: 20, zIndex: 999,
+          background: "var(--ink)", color: "var(--paper)",
+          fontSize: 12, fontWeight: 700, fontFamily: "var(--font-body)",
+          padding: "8px 14px", borderRadius: 20,
+          border: "1.5px solid rgba(255,195,100,0.4)",
+          letterSpacing: "0.04em", pointerEvents: "none",
+          animation: "slideUp 0.3s ease",
+        }}>
+          ✦ your preferences have been noted
+        </div>
+      )}
     </div>
   );
 }

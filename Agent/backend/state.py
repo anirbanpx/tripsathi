@@ -18,6 +18,15 @@ class TripSathiState(TypedDict):
     refinement_history: list[str]       # all feedback messages in session
     regenerate_requested: bool          # True when user taps "Regenerate"
 
+    # Personalization
+    taste_profile: Optional[dict]       # serialised TasteProfile; None if not loaded
+    traveler_notes: Optional[str]       # verbatim NL input from user; None if stepper mode
+    candidates: Optional[list]          # raw candidate pool from candidate_gen
+    ranked_candidates: Optional[list]   # taste-scored pool from ranker
+
+    # Critic loop control
+    critic_passes: int                  # increments each critic pass; caps at 2
+
     # Control/meta
     awaiting_feedback: bool
     current_node: str                   # internal id
