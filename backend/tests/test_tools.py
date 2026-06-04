@@ -119,7 +119,7 @@ class TestDuckDuckGoSearch:
         mock_ddgs.__enter__ = lambda s: s
         mock_ddgs.__exit__ = MagicMock(return_value=False)
         mock_ddgs.text.return_value = ddg_results
-        with patch("duckduckgo_search.DDGS", return_value=mock_ddgs):
+        with patch("ddgs.DDGS", return_value=mock_ddgs):
             result = _duckduckgo_search("Kerala travel")
         assert "Kerala Tips" in result
         assert "Travel info" in result
@@ -132,7 +132,7 @@ class TestDuckDuckGoSearch:
         mock_ddgs.__enter__ = lambda s: s
         mock_ddgs.__exit__ = MagicMock(return_value=False)
         mock_ddgs.text.return_value = []
-        with patch("duckduckgo_search.DDGS", return_value=mock_ddgs):
+        with patch("ddgs.DDGS", return_value=mock_ddgs):
             result = _duckduckgo_search("nothing found query")
         assert result == "No results found."
 
@@ -329,3 +329,95 @@ class TestExecuteTool:
         with patch("tools.knowledge_base_query", return_value="ok") as m:
             execute_tool("knowledge_base_query", {"query": "temples"})
         m.assert_called_once_with("temples", "")
+
+
+# ---------------------------------------------------------------------------
+# Integration tests — live API calls, skipped when keys are absent
+# ---------------------------------------------------------------------------
+
+from dotenv import load_dotenv
+load_dotenv()
+
+
+def _require_key(env_var: str):
+    """Skip the test if the env var is not set or empty."""
+    val = os.environ.get(env_var, "").strip()
+    if not val:
+        pytest.skip(f"{env_var} not set — skipping integration test")
+
+
+class TestWebSearchIntegration:
+    @pytest.mark.integration
+    def test_tavily_returns_real_results(self):
+        _require_key("TAVILY_API_KEY")
+        from tools import web_search
+        result = web_search("best time to visit Manali India")
+        assert len(result) > 50
+        assert "No results found." not in result
+        assert "unavailable" not in result.lower()
+
+    @pytest.mark.integration
+    def test_duckduckgo_fallback_live(self):
+        """Hit real DDG and verify it returns a string without raising.
+        Empty results are accepted — DDG can be rate-limited or geo-blocked."""
+        from tools import _duckduckgo_search
+        result = _duckduckgo_search("Goa beach monsoon season travel")
+        assert isinstance(result, str)
+        assert len(result) > 0
+
+
+class TestGetWeatherIntegration:
+    @pytest.mark.integration
+    def test_returns_forecast_for_known_city(self):
+        _require_key("OPENWEATHER_API_KEY")
+        from tools import get_weather
+        result = get_weather("Munnar", "June 2026")
+        assert "Munnar" in result
+        assert "°C" in result
+        assert "humidity" in result.lower()
+
+    @pytest.mark.integration
+    def test_unknown_city_returns_message_not_exception(self):
+        _require_key("OPENWEATHER_API_KEY")
+        from tools import get_weather
+        result = get_weather("Xyzzyplugh99999")
+        # Should not raise — must return a string
+        assert isinstance(result, str)
+        assert len(result) > 0
+
+
+class TestSearchPlacesIntegration:
+    @pytest.mark.integration
+    def test_returns_rated_places(self):
+        _require_key("GOOGLE_MAPS_API_KEY")
+        from tools import search_places
+        result = search_places("vegetarian restaurants Munnar Kerala")
+        assert isinstance(result, str)
+        assert len(result) > 20
+        # Expect rating field in output
+        assert "Rating:" in result or "No places found" in result
+
+    @pytest.mark.integration
+    def test_obscure_query_does_not_raise(self):
+        _require_key("GOOGLE_MAPS_API_KEY")
+        from tools import search_places
+        result = search_places("xyzzy nonexistent place 99999")
+        assert isinstance(result, str)
+
+
+class TestKnowledgeBaseQueryIntegration:
+    @pytest.mark.integration
+    def test_returns_content_for_indexed_destination(self):
+        """Requires the RAG index to be built (reindex.py run at least once)."""
+        from tools import knowledge_base_query
+        result = knowledge_base_query("houseboat safety tips", "kerala")
+        assert isinstance(result, str)
+        assert len(result) > 20
+        # Should not bubble an exception as a string
+        assert "Traceback" not in result
+
+    @pytest.mark.integration
+    def test_no_destination_filter_still_returns_content(self):
+        from tools import knowledge_base_query
+        result = knowledge_base_query("top attractions India travel")
+        assert isinstance(result, str)

@@ -22,7 +22,7 @@ def _get_tavily():
 
 
 def _duckduckgo_search(query: str) -> str:
-    from duckduckgo_search import DDGS
+    from ddgs import DDGS
     with DDGS() as ddgs:
         results = list(ddgs.text(query, max_results=5))
     snippets = [
