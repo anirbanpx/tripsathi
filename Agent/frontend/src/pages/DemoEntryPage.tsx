@@ -81,13 +81,14 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
     try {
       const data = await googleSignIn(credential);
       setAuthState(data);
+      const seen = !!localStorage.getItem(`tripsathi_onboarded_${data.user.user_id}`);
       onSetContext({
         mode: "authenticated",
         user_id: data.user.user_id,
         auth_user: data.user,
-        current_stage: "onboarding",
+        current_stage: seen ? "entry" : "onboarding",
       });
-      navigate("/onboarding");
+      navigate(seen ? "/planner" : "/onboarding");
     } catch (e) {
       console.error("Google sign-in failed:", e);
     } finally {
