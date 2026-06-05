@@ -137,6 +137,85 @@ export function Camel({ size = 80 }: { size?: number }) {
   );
 }
 
+// ── Archetype illustrations for onboarding ──────────────────────────
+
+export function ArchSlowExplorer({ size = 48 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Arched window frame */}
+      <path d="M10 54 L10 26 Q10 8 28 8 Q46 8 46 26 L46 54" stroke={BARK} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Sill */}
+      <line x1="6" y1="54" x2="50" y2="54" stroke={BARK} strokeWidth="2" strokeLinecap="round"/>
+      {/* Crossbar */}
+      <line x1="10" y1="34" x2="46" y2="34" stroke={BARK} strokeWidth="1.6" strokeLinecap="round"/>
+      {/* Vertical bar */}
+      <line x1="28" y1="8" x2="28" y2="54" stroke={BARK} strokeWidth="1.6" strokeLinecap="round"/>
+      {/* Morning glow inside arch */}
+      <path d="M12 33 L12 26 Q12 11 28 11 Q44 11 44 26 L44 33 Z" fill={OCHRE} opacity="0.12"/>
+      {/* Rising sun arc */}
+      <path d="M18 34 Q28 20 38 34" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" opacity="0.8"/>
+      {/* Sun dot */}
+      <circle cx="28" cy="22" r="4" fill={OCHRE} opacity="0.55"/>
+      {/* Rays */}
+      <line x1="28" y1="15" x2="28" y2="12" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+      <line x1="34" y1="17" x2="36" y2="14" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+      <line x1="22" y1="17" x2="20" y2="14" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+    </svg>
+  );
+}
+
+export function ArchBalancedTraveler({ size = 48 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Backpack main body */}
+      <rect x="12" y="20" width="32" height="30" rx="6" fill={PAPER} stroke={BARK} strokeWidth="2"/>
+      {/* Top lid */}
+      <rect x="14" y="13" width="28" height="10" rx="4" fill={PAPER} stroke={BARK} strokeWidth="1.8"/>
+      {/* Straps */}
+      <path d="M17 20 Q13 28 15 44" stroke={BARK} strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M39 20 Q43 28 41 44" stroke={BARK} strokeWidth="2" strokeLinecap="round" fill="none"/>
+      {/* Front pocket */}
+      <rect x="18" y="33" width="20" height="12" rx="4" stroke={OCHRE} strokeWidth="1.6" fill="none"/>
+      {/* Pocket zip */}
+      <line x1="18" y1="38" x2="38" y2="38" stroke={OCHRE} strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
+      {/* Map sticking out of top */}
+      <path d="M30 13 L30 6 L42 4 L42 11" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      {/* Map fold lines */}
+      <line x1="34" y1="5" x2="34" y2="12" stroke={OCHRE} strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+      <line x1="38" y1="4" x2="38" y2="11" stroke={OCHRE} strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+    </svg>
+  );
+}
+
+export function ArchPackedAdventurer({ size = 48 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Background mountain */}
+      <path d="M6 50 L26 16 L46 50" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.45"/>
+      {/* Snow cap back */}
+      <path d="M26 16 L21 28 L31 28 Z" fill={PAPER} stroke={OCHRE} strokeWidth="1.2" opacity="0.6"/>
+      {/* Right mountain */}
+      <path d="M30 50 L48 22 L66 50" stroke={BARK} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.5"/>
+      {/* Tent in foreground */}
+      <path d="M14 50 L28 30 L42 50 Z" fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Tent door */}
+      <path d="M24 50 Q28 40 32 50" stroke={BARK} strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      {/* Tent pole hint */}
+      <line x1="28" y1="30" x2="28" y2="50" stroke={OCHRE} strokeWidth="1.2" strokeLinecap="round" opacity="0.4"/>
+      {/* Sunrise arc */}
+      <path d="M8 20 Q18 6 28 4 Q38 6 48 20" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.7"/>
+      {/* Sun rays */}
+      <line x1="28" y1="4" x2="28" y2="0" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+      <line x1="38" y1="7" x2="41" y2="3" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+      <line x1="18" y1="7" x2="15" y2="3" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+      <line x1="46" y1="16" x2="50" y2="13" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+      <line x1="10" y1="16" x2="6" y2="13" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
+      {/* Ground line */}
+      <line x1="6" y1="50" x2="50" y2="50" stroke={BARK} strokeWidth="1.4" strokeLinecap="round" opacity="0.2"/>
+    </svg>
+  );
+}
+
 // Pick illustration based on location string
 export function getIllustration(location: string): React.ReactElement {
   const l = location.toLowerCase();

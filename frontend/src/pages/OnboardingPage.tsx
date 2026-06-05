@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { onboard, getUserId, parseTaste, transcribeAudio } from "../services/api";
+import { getAuthState } from "../lib/auth";
+import { ArchSlowExplorer, ArchBalancedTraveler, ArchPackedAdventurer } from "../components/planner/TravelIllustrations";
 import PageTransition from "../components/shared/PageTransition";
 
 const INTERESTS = [
@@ -13,26 +15,29 @@ const DIETARY_OPTIONS = ["Vegetarian", "Vegan", "Jain", "Halal", "Gluten-free", 
 
 type ArchetypeKey = "slow" | "balanced" | "adventurer";
 
-const ARCHETYPES: { key: ArchetypeKey; title: string; subtitle: string; emoji: string; preset: Record<string, number> }[] = [
+const ARCHETYPE_ILLUSTRATIONS: Record<ArchetypeKey, React.ReactElement> = {
+  slow:       <ArchSlowExplorer size={44} />,
+  balanced:   <ArchBalancedTraveler size={44} />,
+  adventurer: <ArchPackedAdventurer size={44} />,
+};
+
+const ARCHETYPES: { key: ArchetypeKey; title: string; subtitle: string; preset: Record<string, number> }[] = [
   {
     key: "slow",
     title: "The Slow Explorer",
     subtitle: "Hidden cafés, long mornings, no alarm clocks",
-    emoji: "☕",
     preset: { pace: 2, crowd_tolerance: 2, accommodation_taste: 4, walking_tolerance: 3 },
   },
   {
     key: "balanced",
     title: "The Balanced Traveler",
     subtitle: "Mix of must-sees and off-path discoveries",
-    emoji: "🎒",
     preset: { pace: 3, crowd_tolerance: 3, accommodation_taste: 3, walking_tolerance: 3 },
   },
   {
     key: "adventurer",
     title: "The Packed Adventurer",
     subtitle: "Sunrise hikes, full days, sleep when home",
-    emoji: "⛺",
     preset: { pace: 5, crowd_tolerance: 4, accommodation_taste: 2, walking_tolerance: 5 },
   },
 ];
@@ -49,6 +54,7 @@ type MicState = "idle" | "recording" | "transcribing";
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
+  const firstName = getAuthState()?.user.name.split(" ")[0] ?? null;
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Step 1 state
@@ -214,7 +220,7 @@ export default function OnboardingPage() {
             your travel <span style={{ fontStyle: "italic" }}>DNA</span>
           </h1>
           <p style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-2)", margin: 0 }}>
-            90 seconds · shapes every plan we build for you
+            {firstName ? <><span style={{ fontWeight: 700, color: "var(--fg-1)" }}>hey {firstName}</span> · </> : ""}90 seconds · shapes every plan we build for you
           </p>
         </div>
 
@@ -344,7 +350,9 @@ export default function OnboardingPage() {
                           cursor: "pointer", transition: "all 0.15s",
                         }}
                       >
-                        <span style={{ fontSize: 28, flexShrink: 0 }}>{a.emoji}</span>
+                        <span style={{ flexShrink: 0, opacity: active ? 1 : 0.75, transition: "opacity 0.15s" }}>
+                          {ARCHETYPE_ILLUSTRATIONS[a.key]}
+                        </span>
                         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                           <span style={{
                             fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 800,

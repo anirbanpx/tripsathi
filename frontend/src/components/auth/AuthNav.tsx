@@ -45,7 +45,7 @@ export default function AuthNav({ user, onSetContext }: Props) {
         onClick={() => navigate("/profile")}
       >
         <BookOpen size={13} strokeWidth={2} />
-        My trips
+        {user.name.split(" ")[0]}
       </button>
       <button
         style={{
