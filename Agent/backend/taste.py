@@ -28,6 +28,9 @@ class TasteProfile:
     dietary_restrictions: list = field(default_factory=list)  # ["vegetarian", "vegan", ...]
     hard_avoids: list = field(default_factory=list)           # ["crowded markets", "extreme heat"]
     decision_style: str = "L2"            # "L1" | "L2" | "L3"
+    persona_type: str = ""                # family_with_kids | solo | friend_group | pilgrimage | weekend_escapee
+    mobility_limited: bool = False        # extracted from story/onboarding
+    story_text: str = ""                  # raw trip story for future context
     # Per-dimension confidence (0.0–1.0); starts low, rises as we learn
     confidence: dict = field(default_factory=lambda: {
         "pace": 0.1, "crowd_tolerance": 0.1, "immersion_style": 0.1,

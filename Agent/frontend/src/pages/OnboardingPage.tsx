@@ -199,6 +199,7 @@ export default function OnboardingPage() {
 
       const result = await onboard({
         user_id: getUserId(),
+        story_text: storyText.trim(),
         taste_data: {
           ...preset,
           food_adventurousness: 3,

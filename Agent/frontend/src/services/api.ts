@@ -372,6 +372,7 @@ export async function parseTaste(text: string, userId: string): Promise<Record<s
 export async function onboard(params: {
   user_id: string;
   taste_data: Record<string, unknown>;
+  story_text?: string;
 }): Promise<{ user_id: string; taste_profile: Record<string, unknown> | null }> {
   if (USE_MOCK) {
     await delay(200);
@@ -383,7 +384,7 @@ export async function onboard(params: {
   const res = await fetch(`${API_BASE}/api/onboard`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
+    body: JSON.stringify({ user_id: params.user_id, taste_data: params.taste_data, story_text: params.story_text ?? "" }),
   });
   if (!res.ok) throw new Error(`/api/onboard failed: ${res.status}`);
   return res.json();
