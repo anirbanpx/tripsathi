@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Globe, ShieldCheck, Lock } from "lucide-react";
 import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
@@ -11,7 +11,7 @@ import {
   MountainRule, DottedPathRule,
 } from "../components/planner/TravelIllustrations";
 import type { UserContext } from "../types";
-import { googleSignIn } from "../services/api";
+import { googleSignIn, getTasteProfile } from "../services/api";
 import { setAuthState } from "../lib/auth";
 
 interface Props {
@@ -39,6 +39,19 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
 
   const isAuth = ctx.mode === "authenticated";
   const firstName = ctx.auth_user?.name?.split(" ")[0] ?? null;
+  const [topInterest, setTopInterest] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isAuth || !ctx.user_id) return;
+    getTasteProfile(ctx.user_id).then((profile) => {
+      if (!profile) return;
+      const interests = (profile.interests as Record<string, number>) ?? {};
+      const top = Object.entries(interests)
+        .filter(([, v]) => v >= 0.65)
+        .sort((a, b) => b[1] - a[1])[0];
+      if (top) setTopInterest(top[0]);
+    }).catch(() => {});
+  }, [isAuth, ctx.user_id]);
 
   function handleComposerSubmit() {
     const text = composerText.trim();
@@ -279,7 +292,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
             <div style={{
               fontFamily: "var(--font-script)", fontSize: 15, color: "var(--secondary)",
             }}>
-              tailored for you ✦
+              {topInterest ? `because you like ${topInterest} ✦` : "tailored for you ✦"}
             </div>
           )}
         </div>

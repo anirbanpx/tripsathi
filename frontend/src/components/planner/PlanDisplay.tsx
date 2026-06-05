@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, Check,
@@ -8,8 +8,10 @@ import {
 import MapView, { haversineDist, driveTime } from "./MapView";
 import DayJournalCard, { cleanName } from "./DayJournalCard";
 import TripJournal from "./TripJournal";
-import { refinePlan, streamRegenerate, saveTrip, toggleHotel } from "../../services/api";
+import GoogleSignInButton from "../auth/GoogleSignInButton";
+import { refinePlan, streamRegenerate, saveTrip, toggleHotel, getTasteProfile, googleSignIn } from "../../services/api";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
+import { setAuthState } from "../../lib/auth";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
 import type { UserContext, DayPlan, Hotel } from "../../types";
@@ -35,6 +37,27 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [tasteToast, setTasteToast] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [hotelSaved, setHotelSaved] = useState<Record<string, boolean>>({});
+  const [tasteProfile, setTasteProfile] = useState<Record<string, unknown> | null>(null);
+  const [loginDismissed, setLoginDismissed] = useState(() => {
+    try { return localStorage.getItem("ts_login_dismiss") === "1"; } catch { return false; }
+  });
+
+  useEffect(() => {
+    if (ctx.mode !== "authenticated" || !ctx.user_id) return;
+    getTasteProfile(ctx.user_id).then(setTasteProfile).catch(() => {});
+  }, [ctx.mode, ctx.user_id]);
+
+  function deriveTasteChips(profile: Record<string, unknown>): string[] {
+    const pace = (profile.pace as number) ?? 3;
+    const archetype = pace <= 2 ? "Slow Explorer" : pace >= 4 ? "Active Adventurer" : "Balanced Wanderer";
+    const interests = (profile.interests as Record<string, number>) ?? {};
+    const top = Object.entries(interests)
+      .filter(([, v]) => v >= 0.65)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2)
+      .map(([k]) => k);
+    return [archetype, ...top];
+  }
 
   const saved = (() => {
     try {
@@ -87,6 +110,15 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       toggleBookmark({ name: hotel.name, location: hotel.location, type: "hotel" });
       setHotelSaved((prev) => ({ ...prev, [key]: next }));
     }
+  }
+
+  async function handleEarnLogin(credential: string) {
+    try {
+      const data = await googleSignIn(credential);
+      setAuthState(data);
+      onSetContext({ mode: "authenticated", user_id: data.user.user_id, auth_user: data.user });
+      setLoginDismissed(true);
+    } catch (e) { console.error("earn-login sign in failed:", e); }
   }
 
   async function handleShare() {
@@ -239,6 +271,27 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           )}
           <span className="meta-pill">{plan.days.length} nights</span>
         </div>
+        {tasteProfile && (() => {
+          const chips = deriveTasteChips(tasteProfile);
+          return chips.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 8 }}>
+              {chips.map((c, i) => (
+                <span key={c} style={{
+                  fontSize: 10, padding: "3px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  background: i === 0 ? "var(--ochre)" : "transparent",
+                  color: i === 0 ? "var(--paper)" : "var(--fg-2)",
+                  border: i === 0 ? "1.5px solid var(--ochre)" : "1.5px solid var(--border)",
+                  fontFamily: "var(--font-body)", fontWeight: 700,
+                  textTransform: "capitalize" as const,
+                  letterSpacing: "0.04em",
+                }}>
+                  {c}
+                </span>
+              ))}
+            </div>
+          ) : null;
+        })()}
         <div className="sub">↓ swipe through days, change anything, then book.</div>
       </div>
       )}
@@ -392,30 +445,44 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         {/* RIGHT — hotels + budget (sticky on tablet+) */}
         <div className="plan-col-right">
           <div className="day-section" style={{ marginTop: 22 }}>
-            <div className="label"><span>Accommodation</span><span className="line" /></div>
-            {plan.hotels.map((h) => {
-              const key = h.name + h.location;
-              const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
-              return (
-                <div key={h.name} style={{ position: "relative" }}>
-                  <HotelCard hotel={h} />
-                  <button
-                    onClick={() => handleHotelBookmark(h)}
-                    title={bookmarked ? "Unsave hotel" : "Save hotel"}
-                    style={{
-                      position: "absolute", top: 10, right: 10,
-                      background: "none", border: "none", cursor: "pointer",
-                      color: bookmarked ? "var(--accent)" : "var(--fg-3)",
-                      padding: 4, lineHeight: 0,
-                    }}
-                  >
-                    {bookmarked
-                      ? <BookmarkCheck size={16} strokeWidth={1.75} />
-                      : <Bookmark size={16} strokeWidth={1.75} />}
-                  </button>
-                </div>
-              );
-            })}
+            <div className="label">
+              <span>
+                {plan.hotels.length} stay{plan.hotels.length !== 1 ? "s" : ""}
+                {ctx.mode === "authenticated" ? " · matched for you" : ""}
+              </span>
+              <span className="line" />
+            </div>
+            <div className="hotel-shelf-wrap">
+            <div style={{
+              display: "flex", gap: 12, overflowX: "auto",
+              paddingBottom: 4,
+              scrollbarWidth: "none",
+            } as React.CSSProperties}>
+              {plan.hotels.map((h) => {
+                const key = h.name + h.location;
+                const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
+                return (
+                  <div key={h.name} style={{ position: "relative", flex: "0 0 260px" }}>
+                    <HotelCard hotel={h} />
+                    <button
+                      onClick={() => handleHotelBookmark(h)}
+                      title={bookmarked ? "Unsave hotel" : "Save hotel"}
+                      style={{
+                        position: "absolute", top: 10, right: 10,
+                        background: "none", border: "none", cursor: "pointer",
+                        color: bookmarked ? "var(--accent)" : "var(--fg-3)",
+                        padding: 4, lineHeight: 0,
+                      }}
+                    >
+                      {bookmarked
+                        ? <BookmarkCheck size={16} strokeWidth={1.75} />
+                        : <Bookmark size={16} strokeWidth={1.75} />}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            </div>{/* end .hotel-shelf-wrap */}
           </div>
 
           <div className="budget">
@@ -447,6 +514,45 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         </div>
 
       </div>{/* end .plan-two-col */}
+
+      {/* Earn-the-login card — after value is seen, before sticky bar */}
+      {ctx.mode === "demo" && !loginDismissed && (
+        <div style={{
+          background: "linear-gradient(135deg, rgba(216,149,64,0.08), rgba(79,107,74,0.05))",
+          border: "1.5px dashed var(--ochre-deep)",
+          borderRadius: 12, padding: "14px 16px", marginTop: 24, marginBottom: 8,
+          display: "flex", gap: 12,
+        }}>
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontFamily: "var(--font-script)", fontSize: 19, color: "var(--bark)", marginBottom: 4,
+            }}>
+              loved this plan? ✦
+            </div>
+            <div style={{
+              fontSize: 12, color: "var(--fg-2)", lineHeight: 1.55,
+              fontFamily: "var(--font-body)", marginBottom: 10,
+            }}>
+              sign in to save your journal, sync across devices, and get plans tuned to your taste.
+            </div>
+            <GoogleSignInButton onToken={handleEarnLogin} />
+          </div>
+          <button
+            onClick={() => {
+              setLoginDismissed(true);
+              try { localStorage.setItem("ts_login_dismiss", "1"); } catch { /* quota */ }
+            }}
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "var(--fg-3)", padding: 2, fontSize: 14,
+              alignSelf: "flex-start", lineHeight: 1,
+            }}
+            title="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       </>)}
 
       </div>{/* end .cx */}

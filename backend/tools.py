@@ -124,7 +124,7 @@ def search_places(query: str) -> str:
                 "X-Goog-FieldMask": "places.displayName,places.rating,places.userRatingCount,places.formattedAddress",
                 "Content-Type": "application/json",
             },
-            json={"textQuery": query, "regionCode": "IN", "maxResultCount": 5},
+            json={"textQuery": query, "regionCode": "IN", "maxResultCount": 12},
             timeout=5,
         ).json()
         places = resp.get("places", [])

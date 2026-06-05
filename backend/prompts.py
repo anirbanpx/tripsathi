@@ -294,6 +294,7 @@ FIELD GUIDANCE:
   (temple visits, walks, beach time, viewpoints).
 - content_source: "rag" if the hotel/property was sourced from retrieved travel knowledge.
   "general" if generated from general knowledge — signals user to verify before booking.
+- hotels: Recommend 3–5 hotels spanning the traveller's budget tier ±1. Include at least one option per major overnight base or location change in the itinerary. Order by best fit first (accommodation_taste, budget, location access). Vary accommodation style when the taste profile allows.
 - personalization_notes: 2-3 short bullets explaining WHY specific choices match this traveller's taste.
   Reference specific profile signals (e.g. "Hadimba Temple: quiet cedar forest — matches your offbeat preference").
   Write ONLY when ranked candidates with match scores were provided. If no ranked candidates, return [].
