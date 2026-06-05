@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Send, RefreshCw, CheckCircle, CornerDownLeft } from "lucide-react";
-import { refinePlan, regeneratePlan } from "../../services/api";
-import { startFakeProgress } from "../../lib/fakeProgress";
+import { refinePlan, streamRegenerate } from "../../services/api";
 import type { UserContext } from "../../types";
 
 interface Props {
@@ -36,14 +35,13 @@ export default function RefinementInput({ ctx, onSetContext }: Props) {
 
   async function handleRegenerate() {
     if (!ctx.thread_id) return;
-    const progressHandle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true });
+    let stageIndex = 0;
+    onSetContext({ current_stage: "generating", generation_active: true, fake_stage_index: 0, fake_stage_label: "Regenerating your itinerary..." });
     try {
-      const response = await regeneratePlan(ctx.thread_id);
-      progressHandle.stop();
+      const response = await streamRegenerate(ctx.thread_id, (label) => {
+        stageIndex = Math.min(stageIndex + 1, 4);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -53,7 +51,6 @@ export default function RefinementInput({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch {
-      progressHandle.stop();
       onSetContext({ current_stage: "plan_display", generation_active: false });
     }
   }
