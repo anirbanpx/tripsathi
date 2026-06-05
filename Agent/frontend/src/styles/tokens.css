@@ -21,6 +21,7 @@
   --ochre-deep: #A6701D;
   --moss:       #4F6B4A;   /* the only "cool" allowed */
   --moss-deep:  #364B33;
+  --ink-deep:   #1a1108;   /* near-black — "night planning" surfaces */
   --tape:       rgba(216, 149, 64, 0.55);  /* masking tape overlay */
 
   /* ---- Semantic tokens ---- */

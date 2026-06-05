@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
-  Home, Heart, User, Baby, Ear, ArrowRight, Pencil, Loader2,
+  Home, Heart, User, Baby, Ear, ArrowRight, Pencil, Loader2, Mic,
 } from "lucide-react";
 import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId, transcribeAudio } from "../../services/api";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
@@ -70,7 +70,7 @@ function MicButton({ state, toggle, id, style }: { state: MicState; toggle: () =
         ...style,
       }}
     >
-      {isTranscribing ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} /> : "🎙"}
+      {isTranscribing ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} /> : <Mic size={13} strokeWidth={2} />}
     </button>
   );
 }

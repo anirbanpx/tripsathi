@@ -363,7 +363,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   function RightPanel({ fill }: { fill?: boolean }) {
     return (
       <div style={{
-        background: "#1a1108",
+        background: "var(--ink-deep)",
         display: "flex", flexDirection: "column",
         padding: wide ? "32px 28px" : "20px 18px",
         gap: 20, overflow: "hidden",
@@ -427,7 +427,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
     return (
       <>
         <style>{STYLE}</style>
-        <div style={{ display: "flex", height: "100svh", background: "#1a1108" }}>
+        <div style={{ display: "flex", height: "100svh", background: "var(--ink-deep)" }}>
           {/* Left: photo + map */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
             {imgUrl ? (
@@ -455,7 +455,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   return (
     <>
       <style>{STYLE}</style>
-      <div style={{ height: "100svh", display: "flex", flexDirection: "column", background: "#1a1108", overflow: "hidden" }}>
+      <div style={{ height: "100svh", display: "flex", flexDirection: "column", background: "var(--ink-deep)", overflow: "hidden" }}>
         {imgUrl && (
           <div style={{ height: "32%", flexShrink: 0, position: "relative", overflow: "hidden" }}>
             <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
