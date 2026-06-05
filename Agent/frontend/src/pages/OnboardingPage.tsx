@@ -6,7 +6,7 @@ import { Mic, Square, Loader2 } from "lucide-react";
 import { ArchSlowExplorer, ArchBalancedTraveler, ArchPackedAdventurer } from "../components/planner/TravelIllustrations";
 import PageTransition from "../components/shared/PageTransition";
 
-const INTERESTS = [
+const ALL_INTERESTS = [
   "nature", "heritage", "food", "adventure",
   "photography", "spiritual", "wildlife", "shopping",
   "wellness", "nightlife",
@@ -15,6 +15,19 @@ const INTERESTS = [
 const DIETARY_OPTIONS = ["Vegetarian", "Vegan", "Jain", "Halal", "Gluten-free", "None"] as const;
 
 type ArchetypeKey = "slow" | "balanced" | "adventurer";
+
+const ARCHETYPE_INTERESTS: Record<ArchetypeKey, { core: string[]; extra: string[] }> = {
+  slow:       { core: ["food", "wellness", "nature"],       extra: ["heritage", "photography", "spiritual", "shopping"] },
+  balanced:   { core: ["heritage", "food", "photography"],  extra: ["nature", "wildlife", "wellness", "adventure", "spiritual"] },
+  adventurer: { core: ["adventure", "wildlife", "nature"],  extra: ["photography", "heritage", "food"] },
+};
+
+const ARCHETYPE_AVOID_CHIPS: Record<ArchetypeKey, string[]> = {
+  slow:       ["tourist traps", "packed itineraries", "early morning rush", "peak-hour crowds"],
+  balanced:   ["all-day bus rides", "tourist-trap restaurants", "back-to-back travel days"],
+  adventurer: ["resort-only stays", "zero-activity rest days", "short trip windows"],
+};
+const COMMON_AVOID_CHIPS = ["extreme heat", "long drives", "crowded markets"];
 
 const ARCHETYPE_ILLUSTRATIONS: Record<ArchetypeKey, React.ReactElement> = {
   slow:       <ArchSlowExplorer size={44} />,
@@ -58,21 +71,38 @@ export default function OnboardingPage() {
   const firstName = getAuthState()?.user.name.split(" ")[0] ?? null;
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
-  // Step 1 state
+  // Step 1
   const [storyText, setStoryText] = useState("");
   const [micState, setMicState] = useState<MicState>("idle");
   const [parsing, setParsing] = useState(false);
   const mediaRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
-  // Step 2 state — populated from parsed or user choice
+  // Step 2
   const [archetype, setArchetype] = useState<ArchetypeKey | null>(null);
   const [selectedInterests, setSelectedInterests] = useState<Set<string>>(new Set());
 
-  // Step 3 state
+  // Step 3
   const [selectedDietary, setSelectedDietary] = useState<Set<string>>(new Set());
+  const [selectedAvoidChips, setSelectedAvoidChips] = useState<Set<string>>(new Set());
   const [hardAvoids, setHardAvoids] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Interests visible on step 2 — curated per archetype, or all if none picked
+  const visibleInterests = archetype
+    ? [...ARCHETYPE_INTERESTS[archetype].core, ...ARCHETYPE_INTERESTS[archetype].extra]
+    : [...ALL_INTERESTS];
+
+  // Avoid chips on step 3 — archetype-specific + common
+  const avoidChips = archetype
+    ? [...ARCHETYPE_AVOID_CHIPS[archetype], ...COMMON_AVOID_CHIPS]
+    : COMMON_AVOID_CHIPS;
+
+  function handleSelectArchetype(key: ArchetypeKey) {
+    setArchetype(key);
+    // Pre-select the core interests for this archetype
+    setSelectedInterests(new Set(ARCHETYPE_INTERESTS[key].core));
+  }
 
   async function toggleMic() {
     if (micState === "idle") {
@@ -94,29 +124,27 @@ export default function OnboardingPage() {
         rec.start();
         mediaRef.current = rec;
         setMicState("recording");
-      } catch { /* no mic permission — stay idle */ }
+      } catch { /* no mic permission */ }
     } else if (micState === "recording") {
       mediaRef.current?.stop();
     }
   }
 
   async function handleStep1Next() {
-    if (!storyText.trim()) {
-      setStep(2);
-      return;
-    }
+    if (!storyText.trim()) { setStep(2); return; }
     setParsing(true);
     try {
       const parsed = await parseTaste(storyText, getUserId());
       const inferredKey = inferArchetype(parsed);
-      if (inferredKey) setArchetype(inferredKey);
-
-      const interests = parsed.interests as Record<string, number> | undefined;
-      if (interests) {
-        const topInterests = Object.entries(interests)
-          .filter(([, v]) => v >= 0.6)
-          .map(([k]) => k);
-        if (topInterests.length) setSelectedInterests(new Set(topInterests));
+      if (inferredKey) {
+        setArchetype(inferredKey);
+        const interests = parsed.interests as Record<string, number> | undefined;
+        if (interests) {
+          const top = Object.entries(interests).filter(([, v]) => v >= 0.6).map(([k]) => k);
+          setSelectedInterests(new Set(top.length ? top : ARCHETYPE_INTERESTS[inferredKey].core));
+        } else {
+          setSelectedInterests(new Set(ARCHETYPE_INTERESTS[inferredKey].core));
+        }
       }
     } catch { /* silently proceed */ }
     setParsing(false);
@@ -126,8 +154,7 @@ export default function OnboardingPage() {
   function toggleInterest(interest: string) {
     setSelectedInterests((prev) => {
       const next = new Set(prev);
-      if (next.has(interest)) next.delete(interest);
-      else next.add(interest);
+      if (next.has(interest)) next.delete(interest); else next.add(interest);
       return next;
     });
   }
@@ -137,10 +164,21 @@ export default function OnboardingPage() {
       const next = new Set(prev);
       if (option === "None") return new Set(["None"]);
       next.delete("None");
-      if (next.has(option)) next.delete(option);
-      else next.add(option);
+      if (next.has(option)) next.delete(option); else next.add(option);
       return next;
     });
+  }
+
+  function toggleAvoidChip(chip: string) {
+    setSelectedAvoidChips((prev) => {
+      const next = new Set(prev);
+      if (next.has(chip)) next.delete(chip); else next.add(chip);
+      return next;
+    });
+  }
+
+  function markOnboarded(userId: string) {
+    localStorage.setItem(`tripsathi_onboarded_${userId}`, "1");
   }
 
   async function handleSubmit() {
@@ -151,11 +189,13 @@ export default function OnboardingPage() {
         : { pace: 3, crowd_tolerance: 3, accommodation_taste: 3, walking_tolerance: 3 };
 
       const interestsMap: Record<string, number> = {};
-      for (const interest of INTERESTS) {
+      for (const interest of ALL_INTERESTS) {
         interestsMap[interest] = selectedInterests.has(interest) ? 0.9 : 0.1;
       }
       const dietary = Array.from(selectedDietary).filter((d) => d !== "None").map((d) => d.toLowerCase());
-      const hard_avoids_list = hardAvoids.split(/[,\n]+/).map((s) => s.trim()).filter(Boolean);
+      const chipText = Array.from(selectedAvoidChips).join(", ");
+      const combined = [chipText, hardAvoids.trim()].filter(Boolean).join(", ");
+      const hard_avoids_list = combined.split(/[,\n]+/).map((s) => s.trim()).filter(Boolean);
 
       const result = await onboard({
         user_id: getUserId(),
@@ -169,10 +209,10 @@ export default function OnboardingPage() {
       });
 
       localStorage.setItem("tripsathi_user_id", result.user_id);
-      localStorage.setItem(`tripsathi_onboarded_${result.user_id}`, "1");
+      markOnboarded(result.user_id);
       navigate("/planner");
     } catch {
-      localStorage.setItem(`tripsathi_onboarded_${getUserId()}`, "1");
+      markOnboarded(getUserId());
       navigate("/planner");
     } finally {
       setSubmitting(false);
@@ -187,31 +227,21 @@ export default function OnboardingPage() {
     <div style={{ minHeight: "100svh", background: "var(--paper)", display: "flex", justifyContent: "center", padding: "40px 16px 60px" }}>
       <div style={{ width: "100%", maxWidth: 520, display: "flex", flexDirection: "column", gap: 0 }}>
 
-        {/* Top row: step indicator + skip */}
+        {/* Top row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
           <div style={{ display: "flex", gap: 6 }}>
             {[1, 2, 3].map((n) => (
-              <div
-                key={n}
-                style={{
-                  width: n === step ? 24 : 8, height: 8, borderRadius: 4,
-                  background: n === step ? "var(--ink)" : n < step ? "var(--fg-3)" : "var(--border-strong)",
-                  transition: "all 0.3s ease",
-                }}
-              />
+              <div key={n} style={{
+                width: n === step ? 24 : 8, height: 8, borderRadius: 4,
+                background: n === step ? "var(--ink)" : n < step ? "var(--fg-3)" : "var(--border-strong)",
+                transition: "all 0.3s ease",
+              }} />
             ))}
           </div>
           <button
             type="button"
-            onClick={() => {
-              localStorage.setItem(`tripsathi_onboarded_${getUserId()}`, "1");
-              navigate("/planner");
-            }}
-            style={{
-              background: "none", border: "none", cursor: "pointer",
-              fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-3)",
-              fontWeight: 600, padding: "4px 0",
-            }}
+            onClick={() => { markOnboarded(getUserId()); navigate("/planner"); }}
+            style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-3)", fontWeight: 600, padding: "4px 0" }}
           >
             Skip for now →
           </button>
@@ -231,28 +261,18 @@ export default function OnboardingPage() {
         </div>
 
         <PageTransition stepKey={step}>
+
+          {/* ── Step 1: Trip story ── */}
           {step === 1 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                position: "relative",
-                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                borderRadius: 16, padding: "24px 20px",
-                display: "flex", flexDirection: "column", gap: 16,
-                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
-                transform: "rotate(-0.3deg)",
+                position: "relative", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+                borderRadius: 16, padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)", transform: "rotate(-0.3deg)",
               }}>
-                {/* Tape strip */}
-                <div style={{
-                  position: "absolute", top: -10, left: "50%",
-                  transform: "translateX(-50%) rotate(1.5deg)",
-                  width: 72, height: 18, background: "var(--tape)",
-                  pointerEvents: "none",
-                }} />
+                <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%) rotate(1.5deg)", width: 72, height: 18, background: "var(--tape)", pointerEvents: "none" }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <p style={{
-                    fontFamily: "var(--font-display)", fontSize: 17, color: "var(--ink)",
-                    fontStyle: "italic", margin: 0, lineHeight: 1.4,
-                  }}>
+                  <p style={{ fontFamily: "var(--font-display)", fontSize: 17, color: "var(--ink)", fontStyle: "italic", margin: 0, lineHeight: 1.4 }}>
                     "Tell me about a trip you loved — or one that disappointed you."
                   </p>
                   <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", margin: 0 }}>
@@ -260,303 +280,206 @@ export default function OnboardingPage() {
                   </p>
                 </div>
 
-                {/* Mic button */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
                   <button
-                    type="button"
-                    onClick={toggleMic}
-                    disabled={micState === "transcribing"}
-                    style={{
-                      width: 64, height: 64, borderRadius: "50%",
-                      border: `2px solid ${micColor}`,
-                      background: micBg, cursor: micState === "transcribing" ? "not-allowed" : "pointer",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s ease", boxShadow: micBoxShadow,
-                      color: micColor,
-                    }}
+                    type="button" onClick={toggleMic} disabled={micState === "transcribing"}
+                    style={{ width: 64, height: 64, borderRadius: "50%", border: `2px solid ${micColor}`, background: micBg, cursor: micState === "transcribing" ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease", boxShadow: micBoxShadow, color: micColor }}
                   >
-                    {micState === "transcribing"
-                      ? <Loader2 size={24} strokeWidth={2} style={{ animation: "spin 1s linear infinite" }} />
-                      : micState === "recording"
-                        ? <Square size={22} strokeWidth={2.5} fill="currentColor" />
-                        : <Mic size={24} strokeWidth={2} />}
+                    {micState === "transcribing" ? <Loader2 size={24} strokeWidth={2} style={{ animation: "spin 1s linear infinite" }} /> : micState === "recording" ? <Square size={22} strokeWidth={2.5} fill="currentColor" /> : <Mic size={24} strokeWidth={2} />}
                   </button>
                   <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)" }}>
                     {micState === "recording" ? "Recording… tap to stop" : micState === "transcribing" ? "Transcribing…" : "Hold to record"}
                   </span>
                 </div>
 
-                {/* Text area */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <label style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", fontWeight: 600 }}>
-                    or type instead
-                  </label>
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", fontWeight: 600 }}>or type instead</label>
                   <textarea
                     rows={4}
                     placeholder="e.g. We went to Coorg last monsoon — loved the misty mornings but hated the tourist crowds at Abbey Falls..."
                     value={storyText}
                     onChange={(e) => setStoryText(e.target.value)}
-                    style={{
-                      width: "100%", background: "var(--paper)", border: "1.5px solid var(--border-strong)",
-                      borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)",
-                      fontFamily: "var(--font-body)", fontSize: 13, resize: "none", outline: "none",
-                      boxSizing: "border-box", lineHeight: 1.5,
-                    }}
+                    style={{ width: "100%", background: "var(--paper)", border: "1.5px solid var(--border-strong)", borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)", fontFamily: "var(--font-body)", fontSize: 13, resize: "none", outline: "none", boxSizing: "border-box", lineHeight: 1.5 }}
                   />
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <button
-                  type="button"
-                  disabled={parsing}
-                  onClick={handleStep1Next}
-                  style={{
-                    width: "100%", padding: "14px", borderRadius: "var(--radius-pill)",
-                    background: "var(--ink)", color: "var(--paper)",
-                    fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14,
-                    border: "none", cursor: parsing ? "not-allowed" : "pointer",
-                    opacity: parsing ? 0.6 : 1, letterSpacing: "0.04em",
-                  }}
-                >
-                  {parsing ? "reading your story..." : storyText.trim() ? "analyse my story →" : "skip this step →"}
-                </button>
-              </div>
+              <button
+                type="button" disabled={parsing} onClick={handleStep1Next}
+                style={{ width: "100%", padding: "14px", borderRadius: "var(--radius-pill)", background: "var(--ink)", color: "var(--paper)", fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14, border: "none", cursor: parsing ? "not-allowed" : "pointer", opacity: parsing ? 0.6 : 1, letterSpacing: "0.04em" }}
+              >
+                {parsing ? "reading your story..." : storyText.trim() ? "analyse my story →" : "skip this step →"}
+              </button>
             </div>
           )}
 
+          {/* ── Step 2: Archetype + personalized interests ── */}
           {step === 2 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                position: "relative",
-                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                borderRadius: 16, padding: "24px 20px",
-                display: "flex", flexDirection: "column", gap: 16,
-                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
-                transform: "rotate(0.2deg)",
+                position: "relative", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+                borderRadius: 16, padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)", transform: "rotate(0.2deg)",
               }}>
-                <div style={{
-                  position: "absolute", top: -10, right: 40,
-                  transform: "rotate(-2deg)",
-                  width: 60, height: 18, background: "var(--tape)",
-                  pointerEvents: "none",
-                }} />
-                <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
-                  Which traveler are you?
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {ARCHETYPES.map((a) => {
-                    const active = archetype === a.key;
-                    return (
-                      <button
-                        key={a.key}
-                        type="button"
-                        onClick={() => setArchetype(a.key)}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 14,
-                          padding: "14px 16px", borderRadius: 12, textAlign: "left",
-                          border: `2px solid ${active ? "var(--ink)" : "var(--border-strong)"}`,
-                          background: active ? "rgba(26,21,14,0.05)" : "var(--paper)",
-                          cursor: "pointer", transition: "all 0.15s",
-                        }}
-                      >
-                        <span style={{ flexShrink: 0, opacity: active ? 1 : 0.75, transition: "opacity 0.15s" }}>
-                          {ARCHETYPE_ILLUSTRATIONS[a.key]}
-                        </span>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                          <span style={{
-                            fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 800,
-                            color: active ? "var(--ink)" : "var(--fg-1)",
-                          }}>
-                            {a.title}
-                          </span>
-                          <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)" }}>
-                            {a.subtitle}
-                          </span>
-                        </div>
-                        {active && (
-                          <span style={{
-                            marginLeft: "auto", fontSize: 16, color: "var(--ink)", flexShrink: 0,
-                          }}>✓</span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+                <div style={{ position: "absolute", top: -10, right: 40, transform: "rotate(-2deg)", width: 60, height: 18, background: "var(--tape)", pointerEvents: "none" }} />
 
-              <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                borderRadius: 16, padding: "20px",
-                display: "flex", flexDirection: "column", gap: 12,
-                boxShadow: "0 1px 0 0 rgba(62,47,35,0.06)",
-              }}>
-                <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
-                  What do you love doing on a trip?
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  {INTERESTS.map((interest) => {
-                    const active = selectedInterests.has(interest);
-                    return (
-                      <button
-                        key={interest}
-                        type="button"
-                        onClick={() => toggleInterest(interest)}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 8,
-                          padding: "9px 12px", borderRadius: 10,
-                          border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
-                          background: active ? "rgba(176,73,47,0.08)" : "var(--paper)",
-                          color: active ? "var(--accent)" : "var(--fg-2)",
-                          fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13,
-                          cursor: "pointer", textTransform: "capitalize", textAlign: "left",
-                          transition: "all 0.15s",
-                        }}
-                      >
-                        <span style={{
-                          width: 16, height: 16, borderRadius: 4, flexShrink: 0,
-                          border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontSize: 10, color: active ? "var(--accent)" : "transparent",
-                          background: active ? "rgba(176,73,47,0.12)" : "transparent",
-                        }}>
-                          {active ? "✓" : ""}
-                        </span>
-                        {interest}
-                      </button>
-                    );
-                  })}
+                {/* Archetype */}
+                <div>
+                  <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: "0 0 4px" }}>
+                    Which traveler are you?
+                  </p>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", margin: "0 0 12px", lineHeight: 1.5 }}>
+                    This sets your travel rhythm — how we pace your days, how many activities we stack, and what kind of stays we prioritise.
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {ARCHETYPES.map((a) => {
+                      const active = archetype === a.key;
+                      return (
+                        <button
+                          key={a.key} type="button" onClick={() => handleSelectArchetype(a.key)}
+                          style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", borderRadius: 12, textAlign: "left", border: `2px solid ${active ? "var(--ink)" : "var(--border-strong)"}`, background: active ? "rgba(26,21,14,0.05)" : "var(--paper)", cursor: "pointer", transition: "all 0.15s" }}
+                        >
+                          <span style={{ flexShrink: 0, opacity: active ? 1 : 0.75, transition: "opacity 0.15s" }}>
+                            {ARCHETYPE_ILLUSTRATIONS[a.key]}
+                          </span>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <span style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 800, color: active ? "var(--ink)" : "var(--fg-1)" }}>{a.title}</span>
+                            <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)" }}>{a.subtitle}</span>
+                          </div>
+                          {active && <span style={{ marginLeft: "auto", fontSize: 16, color: "var(--ink)", flexShrink: 0 }}>✓</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Interests — curated per archetype */}
+                <div style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+                  <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: "0 0 4px" }}>
+                    What excites you most on a trip?
+                  </p>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", margin: "0 0 12px", lineHeight: 1.5 }}>
+                    {archetype
+                      ? "Pre-filled based on your archetype — deselect what doesn't fit, or add more. This shapes every experience we surface."
+                      : "Pick what draws you in — we skip the rest and only surface what you'd actually enjoy."}
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {visibleInterests.map((interest) => {
+                      const active = selectedInterests.has(interest);
+                      return (
+                        <button
+                          key={interest} type="button" onClick={() => toggleInterest(interest)}
+                          style={{ padding: "6px 14px", borderRadius: 999, border: "1.5px solid", borderColor: active ? "var(--accent)" : "var(--border-strong)", background: active ? "rgba(176,73,47,0.08)" : "var(--paper)", color: active ? "var(--accent)" : "var(--fg-2)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12, cursor: "pointer", transition: "all 0.15s", textTransform: "capitalize" }}
+                        >
+                          {interest}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 
               <div style={{ display: "flex", gap: 10 }}>
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  style={{
-                    flex: 1, padding: "12px", borderRadius: "var(--radius-pill)",
-                    background: "none", border: "1.5px solid var(--border-strong)",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13,
-                    color: "var(--fg-2)", cursor: "pointer",
-                  }}
-                >
-                  ← back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setStep(3)}
-                  style={{
-                    flex: 2, padding: "12px", borderRadius: "var(--radius-pill)",
-                    background: "var(--ink)", color: "var(--paper)",
-                    fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14,
-                    border: "none", cursor: "pointer", letterSpacing: "0.04em",
-                  }}
-                >
-                  next →
-                </button>
+                <button type="button" onClick={() => setStep(1)} style={backBtnStyle}>← back</button>
+                <button type="button" onClick={() => setStep(3)} style={nextBtnStyle}>next →</button>
               </div>
             </div>
           )}
 
+          {/* ── Step 3: Dietary + avoids ── */}
           {step === 3 && (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{
-                position: "relative",
-                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                borderRadius: 16, padding: "24px 20px",
-                display: "flex", flexDirection: "column", gap: 16,
-                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)",
-                transform: "rotate(-0.2deg)",
+                position: "relative", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
+                borderRadius: 16, padding: "24px 20px", display: "flex", flexDirection: "column", gap: 16,
+                boxShadow: "0 2px 0 0 rgba(62,47,35,0.08), 0 10px 30px -16px rgba(62,47,35,0.2)", transform: "rotate(-0.2deg)",
               }}>
-                <div style={{
-                  position: "absolute", top: -10, left: 36,
-                  transform: "rotate(1deg)",
-                  width: 56, height: 18, background: "var(--tape)",
-                  pointerEvents: "none",
-                }} />
-                <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: 0 }}>
-                  Dietary restrictions?
-                </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                  {DIETARY_OPTIONS.map((option) => {
-                    const active = selectedDietary.has(option);
-                    return (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => toggleDietary(option)}
-                        style={{
-                          padding: "6px 14px", borderRadius: 999,
-                          border: `1.5px solid ${active ? "var(--accent)" : "var(--border-strong)"}`,
-                          background: active ? "rgba(176,73,47,0.08)" : "var(--paper)",
-                          color: active ? "var(--accent)" : "var(--fg-2)",
-                          fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
-                          cursor: "pointer", transition: "all 0.15s",
-                        }}
-                      >
-                        {option}
-                      </button>
-                    );
-                  })}
+                <div style={{ position: "absolute", top: -10, left: 36, transform: "rotate(1deg)", width: 56, height: 18, background: "var(--tape)", pointerEvents: "none" }} />
+
+                {/* Dietary */}
+                <div>
+                  <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: "0 0 4px" }}>
+                    Dietary restrictions?
+                  </p>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", margin: "0 0 12px", lineHeight: 1.5 }}>
+                    Goes into every restaurant and meal recommendation — no extra filtering needed on your end.
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {DIETARY_OPTIONS.map((option) => {
+                      const active = selectedDietary.has(option);
+                      return (
+                        <button
+                          key={option} type="button" onClick={() => toggleDietary(option)}
+                          style={{ padding: "6px 14px", borderRadius: 999, border: "1.5px solid", borderColor: active ? "var(--accent)" : "var(--border-strong)", background: active ? "rgba(176,73,47,0.08)" : "var(--paper)", color: active ? "var(--accent)" : "var(--fg-2)", fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12, cursor: "pointer", transition: "all 0.15s" }}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Avoids — contextual chips + freetext */}
+                <div style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+                  <p style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)", margin: "0 0 4px" }}>
+                    Anything we should always avoid?
+                  </p>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-3)", margin: "0 0 12px", lineHeight: 1.5 }}>
+                    {archetype
+                      ? "Based on what a typical " + ARCHETYPES.find(a => a.key === archetype)!.title.toLowerCase() + " hates — tap to confirm, add anything else below."
+                      : "Hard rules for your plan — we'll never suggest these, even if they're popular."}
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                    {avoidChips.map((chip) => {
+                      const active = selectedAvoidChips.has(chip);
+                      return (
+                        <button
+                          key={chip} type="button" onClick={() => toggleAvoidChip(chip)}
+                          style={{ padding: "5px 12px", borderRadius: 999, border: "1.5px solid", borderColor: active ? "var(--ink)" : "var(--border-strong)", background: active ? "rgba(26,21,14,0.08)" : "var(--paper)", color: active ? "var(--ink)" : "var(--fg-3)", fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 11, cursor: "pointer", transition: "all 0.15s" }}
+                        >
+                          {active ? "✓ " : "+ "}{chip}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <textarea
+                    rows={2}
+                    placeholder="or type anything else..."
+                    value={hardAvoids}
+                    onChange={(e) => setHardAvoids(e.target.value)}
+                    style={{ width: "100%", background: "var(--paper)", border: "1.5px solid var(--border-strong)", borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)", fontFamily: "var(--font-body)", fontSize: 13, resize: "none", outline: "none", boxSizing: "border-box" }}
+                  />
                 </div>
               </div>
 
-              <div style={{
-                background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-                borderRadius: 16, padding: "20px",
-                display: "flex", flexDirection: "column", gap: 12,
-                boxShadow: "0 1px 0 0 rgba(62,47,35,0.06)",
-              }}>
-                <label style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13, color: "var(--fg-1)" }}>
-                  Anything we should avoid?
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="e.g. extreme heat, long bus rides, crowded markets..."
-                  value={hardAvoids}
-                  onChange={(e) => setHardAvoids(e.target.value)}
-                  style={{
-                    width: "100%", background: "var(--paper)", border: "1.5px solid var(--border-strong)",
-                    borderRadius: 10, padding: "10px 12px", color: "var(--fg-1)",
-                    fontFamily: "var(--font-body)", fontSize: 13, resize: "none", outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-
               <div style={{ display: "flex", gap: 10 }}>
+                <button type="button" onClick={() => setStep(2)} style={backBtnStyle}>← back</button>
                 <button
-                  type="button"
-                  onClick={() => setStep(2)}
-                  style={{
-                    flex: 1, padding: "12px", borderRadius: "var(--radius-pill)",
-                    background: "none", border: "1.5px solid var(--border-strong)",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13,
-                    color: "var(--fg-2)", cursor: "pointer",
-                  }}
-                >
-                  ← back
-                </button>
-                <button
-                  type="button"
-                  disabled={submitting}
-                  onClick={handleSubmit}
-                  style={{
-                    flex: 2, padding: "12px", borderRadius: "var(--radius-pill)",
-                    background: "var(--ink)", color: "var(--paper)",
-                    fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14,
-                    border: "none", cursor: submitting ? "not-allowed" : "pointer",
-                    opacity: submitting ? 0.6 : 1, letterSpacing: "0.04em",
-                  }}
+                  type="button" disabled={submitting} onClick={handleSubmit}
+                  style={{ flex: 2, padding: "12px", borderRadius: "var(--radius-pill)", background: "var(--ink)", color: "var(--paper)", fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14, border: "none", cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.6 : 1, letterSpacing: "0.04em" }}
                 >
                   {submitting ? "saving..." : "start planning ✦"}
                 </button>
               </div>
             </div>
           )}
-        </PageTransition>
 
+        </PageTransition>
       </div>
     </div>
   );
 }
+
+const backBtnStyle = {
+  flex: 1, padding: "12px", borderRadius: "var(--radius-pill)",
+  background: "none", border: "1.5px solid var(--border-strong)",
+  fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13,
+  color: "var(--fg-2)", cursor: "pointer",
+} as const;
+
+const nextBtnStyle = {
+  flex: 2, padding: "12px", borderRadius: "var(--radius-pill)",
+  background: "var(--ink)", color: "var(--paper)",
+  fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 14,
+  border: "none", cursor: "pointer", letterSpacing: "0.04em",
+} as const;
