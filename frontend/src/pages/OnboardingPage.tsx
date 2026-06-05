@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { onboard, getUserId, parseTaste, transcribeAudio } from "../services/api";
 import { getAuthState } from "../lib/auth";
+import { Mic, Square, Loader2 } from "lucide-react";
 import { ArchSlowExplorer, ArchBalancedTraveler, ArchPackedAdventurer } from "../components/planner/TravelIllustrations";
 import PageTransition from "../components/shared/PageTransition";
 
@@ -264,12 +265,16 @@ export default function OnboardingPage() {
                       width: 64, height: 64, borderRadius: "50%",
                       border: `2px solid ${micColor}`,
                       background: micBg, cursor: micState === "transcribing" ? "not-allowed" : "pointer",
-                      fontSize: 24, display: "flex", alignItems: "center", justifyContent: "center",
+                      display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.2s ease", boxShadow: micBoxShadow,
                       color: micColor,
                     }}
                   >
-                    {micState === "transcribing" ? "⏳" : micState === "recording" ? "⏹" : "🎙"}
+                    {micState === "transcribing"
+                      ? <Loader2 size={24} strokeWidth={2} style={{ animation: "spin 1s linear infinite" }} />
+                      : micState === "recording"
+                        ? <Square size={22} strokeWidth={2.5} fill="currentColor" />
+                        : <Mic size={24} strokeWidth={2} />}
                   </button>
                   <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)" }}>
                     {micState === "recording" ? "Recording… tap to stop" : micState === "transcribing" ? "Transcribing…" : "Hold to record"}

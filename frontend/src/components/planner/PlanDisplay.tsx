@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, RefreshCw, Check,
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
-  GalleryHorizontal, LayoutList, Map,
+  GalleryHorizontal, LayoutList, Map, Coffee, Soup, UtensilsCrossed, Hotel,
 } from "lucide-react";
 import MapView, { haversineDist, driveTime } from "./MapView";
 
@@ -259,15 +259,15 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       {/* Tailored for you */}
       {plan.personalization_notes && plan.personalization_notes.length > 0 && (
         <div style={{
-          background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))",
-          border: "1.5px solid rgba(139,92,246,0.3)",
+          background: "linear-gradient(135deg, rgba(216,149,64,0.14), rgba(79,107,74,0.08))",
+          border: "1.5px solid var(--ochre-deep)",
           borderRadius: 12,
           padding: "14px 16px",
           marginBottom: 16,
         }}>
           <div style={{
             fontSize: 11, fontWeight: 800, letterSpacing: "0.08em",
-            color: "rgba(139,92,246,0.9)", marginBottom: 8,
+            color: "var(--ochre-deep)", marginBottom: 8,
             fontFamily: "var(--font-body)",
             textTransform: "uppercase",
           }}>
@@ -765,17 +765,17 @@ function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean
         display: "flex", gap: 8,
       }}>
         {([
-          { icon: "🍳", label: "B", meal: day.meals.breakfast },
-          { icon: "🥘", label: "L", meal: day.meals.lunch },
-          { icon: "🍛", label: "D", meal: day.meals.dinner },
-        ]).map(({ icon, label, meal }) => (
+          { Icon: Coffee, label: "B", meal: day.meals.breakfast },
+          { Icon: Soup, label: "L", meal: day.meals.lunch },
+          { Icon: UtensilsCrossed, label: "D", meal: day.meals.dinner },
+        ]).map(({ Icon, label, meal }) => (
           <div key={label} style={{
             flex: 1, padding: "6px 8px",
             background: "rgba(244,236,219,0.8)",
             border: "1px solid rgba(62,47,35,0.12)",
             borderRadius: 8,
           }}>
-            <div style={{ fontSize: 12, marginBottom: 2 }}>{icon}</div>
+            <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><Icon size={13} strokeWidth={2} /></div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>{label}</div>
             <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{meal}</div>
           </div>
@@ -814,7 +814,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
           backgroundSize: "cover", backgroundPosition: "center",
         }}>
           {!imgUrl && (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🏨</div>
+            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bark-3)" }}><Hotel size={30} strokeWidth={1.5} /></div>
           )}
         </div>
         {/* Tape tab on photo */}
@@ -954,7 +954,7 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
           <div className="map-section-label" style={{ marginTop: 18 }}>accommodation</div>
           {hotels.map(h => (
             <div key={h.name} className="map-hotel-row" style={{ marginBottom: 8 }}>
-              <div style={{ fontSize: 16 }}>🏨</div>
+              <div style={{ color: "var(--bark-2)", lineHeight: 0 }}><Bed size={16} strokeWidth={2} /></div>
               <div className="hname">{h.name}<br /><span style={{ fontWeight: 600, color: "var(--fg-3)", fontSize: 10 }}>{h.location}</span></div>
               <div className="hcost">₹{h.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
             </div>
@@ -1027,7 +1027,7 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
           <>
             <div className="map-section-label">tonight's stay</div>
             <div className="map-hotel-row">
-              <div style={{ fontSize: 16 }}>🏨</div>
+              <div style={{ color: "var(--bark-2)", lineHeight: 0 }}><Bed size={16} strokeWidth={2} /></div>
               <div className="hname">{nightHotel.name}</div>
               <div className="hcost">₹{nightHotel.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
             </div>

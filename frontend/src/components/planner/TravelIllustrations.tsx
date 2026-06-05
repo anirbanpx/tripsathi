@@ -4,6 +4,7 @@
 const OCHRE = "#A6701D";
 const BARK  = "#3E2F23";
 const PAPER = "#F4ECDB";
+const RUST  = "#B0492F";
 
 export function PalmTree({ size = 80 }: { size?: number }) {
   return (
@@ -212,6 +213,178 @@ export function ArchPackedAdventurer({ size = 48 }: { size?: number }) {
       <line x1="10" y1="16" x2="6" y2="13" stroke={OCHRE} strokeWidth="1.4" strokeLinecap="round" opacity="0.5"/>
       {/* Ground line */}
       <line x1="6" y1="50" x2="50" y2="50" stroke={BARK} strokeWidth="1.4" strokeLinecap="round" opacity="0.2"/>
+    </svg>
+  );
+}
+
+// ── Homepage hero scene ─────────────────────────────────────────────
+// A composed field-journal scene: Sathi sketching a dotted route across an
+// Indian landscape. Same hand-drawn line language as the spot illustrations.
+// The route "draws in" once on mount, unless the user prefers reduced motion.
+
+export function HeroScene({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 360 240"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="A travel companion sketching a route across an Indian landscape"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    >
+      <style>{`
+        @keyframes heroDraw { to { stroke-dashoffset: 0; } }
+        .hero-route {
+          stroke-dasharray: 360;
+          stroke-dashoffset: 360;
+          animation: heroDraw 2.2s var(--ease-out, ease-out) 0.3s forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-route { animation: none; stroke-dashoffset: 0; }
+        }
+      `}</style>
+
+      {/* Sun + rays */}
+      <circle cx="290" cy="48" r="15" fill={OCHRE} opacity="0.45" />
+      <line x1="290" y1="22" x2="290" y2="14" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
+      <line x1="311" y1="29" x2="317" y2="23" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
+      <line x1="269" y1="29" x2="263" y2="23" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
+      <line x1="318" y1="48" x2="326" y2="48" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
+
+      {/* Mountain range back-left */}
+      <path d="M10 150 L60 78 L102 150" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+      <path d="M60 78 L46 104 L74 104 Z" fill={PAPER} stroke={OCHRE} strokeWidth="1.4" opacity="0.7" />
+      <path d="M64 150 L112 96 L156 150" stroke={BARK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" />
+
+      {/* Temple silhouette mid */}
+      <line x1="196" y1="92" x2="196" y2="104" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" />
+      <circle cx="196" cy="90" r="3" fill={OCHRE} />
+      <rect x="188" y="104" width="16" height="6" rx="1" fill={PAPER} stroke={BARK} strokeWidth="1.6" />
+      <rect x="183" y="110" width="26" height="7" rx="1" fill={PAPER} stroke={BARK} strokeWidth="1.6" />
+      <rect x="178" y="117" width="36" height="33" rx="2" fill={PAPER} stroke={BARK} strokeWidth="1.8" />
+      <path d="M190 150 L190 134 Q196 128 202 134 L202 150" fill={OCHRE} stroke={BARK} strokeWidth="1.3" opacity="0.55" />
+
+      {/* Palm right */}
+      <path d="M300 150 Q296 124 300 104" stroke={OCHRE} strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M300 104 Q286 98 278 106" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M300 104 Q292 94 296 86" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M300 104 Q314 98 320 106" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M300 104 Q312 106 316 116" stroke={OCHRE} strokeWidth="1.8" strokeLinecap="round" />
+
+      {/* Horizon */}
+      <path d="M8 150 Q180 156 352 150" stroke={BARK} strokeWidth="1.5" strokeLinecap="round" opacity="0.25" />
+
+      {/* Dotted travel route — draws in on mount */}
+      <path
+        className="hero-route"
+        d="M40 196 Q96 168 120 150 Q150 128 196 132 Q248 137 300 96"
+        stroke={RUST}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeDasharray="1 8"
+        fill="none"
+      />
+      {/* Route end pin */}
+      <path d="M300 96 q-7 -10 0 -18 q7 8 0 18" fill={RUST} />
+      <circle cx="300" cy="82" r="2.4" fill={PAPER} />
+
+      {/* Foreground: open field journal */}
+      <path d="M132 214 L132 184 Q160 176 178 184 L178 214 Q160 207 132 214 Z" fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinejoin="round" />
+      <path d="M178 214 L178 184 Q196 176 224 184 L224 214 Q196 207 178 214 Z" fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinejoin="round" />
+      <line x1="178" y1="184" x2="178" y2="212" stroke={BARK} strokeWidth="1.6" />
+      {/* Left page: written lines */}
+      <line x1="140" y1="190" x2="170" y2="187" stroke={BARK} strokeWidth="1.1" strokeLinecap="round" opacity="0.4" />
+      <line x1="140" y1="196" x2="170" y2="193" stroke={BARK} strokeWidth="1.1" strokeLinecap="round" opacity="0.4" />
+      <line x1="140" y1="202" x2="166" y2="199" stroke={BARK} strokeWidth="1.1" strokeLinecap="round" opacity="0.4" />
+      {/* Right page: compass */}
+      <circle cx="201" cy="196" r="9" fill={PAPER} stroke={OCHRE} strokeWidth="1.6" />
+      <path d="M201 190 L204 196 L201 202 L198 196 Z" fill={RUST} opacity="0.75" />
+
+      {/* Mascot Sathi — small seated traveller with a sun hat, sketching */}
+      <g>
+        {/* hat brim + crown */}
+        <ellipse cx="92" cy="170" rx="15" ry="3.4" fill={PAPER} stroke={BARK} strokeWidth="1.8" />
+        <path d="M83 169 Q86 156 92 156 Q98 156 101 169" fill={PAPER} stroke={BARK} strokeWidth="1.8" />
+        <path d="M83 167 Q92 164 101 167" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" />
+        {/* head */}
+        <circle cx="92" cy="178" r="6.5" fill={PAPER} stroke={BARK} strokeWidth="1.8" />
+        {/* body */}
+        <path d="M86 196 Q86 184 92 184 Q98 184 98 196 Z" fill={PAPER} stroke={BARK} strokeWidth="1.8" strokeLinejoin="round" />
+        {/* arm reaching to the journal */}
+        <path d="M97 189 Q112 188 128 196" stroke={BARK} strokeWidth="1.8" strokeLinecap="round" fill="none" />
+        {/* ground shadow */}
+        <ellipse cx="92" cy="208" rx="14" ry="3" fill={BARK} opacity="0.12" />
+      </g>
+    </svg>
+  );
+}
+
+// ── "How it works" doodles ──────────────────────────────────────────
+
+export function DoodleTell({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* speech bubble */}
+      <path d="M8 12 Q8 8 12 8 L44 8 Q48 8 48 12 L48 34 Q48 38 44 38 L24 38 L16 46 L16 38 L12 38 Q8 38 8 34 Z"
+        fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinejoin="round" />
+      {/* squiggle = your words */}
+      <path d="M16 18 Q20 14 24 18 T32 18 T40 18" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M16 27 Q22 24 28 27 T40 27" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
+    </svg>
+  );
+}
+
+export function DoodlePlan({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* pencil */}
+      <path d="M14 40 L34 20 L40 26 L20 46 L12 48 Z" fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinejoin="round" />
+      <line x1="31" y1="23" x2="37" y2="29" stroke={BARK} strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M14 40 L20 46 L12 48 Z" fill={OCHRE} stroke={BARK} strokeWidth="1.6" strokeLinejoin="round" opacity="0.8" />
+      {/* sketched route being drawn */}
+      <path d="M30 44 Q40 44 44 36 Q47 30 44 24" stroke={RUST} strokeWidth="2" strokeLinecap="round" strokeDasharray="1 5" fill="none" />
+      <path d="M44 24 q-4 -5 0 -9 q4 4 0 9" fill={RUST} opacity="0.8" />
+    </svg>
+  );
+}
+
+export function DoodleBook({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* boarding pass / ticket */}
+      <path d="M8 18 L48 18 Q48 22 50 24 Q48 26 48 30 L48 38 L8 38 L8 30 Q10 26 10 24 Q8 22 8 18 Z"
+        fill={PAPER} stroke={BARK} strokeWidth="2" strokeLinejoin="round" />
+      {/* perforation */}
+      <line x1="36" y1="19" x2="36" y2="37" stroke={BARK} strokeWidth="1.4" strokeDasharray="2 3" opacity="0.7" />
+      {/* details */}
+      <line x1="14" y1="25" x2="30" y2="25" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" />
+      <line x1="14" y1="31" x2="26" y2="31" stroke={OCHRE} strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+      {/* check mark */}
+      <path d="M39 28 L42 31 L46 25" stroke={BARK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ── Section dividers (full-width rules) ─────────────────────────────
+
+export function MountainRule({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 240 16" fill="none" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: 16, display: "block" }} aria-hidden="true">
+      <line x1="0" y1="12" x2="98" y2="12" stroke={BARK} strokeWidth="1.4" strokeLinecap="round" opacity="0.3" />
+      <path d="M104 12 L114 4 L122 12 L132 6 L140 12" stroke={OCHRE} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" opacity="0.7" />
+      <line x1="146" y1="12" x2="240" y2="12" stroke={BARK} strokeWidth="1.4" strokeLinecap="round" opacity="0.3" />
+    </svg>
+  );
+}
+
+export function DottedPathRule({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 240 16" fill="none" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: 16, display: "block" }} aria-hidden="true">
+      <path d="M4 8 Q80 2 120 8 Q160 14 232 8" stroke={RUST} strokeWidth="1.8" strokeLinecap="round" strokeDasharray="1 7" fill="none" opacity="0.6" />
+      <path d="M232 8 q-5 -6 0 -11 q5 5 0 11" fill={RUST} opacity="0.6" />
     </svg>
   );
 }
