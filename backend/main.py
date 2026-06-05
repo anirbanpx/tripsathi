@@ -135,6 +135,7 @@ class OnboardRequest(BaseModel):
     destination_hint: str = ""
     taste_data: dict = {}
     user_id: str = ""
+    story_text: str = ""
 
 
 class PlanRequest(BaseModel):
@@ -250,26 +251,45 @@ async def onboard(req: OnboardRequest):
 
     user_id = req.user_id.strip() if req.user_id.strip() else f"anon_{uuid4().hex[:12]}"
 
-    user_profile = None
-    if req.onboarding_answers:
+    # Run persona classification on story text if provided
+    persona_meta: dict = {}
+    input_text = None
+    if req.story_text.strip():
+        input_text = f"Trip story:\n{req.story_text.strip()}"
+    elif req.onboarding_answers:
+        input_text = "\n".join(f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers)
+        if req.destination_hint:
+            input_text += f"\nDestination hint: {req.destination_hint}"
+
+    if input_text:
         from nodes import _call_llm
         from prompts import PERSONA_CLASSIFICATION_SYSTEM
-        answers_text = "\n".join(f"Q: {a['question']}\nA: {a['answer']}" for a in req.onboarding_answers)
-        if req.destination_hint:
-            answers_text += f"\nDestination hint: {req.destination_hint}"
         try:
-            user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"persona_classification_failed: {e}")
+            classification = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, input_text, max_tokens=1024)
+            if isinstance(classification, dict):
+                persona_meta["persona_type"] = classification.get("persona_type", "")
+                persona_meta["decision_style"] = classification.get("autonomy_mode", "L2")
+                constraints = classification.get("constraints", {})
+                persona_meta["mobility_limited"] = bool(constraints.get("mobility_limited", False))
+                # Merge dietary restrictions only if not already provided by the form
+                if not req.taste_data.get("dietary_restrictions") and constraints.get("dietary_restrictions"):
+                    persona_meta["dietary_restrictions"] = constraints["dietary_restrictions"]
+        except Exception:
+            pass  # Classification is best-effort — don't fail the whole onboard
 
     taste_profile_dict = None
     if req.taste_data:
-        profile_data = {"user_id": user_id, **req.taste_data}
+        profile_data = {
+            "user_id": user_id,
+            **req.taste_data,
+            **persona_meta,
+            "story_text": req.story_text.strip(),
+        }
         profile = TasteProfile(**{k: v for k, v in profile_data.items() if k in TasteProfile.__dataclass_fields__})
         save_taste(profile)
         taste_profile_dict = asdict(profile)
 
-    return {"user_id": user_id, "user_profile": user_profile, "taste_profile": taste_profile_dict}
+    return {"user_id": user_id, "persona_meta": persona_meta, "taste_profile": taste_profile_dict}
 
 
 @app.get("/api/taste/{user_id}")
