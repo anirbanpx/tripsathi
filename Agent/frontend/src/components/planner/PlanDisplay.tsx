@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, RefreshCw, Check,
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
-  GalleryHorizontal, LayoutList, Map, Coffee, Soup, UtensilsCrossed, Hotel,
+  GalleryHorizontal, LayoutList, Map, Coffee, Soup, UtensilsCrossed, Hotel as HotelIcon,
 } from "lucide-react";
 import MapView, { haversineDist, driveTime } from "./MapView";
 
@@ -36,7 +36,7 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [feedback, setFeedback] = useState("");
   const [refining, setRefining] = useState(false);
   const [activeDay, setActiveDay] = useState(0);
-  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("map");
+  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("swipe");
   const [mapDay, setMapDay] = useState(0); // 0 = all stops, 1-N = specific day
   const [saveFlash, setSaveFlash] = useState(false);
   const [tasteToast, setTasteToast] = useState(false);
@@ -814,7 +814,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
           backgroundSize: "cover", backgroundPosition: "center",
         }}>
           {!imgUrl && (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bark-3)" }}><Hotel size={30} strokeWidth={1.5} /></div>
+            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bark-3)" }}><HotelIcon size={30} strokeWidth={1.5} /></div>
           )}
         </div>
         {/* Tape tab on photo */}
