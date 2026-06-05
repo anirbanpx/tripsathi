@@ -169,8 +169,10 @@ export default function OnboardingPage() {
       });
 
       localStorage.setItem("tripsathi_user_id", result.user_id);
+      localStorage.setItem(`tripsathi_onboarded_${result.user_id}`, "1");
       navigate("/planner");
     } catch {
+      localStorage.setItem(`tripsathi_onboarded_${getUserId()}`, "1");
       navigate("/planner");
     } finally {
       setSubmitting(false);
@@ -201,7 +203,10 @@ export default function OnboardingPage() {
           </div>
           <button
             type="button"
-            onClick={() => navigate("/planner")}
+            onClick={() => {
+              localStorage.setItem(`tripsathi_onboarded_${getUserId()}`, "1");
+              navigate("/planner");
+            }}
             style={{
               background: "none", border: "none", cursor: "pointer",
               fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg-3)",
