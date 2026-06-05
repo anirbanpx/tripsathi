@@ -154,4 +154,5 @@ export interface UserContext {
   kid_ages: number[];
   destination: string;
   trip_params: TripParameters | null;
+  seed_prompt?: string;
 }

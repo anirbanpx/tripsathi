@@ -66,6 +66,7 @@ export async function generatePlan(params: TripParameters): Promise<PlanResponse
 export async function streamPlan(
   params: TripParameters,
   onStage: (label: string) => void,
+  onDetail?: (text: string) => void,
 ): Promise<PlanResponse> {
   if (USE_MOCK) {
     await delay(200);
@@ -131,6 +132,8 @@ export async function streamPlan(
                 threadId = data.thread_id;
               } else if (data.type === "stage") {
                 onStage(data.stage_label);
+              } else if (data.type === "detail") {
+                onDetail?.(data.text);
               } else if (data.type === "done") {
                 resolve({ plan: data.plan, thread_id: threadId, status: "awaiting_feedback", stage_label: data.stage_label, refinement_count: data.refinement_count ?? 0 });
                 return;
