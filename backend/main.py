@@ -364,6 +364,20 @@ async def stream_plan(req: PlanRequest):
                 stage = update.get("stage_label")
                 if stage:
                     yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
+                # Emit real detail events surfacing existing node outputs
+                synthesis = update.get("research_synthesis")
+                if synthesis and isinstance(synthesis, dict):
+                    risks = synthesis.get("local_risks", []) + synthesis.get("implicit_warnings", [])
+                    if risks:
+                        n = len(risks)
+                        detail = f"Found {n} local insight{'s' if n != 1 else ''} for {req.destination}"
+                        yield f"data: {json.dumps({'type': 'detail', 'text': detail})}\n\n"
+                plan_data = update.get("plan")
+                if plan_data and isinstance(plan_data, dict) and plan_data.get("days"):
+                    days = len(plan_data.get("days", []))
+                    hotels = len(plan_data.get("hotels", []))
+                    detail = f"Drafted {days}-day plan · {hotels} hotel{'s' if hotels != 1 else ''} shortlisted"
+                    yield f"data: {json.dumps({'type': 'detail', 'text': detail})}\n\n"
 
         state = _get_state(config)
         if state.get("error"):

@@ -917,6 +917,26 @@ body {
 .entry-trust .dot { width: 3px; height: 3px; border-radius: 999px; background: var(--fg-3); }
 .footer-note { margin-top: auto; padding-top: 20px; text-align: center; font-family: var(--font-script); font-size: 18px; color: var(--accent-2); transform: rotate(-1deg); }
 
+/* ── Destination shelf (homepage) ──────────────────────────────── */
+.dest-shelf { overflow-x: auto; display: flex; gap: 12px; padding: 4px 0 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.dest-shelf::-webkit-scrollbar { display: none; }
+.dest-shelf-card { flex-shrink: 0; width: 148px; height: 108px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; border: 1.5px solid var(--border); transition: transform 200ms var(--ease-spring, ease); background: var(--surface); }
+.dest-shelf-card:hover { transform: translateY(-2px); }
+.dest-shelf-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 25%, rgba(26,17,8,0.72) 100%); }
+.dest-shelf-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px 10px; }
+.dest-shelf-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: rgba(244,236,219,0.97); }
+.dest-shelf-hook { font-size: 9px; font-weight: 600; color: rgba(244,236,219,0.6); font-family: var(--font-body); margin-top: 2px; line-height: 1.3; }
+
+/* ── How it works strip ─────────────────────────────────────────── */
+.how-it-works { display: flex; gap: 24px; }
+.how-it-works-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+@media (max-width: 639px) {
+  .how-it-works { flex-direction: column; gap: 16px; }
+  .how-it-works-step { flex-direction: row; text-align: left; gap: 14px; align-items: flex-start; }
+  .how-it-works-step > svg { flex-shrink: 0; }
+  .how-it-works-step > p { text-align: left; }
+}
+
 /* ── Destination band (stepper sticky header) ───────────────────── */
 .dest-band {
   position: sticky; top: 0; z-index: 10;
