@@ -163,18 +163,60 @@ export async function refinePlan(threadId: string, userFeedback: string): Promis
   return res.json();
 }
 
-export async function regeneratePlan(threadId: string): Promise<PlanResponse> {
+export async function streamRegenerate(
+  threadId: string,
+  onStage: (label: string) => void,
+): Promise<PlanResponse> {
   if (USE_MOCK) {
     await delay(200);
+    onStage("Regenerating your itinerary...");
+    await delay(400);
     return mockPlan as PlanResponse;
   }
-  const res = await fetch(`${API_BASE}/api/regenerate`, {
+
+  const res = await fetch(`${API_BASE}/api/regenerate/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ thread_id: threadId }),
   });
-  if (!res.ok) throw new Error(`/api/regenerate failed: ${res.status}`);
-  return res.json();
+  if (!res.ok) throw new Error(`/api/regenerate/stream failed: ${res.status}`);
+  if (!res.body) throw new Error("No response body from stream");
+
+  return new Promise((resolve, reject) => {
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    async function pump() {
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) { reject(new Error("Stream closed without completion event")); return; }
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.type === "stage") {
+                onStage(data.stage_label);
+              } else if (data.type === "done") {
+                resolve({ plan: data.plan, thread_id: threadId, status: "awaiting_feedback", stage_label: data.stage_label, refinement_count: data.refinement_count ?? 0 });
+                return;
+              } else if (data.type === "error") {
+                reject(new Error(data.detail));
+                return;
+              }
+            } catch { /* ignore malformed SSE lines */ }
+          }
+        }
+      } catch (e) {
+        reject(e);
+      }
+    }
+    pump();
+  });
 }
 
 export async function bookItem(

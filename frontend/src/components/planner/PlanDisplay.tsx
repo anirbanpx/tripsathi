@@ -18,8 +18,7 @@ function cleanName(name: string): string {
     .trim();
 }
 import { getIllustration } from "./TravelIllustrations";
-import { refinePlan, regeneratePlan, saveTrip, toggleHotel } from "../../services/api";
-import { startFakeProgress } from "../../lib/fakeProgress";
+import { refinePlan, streamRegenerate, saveTrip, toggleHotel } from "../../services/api";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getPlaceImageUrl } from "../../lib/placeImage";
@@ -149,14 +148,13 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
 
   async function handleRegenerate() {
     if (!ctx.thread_id) return;
-    const handle = startFakeProgress(
-      (index, label) => onSetContext({ fake_stage_index: index, fake_stage_label: label }),
-      () => {}
-    );
-    onSetContext({ current_stage: "generating", generation_active: true });
+    let stageIndex = 0;
+    onSetContext({ current_stage: "generating", generation_active: true, fake_stage_index: 0, fake_stage_label: "Regenerating your itinerary..." });
     try {
-      const res = await regeneratePlan(ctx.thread_id);
-      handle.stop();
+      const res = await streamRegenerate(ctx.thread_id, (label) => {
+        stageIndex = Math.min(stageIndex + 1, 4);
+        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
+      });
       onSetContext({
         current_stage: "plan_display",
         generation_active: false,
@@ -166,7 +164,6 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         fake_stage_label: "Done",
       });
     } catch {
-      handle.stop();
       onSetContext({ current_stage: "plan_display", generation_active: false });
     }
   }

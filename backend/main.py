@@ -386,6 +386,50 @@ async def refine_plan(req: RefineRequest):
     return _plan_response(state, req.thread_id)
 
 
+@app.post("/api/regenerate/stream")
+async def regenerate_plan_stream(req: RegenerateRequest):
+    config = {"configurable": {"thread_id": req.thread_id}}
+
+    async def generate():
+        loop = asyncio.get_event_loop()
+        queue: asyncio.Queue = asyncio.Queue()
+        _SENTINEL = object()
+
+        def run_graph():
+            try:
+                for chunk in graph.stream(Command(resume={"regenerate": True}), config=config, stream_mode="updates"):
+                    loop.call_soon_threadsafe(queue.put_nowait, chunk)
+            except Exception as e:  # noqa: BLE001
+                loop.call_soon_threadsafe(queue.put_nowait, e)
+            finally:
+                loop.call_soon_threadsafe(queue.put_nowait, _SENTINEL)
+
+        loop.run_in_executor(None, run_graph)
+
+        while True:
+            item = await queue.get()
+            if item is _SENTINEL:
+                break
+            if isinstance(item, Exception):
+                yield f"data: {json.dumps({'type': 'error', 'detail': str(item)})}\n\n"
+                return
+            for _node, update in item.items():
+                if not isinstance(update, dict):
+                    continue
+                stage = update.get("stage_label")
+                if stage:
+                    yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
+
+        state = _get_state(config)
+        if state.get("error"):
+            yield f"data: {json.dumps({'type': 'error', 'detail': state['error']})}\n\n"
+        else:
+            yield f"data: {json.dumps({'type': 'done', 'plan': state.get('plan'), 'thread_id': req.thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
+
+    return StreamingResponse(generate(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
 @app.post("/api/regenerate")
 async def regenerate_plan(req: RegenerateRequest):
     config = {"configurable": {"thread_id": req.thread_id}}
