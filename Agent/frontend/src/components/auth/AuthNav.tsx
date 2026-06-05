@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut, BookOpen } from "lucide-react";
 import type { AuthUser } from "../../types";
@@ -11,6 +12,7 @@ interface Props {
 
 export default function AuthNav({ user, onSetContext }: Props) {
   const navigate = useNavigate();
+  const [imgFailed, setImgFailed] = useState(false);
 
   function handleSignOut() {
     clearAuthState();
@@ -18,21 +20,27 @@ export default function AuthNav({ user, onSetContext }: Props) {
     navigate("/");
   }
 
+  const initial = user.name.charAt(0).toUpperCase();
+  const avatarStyle: React.CSSProperties = {
+    width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
+  };
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      {user.avatar_url ? (
+      {user.avatar_url && !imgFailed ? (
         <img
           src={user.avatar_url}
           alt={user.name}
-          style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover" }}
+          style={{ ...avatarStyle, objectFit: "cover" }}
+          onError={() => setImgFailed(true)}
         />
       ) : (
         <div style={{
-          width: 28, height: 28, borderRadius: "50%", background: "var(--accent)",
+          ...avatarStyle, background: "var(--accent)",
           display: "flex", alignItems: "center", justifyContent: "center",
           color: "#fff", fontSize: 12, fontWeight: 700,
         }}>
-          {user.name.charAt(0).toUpperCase()}
+          {initial}
         </div>
       )}
       <button

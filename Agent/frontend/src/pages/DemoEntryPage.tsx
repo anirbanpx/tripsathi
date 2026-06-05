@@ -32,6 +32,13 @@ const CURATED_DESTINATIONS = [
   { slug: "hampi",      name: "Hampi",      hook: "boulder ruins & Vijayanagara grandeur" },
 ];
 
+function getTimeGreeting(): string {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return "good morning";
+  if (h >= 12 && h < 17) return "good afternoon";
+  return "good evening";
+}
+
 export default function DemoEntryPage({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
   const [composerText, setComposerText] = useState("");
@@ -120,7 +127,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
               <div className="hero">
                 <div className="hero-eyebrow">Travel AI · for India</div>
                 {firstName ? (
-                  <h1>hey {firstName},<br />where are<br /><span className="sw">we headed?</span></h1>
+                  <h1>{getTimeGreeting()},<br />{firstName} —<br /><span className="sw">where to? ✦</span></h1>
                 ) : (
                   <h1>ooh, where<br />are we<br /><span className="sw">off to? ✦</span></h1>
                 )}
