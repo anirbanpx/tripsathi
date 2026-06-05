@@ -360,7 +360,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   const styles = (tripParams?.trip_style ?? []).slice(0, 2);
 
   // ── Shared right panel ────────────────────────────────────────────────────
-  function RightPanel({ fill }: { fill?: boolean }) {
+  function RightPanel({ fill, hideDestHeader }: { fill?: boolean; hideDestHeader?: boolean }) {
     return (
       <div style={{
         background: "var(--ink-deep)",
@@ -369,11 +369,13 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
         gap: 20, overflow: "hidden",
         ...(fill ? { flex: 1, minHeight: 0 } : { width: 400, flexShrink: 0 }),
       }}>
-        {/* Persona badge */}
+        {/* Persona badge — hidden on mobile when image overlay already shows the dest name */}
         <div>
-          <div style={{ fontSize: 22, fontFamily: "var(--font-display)", color: "rgba(244,236,219,0.95)", letterSpacing: "0.01em", marginBottom: 4 }}>
-            {dest} <span style={{ color: "rgba(255,195,100,0.85)" }}>✦</span>
-          </div>
+          {!hideDestHeader && (
+            <div style={{ fontSize: 22, fontFamily: "var(--font-display)", color: "rgba(244,236,219,0.95)", letterSpacing: "0.01em", marginBottom: 4 }}>
+              {dest} <span style={{ color: "rgba(255,195,100,0.85)" }}>✦</span>
+            </div>
+          )}
           <div style={{ fontSize: 13, color: "rgba(244,236,219,0.55)", fontFamily: "var(--font-body)", marginBottom: 10 }}>
             {personaLabel(tripParams)}
           </div>
@@ -465,7 +467,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
             </div>
           </div>
         )}
-        <RightPanel fill />
+        <RightPanel fill hideDestHeader={!!imgUrl} />
       </div>
     </>
   );
