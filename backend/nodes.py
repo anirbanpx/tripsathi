@@ -68,7 +68,7 @@ def _build_gemini_provider():
     return _GeminiProvider(
         name="gemini",
         api_key=key,
-        model=os.environ.get("FALLBACK2_LLM_MODEL", "gemini-2.5-flash"),
+        model=os.environ.get("FALLBACK2_LLM_MODEL", "gemini-2.5-flash-lite"),
     )
 
 
