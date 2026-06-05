@@ -1,1 +1,12 @@
 settings.local.json
+
+# ── Local agent / IDE state ──────────────────────────────
+.claude/
+
+# ── Separate projects in this workspace (not part of Agent) ──
+/ai-analyst-plus/
+/ai-analyst-starter/
+/playbox/
+
+# ── Backend runtime artifacts ────────────────────────────
+Agent/backend/.deepeval/

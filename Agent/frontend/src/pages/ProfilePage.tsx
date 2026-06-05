@@ -197,7 +197,11 @@ export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props)
       {/* Saved Trips */}
       <Section icon={<Bookmark size={15} />} title="Saved Trips" count={trips.length}>
         {trips.length === 0 ? (
-          <EmptyState text="No saved trips yet. Generate a plan and save it!" />
+          <EmptyState
+            text="no saved trips yet — generate a plan and tap the save button to keep it here ✦"
+            cta="plan your first trip"
+            onCta={() => navigate("/")}
+          />
         ) : (
           trips.map((trip) => (
             <div key={trip.id} className="profile-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -223,7 +227,7 @@ export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props)
       {/* Wishlist */}
       <Section icon={<Heart size={15} />} title="Wishlist" count={wishlist.length}>
         {wishlist.length === 0 ? (
-          <EmptyState text="Nothing wishlisted yet. Heart a destination or activity!" />
+          <EmptyState text="nothing wishlisted yet — heart a destination on the map or an activity from your plan" />
         ) : (
           wishlist.map((item) => (
             <div key={item.id} className="profile-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -251,7 +255,7 @@ export default function ProfilePage({ ctx, onSetContext: _onSetContext }: Props)
       {/* Saved Hotels */}
       <Section icon={<Bookmark size={15} />} title="Saved Hotels" count={hotels.length}>
         {hotels.length === 0 ? (
-          <EmptyState text="No saved hotels yet. Bookmark hotels from your plans!" />
+          <EmptyState text="no bookmarked hotels yet — tap the bookmark icon on any hotel in your plan" />
         ) : (
           hotels.map((hotel) => (
             <div key={hotel.id} className="profile-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -364,13 +368,26 @@ function Section({ icon, title, count, children }: { icon: React.ReactNode; titl
   );
 }
 
-function EmptyState({ text }: { text: string }) {
+function EmptyState({ text, cta, onCta }: { text: string; cta?: string; onCta?: () => void }) {
   return (
     <div style={{
-      padding: "16px 20px", background: "var(--bg-2, #f7f5f0)", borderRadius: 10,
-      fontSize: 12, color: "var(--fg-3)", fontStyle: "italic",
+      padding: "18px 20px", background: "var(--bg-2, #f7f5f0)", borderRadius: 12,
+      fontSize: 13, color: "var(--fg-3)", lineHeight: 1.55,
+      border: "1.5px dashed var(--border)",
     }}>
-      {text}
+      <div>{text}</div>
+      {cta && onCta && (
+        <button
+          onClick={onCta}
+          style={{
+            marginTop: 10, background: "none", border: "none", padding: 0,
+            cursor: "pointer", color: "var(--accent)", fontSize: 12,
+            fontWeight: 700, fontFamily: "var(--font-body)",
+          }}
+        >
+          {cta} →
+        </button>
+      )}
     </div>
   );
 }

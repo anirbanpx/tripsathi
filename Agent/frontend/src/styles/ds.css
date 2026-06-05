@@ -611,6 +611,20 @@ body {
 .bp-bm-btn.saved { color: var(--accent); }
 .bp-bm-btn svg { width: 13px; height: 13px; stroke-width: 2; }
 
+/* Hotel shelf scroll container — right-edge fade signals scrollability */
+.hotel-shelf-wrap {
+  position: relative;
+}
+.hotel-shelf-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 48px; height: 100%;
+  background: linear-gradient(to right, transparent, var(--paper));
+  pointer-events: none;
+  border-radius: 0 16px 16px 0;
+}
+
 /* Hotel card */
 .hotel-card {
   margin-top: 14px;
@@ -916,6 +930,26 @@ body {
 .entry-trust svg { width: 13px; height: 13px; stroke-width: 1.75; }
 .entry-trust .dot { width: 3px; height: 3px; border-radius: 999px; background: var(--fg-3); }
 .footer-note { margin-top: auto; padding-top: 20px; text-align: center; font-family: var(--font-script); font-size: 18px; color: var(--accent-2); transform: rotate(-1deg); }
+
+/* ── Destination shelf (homepage) ──────────────────────────────── */
+.dest-shelf { overflow-x: auto; display: flex; gap: 12px; padding: 4px 0 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.dest-shelf::-webkit-scrollbar { display: none; }
+.dest-shelf-card { flex-shrink: 0; width: 148px; height: 108px; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; border: 1.5px solid var(--border); transition: transform 200ms var(--ease-spring, ease); background: var(--surface); }
+.dest-shelf-card:hover { transform: translateY(-2px); }
+.dest-shelf-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 25%, rgba(26,17,8,0.72) 100%); }
+.dest-shelf-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px 10px; }
+.dest-shelf-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: rgba(244,236,219,0.97); }
+.dest-shelf-hook { font-size: 9px; font-weight: 600; color: rgba(244,236,219,0.6); font-family: var(--font-body); margin-top: 2px; line-height: 1.3; }
+
+/* ── How it works strip ─────────────────────────────────────────── */
+.how-it-works { display: flex; gap: 24px; }
+.how-it-works-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+@media (max-width: 639px) {
+  .how-it-works { flex-direction: column; gap: 16px; }
+  .how-it-works-step { flex-direction: row; text-align: left; gap: 14px; align-items: flex-start; }
+  .how-it-works-step > svg { flex-shrink: 0; }
+  .how-it-works-step > p { text-align: left; }
+}
 
 /* ── Destination band (stepper sticky header) ───────────────────── */
 .dest-band {
@@ -1599,3 +1633,193 @@ body {
 .profile-card:nth-child(odd)  { transform: rotate(-0.4deg); }
 .profile-card:nth-child(even) { transform: rotate(0.3deg); }
 .profile-card:hover { transform: rotate(0deg) translateY(-1px); }
+
+/* ── Plan ⇄ Journal view-mode toggle ──────────────────────────────── */
+.view-mode-toggle {
+  display: inline-flex;
+  background: var(--paper-2);
+  border-radius: 20px;
+  padding: 2px;
+  border: 1.5px solid var(--border);
+  gap: 2px;
+  margin-bottom: 16px;
+}
+.view-mode-toggle button {
+  padding: 5px 14px;
+  border-radius: 18px;
+  border: 0;
+  background: transparent;
+  color: var(--fg-3);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 150ms var(--ease-out);
+}
+.view-mode-toggle button.active {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: 0 1px 3px rgba(62,47,35,0.14);
+}
+
+/* ── TripJournal ─────────────────────────────────────────────────── */
+.trip-journal { margin-top: 8px; }
+.journal-page-content {
+  min-height: 280px;
+  max-height: calc(100dvh - 440px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.journal-day-page .day-swipe-card { flex: none; width: 100%; }
+
+/* Cover page */
+.journal-cover {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 0 rgba(62,47,35,.1), 0 10px 28px -16px rgba(62,47,35,.28);
+  position: relative;
+  background-color: var(--paper);
+  min-height: 340px;
+}
+.journal-cover-img-wrap { position: absolute; inset: 0; }
+.journal-cover-img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.journal-cover-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(42,28,14,0.18) 0%, rgba(42,28,14,0.72) 100%);
+}
+.journal-cover-body {
+  position: relative; z-index: 1;
+  padding: 28px 24px 32px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 340px;
+}
+.journal-cover-tape {
+  width: 52px; height: 14px;
+  background: var(--tape);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+.journal-cover-title {
+  font-family: var(--font-script);
+  font-size: 42px; font-weight: 700;
+  color: var(--paper); line-height: 1.05;
+  text-shadow: 0 2px 12px rgba(42,28,14,0.5);
+}
+.journal-cover-nights {
+  font-family: var(--font-body);
+  font-size: 13px; font-weight: 800;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(244,236,219,0.75);
+  margin-top: 8px;
+}
+.journal-cover-cue {
+  font-family: var(--font-script);
+  font-size: 16px;
+  color: rgba(244,236,219,0.65);
+  margin-top: 16px;
+}
+
+/* Navigation */
+.journal-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 20px;
+}
+.journal-nav-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--fg-2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 150ms var(--ease-out);
+  box-shadow: 0 1px 4px rgba(62,47,35,0.1);
+}
+.journal-nav-btn:hover:not(:disabled) {
+  background: var(--paper-2);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.journal-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.journal-dots { display: flex; align-items: center; gap: 5px; }
+.journal-dot {
+  height: 6px; border-radius: 999px; width: 6px;
+  background: var(--paper-3); cursor: pointer;
+  transition: all 250ms var(--ease-out);
+}
+.journal-dot.active { width: 22px; background: var(--accent); }
+.journal-page-label {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--bark-3);
+  margin-top: 10px;
+}
+
+/* Closing page */
+.journal-closing {
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background-color: var(--surface);
+  background-image: repeating-linear-gradient(transparent,transparent 27px,rgba(62,47,35,0.07) 27px,rgba(62,47,35,0.07) 28px);
+  background-position-y: 28px;
+  box-shadow: 0 2px 0 rgba(62,47,35,.1), 0 10px 28px -16px rgba(62,47,35,.28);
+  padding: 24px 20px;
+}
+.journal-closing-heading {
+  font-family: var(--font-script);
+  font-size: 32px; font-weight: 700; color: var(--bark);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px dashed var(--border-strong);
+}
+.journal-closing-section { margin-bottom: 20px; }
+.journal-closing-label {
+  font-family: var(--font-body);
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--bark-3); margin-bottom: 8px;
+}
+.journal-closing-total {
+  font-family: var(--font-script);
+  font-size: 28px; font-weight: 700; color: var(--rust);
+  margin-bottom: 10px;
+}
+.journal-closing-rows { display: flex; flex-direction: column; gap: 6px; }
+.journal-closing-row { display: flex; align-items: center; justify-content: space-between; }
+.jcr-lab {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-body);
+  font-size: 11px; font-weight: 700; color: var(--fg-2);
+  text-transform: capitalize;
+}
+.jcr-val { font-family: var(--font-script); font-size: 14px; color: var(--bark); }
+.journal-closing-disc {
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-body);
+  font-size: 10px; color: var(--bark-3);
+  margin-top: 8px;
+}
+.journal-closing-hotel {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(62,47,35,0.1);
+}
+.journal-closing-hotel:last-child { border-bottom: none; }
+.jch-info { flex: 1; min-width: 0; }
+.jch-name { font-family: var(--font-script); font-size: 15px; color: var(--bark); font-weight: 700; }
+.jch-loc { font-family: var(--font-body); font-size: 10px; color: var(--bark-3); font-weight: 600; }
+.jch-cost { font-family: var(--font-script); font-size: 14px; color: var(--rust); white-space: nowrap; }
+.jch-cost span { font-family: var(--font-body); font-size: 9px; opacity: 0.6; }
+.journal-closing-cta {
+  margin-top: 20px; padding: 14px;
+  background: var(--accent); color: var(--paper);
+  border-radius: 12px;
+  font-family: var(--font-script); font-size: 20px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(176,73,47,0.3);
+}

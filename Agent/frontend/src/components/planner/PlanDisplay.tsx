@@ -1,27 +1,18 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, RefreshCw, Check,
+  ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, Check,
   Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
-  GalleryHorizontal, LayoutList, Map,
+  GalleryHorizontal, LayoutList, Map, Hotel as HotelIcon,
 } from "lucide-react";
 import MapView, { haversineDist, driveTime } from "./MapView";
-
-// Strip LLM internal notes from activity names:
-//   ") — check something"  →  ""
-//   " — verify/check ..."  →  ""
-function cleanName(name: string): string {
-  return name
-    .replace(/\s*\)\s*—\s*.+$/i, "")
-    .replace(/\s*—\s*(check|verify|note|confirm|see)\b.+$/i, "")
-    .replace(/\s*\(LWD\s+\w+\)/i, "")
-    .trim();
-}
-import { getIllustration } from "./TravelIllustrations";
-import { refinePlan, streamRegenerate, saveTrip, toggleHotel } from "../../services/api";
+import DayJournalCard, { cleanName } from "./DayJournalCard";
+import TripJournal from "./TripJournal";
+import GoogleSignInButton from "../auth/GoogleSignInButton";
+import { refinePlan, streamRegenerate, saveTrip, toggleHotel, getTasteProfile, googleSignIn } from "../../services/api";
 import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
+import { setAuthState } from "../../lib/auth";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
-import { getPlaceImageUrl } from "../../lib/placeImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
 import type { UserContext, DayPlan, Hotel } from "../../types";
 
@@ -36,12 +27,37 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
   const [feedback, setFeedback] = useState("");
   const [refining, setRefining] = useState(false);
   const [activeDay, setActiveDay] = useState(0);
-  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("map");
+  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("swipe");
+  const [viewMode, setViewMode] = useState<"plan" | "journal">(() => {
+    try { return (localStorage.getItem("ts_plan_view") as "plan" | "journal") ?? "plan"; }
+    catch { return "plan"; }
+  });
   const [mapDay, setMapDay] = useState(0); // 0 = all stops, 1-N = specific day
   const [saveFlash, setSaveFlash] = useState(false);
   const [tasteToast, setTasteToast] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [hotelSaved, setHotelSaved] = useState<Record<string, boolean>>({});
+  const [tasteProfile, setTasteProfile] = useState<Record<string, unknown> | null>(null);
+  const [loginDismissed, setLoginDismissed] = useState(() => {
+    try { return localStorage.getItem("ts_login_dismiss") === "1"; } catch { return false; }
+  });
+
+  useEffect(() => {
+    if (ctx.mode !== "authenticated" || !ctx.user_id) return;
+    getTasteProfile(ctx.user_id).then(setTasteProfile).catch(() => {});
+  }, [ctx.mode, ctx.user_id]);
+
+  function deriveTasteChips(profile: Record<string, unknown>): string[] {
+    const pace = (profile.pace as number) ?? 3;
+    const archetype = pace <= 2 ? "Slow Explorer" : pace >= 4 ? "Active Adventurer" : "Balanced Wanderer";
+    const interests = (profile.interests as Record<string, number>) ?? {};
+    const top = Object.entries(interests)
+      .filter(([, v]) => v >= 0.65)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2)
+      .map(([k]) => k);
+    return [archetype, ...top];
+  }
 
   const saved = (() => {
     try {
@@ -94,6 +110,15 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       toggleBookmark({ name: hotel.name, location: hotel.location, type: "hotel" });
       setHotelSaved((prev) => ({ ...prev, [key]: next }));
     }
+  }
+
+  async function handleEarnLogin(credential: string) {
+    try {
+      const data = await googleSignIn(credential);
+      setAuthState(data);
+      onSetContext({ mode: "authenticated", user_id: data.user.user_id, auth_user: data.user });
+      setLoginDismissed(true);
+    } catch (e) { console.error("earn-login sign in failed:", e); }
   }
 
   async function handleShare() {
@@ -168,6 +193,11 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
     }
   }
 
+  function setView(m: "plan" | "journal") {
+    setViewMode(m);
+    try { localStorage.setItem("ts_plan_view", m); } catch { /* quota */ }
+  }
+
   return (
     <div className="screen" style={{ minHeight: "unset", paddingBottom: 200 }}>
       {ctx.mode === "demo" && (
@@ -231,7 +261,8 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
       </div>
 
       <div className="cx">
-      {/* Trip header */}
+      {/* Trip header — hidden in journal mode to free vertical space for nav */}
+      {viewMode !== "journal" && (
       <div className="trip-head">
         <h1>your <span className="sw">{plan.days[0]?.location.split(",")[0] ?? "trip"}</span><br />plan, sketched.</h1>
         <div className="meta-pills" style={{ padding: 0, marginTop: 12 }}>
@@ -240,7 +271,35 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           )}
           <span className="meta-pill">{plan.days.length} nights</span>
         </div>
+        {tasteProfile && (() => {
+          const chips = deriveTasteChips(tasteProfile);
+          return chips.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 8 }}>
+              {chips.map((c, i) => (
+                <span key={c} style={{
+                  fontSize: 10, padding: "3px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  background: i === 0 ? "var(--ochre)" : "transparent",
+                  color: i === 0 ? "var(--paper)" : "var(--fg-2)",
+                  border: i === 0 ? "1.5px solid var(--ochre)" : "1.5px solid var(--border)",
+                  fontFamily: "var(--font-body)", fontWeight: 700,
+                  textTransform: "capitalize" as const,
+                  letterSpacing: "0.04em",
+                }}>
+                  {c}
+                </span>
+              ))}
+            </div>
+          ) : null;
+        })()}
         <div className="sub">↓ swipe through days, change anything, then book.</div>
+      </div>
+      )}
+
+      {/* Plan ⇄ Journal toggle */}
+      <div className="view-mode-toggle">
+        <button className={viewMode === "plan" ? "active" : ""} onClick={() => setView("plan")}>✎ plan</button>
+        <button className={viewMode === "journal" ? "active" : ""} onClick={() => setView("journal")}>journal</button>
       </div>
 
       {/* Interpreted change banner */}
@@ -256,18 +315,22 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         </div>
       )}
 
+      {viewMode === "journal" ? (
+        <TripJournal plan={plan} />
+      ) : (<>
+
       {/* Tailored for you */}
       {plan.personalization_notes && plan.personalization_notes.length > 0 && (
         <div style={{
-          background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.08))",
-          border: "1.5px solid rgba(139,92,246,0.3)",
+          background: "linear-gradient(135deg, rgba(216,149,64,0.14), rgba(79,107,74,0.08))",
+          border: "1.5px solid var(--ochre-deep)",
           borderRadius: 12,
           padding: "14px 16px",
           marginBottom: 16,
         }}>
           <div style={{
             fontSize: 11, fontWeight: 800, letterSpacing: "0.08em",
-            color: "rgba(139,92,246,0.9)", marginBottom: 8,
+            color: "var(--ochre-deep)", marginBottom: 8,
             fontFamily: "var(--font-body)",
             textTransform: "uppercase",
           }}>
@@ -327,14 +390,14 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
             {dayView === "swipe" && (
               <div className="days-swiper" ref={scrollRef} onScroll={onScroll}>
                 {plan.days.map((day) => (
-                  <SwipeCard key={day.day_number} day={day} />
+                  <DayJournalCard key={day.day_number} day={day} />
                 ))}
               </div>
             )}
             {dayView === "list" && (
               <div style={{ padding: "4px 0 8px", display: "flex", flexDirection: "column", gap: 12 }}>
                 {plan.days.map((day) => (
-                  <SwipeCard key={day.day_number} day={day} listMode />
+                  <DayJournalCard key={day.day_number} day={day} listMode />
                 ))}
               </div>
             )}
@@ -382,30 +445,44 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         {/* RIGHT — hotels + budget (sticky on tablet+) */}
         <div className="plan-col-right">
           <div className="day-section" style={{ marginTop: 22 }}>
-            <div className="label"><span>Accommodation</span><span className="line" /></div>
-            {plan.hotels.map((h) => {
-              const key = h.name + h.location;
-              const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
-              return (
-                <div key={h.name} style={{ position: "relative" }}>
-                  <HotelCard hotel={h} />
-                  <button
-                    onClick={() => handleHotelBookmark(h)}
-                    title={bookmarked ? "Unsave hotel" : "Save hotel"}
-                    style={{
-                      position: "absolute", top: 10, right: 10,
-                      background: "none", border: "none", cursor: "pointer",
-                      color: bookmarked ? "var(--accent)" : "var(--fg-3)",
-                      padding: 4, lineHeight: 0,
-                    }}
-                  >
-                    {bookmarked
-                      ? <BookmarkCheck size={16} strokeWidth={1.75} />
-                      : <Bookmark size={16} strokeWidth={1.75} />}
-                  </button>
-                </div>
-              );
-            })}
+            <div className="label">
+              <span>
+                {plan.hotels.length} stay{plan.hotels.length !== 1 ? "s" : ""}
+                {ctx.mode === "authenticated" ? " · matched for you" : ""}
+              </span>
+              <span className="line" />
+            </div>
+            <div className="hotel-shelf-wrap">
+            <div style={{
+              display: "flex", gap: 12, overflowX: "auto",
+              paddingBottom: 4,
+              scrollbarWidth: "none",
+            } as React.CSSProperties}>
+              {plan.hotels.map((h) => {
+                const key = h.name + h.location;
+                const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
+                return (
+                  <div key={h.name} style={{ position: "relative", flex: "0 0 260px" }}>
+                    <HotelCard hotel={h} />
+                    <button
+                      onClick={() => handleHotelBookmark(h)}
+                      title={bookmarked ? "Unsave hotel" : "Save hotel"}
+                      style={{
+                        position: "absolute", top: 10, right: 10,
+                        background: "none", border: "none", cursor: "pointer",
+                        color: bookmarked ? "var(--accent)" : "var(--fg-3)",
+                        padding: 4, lineHeight: 0,
+                      }}
+                    >
+                      {bookmarked
+                        ? <BookmarkCheck size={16} strokeWidth={1.75} />
+                        : <Bookmark size={16} strokeWidth={1.75} />}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            </div>{/* end .hotel-shelf-wrap */}
           </div>
 
           <div className="budget">
@@ -437,6 +514,46 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         </div>
 
       </div>{/* end .plan-two-col */}
+
+      {/* Earn-the-login card — after value is seen, before sticky bar */}
+      {ctx.mode === "demo" && !loginDismissed && (
+        <div style={{
+          background: "linear-gradient(135deg, rgba(216,149,64,0.08), rgba(79,107,74,0.05))",
+          border: "1.5px dashed var(--ochre-deep)",
+          borderRadius: 12, padding: "14px 16px", marginTop: 24, marginBottom: 8,
+          display: "flex", gap: 12,
+        }}>
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontFamily: "var(--font-script)", fontSize: 19, color: "var(--bark)", marginBottom: 4,
+            }}>
+              loved this plan? ✦
+            </div>
+            <div style={{
+              fontSize: 12, color: "var(--fg-2)", lineHeight: 1.55,
+              fontFamily: "var(--font-body)", marginBottom: 10,
+            }}>
+              sign in to save your journal, sync across devices, and get plans tuned to your taste.
+            </div>
+            <GoogleSignInButton onToken={handleEarnLogin} />
+          </div>
+          <button
+            onClick={() => {
+              setLoginDismissed(true);
+              try { localStorage.setItem("ts_login_dismiss", "1"); } catch { /* quota */ }
+            }}
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "var(--fg-3)", padding: 2, fontSize: 14,
+              alignSelf: "flex-start", lineHeight: 1,
+            }}
+            title="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      </>)}
 
       </div>{/* end .cx */}
 
@@ -603,188 +720,6 @@ function WarningsCarousel({ warnings }: { warnings: string[] }) {
   );
 }
 
-function SwipeCard({ day, listMode = false }: { day: DayPlan; listMode?: boolean }) {
-  const imgUrl = getDestinationImageUrl(day.location);
-  const illustration = getIllustration(day.location);
-
-  return (
-    <div
-      className="day-swipe-card"
-      style={{
-        ...(listMode ? { flex: "none", width: "100%" } : {}),
-        // Ruled-paper background
-        backgroundImage: "repeating-linear-gradient(transparent,transparent 27px,rgba(62,47,35,0.07) 27px,rgba(62,47,35,0.07) 28px)",
-        backgroundPositionY: "80px",
-        position: "relative",
-        overflow: "hidden",
-        padding: "0 0 16px",
-      }}
-    >
-      {/* Washi tape strip across top */}
-      <div style={{
-        height: 14, background: "var(--tape)",
-        margin: "0 -16px 0", borderBottom: "1px solid rgba(166,112,29,0.3)",
-      }} />
-
-      {/* Header: day stamp + location + illustration */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "12px 16px 0", marginBottom: 12 }}>
-        {/* Ink stamp circle */}
-        <div style={{
-          width: 56, height: 56, borderRadius: "50%", flexShrink: 0,
-          border: "2.5px solid var(--bark)",
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          background: "transparent",
-        }}>
-          <span style={{ fontFamily: "var(--font-script)", fontSize: 30, fontWeight: 700, color: "var(--bark)", lineHeight: 1 }}>
-            {day.day_number}
-          </span>
-          <span style={{ fontFamily: "var(--font-body)", fontSize: 7, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--bark-2)", marginTop: 1 }}>
-            DAY
-          </span>
-        </div>
-
-        {/* Location + refinement tag */}
-        <div style={{ flex: 1, minWidth: 0, paddingTop: 4 }}>
-          <div style={{ fontFamily: "var(--font-script)", fontSize: 22, color: "var(--rust)", lineHeight: 1.15, fontWeight: 700 }}>
-            {day.location.split(",")[0]}
-          </div>
-          {day.location.includes(",") && (
-            <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--bark-3)", fontWeight: 600, marginTop: 1 }}>
-              {day.location.split(",").slice(1).join(",").trim()}
-            </div>
-          )}
-          {day.updated_in_refinement && (
-            <span className="updated-tag" style={{ marginTop: 4, display: "inline-flex" }}>
-              <RefreshCw size={10} strokeWidth={3} />updated
-            </span>
-          )}
-        </div>
-
-        {/* Illustration */}
-        <div style={{ flexShrink: 0, opacity: 0.85, marginTop: -4 }}>
-          {illustration}
-        </div>
-      </div>
-
-      {/* Photo strip with tape tabs */}
-      {imgUrl && (
-        <div style={{ position: "relative", margin: "0 16px 14px" }}>
-          {/* Tape tabs on photo */}
-          <div style={{
-            position: "absolute", top: -6, left: "50%", transform: "translateX(-50%)",
-            width: 40, height: 12, background: "var(--tape)",
-            borderRadius: 2, zIndex: 2,
-          }} />
-          <div style={{
-            borderRadius: 6, overflow: "hidden", height: 90,
-            boxShadow: "0 3px 12px rgba(62,47,35,0.2)",
-            border: "3px solid var(--paper)",
-            outline: "1px solid rgba(62,47,35,0.12)",
-          }}>
-            <img
-              src={imgUrl}
-              alt={day.location}
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
-              onError={e => { (e.currentTarget.parentElement!.parentElement as HTMLElement).style.display = "none"; }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Notes callout */}
-      {day.notes && (
-        <div style={{
-          margin: "0 16px 10px",
-          padding: "8px 12px",
-          background: "rgba(216,149,64,0.12)",
-          border: "1.5px dashed var(--ochre-deep)",
-          borderRadius: 8,
-          display: "flex", gap: 7, alignItems: "flex-start",
-        }}>
-          <span style={{ fontSize: 13, flexShrink: 0 }}>✎</span>
-          <span style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark)", lineHeight: 1.5 }}>
-            {day.notes}
-          </span>
-        </div>
-      )}
-
-      {/* Activities — journal entry style */}
-      <div style={{ padding: "0 16px" }}>
-        {day.activities.map((a, i) => {
-          const placeImg = getPlaceImageUrl(a.name, day.location.split(",")[0]);
-          return (
-          <div key={a.name} style={{
-            display: "flex", gap: 10, alignItems: "flex-start",
-            padding: "9px 0",
-            borderTop: i === 0 ? "none" : "1px dashed rgba(62,47,35,0.1)",
-          }}>
-            <span style={{
-              fontFamily: "var(--font-script)", fontSize: 16, fontWeight: 700,
-              color: a.bookable ? "var(--moss)" : "var(--bark-3)",
-              lineHeight: 1, flexShrink: 0, width: 18, textAlign: "center", paddingTop: 1,
-            }}>
-              {i + 1}.
-            </span>
-            <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 13.5, color: "var(--fg)", lineHeight: 1.3 }}>
-                {cleanName(a.name)}
-              </div>
-              {a.approx_cost != null && (
-                <div style={{ fontFamily: "var(--font-script)", fontSize: 13, color: "var(--rust)", marginTop: 1 }}>
-                  ~₹{a.approx_cost.toLocaleString()} / person
-                </div>
-              )}
-              <div className="act-badges" style={{ marginTop: 4 }}>
-                {a.bookable
-                  ? <span className="badge bookable">bookable</span>
-                  : <span className="badge">plan to visit</span>}
-              </div>
-            </div>
-            {placeImg && (
-              <img
-                src={placeImg}
-                alt={a.name}
-                style={{
-                  width: 52, height: 52, borderRadius: 8, objectFit: "cover",
-                  flexShrink: 0, border: "2px solid var(--paper)",
-                  boxShadow: "0 2px 6px rgba(62,47,35,0.18)",
-                }}
-              />
-            )}
-          </div>
-          );
-        })}
-      </div>
-
-      {/* Meals — postage-stamp style row */}
-      <div style={{
-        margin: "10px 16px 0",
-        padding: "10px 0 0",
-        borderTop: "1.5px solid rgba(62,47,35,0.12)",
-        display: "flex", gap: 8,
-      }}>
-        {([
-          { icon: "🍳", label: "B", meal: day.meals.breakfast },
-          { icon: "🥘", label: "L", meal: day.meals.lunch },
-          { icon: "🍛", label: "D", meal: day.meals.dinner },
-        ]).map(({ icon, label, meal }) => (
-          <div key={label} style={{
-            flex: 1, padding: "6px 8px",
-            background: "rgba(244,236,219,0.8)",
-            border: "1px solid rgba(62,47,35,0.12)",
-            borderRadius: 8,
-          }}>
-            <div style={{ fontSize: 12, marginBottom: 2 }}>{icon}</div>
-            <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>{label}</div>
-            <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{meal}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function HotelCard({ hotel }: { hotel: Hotel }) {
   const imgUrl = getDestinationImageUrl(hotel.location);
   const [bookmarked, setBookmarked] = useState(() => isBookmarked(hotel.name));
@@ -814,7 +749,7 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
           backgroundSize: "cover", backgroundPosition: "center",
         }}>
           {!imgUrl && (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🏨</div>
+            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bark-3)" }}><HotelIcon size={30} strokeWidth={1.5} /></div>
           )}
         </div>
         {/* Tape tab on photo */}
@@ -954,7 +889,7 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
           <div className="map-section-label" style={{ marginTop: 18 }}>accommodation</div>
           {hotels.map(h => (
             <div key={h.name} className="map-hotel-row" style={{ marginBottom: 8 }}>
-              <div style={{ fontSize: 16 }}>🏨</div>
+              <div style={{ color: "var(--bark-2)", lineHeight: 0 }}><Bed size={16} strokeWidth={2} /></div>
               <div className="hname">{h.name}<br /><span style={{ fontWeight: 600, color: "var(--fg-3)", fontSize: 10 }}>{h.location}</span></div>
               <div className="hcost">₹{h.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
             </div>
@@ -1027,7 +962,7 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
           <>
             <div className="map-section-label">tonight's stay</div>
             <div className="map-hotel-row">
-              <div style={{ fontSize: 16 }}>🏨</div>
+              <div style={{ color: "var(--bark-2)", lineHeight: 0 }}><Bed size={16} strokeWidth={2} /></div>
               <div className="hname">{nightHotel.name}</div>
               <div className="hcost">₹{nightHotel.approx_cost_per_night.toLocaleString()}<span style={{ opacity: 0.5 }}>/n</span></div>
             </div>

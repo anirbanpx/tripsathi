@@ -67,8 +67,8 @@ export default function BookingSection({ ctx, onSetContext }: Props) {
   async function handleShare() {
     const dest = plan.days[0]?.location.split(",")[0] ?? "trip";
     const lines = [
-      `🗺 ${dest} trip · ${plan.days.length} nights`,
-      `💰 ~₹${plan.budget_breakdown.total.toLocaleString()} total`,
+      `${dest} trip · ${plan.days.length} nights`,
+      `Budget: ~₹${plan.budget_breakdown.total.toLocaleString()} total`,
       ...Object.entries(bookedItems).map(([name, b]) => `✓ ${name} — ${b.confirmation_id}`),
       `\nplanned on tripsathi`,
     ];
