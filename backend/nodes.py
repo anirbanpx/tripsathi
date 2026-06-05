@@ -8,6 +8,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from openai import OpenAI, RateLimitError, APIStatusError, BadRequestError
+from google import genai
+from google.genai import types
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +39,13 @@ class _Provider:
     model: str
 
 
+@dataclass
+class _GeminiProvider:
+    name: str
+    api_key: str
+    model: str
+
+
 def _build_provider(name, base_env, key_env, model_env, base_default, model_default):
     key = os.environ.get(key_env)
     if not key:
@@ -52,27 +61,39 @@ def _build_provider(name, base_env, key_env, model_env, base_default, model_defa
     )
 
 
+def _build_gemini_provider():
+    key = os.environ.get("FALLBACK2_LLM_API_KEY")
+    if not key:
+        return None
+    return _GeminiProvider(
+        name="gemini",
+        api_key=key,
+        model=os.environ.get("FALLBACK2_LLM_MODEL", "gemini-2.5-flash"),
+    )
+
+
 _PROVIDERS = [p for p in [
     _build_provider("groq",     "LLM_BASE_URL",           "LLM_API_KEY",           "LLM_MODEL",
                     "http://localhost:1234/v1", "local-model"),
     _build_provider("cerebras", "FALLBACK1_LLM_BASE_URL",  "FALLBACK1_LLM_API_KEY", "FALLBACK1_LLM_MODEL",
                     "https://api.cerebras.ai/v1", "gpt-oss-120b"),
-    _build_provider("gemini",   "FALLBACK2_LLM_BASE_URL",  "FALLBACK2_LLM_API_KEY", "FALLBACK2_LLM_MODEL",
-                    "https://generativelanguage.googleapis.com/v1beta/openai/", "gemini-2.5-flash"),
+    _build_gemini_provider(),
 ] if p]
 
 # session stickiness: provider name -> epoch time it becomes usable again
 _disabled_until: dict[str, float] = {}
 
-# Task-based provider ordering: routes each call type to its best-fit model first.
-# synthesis/candidate_gen → Gemini-first (long-context + clean JSON, huge free quota)
-# plan/critic → gpt-oss-first (deliberate reasoning is gpt-oss's strength)
-# default → Groq-first (primary for everything not explicitly routed)
+# Task-based provider ordering.
+# synthesis/candidate_gen → Gemini-first (large context, generous free quota)
+# plan/critic → gpt-oss-first (deliberate reasoning)
+# gemini_only → Gemini exclusively
+# default → Groq-first
 _TASK_CHAINS: dict[str, list[str]] = {
     "synthesis":     ["gemini", "groq", "cerebras"],
     "candidate_gen": ["gemini", "groq", "cerebras"],
     "plan":          ["groq", "cerebras", "gemini"],
     "critic":        ["groq", "cerebras", "gemini"],
+    "gemini_only":   ["gemini"],
     "default":       ["groq", "cerebras", "gemini"],
 }
 
@@ -100,6 +121,157 @@ def _classify_error(e) -> str:
 def _parse_cooldown(e) -> float:
     match = re.search(r"try again in (\d+(?:\.\d+)?)s", str(e), re.IGNORECASE)
     return float(match.group(1)) if match else 600.0
+
+
+def _classify_gemini_error(e) -> str:
+    msg = str(e).lower()
+    if "429" in msg or "resource_exhausted" in msg or "quota" in msg or "rate" in msg:
+        return "quota"
+    if "403" in msg or "permission_denied" in msg or "access denied" in msg or "denied access" in msg:
+        return "quota"
+    if "too long" in msg or "context" in msg or "input token" in msg:
+        return "context"
+    return "other"
+
+
+def _gemini_tokens(response) -> int:
+    try:
+        return response.usage_metadata.total_token_count or 0
+    except Exception:
+        return 0
+
+
+def _openai_tools_to_gemini(tools: list) -> list:
+    """Convert OpenAI tool schema → Gemini function_declarations list."""
+    decls = []
+    for t in tools:
+        if t.get("type") != "function":
+            continue
+        fn = t["function"]
+        decl: dict = {"name": fn["name"]}
+        if fn.get("description"):
+            decl["description"] = fn["description"]
+        if fn.get("parameters"):
+            decl["parameters"] = fn["parameters"]
+        decls.append(decl)
+    return [{"function_declarations": decls}] if decls else []
+
+
+def _call_gemini_json(provider, system: str, user_message: str, max_tokens: int) -> dict | list | None:
+    """Single Gemini call returning parsed JSON, with up to 3-attempt retry."""
+    client = genai.Client(api_key=provider.api_key)
+    for attempt in range(3):
+        extra = (
+            "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown, no prose, no code fences."
+            if attempt > 0 else ""
+        )
+        if attempt > 0:
+            time.sleep(8 * attempt)
+        try:
+            response = client.models.generate_content(
+                model=provider.model,
+                contents=user_message + extra,
+                config=types.GenerateContentConfig(
+                    system_instruction=system,
+                    response_mime_type="application/json",
+                    max_output_tokens=max_tokens,
+                ),
+            )
+        except Exception as e:
+            kind = _classify_gemini_error(e)
+            if kind in ("quota", "context"):
+                raise
+            if attempt == 2:
+                raise
+            continue
+
+        tokens = _gemini_tokens(response)
+        _thread_tokens.count = getattr(_thread_tokens, "count", 0) + tokens
+        logger.info("llm_call provider=gemini model=%s total_tokens=%d", provider.model, tokens)
+
+        raw = (response.text or "").strip()
+        if not raw:
+            continue
+        if raw.startswith("```"):
+            parts = raw.split("```")
+            raw = parts[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+            raw = raw.strip()
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            if attempt == 2:
+                return None
+            continue
+    return None
+
+
+def _call_gemini_with_tools(
+    provider,
+    system: str,
+    user_message: str,
+    tools: list,
+    max_tokens: int,
+    max_tool_rounds: int,
+) -> dict | list | None:
+    """Gemini multi-turn tool-calling loop."""
+    from tools import execute_tool
+
+    client = genai.Client(api_key=provider.api_key)
+    gemini_tools = _openai_tools_to_gemini(tools) if tools else []
+
+    contents: list = [user_message]
+    tool_rounds = 0
+
+    while True:
+        active_tools = gemini_tools if tool_rounds < max_tool_rounds and gemini_tools else []
+        response = client.models.generate_content(
+            model=provider.model,
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+                max_output_tokens=max_tokens,
+                tools=active_tools or None,
+            ),
+        )
+
+        tokens = _gemini_tokens(response)
+        _thread_tokens.count = getattr(_thread_tokens, "count", 0) + tokens
+        logger.info("llm_call provider=gemini model=%s total_tokens=%d", provider.model, tokens)
+
+        fn_calls = getattr(response, "function_calls", None) or []
+
+        if not fn_calls:
+            raw = (response.text or "").strip()
+            if not raw:
+                return None
+            if raw.startswith("```"):
+                parts = raw.split("```")
+                raw = parts[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+                raw = raw.strip()
+            try:
+                return json.loads(raw)
+            except json.JSONDecodeError:
+                return None
+
+        contents.append(response.candidates[0].content)
+        tool_results = []
+        for fc in fn_calls:
+            try:
+                args = dict(fc.args) if fc.args else {}
+            except Exception:
+                args = {}
+            result = execute_tool(fc.name, args)
+            logger.info("tool_call name=%s result_len=%d", fc.name, len(result))
+            tool_results.append(
+                types.Part.from_function_response(name=fc.name, response={"result": result})
+            )
+        contents.append(types.Content(role="user", parts=tool_results))
+        tool_rounds += 1
+
 
 APPROVAL_SIGNALS = {
     "looks good", "approve", "approved", "perfect", "that's fine", "yes",
@@ -293,6 +465,22 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
         raise RuntimeError("all LLM providers are currently rate-limited")
 
     for provider in available:
+        if isinstance(provider, _GeminiProvider):
+            try:
+                result = _call_gemini_json(provider, system, user_message, max_tokens)
+                if result is not None:
+                    return result
+            except Exception as e:
+                kind = _classify_gemini_error(e)
+                if kind == "quota":
+                    _disabled_until[provider.name] = time.time() + 600.0
+                    logger.warning("provider %s exhausted → failing over", provider.name)
+                elif kind == "context":
+                    logger.warning("provider %s context-length error → failing over", provider.name)
+                else:
+                    logger.warning("provider %s error → failing over: %s", provider.name, e)
+            continue
+
         for attempt in range(3):
             extra_instruction = (
                 "\n\nIMPORTANT: Respond ONLY with valid JSON. No markdown, no prose, no code fences."
@@ -375,6 +563,22 @@ def _call_llm_with_tools(
         raise RuntimeError("all LLM providers are currently rate-limited")
 
     for provider in available:
+        if isinstance(provider, _GeminiProvider):
+            try:
+                result = _call_gemini_with_tools(provider, system, user_message, tools, max_tokens, max_tool_rounds)
+                if result is not None:
+                    return result
+            except Exception as e:
+                kind = _classify_gemini_error(e)
+                if kind == "quota":
+                    _disabled_until[provider.name] = time.time() + 600.0
+                    logger.warning("provider %s exhausted → failing over", provider.name)
+                elif kind == "context":
+                    logger.warning("provider %s context-length error → failing over", provider.name)
+                else:
+                    logger.warning("provider %s tool_call error → failing over: %s", provider.name, e)
+            continue
+
         messages = [
             {"role": "system", "content": system},
             {"role": "user", "content": user_message},
