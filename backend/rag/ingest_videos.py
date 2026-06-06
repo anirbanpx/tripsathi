@@ -2,13 +2,16 @@
 One-time script to pre-ingest YouTube video metadata for all destinations.
 
 Run from backend/:
-    python rag/ingest_videos.py
+    python rag/ingest_videos.py [--days N]
+
+  --days N   Look-back window in days (default: 365)
 
 Requires YOUTUBE_API_KEY env var. Output committed to rag/destination_videos.json.
 Cost: 54 destinations × 101 API units ≈ 5,454 units (fits free daily quota in one run).
 Re-run annually to refresh video freshness.
 """
 
+import argparse
 import json
 import logging
 import os
@@ -22,6 +25,21 @@ import requests
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
+
+_NON_EN_KEYWORDS = [
+    "in telugu", "in hindi", "in tamil", "in kannada", "in malayalam",
+    "in bengali", "in marathi", "in odia", "in gujarati", "in punjabi",
+    "telugu lo", "hindi mein", "tamil la",
+]
+_INDIC_RANGES = [(0x0900, 0x0D7F), (0x0A00, 0x0A7F)]
+
+
+def _is_english_title(title: str) -> bool:
+    lower = title.lower()
+    if any(kw in lower for kw in _NON_EN_KEYWORDS):
+        return False
+    return not any(lo <= ord(ch) <= hi for ch in title for lo, hi in _INDIC_RANGES)
+
 
 DESTINATIONS = [
     "Agra", "Ahmedabad", "Ajmer", "Alleppey", "Amritsar",
@@ -48,7 +66,8 @@ def _parse_iso8601_duration(duration: str) -> int:
     return h * 3600 + m * 60 + s
 
 
-def fetch_best_video(destination: str, api_key: str, published_after: str) -> dict | None:
+def fetch_best_video(destination: str, api_key: str, days: int = 365) -> dict | None:
+    published_after = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
     # Call 1: search.list (100 units)
     search_resp = requests.get(
         "https://www.googleapis.com/youtube/v3/search",
@@ -89,15 +108,17 @@ def fetch_best_video(destination: str, api_key: str, published_after: str) -> di
         if dur_s < 300 or views < 50_000:
             continue
         snip = item.get("snippet", {})
+        title = snip.get("title", "")
         candidates.append({
             "video_id": item["id"],
-            "title": snip.get("title", ""),
+            "title": title,
             "view_count": views,
             "duration_seconds": dur_s,
             "published_at": snip.get("publishedAt", "")[:10],
             "description": snip.get("description", "")[:300],
             "tags": snip.get("tags", [])[:10],
             "thumbnail_url": f"https://img.youtube.com/vi/{item['id']}/maxresdefault.jpg",
+            "language": "en" if _is_english_title(title) else "non-en",
         })
 
     candidates.sort(key=lambda x: x["view_count"], reverse=True)
@@ -105,12 +126,14 @@ def fetch_best_video(destination: str, api_key: str, published_after: str) -> di
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--days", type=int, default=365, help="Look-back window in days (default: 365)")
+    args = parser.parse_args()
+
     api_key = os.environ.get("YOUTUBE_API_KEY")
     if not api_key:
         logger.error("YOUTUBE_API_KEY not set")
         sys.exit(1)
-
-    published_after = (datetime.now(timezone.utc) - timedelta(days=365)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Load existing file so we can skip already-fetched destinations
     existing: dict = {}
@@ -126,9 +149,9 @@ def main():
         if dest in results:
             logger.info("[%d/%d] Skipping %s (already ingested)", i + 1, len(DESTINATIONS), dest)
             continue
-        logger.info("[%d/%d] Fetching %s ...", i + 1, len(DESTINATIONS), dest)
+        logger.info("[%d/%d] Fetching %s (last %d days) ...", i + 1, len(DESTINATIONS), dest, args.days)
         try:
-            video = fetch_best_video(dest, api_key, published_after)
+            video = fetch_best_video(dest, api_key, days=args.days)
             if video:
                 results[dest] = video
                 logger.info("  -> %s (%d views, %ds)", video["title"][:60], video["view_count"], video["duration_seconds"])
