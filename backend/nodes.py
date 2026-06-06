@@ -72,13 +72,34 @@ def _build_gemini_provider():
     )
 
 
-_PROVIDERS = [p for p in [
+_DEFAULT_OPENROUTER_MODELS = (
+    "meta-llama/llama-3.3-70b-instruct:free,"
+    "google/gemma-4-31b-it:free,"
+    "deepseek/deepseek-r1-0528:free,"
+    "z-ai/glm-4.5-air:free,"
+    "nvidia/nemotron-3-super-120b-a12b:free,"
+    "qwen/qwen3-next-80b-a3b-instruct:free"
+)
+
+
+def _build_openrouter_providers() -> list[_Provider]:
+    key = os.environ.get("FALLBACK3_LLM_API_KEY")
+    if not key:
+        return []
+    base_url = os.environ.get("FALLBACK3_LLM_BASE_URL", "https://openrouter.ai/api/v1")
+    models_str = os.environ.get("FALLBACK3_LLM_MODELS", _DEFAULT_OPENROUTER_MODELS)
+    models = [m.strip() for m in models_str.split(",") if m.strip()]
+    client = OpenAI(base_url=base_url, api_key=key, max_retries=0)
+    return [_Provider(name=f"openrouter_{i}", client=client, model=model) for i, model in enumerate(models)]
+
+
+_PROVIDERS: list = [p for p in [
     _build_provider("groq",     "LLM_BASE_URL",           "LLM_API_KEY",           "LLM_MODEL",
                     "http://localhost:1234/v1", "local-model"),
     _build_provider("cerebras", "FALLBACK1_LLM_BASE_URL",  "FALLBACK1_LLM_API_KEY", "FALLBACK1_LLM_MODEL",
                     "https://api.cerebras.ai/v1", "gpt-oss-120b"),
     _build_gemini_provider(),
-] if p]
+] if p] + _build_openrouter_providers()
 
 # session stickiness: provider name -> epoch time it becomes usable again
 _disabled_until: dict[str, float] = {}
@@ -89,12 +110,12 @@ _disabled_until: dict[str, float] = {}
 # gemini_only → Gemini exclusively
 # default → Groq-first
 _TASK_CHAINS: dict[str, list[str]] = {
-    "synthesis":     ["gemini", "groq", "cerebras"],
-    "candidate_gen": ["gemini", "groq", "cerebras"],
-    "plan":          ["groq", "cerebras", "gemini"],
-    "critic":        ["groq", "cerebras", "gemini"],
-    "gemini_only":   ["gemini"],
-    "default":       ["groq", "cerebras", "gemini"],
+    "synthesis":     ["openrouter", "groq", "cerebras", "gemini"],
+    "candidate_gen": ["openrouter", "groq", "cerebras", "gemini"],
+    "plan":          ["openrouter", "groq", "cerebras", "gemini"],
+    "critic":        ["openrouter", "groq", "cerebras", "gemini"],
+    "gemini_only":   ["openrouter", "gemini"],
+    "default":       ["openrouter", "groq", "cerebras", "gemini"],
 }
 
 
@@ -370,6 +391,178 @@ def _get_elderly(state) -> bool:
     )
 
 
+def _season_qualifier(start_date: str | None) -> str:
+    """Derive a seasonal amenity hint from trip start date."""
+    if not start_date:
+        return ""
+    try:
+        month = int(str(start_date)[5:7])
+    except (ValueError, IndexError):
+        return ""
+    if month in (3, 4, 5):   # Summer — heat is the main concern
+        return "air conditioned with pool"
+    if month in (6, 7, 8, 9):  # Monsoon — indoor comfort matters
+        return "good indoor facilities covered"
+    if month in (12, 1, 2):  # Winter — cold nights in hill stations
+        return "heated rooms"
+    return ""  # Oct-Nov: peak pleasant season, no special amenity need
+
+
+def _build_place_search_queries(state) -> tuple[list[str], list[str]]:
+    """Build 2-3 focused search_places queries per category from persona signals.
+
+    Returns (hotel_queries, restaurant_queries). Each list has 1-3 short, targeted
+    queries that cover different facets: core type/budget, location preference,
+    group context or seasonal amenity. Shorter focused queries outperform one long
+    compound string in Google Places text search.
+    """
+    destination = state["destination"]
+    tp = state.get("trip_parameters") or {}
+    up = (state.get("user_profile") or {}).get("constraints", {})
+    taste = state.get("taste_profile") or {}
+
+    budget = tp.get("budget_bracket") or up.get("budget_sensitivity") or "mid"
+    kid_ages = _get_kid_ages(state)
+    elderly = _get_elderly(state)
+    mobility_limited = bool(up.get("mobility_limited"))
+    dietary = up.get("dietary_restrictions") or tp.get("dietary_restrictions") or []
+    trip_style = tp.get("trip_style") or []
+    at = taste.get("accommodation_taste", 3)
+    ct = taste.get("crowd_tolerance", 3)
+    wt = taste.get("walking_tolerance", 3)
+
+    # ── Derived signals ──────────────────────────────────────────────────────
+
+    # Accommodation type
+    if at <= 2:
+        acc_type = "homestay guesthouse"
+    elif at >= 4:
+        acc_type = "resort"
+    else:
+        acc_type = "hotel"
+
+    # Budget prefix
+    budget_prefix = {"budget": "budget", "premium": "luxury", "mid": "mid-range"}.get(budget, "mid-range")
+    # "luxury resort" not "luxury luxury resort"
+    if budget == "premium" and at >= 4:
+        budget_prefix = ""
+
+    # Location signal — priority: mobility > hard_avoids > walking_tolerance > crowd_tolerance > trip_style
+    hard_avoids_text = " ".join(taste.get("hard_avoids") or []).lower()
+    if elderly or mobility_limited:
+        location = "central accessible flat terrain"
+    elif any(kw in hard_avoids_text for kw in ["noise", "noisy", "highway", "loud"]):
+        location = "quiet peaceful away from noise"
+    elif any(kw in hard_avoids_text for kw in ["crowded", "tourist crowd", "busy street"]):
+        location = "away from tourist crowds"
+    elif any(kw in hard_avoids_text for kw in ["city center", "city noise", "urban"]):
+        location = "away from city center"
+    elif wt <= 2:
+        location = "walking distance to attractions"
+    elif ct <= 2:
+        location = "quiet secluded"
+    elif ct >= 4:
+        location = "city center"
+    else:
+        location = {"beaches": "beachfront", "nature": "near nature reserve",
+                    "adventure": "near trekking", "religious": "near temple"}.get(
+            next((s for s in trip_style if s in ("beaches", "nature", "adventure", "religious")), ""), ""
+        )
+
+    # Group context
+    context = "family" if kid_ages else ("accessible" if (elderly or mobility_limited) else "")
+
+    # Seasonal amenity
+    season = _season_qualifier(tp.get("start_date"))
+
+    # ── Hotel queries (up to 3, each covering a different facet) ────────────
+
+    hotel_queries: list[str] = []
+
+    # Q1: core — budget tier + property type (always)
+    q1_parts = [p for p in [budget_prefix, acc_type, destination] if p]
+    hotel_queries.append(" ".join(q1_parts))
+
+    # Q2: location preference (skip if neutral/empty)
+    if location:
+        hotel_queries.append(f"{acc_type} {destination} {location}")
+
+    # Q3: group context, then seasonal amenity as fallback — only if adds new info
+    if context:
+        hotel_queries.append(f"{context} {acc_type} {destination}")
+    elif season:
+        hotel_queries.append(f"{acc_type} {destination} {season}")
+
+    # Deduplicate while preserving order
+    seen: set[str] = set()
+    hotel_queries = [q for q in hotel_queries if not (q in seen or seen.add(q))]  # type: ignore[func-returns-value]
+
+    # ── Restaurant queries (up to 2) ─────────────────────────────────────────
+
+    restaurant_queries: list[str] = []
+
+    # Q1: dietary + destination (always)
+    dietary_prefix = " ".join(dietary) if dietary else ""
+    q1 = f"{dietary_prefix} restaurant {destination}".strip() if dietary_prefix else f"restaurant {destination}"
+    restaurant_queries.append(q1)
+
+    # Q2: context — family / fine dining / local food; monsoon → covered seating
+    if kid_ages:
+        restaurant_queries.append(f"family restaurant {destination}")
+    elif budget == "premium":
+        restaurant_queries.append(f"fine dining {destination}")
+    elif budget == "budget":
+        restaurant_queries.append(f"local street food {destination}")
+    elif season and "covered" in season:
+        restaurant_queries.append(f"indoor restaurant {destination}")
+
+    seen = set()
+    restaurant_queries = [q for q in restaurant_queries if not (q in seen or seen.add(q))]  # type: ignore[func-returns-value]
+
+    return hotel_queries[:3], restaurant_queries[:2]
+
+
+def _parallel_place_search(queries: list[str]) -> list[dict]:
+    """Run multiple search_places queries in parallel and merge, deduplicating by name.
+
+    Returns a list of {name, rating, address} dicts, ordered by first appearance
+    (higher-priority queries go first so the plan LLM sees the best matches early).
+    """
+    from tools import search_places
+
+    if not queries:
+        return []
+
+    with ThreadPoolExecutor(max_workers=len(queries)) as pool:
+        raw_results = list(pool.map(search_places, queries))
+
+    seen_names: set[str] = set()
+    merged: list[dict] = []
+
+    for raw in raw_results:
+        if not isinstance(raw, str):
+            continue
+        # Skip error/empty responses from search_places
+        if any(raw.startswith(prefix) for prefix in ("No places", "Places lookup failed", "Google Maps")):
+            continue
+        for line in raw.split("\n"):
+            if not line.startswith("- "):
+                continue
+            parts = line[2:].split(" | ")
+            name = parts[0].strip()
+            if not name or name in seen_names:
+                continue
+            seen_names.add(name)
+            # Parse "Rating: 4.2/5 (123 reviews)" → "4.2"
+            rating = ""
+            if len(parts) > 1:
+                rating = parts[1].replace("Rating: ", "").split("/")[0].strip()
+            address = parts[2].strip() if len(parts) > 2 else ""
+            merged.append({"name": name, "rating": rating, "address": address})
+
+    return merged
+
+
 def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "", elderly: bool = False) -> dict:
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
@@ -455,11 +648,23 @@ def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict |
     return plan
 
 
-def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str = "default") -> dict | list:
-    now = time.time()
+def _resolve_chain(task: str) -> list:
+    """Expand task chain names → ordered provider list, with 'openrouter' fanned out to all openrouter_N entries."""
     chain = _TASK_CHAINS.get(task, _TASK_CHAINS["default"])
     provider_map = {p.name: p for p in _PROVIDERS}
-    ordered = [provider_map[name] for name in chain if name in provider_map]
+    openrouter_providers = [p for p in _PROVIDERS if p.name.startswith("openrouter_")]
+    result = []
+    for name in chain:
+        if name == "openrouter":
+            result.extend(openrouter_providers)
+        elif name in provider_map:
+            result.append(provider_map[name])
+    return result
+
+
+def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str = "default") -> dict | list:
+    now = time.time()
+    ordered = _resolve_chain(task)
     available = [p for p in ordered if _disabled_until.get(p.name, 0) <= now]
     if not available:
         raise RuntimeError("all LLM providers are currently rate-limited")
@@ -555,9 +760,7 @@ def _call_llm_with_tools(
     from tools import execute_tool
 
     now = time.time()
-    chain = _TASK_CHAINS.get(task, _TASK_CHAINS["default"])
-    provider_map = {p.name: p for p in _PROVIDERS}
-    ordered = [provider_map[name] for name in chain if name in provider_map]
+    ordered = _resolve_chain(task)
     available = [p for p in ordered if _disabled_until.get(p.name, 0) <= now]
     if not available:
         raise RuntimeError("all LLM providers are currently rate-limited")
@@ -768,17 +971,34 @@ def destination_intelligence(state: TripSathiState) -> dict:
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
 
-    # Call 3: synthesize via tool-calling agent
-    # The LLM can supplement RAG with live data (weather, place ratings, web search) for gaps.
+    # Call 3a: pre-fetch hotels + restaurants from Google Maps in parallel.
+    # We do this ourselves rather than asking the synthesis LLM to call search_places,
+    # so we control query quality and run all searches simultaneously.
+    hotel_queries, restaurant_queries = _build_place_search_queries(state)
+    logger.info(
+        "place_search destination=%s hotel_queries=%r restaurant_queries=%r",
+        state["destination"], hotel_queries, restaurant_queries,
+    )
+    with ThreadPoolExecutor(max_workers=2) as _places_pool:
+        _hotel_future = _places_pool.submit(_parallel_place_search, hotel_queries)
+        _rest_future = _places_pool.submit(_parallel_place_search, restaurant_queries)
+        prefetched_hotels = _hotel_future.result()
+        prefetched_restaurants = _rest_future.result()
+    logger.info(
+        "place_search_done destination=%s hotels=%d restaurants=%d",
+        state["destination"], len(prefetched_hotels), len(prefetched_restaurants),
+    )
+
+    # Call 3b: synthesize via tool-calling agent.
+    # Hotels/restaurants are already pre-fetched — LLM only needs weather + web search here.
     synthesis_prompt = (
         f"Destination: {state['destination']}\n"
         f"Traveller profile: {json.dumps(state['user_profile'])}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Retrieved knowledge (RAG):\n{knowledge_block}\n\n"
-        f"MANDATORY tool use: call search_places for hotels (query: best hotels in {state['destination']}) "
-        f"AND call search_places for restaurants (query: best restaurants in {state['destination']}) — "
-        f"do NOT use hotel or restaurant names from the RAG block above, use search_places results exclusively. "
-        f"Also use get_weather for current seasonal warnings, and web_search for recent traveller reports or pricing not in the RAG content. "
+        f"MANDATORY tool use: call get_weather for current seasonal warnings, and web_search "
+        f"for recent traveller reports or pricing not covered by the RAG content. "
+        f"Do NOT call search_places for hotels or restaurants — those have already been fetched. "
         f"After all tool calls, produce the synthesis JSON."
     )
     try:
@@ -851,6 +1071,8 @@ def destination_intelligence(state: TripSathiState) -> dict:
 
     return {
         "research_synthesis": research_synthesis,
+        "prefetched_hotels": prefetched_hotels,
+        "prefetched_restaurants": prefetched_restaurants,
         "current_node": "plan_assembly",
         "stage_label": "Generating your itinerary",
         "error": None,
@@ -985,16 +1207,34 @@ def plan_assembly(state: TripSathiState) -> dict:
                 for c in items[:n]
             )
         activities = [c for c in ranked if c.get("type") not in ("hotel", "restaurant")]
-        hotels     = [c for c in ranked if c.get("type") == "hotel"]
-        restaurants = [c for c in ranked if c.get("type") == "restaurant"]
         ranked_block = "\n\nRANKED CANDIDATES (pre-scored against traveller taste — use as your primary selection pool):"
         if activities:
             ranked_block += f"\nActivities/experiences:\n{_fmt(activities, 12)}"
-        if hotels:
-            ranked_block += f"\nHotels:\n{_fmt(hotels, 4)}"
-        if restaurants:
-            ranked_block += f"\nRestaurants:\n{_fmt(restaurants, 5)}"
         ranked_block += "\nPrioritise higher-scored items. Include a lower-scored item only if logistically essential."
+
+    # Verified places block — pre-fetched from Google Maps in parallel during destination_intelligence.
+    # These are live data and must take precedence over LLM training knowledge.
+    search_hotels = state.get("prefetched_hotels") or []
+    search_restaurants = state.get("prefetched_restaurants") or []
+    verified_block = ""
+    if search_hotels:
+        hotel_lines = "\n".join(
+            f"  - {h['name']} | {h.get('rating', '?')}/5 | {h.get('address', '')}"
+            for h in search_hotels
+        )
+        verified_block += (
+            f"\n\nVERIFIED HOTELS from Google Maps (use ONLY these names in the hotels array — "
+            f"do NOT invent hotel names from training knowledge):\n{hotel_lines}"
+        )
+    if search_restaurants:
+        rest_lines = "\n".join(
+            f"  - {r['name']} | {r.get('rating', '?')}/5 | {r.get('address', '')}"
+            for r in search_restaurants
+        )
+        verified_block += (
+            f"\n\nVERIFIED RESTAURANTS from Google Maps (prefer these names for meal recommendations — "
+            f"do NOT invent restaurant names from training knowledge):\n{rest_lines}"
+        )
 
     generation_prompt = (
         f"Destination: {state['destination']}\n"
@@ -1004,7 +1244,11 @@ def plan_assembly(state: TripSathiState) -> dict:
         f"{req_block}"
         f"{toddler_block}"
         f"{ranked_block}"
+        f"{verified_block}"
         f"\nResearch: {json.dumps(state.get('research_synthesis'))}"
+        f"\n\nHOTEL REQUIREMENT (non-negotiable): the hotels array MUST contain at least 3 entries. "
+        f"Use hotels from the VERIFIED HOTELS list above. If that list has fewer than 3 entries, "
+        f"supplement with general knowledge to reach 3–5 hotels spanning budget tiers."
     )
     try:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt, task="plan")

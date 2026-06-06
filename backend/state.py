@@ -33,5 +33,9 @@ class TripSathiState(TypedDict):
     stage_label: str                    # human-readable label for React
     error: Optional[str]
 
+    # Pre-fetched place search results (set by destination_intelligence, consumed by plan_assembly)
+    prefetched_hotels: Optional[list]       # [{name, rating, address}, ...]
+    prefetched_restaurants: Optional[list]  # [{name, rating, address}, ...]
+
     # Observability
     session_tokens: int                 # cumulative tokens across all LLM calls this session
