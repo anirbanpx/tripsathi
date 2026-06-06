@@ -181,6 +181,7 @@ export type AppStage =
   | "trip_input"
   | "generating"
   | "plan_display"
+  | "selection"
   | "booking";
 
 export interface UserContext {

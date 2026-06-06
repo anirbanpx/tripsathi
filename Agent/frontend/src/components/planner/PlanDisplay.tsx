@@ -14,14 +14,16 @@ import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
 import { setAuthState } from "../../lib/auth";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
-import type { UserContext, DayPlan, Hotel } from "../../types";
+import type { UserContext, DayPlan, Hotel, FetchedHotel } from "../../types";
 
 interface Props {
   ctx: UserContext;
   onSetContext: (patch: Partial<UserContext>) => void;
+  fetchedHotels?: FetchedHotel[];
+  placesReady?: boolean;
 }
 
-export default function PlanDisplay({ ctx, onSetContext }: Props) {
+export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesReady }: Props) {
   const navigate = useNavigate();
   const plan = ctx.plan!;
   const [feedback, setFeedback] = useState("");
@@ -442,47 +444,37 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
           </div>
         </div>
 
-        {/* RIGHT — hotels + budget (sticky on tablet+) */}
+        {/* RIGHT — hotels + dining tiles + budget (sticky on tablet+) */}
         <div className="plan-col-right">
-          <div className="day-section" style={{ marginTop: 22 }}>
-            <div className="label">
-              <span>
-                {plan.hotels.length} stay{plan.hotels.length !== 1 ? "s" : ""}
-                {ctx.mode === "authenticated" ? " · matched for you" : ""}
-              </span>
-              <span className="line" />
-            </div>
-            <div className="hotel-shelf-wrap">
-            <div style={{
-              display: "flex", gap: 12, overflowX: "auto",
-              paddingBottom: 4,
-              scrollbarWidth: "none",
-            } as React.CSSProperties}>
-              {plan.hotels.map((h) => {
-                const key = h.name + h.location;
-                const bookmarked = hotelSaved[key] ?? isBookmarked(h.name);
-                return (
-                  <div key={h.name} style={{ position: "relative", flex: "0 0 260px" }}>
-                    <HotelCard hotel={h} />
-                    <button
-                      onClick={() => handleHotelBookmark(h)}
-                      title={bookmarked ? "Unsave hotel" : "Save hotel"}
-                      style={{
-                        position: "absolute", top: 10, right: 10,
-                        background: "none", border: "none", cursor: "pointer",
-                        color: bookmarked ? "var(--accent)" : "var(--fg-3)",
-                        padding: 4, lineHeight: 0,
-                      }}
-                    >
-                      {bookmarked
-                        ? <BookmarkCheck size={16} strokeWidth={1.75} />
-                        : <Bookmark size={16} strokeWidth={1.75} />}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            </div>{/* end .hotel-shelf-wrap */}
+          {/* Hotels tile */}
+          <div style={{ marginTop: 22 }}>
+            <PlacesSummaryTile
+              title="HOTELS"
+              loadingText="Finding your best match..."
+              ready={!!placesReady}
+              count={fetchedHotels?.length}
+              priceRange={fetchedHotels && fetchedHotels.length > 0 ? (() => {
+                const ratings = fetchedHotels.map(h => parseFloat(h.rating)).filter(r => !isNaN(r));
+                const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : null;
+                return avgRating ? `★ ${avgRating} avg · Google verified` : "Google verified";
+              })() : undefined}
+              ctaLabel="View & Choose →"
+              onCta={() => onSetContext({ current_stage: "selection" })}
+            />
+          </div>
+
+          {/* Dining tile */}
+          <div style={{ marginTop: 12 }}>
+            <PlacesSummaryTile
+              title="DINING"
+              loadingText="Personalizing options..."
+              ready={!!placesReady}
+              count={undefined}
+              priceRange={placesReady ? "3 options per evening · Local · Family · Splurge" : undefined}
+              subline={placesReady ? "Matched to your preferences" : undefined}
+              ctaLabel="Choose per day →"
+              onCta={() => onSetContext({ current_stage: "selection" })}
+            />
           </div>
 
           <div className="budget">
@@ -613,6 +605,72 @@ export default function PlanDisplay({ ctx, onSetContext }: Props) {
         }}>
           ✦ your preferences have been noted
         </div>
+      )}
+    </div>
+  );
+}
+
+function PlacesSummaryTile({
+  title, loadingText, ready, count, priceRange, subline, ctaLabel, onCta,
+}: {
+  title: string;
+  loadingText: string;
+  ready: boolean;
+  count?: number;
+  priceRange?: string;
+  subline?: string;
+  ctaLabel: string;
+  onCta: () => void;
+}) {
+  return (
+    <div style={{
+      border: "1.5px solid rgba(62,47,35,0.14)",
+      borderRadius: 12,
+      padding: "14px 16px",
+      background: "var(--surface)",
+      boxShadow: "0 1px 4px rgba(62,47,35,0.06)",
+    }}>
+      <div style={{
+        fontSize: 10, fontWeight: 800, letterSpacing: "0.12em",
+        color: "var(--bark-3)", fontFamily: "var(--font-body)",
+        textTransform: "uppercase", marginBottom: 8,
+      }}>
+        {title}
+      </div>
+      {!ready ? (
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark-2)" }}>
+          {loadingText}
+        </div>
+      ) : (
+        <>
+          {count !== undefined && (
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>
+              {count} option{count !== 1 ? "s" : ""}
+            </div>
+          )}
+          {priceRange && (
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--fg-2)", marginBottom: 2 }}>
+              {priceRange}
+            </div>
+          )}
+          {subline && (
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg-3)", marginBottom: 8 }}>
+              {subline}
+            </div>
+          )}
+          <button
+            onClick={onCta}
+            style={{
+              marginTop: 10, padding: "7px 14px", borderRadius: 8,
+              background: "var(--accent)", color: "var(--paper)",
+              border: "none", cursor: "pointer",
+              fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {ctaLabel}
+          </button>
+        </>
       )}
     </div>
   );
@@ -971,13 +1029,23 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
 
         <div className="map-section-label">meals</div>
         {([
-          { label: "B", meal: day.meals.breakfast },
-          { label: "L", meal: day.meals.lunch },
-          { label: "D", meal: day.meals.dinner },
-        ]).map(({ label, meal }) => (
+          { label: "B", text: day.meals.breakfast },
+          {
+            label: "L",
+            text: typeof day.meals.lunch === "string"
+              ? day.meals.lunch
+              : (day.meals.lunch as { description?: string }).description ?? "",
+          },
+          {
+            label: "D",
+            text: Array.isArray(day.meals.dinner)
+              ? ((day.meals.dinner as { description?: string }[]).find((d: { cuisine_tag?: string }) => d.cuisine_tag === "local")?.description ?? (day.meals.dinner as { description?: string }[])[0]?.description ?? "")
+              : String(day.meals.dinner),
+          },
+        ]).map(({ label, text }) => (
           <div key={label} className="map-meal-row">
             <span className="mlabel">{label}</span>
-            <span>{meal}</span>
+            <span>{text}</span>
           </div>
         ))}
 
