@@ -248,6 +248,20 @@ YOUNG CHILD RULES — apply when kid_ages contains any value 4-10:
 - Flag any terrain unsuitable for the specific age (e.g. Eravikulam NP unsuitable for under-5: steep uneven mountain paths)
 - Include at least one meal per day with a named kid-friendly option
 
+DIETARY RULE — apply when dietary_restrictions is non-empty:
+- Every meal description MUST name a dish compatible with the restriction
+- Never write "options available" — be specific (e.g. "paneer butter masala", "veg thali", "aloo paratha")
+- Add a warning if any day has genuinely scarce dietary options at that destination
+
+ELDERLY MEAL RULE — apply when elderly=true:
+- Dinner description must note early sitting preference (before 7:30 PM)
+- Prefer thali / dal-rice / soft curries in dinner descriptions
+- Never recommend street-food stalls for elderly travellers
+
+YOUNG CHILD MEAL RULE — apply when kid_ages contains any value 4-10:
+- Name one child-safe dish per day (dosa, plain rice, roti, pasta, sandwich)
+- At least one dinner option per day must be a sit-down venue (not street-side)
+
 Include proactive warnings the traveller didn't ask about.
 
 Respond ONLY with valid JSON:
@@ -263,7 +277,18 @@ Respond ONLY with valid JSON:
           "approx_cost": 0
         }
       ],
-      "meals": {"breakfast": "option", "lunch": "option", "dinner": "option"},
+      "meals": {
+        "breakfast": "At hotel — or name a well-known breakfast spot if destination is famous for one",
+        "lunch": {
+          "description": "what to eat + area/landmark en-route (no restaurant name)",
+          "location_note": "near [landmark] — approx [X]km from base"
+        },
+        "dinner": [
+          {"description": "local cuisine highlight — name the dish", "cuisine_tag": "local"},
+          {"description": "reliable group-friendly option", "cuisine_tag": "family"},
+          {"description": "premium/splurge option — special ambience", "cuisine_tag": "premium"}
+        ]
+      },
       "notes": "pacing notes, warnings for this day"
     }
   ],

@@ -1,5 +1,46 @@
 // Core domain types — must stay in sync with backend API contracts
 
+export interface YouTubeVideo {
+  video_id: string;
+  title: string;
+  view_count: number;
+  duration_seconds: number;
+  description: string;
+  tags: string[];
+  thumbnail_url: string;
+}
+
+export interface LunchMeal {
+  description: string;
+  location_note?: string;
+  restaurant_name?: string;
+  why_chosen?: string;
+}
+
+export interface DinnerOption {
+  description: string;
+  cuisine_tag: "local" | "family" | "premium";
+  restaurant_name?: string;
+  why_chosen?: string;
+  phone?: string;
+}
+
+export interface DayMeals {
+  breakfast: string;
+  lunch: LunchMeal;
+  dinner: DinnerOption[];
+}
+
+export interface FetchedHotel {
+  name: string;
+  rating: string;
+  address: string;
+  why_chosen: string;
+  website_url?: string;
+  phone?: string;
+  maps_url?: string;
+}
+
 export interface Activity {
   name: string;
   bookable: boolean;
@@ -11,7 +52,7 @@ export interface DayPlan {
   day_number: number;
   location: string;
   activities: Activity[];
-  meals: { breakfast: string; lunch: string; dinner: string };
+  meals: DayMeals;
   notes: string;
   updated_in_refinement?: boolean;
   update_note?: string;
@@ -25,6 +66,10 @@ export interface Hotel {
   content_source: "rag" | "general";
   bookable: boolean;
   updated_in_refinement?: boolean;
+  why_chosen?: string;
+  website_url?: string;
+  phone?: string;
+  maps_url?: string;
 }
 
 export interface BudgetBreakdown {
