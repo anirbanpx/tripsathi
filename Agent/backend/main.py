@@ -46,7 +46,7 @@ if not os.getenv("LLM_API_KEY"):
 from graph import graph  # noqa: E402 — import after env check
 
 _logger = logging.getLogger(__name__)
-_CHECKPOINTS_DB = "checkpoints.db"
+_CHECKPOINTS_DB = os.path.join(os.path.dirname(__file__), "..", "checkpoints.db")
 _SESSION_TTL_SECONDS = 86400  # 24 hours
 
 

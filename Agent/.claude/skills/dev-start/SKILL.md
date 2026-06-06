@@ -1,10 +1,14 @@
 ---
-description: Start TripSathi backend (FastAPI/uvicorn) and frontend (Vite) for local development. Use when asked to start the app, run locally, or bring up dev servers.
+description: Start TripSathi backend (FastAPI/uvicorn) and frontend (Vite) for local development. Use when asked to start the app, run locally, or bring up dev servers. Pass "phoenix" as an argument (e.g. /dev-start phoenix) to also start Docker Desktop and the Arize Phoenix observability container.
 ---
 
 # dev-start skill
 
 Start both services for local development. Follow every step exactly — the ordering and PowerShell forms below are proven to work on this Windows 11 machine.
+
+## Arguments
+
+- `phoenix` (optional) — also start Docker Desktop and the Arize Phoenix container before the backend. Pass as `/dev-start phoenix`. Without this argument, Step 0 is skipped entirely.
 
 ## ⚠️ Python version requirement
 
@@ -44,7 +48,9 @@ Stop here and report — do not attempt to launch if prerequisites are missing.
 
 ## Step 0 — Start Docker Desktop + Phoenix (local observability)
 
-This step runs before the backend. Skip it only if `PHOENIX_ENABLED` is not `true` in `.env`.
+**Only run this step if the `phoenix` argument was passed.** If no argument was given, skip directly to Step 1.
+
+Check: was "phoenix" passed as an argument to this skill invocation? If yes, proceed with 0a and 0b. If no, skip to Step 1.
 
 ### 0a — Ensure Docker daemon is running
 
@@ -156,12 +162,18 @@ Get-Content "$env:TEMP\tripsathi_frontend_err.txt" -ErrorAction SilentlyContinue
 
 ## Step 3 — Confirm and report
 
-Once all services are up, report to the user:
+Once all services are up, report to the user. Include the Phoenix line only if the `phoenix` argument was passed:
 
 ```
+# With phoenix argument:
 Phoenix:  http://localhost:6006   (Arize Phoenix UI — project: tripsathi)
 Backend:  http://localhost:8000   (FastAPI + uvicorn, --reload active)
 Frontend: http://localhost:5173   (Vite dev server)
+
+# Without phoenix argument:
+Backend:  http://localhost:8000   (FastAPI + uvicorn, --reload active)
+Frontend: http://localhost:5173   (Vite dev server)
+(Phoenix not started — run /dev-start phoenix to include observability)
 
 Logs:
   Backend  → %TEMP%\tripsathi_backend_out.txt / tripsathi_backend_err.txt

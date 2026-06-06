@@ -1,123 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
-  Home, Heart, User, Baby, Ear, ArrowRight, Pencil, Loader2, Mic,
+  Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
 } from "lucide-react";
-import { streamPlan, parseIntent, getClarifyQuestions, getOrCreateUserId, transcribeAudio } from "../../services/api";
+import { streamPlan, parseIntent } from "../../services/api";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
-import { EXAMPLE_PROMPTS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../../lib/examplePrompts";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
 
-type MicState = "idle" | "recording" | "transcribing";
-
-function getClarifyGhostText(question: string): string {
-  const q = question.toLowerCase();
-  if (/pace|slow|rush|speed/.test(q)) return "e.g. mornings out, lazy afternoons, no rush";
-  if (/activ|things to do/.test(q)) return "e.g. 2–3 things a day, prefer outdoors";
-  if (/food|eat|diet|meal/.test(q)) return "e.g. vegetarian, love street food";
-  if (/stay|hotel|accommod/.test(q)) return "e.g. boutique over chains, with a pool";
-  if (/budget|spend|cost/.test(q)) return "e.g. mid-range, will splurge on one nice stay";
-  return "anything helps — one sentence is fine ✦";
-}
-
-function useMicRecorder(onTranscript: (text: string) => void) {
-  const [state, setState] = useState<MicState>("idle");
-  const mediaRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
-
-  async function toggle() {
-    if (state === "idle") {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const rec = new MediaRecorder(stream);
-        chunksRef.current = [];
-        rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-        rec.onstop = async () => {
-          setState("transcribing");
-          const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-          stream.getTracks().forEach(t => t.stop());
-          try {
-            const text = await transcribeAudio(blob);
-            if (text) onTranscript(text);
-          } catch { /* silent — user sees nothing, field unchanged */ }
-          setState("idle");
-        };
-        rec.start();
-        mediaRef.current = rec;
-        setState("recording");
-      } catch { setState("idle"); }
-    } else if (state === "recording") {
-      mediaRef.current?.stop();
-    }
-  }
-
-  return { state, toggle };
-}
-
-function MicButton({ state, toggle, id, style }: { state: MicState; toggle: () => void; id: string; style?: React.CSSProperties }) {
-  const isRecording = state === "recording";
-  const isTranscribing = state === "transcribing";
-  return (
-    <button
-      id={id}
-      type="button"
-      onClick={toggle}
-      disabled={isTranscribing}
-      title={isRecording ? "Stop recording" : isTranscribing ? "Transcribing..." : "Voice input"}
-      style={{
-        background: isRecording ? "rgba(255,195,100,0.18)" : "none",
-        border: `1.5px solid ${isRecording ? "rgba(255,195,100,0.7)" : "var(--border-strong)"}`,
-        borderRadius: "50%", width: 28, height: 28,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        cursor: isTranscribing ? "not-allowed" : "pointer",
-        opacity: isTranscribing ? 0.5 : 1,
-        color: isRecording ? "rgba(255,195,100,0.9)" : "var(--fg-2)",
-        fontSize: 14, flexShrink: 0,
-        boxShadow: isRecording ? "0 0 0 4px rgba(255,195,100,0.2)" : "none",
-        transition: "all 0.2s",
-        ...style,
-      }}
-    >
-      {isTranscribing ? <Loader2 size={13} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} /> : <Mic size={13} strokeWidth={2} />}
-    </button>
-  );
-}
-
-function ClarifyQuestion({ index, question, value, onChange }: {
-  index: number; question: string; value: string; onChange: (v: string) => void;
-}) {
-  const mic = useMicRecorder(text => onChange(value ? `${value} ${text}` : text));
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <label style={{ fontSize: 13, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)" }}>
-        {question}
-      </label>
-      <div style={{ position: "relative" }}>
-        <textarea
-          rows={2}
-          style={{
-            width: "100%", background: "var(--surface)", border: "1.5px solid var(--border-strong)",
-            borderRadius: 10, padding: "10px 40px 10px 12px", color: "var(--fg-1)",
-            fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
-            outline: "none", boxSizing: "border-box",
-          }}
-          placeholder="(optional)"
-          value={value}
-          onChange={e => onChange(e.target.value)}
-        />
-        <MicButton
-          id={`mic-btn-clarify-${index}`}
-          state={mic.state}
-          toggle={mic.toggle}
-          style={{ position: "absolute", right: 8, top: 8, borderRadius: "50%" }}
-        />
-      </div>
-    </div>
-  );
-}
+// ── demo / stepper constants ──────────────────────────────────────────────────
 
 const DEMO_PARAMS: TripParameters = {
   destination: "Kerala",
@@ -139,19 +32,16 @@ interface Props {
 const STEP_ICONS = [MapPin, Calendar, Users, Wallet, Sparkles, Accessibility];
 const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
+// ── component ─────────────────────────────────────────────────────────────────
+
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
-  const nlMic = useMicRecorder(text => setNlText(prev => prev ? `${prev} ${text}` : text));
-  const [inputMode, setInputMode] = useState<"stepper" | "natural">(ctx.mode === "demo" ? "stepper" : "natural");
-  const [clarifyQuestions, setClarifyQuestions] = useState<string[]>([]);
-  const [clarifyAnswers, setClarifyAnswers] = useState<string[]>([]);
-  const [pendingParams, setPendingParams] = useState<TripParameters | null>(null);
-  const [showClarifyCard, setShowClarifyCard] = useState(false);
-  const [nlText, setNlText] = useState(ctx.seed_prompt ?? "");
-  const [step, setStep] = useState(ctx.mode === "demo" ? 2 : 0);
+  const [isDemoMode] = useState(ctx.mode === "demo" && !ctx.seed_prompt);
+
+  const [step, setStep] = useState(isDemoMode ? 2 : 0);
   const [groupType, setGroupType] = useState<string | null>(null);
   const [params, setParams] = useState<TripParameters>(
-    ctx.mode === "demo" ? DEMO_PARAMS : {
+    isDemoMode ? DEMO_PARAMS : {
       destination: "",
       start_date: "",
       duration_days: 5,
@@ -176,39 +66,18 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     });
   }
 
-  async function handleNaturalGenerate() {
-    if (!nlText.trim() || ctx.generation_active) return;
-    onSetContext({ current_stage: "generating", generation_active: true, destination: nlText, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: null });
+  async function fireGenerate(finalParams: TripParameters) {
     let stageIndex = 0;
+    onSetContext({
+      current_stage: "generating",
+      generation_active: true,
+      destination: finalParams.destination,
+      fake_stage_index: 0,
+      fake_stage_label: "Understanding your profile...",
+      trip_params: finalParams,
+    });
     try {
-      const parsed = await parseIntent(nlText);
-      if (parsed.destination) onSetContext({ destination: parsed.destination });
-      const merged: TripParameters = {
-        destination:     parsed.destination || "",
-        start_date:      parsed.start_date || "",
-        duration_days:   parsed.duration_days || 4,
-        party_size:      parsed.party_size || 2,
-        kid_ages:        parsed.kid_ages || [],
-        elderly:         parsed.elderly || false,
-        budget_bracket:  parsed.budget_bracket || "mid",
-        trip_style:      parsed.trip_style || [],
-        special_needs:   parsed.special_needs || "",
-        traveler_notes:  nlText.trim(),
-      };
-
-      // Fetch adaptive clarify questions based on taste profile gaps
-      const userId = getOrCreateUserId();
-      const questions = await getClarifyQuestions(userId, merged.destination);
-      if (questions.length > 0) {
-        setPendingParams(merged);
-        setClarifyQuestions(questions);
-        setClarifyAnswers(new Array(questions.length).fill(""));
-        setShowClarifyCard(true);
-        onSetContext({ current_stage: "trip_input", generation_active: false });
-        return;
-      }
-
-      const res = await streamPlan(merged, (label) => {
+      const res = await streamPlan(finalParams, (label) => {
         stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
         onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
       }, (text) => {
@@ -221,7 +90,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         generation_active: false,
         plan: res.plan,
         thread_id: res.thread_id,
-        kid_ages: merged.kid_ages,
+        kid_ages: finalParams.kid_ages,
         fake_stage_label: "Done",
       });
     } catch (err) {
@@ -256,34 +125,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     }
   }
 
-  async function handleClarifySubmit() {
-    if (!pendingParams || ctx.generation_active) return;
-    const qaBlock = clarifyQuestions
-      .map((q, i) => `Q: ${q}\nA: ${clarifyAnswers[i] || "(skipped)"}`)
-      .join("\n\n");
-    const finalParams: TripParameters = {
-      ...pendingParams,
-      traveler_notes: `${pendingParams.traveler_notes || ""}\n\n--- Quick questions ---\n${qaBlock}`.trim(),
-    };
-    let stageIndex = 0;
-    onSetContext({ current_stage: "generating", generation_active: true, destination: finalParams.destination, fake_stage_index: 0, fake_stage_label: "Understanding your profile...", trip_params: finalParams });
-    try {
-      const res = await streamPlan(finalParams, (label) => {
-        stageIndex = Math.min(stageIndex + 1, PROGRESS_STAGES.length - 1);
-        onSetContext({ fake_stage_index: stageIndex, fake_stage_label: label });
-      }, (text) => {
-        const enq = (window as unknown as Record<string, unknown>).__gpEnqueue as ((lines: string[]) => void) | undefined;
-        enq?.([text]);
-      });
-      if (!res.plan) throw new Error("Plan generation failed — please try again");
-      onSetContext({ current_stage: "plan_display", generation_active: false, plan: res.plan, thread_id: res.thread_id, fake_stage_label: "Done" });
-    } catch (err) {
-      onSetContext({ current_stage: "trip_input", generation_active: false });
-      setInputMode("natural");
-      alert(`Something went wrong: ${err instanceof Error ? err.message : "please try again"}`);
-    }
-  }
-
   function recapLabel(i: number): string {
     if (i === 0) return params.destination;
     if (i === 1) return `${params.start_date} · ${params.duration_days} nights`;
@@ -301,8 +142,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     ? (step === 0 ? !!params.destination : step === 1 ? !!params.start_date : true)
     : true;
 
-  // Scroll on step change — top for most steps, bottom for step 5 (recap chips stack up)
-  // and bottom for step 2 when kids are pre-filled so the age inputs aren't hidden behind the bar.
   useEffect(() => {
     if (step === 5 || (step === 2 && params.kid_ages.length > 0)) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
@@ -311,19 +150,41 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     }
   }, [step]);
 
-  // Also scroll to bottom when user adds a kid mid-step so the new age input is visible.
   useEffect(() => {
     if (step === 2 && params.kid_ages.length > 0) {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }
   }, [params.kid_ages.length]);
 
-  // Auto-fire generation when arriving from the homepage composer
+  // Auto-fire generation when arriving from the homepage composer.
+  // Switch to "generating" stage immediately so the stepper never flashes.
   useEffect(() => {
-    if (ctx.seed_prompt) {
-      onSetContext({ seed_prompt: undefined });
-      handleNaturalGenerate();
-    }
+    if (!ctx.seed_prompt) return;
+    const text = ctx.seed_prompt;
+    onSetContext({
+      seed_prompt: undefined,
+      current_stage: "generating",
+      generation_active: true,
+      fake_stage_index: 0,
+      fake_stage_label: "Understanding your trip...",
+    });
+    parseIntent(text).then(parsed => {
+      if (parsed.destination) onSetContext({ destination: parsed.destination });
+      fireGenerate({
+        destination:    parsed.destination || "",
+        start_date:     parsed.start_date || "",
+        duration_days:  parsed.duration_days || 4,
+        party_size:     parsed.party_size || 2,
+        kid_ages:       parsed.kid_ages || [],
+        elderly:        parsed.elderly || false,
+        budget_bracket: parsed.budget_bracket || "mid",
+        trip_style:     parsed.trip_style || [],
+        special_needs:  parsed.special_needs || "",
+        traveler_notes: text,
+      });
+    }).catch(() => {
+      onSetContext({ current_stage: "trip_input", generation_active: false });
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -345,7 +206,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
       {/* ── Left column — form ── */}
       <div className="stepper-left">
-      {ctx.mode === "demo" && (
+      {isDemoMode && (
         <div className="demo-banner">
           <span className="tag">Demo</span>
           using a sample Kerala trip — no login needed
@@ -386,7 +247,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         )}
       </div>
 
-      {/* Destination band — mobile only (hidden on tablet+ via CSS) */}
+      {/* Destination band — mobile only */}
       {params.destination && step >= 1 && destImgUrl && (
         <div className="dest-band">
           <img src={destImgUrl} alt={params.destination} />
@@ -396,157 +257,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       )}
 
       <div className="cx" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-      {/* Natural language mode — primary */}
-      {inputMode === "natural" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
-          <div className="question" style={{ marginTop: 8 }}>
-            <div className="q-eyebrow">
-              <Sparkles size={13} strokeWidth={2.5} />
-              just describe your trip
-            </div>
-            <h1>tell me everything<br />in <span className="sw">your words.</span></h1>
-            <div className="hint">↓ destination, dates, who's coming, budget, anything special</div>
-          </div>
 
-          <div className="journal-page">
-            <div className="journal-page-header">
-              <span className="journal-title">trip notes ✦</span>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <MicButton id="mic-btn-nl" state={nlMic.state} toggle={nlMic.toggle} />
-                <span className="journal-badge">open journal</span>
-              </div>
-            </div>
-            <textarea
-              className="journal-textarea"
-              placeholder={COMPOSER_PLACEHOLDER}
-              value={nlText}
-              onChange={e => setNlText(e.target.value)}
-              autoFocus
-            />
-          </div>
-
-          <div style={{
-            fontSize: 12, color: "var(--fg-3)", fontFamily: "var(--font-body)",
-            fontWeight: 600, paddingLeft: 2,
-          }}>
-            {COMPOSER_HELPER}
-          </div>
-
-          {/* Suggestion chips — shown when empty */}
-          {!nlText && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {EXAMPLE_PROMPTS.map(s => (
-                <span
-                  key={s}
-                  className="chip"
-                  onClick={() => setNlText(s)}
-                  style={{ fontSize: 11, cursor: "pointer" }}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Inline clarify card — shown when adaptive questions are ready */}
-          {showClarifyCard && clarifyQuestions.length > 0 && (
-            <div style={{
-              background: "var(--surface)",
-              border: "1.5px dashed var(--border-strong)",
-              borderRadius: 14, padding: "14px 16px",
-            }}>
-              <div className="q-eyebrow" style={{ marginBottom: 10 }}>
-                <Sparkles size={13} strokeWidth={2.5} />
-                one quick thing before i start ✦
-              </div>
-              <div style={{
-                fontSize: 13, fontWeight: 700, color: "var(--fg-1)",
-                fontFamily: "var(--font-body)", marginBottom: 8, lineHeight: 1.4,
-              }}>
-                {clarifyQuestions[0]}
-              </div>
-              <textarea
-                rows={2}
-                style={{
-                  width: "100%", background: "var(--paper)", border: "1.5px solid var(--border-strong)",
-                  borderRadius: 10, padding: "9px 12px", color: "var(--fg-1)",
-                  fontFamily: "var(--font-body)", fontSize: 13, resize: "none",
-                  outline: "none", boxSizing: "border-box",
-                }}
-                placeholder={getClarifyGhostText(clarifyQuestions[0])}
-                value={clarifyAnswers[0] ?? ""}
-                onChange={e => {
-                  const next = [...clarifyAnswers];
-                  next[0] = e.target.value;
-                  setClarifyAnswers(next);
-                }}
-              />
-              <div style={{ display: "flex", gap: 8, marginTop: 10, justifyContent: "flex-end" }}>
-                <button
-                  style={{
-                    padding: "6px 12px", border: "1.5px solid var(--border-strong)",
-                    borderRadius: "var(--radius-pill)", background: "var(--surface)",
-                    fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
-                    color: "var(--fg-3)", cursor: "pointer", letterSpacing: "0.04em",
-                  }}
-                  onClick={() => { setShowClarifyCard(false); handleClarifySubmit(); }}
-                >
-                  skip — just plan it
-                </button>
-                <button
-                  className="cta-primary"
-                  style={{ fontSize: 13, padding: "8px 16px" }}
-                  onClick={() => { setShowClarifyCard(false); handleClarifySubmit(); }}
-                >
-                  looks good <ArrowRight size={14} strokeWidth={2.5} />
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="bottom-bar">
-            <div className="inner">
-              <button
-                style={{
-                  padding: "6px 12px",
-                  border: "1.5px solid var(--border-strong)",
-                  borderRadius: "var(--radius-pill)",
-                  background: "var(--surface)",
-                  fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 11,
-                  color: "var(--fg-2)", cursor: "pointer", letterSpacing: "0.04em",
-                  whiteSpace: "nowrap",
-                }}
-                onClick={() => setInputMode("stepper")}
-              >
-                guide me through it →
-              </button>
-              <button
-                className="cta-primary"
-                disabled={!nlText.trim() || showClarifyCard}
-                onClick={handleNaturalGenerate}
-              >
-                sketch my plan <ArrowRight size={15} strokeWidth={2.5} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Stepper mode */}
-      {inputMode === "stepper" && (<>
-      <div style={{ marginBottom: 8 }}>
-        <button
-          style={{
-            background: "none", border: "none", padding: 0,
-            fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 11,
-            color: "var(--fg-3)", cursor: "pointer", letterSpacing: "0.04em",
-            textDecoration: "underline", textUnderlineOffset: 3,
-          }}
-          onClick={() => setInputMode("natural")}
-        >
-          ← back to prompt
-        </button>
-      </div>
       <div className="stepper">
         {STEP_LABELS.map((_, i) => (
           <span
@@ -560,7 +271,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         <span>{step < 4 ? "keep going ✦" : "almost there ✦"}</span>
       </div>
 
-      {/* Recap of completed steps */}
       {step > 0 && step <= 3 && (
         <div className="recap">
           {Array.from({ length: step }).map((_, i) => (
@@ -597,7 +307,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         </div>
       )}
 
-      {/* Current question */}
       <div className="question">
         <div className="q-eyebrow">
           {(() => { const Icon = STEP_ICONS[step]; return <Icon size={13} strokeWidth={2.5} />; })()}
@@ -809,7 +518,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         )}
       </div>
 
-      {/* Sticky bottom */}
       <div className="bottom-bar">
         <div className="inner">
           {step > 0 ? (
@@ -836,13 +544,11 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
         </div>
       </div>
 
-      {/* Spacer so content isn't hidden behind fixed bar on mobile */}
       <div className="stepper-spacer" style={{ height: 180 }} />
-      </>)}
       </div>
       </div>
 
-      {/* ── Right column — destination panel (tablet+ only) ── */}
+      {/* ── Right column — destination panel (tablet+) ── */}
       <div className="stepper-dest-panel">
         {destImgUrl && step >= 1 ? (
           <>

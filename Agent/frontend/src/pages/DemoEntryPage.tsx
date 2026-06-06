@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Globe, ShieldCheck, Lock } from "lucide-react";
+import { ArrowRight, Globe, ShieldCheck, Lock, Mic, Loader2 } from "lucide-react";
 import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
 import GoogleSignInButton from "../components/auth/GoogleSignInButton";
 import AuthNav from "../components/auth/AuthNav";
 import { getDestinationImageUrl } from "../lib/destinationImage";
 import { EXAMPLE_PROMPTS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
 import {
-  HeroScene, DoodleTell, DoodlePlan, DoodleBook,
-  MountainRule, DottedPathRule,
+  DoodleTell, DoodlePlan, DoodleBook,
+  MountainRule,
 } from "../components/planner/TravelIllustrations";
 import type { UserContext } from "../types";
-import { googleSignIn, getTasteProfile } from "../services/api";
+import { googleSignIn, getTasteProfile, transcribeAudio } from "../services/api";
 import { setAuthState } from "../lib/auth";
 
 interface Props {
@@ -20,16 +20,16 @@ interface Props {
 }
 
 const CURATED_DESTINATIONS = [
-  { slug: "kerala",     name: "Kerala",     hook: "backwaters, spice trails & hill mist" },
-  { slug: "goa",        name: "Goa",        hook: "beaches, forts & afternoon sunsets" },
-  { slug: "jaipur",     name: "Jaipur",     hook: "pink city, palaces & desert edge" },
-  { slug: "udaipur",    name: "Udaipur",    hook: "lake palaces & Rajput romance" },
-  { slug: "manali",     name: "Manali",     hook: "snow peaks, treks & riverside calm" },
-  { slug: "leh",        name: "Ladakh",     hook: "high roads & big, starlit skies" },
-  { slug: "varanasi",   name: "Varanasi",   hook: "ancient ghats & dawn on the Ganga" },
-  { slug: "andaman",    name: "Andamans",   hook: "turquoise water & world-class beaches" },
-  { slug: "darjeeling", name: "Darjeeling", hook: "tea estates & Himalayan horizons" },
-  { slug: "hampi",      name: "Hampi",      hook: "boulder ruins & Vijayanagara grandeur" },
+  { slug: "kerala",     name: "Kerala",     hook: "backwaters, spice trails & hill mist",   sample: "Kerala, 5 nights, family, mid-range, vegetarian",          tags: ["5n", "family", "veg"] },
+  { slug: "goa",        name: "Goa",        hook: "beaches, forts & afternoon sunsets",      sample: "Goa, couple, 4 nights, ₹60k, beach, no alcohol",           tags: ["4n", "couple", "no alcohol"] },
+  { slug: "jaipur",     name: "Jaipur",     hook: "pink city, palaces & desert edge",        sample: "Jaipur, 4 nights, family, mid-range, veg",                 tags: ["4n", "family", "veg"] },
+  { slug: "udaipur",    name: "Udaipur",    hook: "lake palaces & Rajput romance",           sample: "Udaipur, couple, 3 nights, premium, romantic",             tags: ["3n", "couple", "premium"] },
+  { slug: "manali",     name: "Manali",     hook: "snow peaks, treks & riverside calm",      sample: "Manali, group of friends, 5 nights, adventure, budget",    tags: ["5n", "friends", "trek"] },
+  { slug: "leh",        name: "Ladakh",     hook: "high roads & big, starlit skies",         sample: "Ladakh, solo, 10 days, July, pure veg",                    tags: ["10d", "solo", "veg"] },
+  { slug: "varanasi",   name: "Varanasi",   hook: "ancient ghats & dawn on the Ganga",      sample: "Varanasi, 3 nights, family, spiritual, vegetarian",        tags: ["3n", "family", "spiritual"] },
+  { slug: "andaman",    name: "Andamans",   hook: "turquoise water & world-class beaches",  sample: "Andamans, family, 6 nights, mid-range, beach",             tags: ["6n", "family", "beach"] },
+  { slug: "darjeeling", name: "Darjeeling", hook: "tea estates & Himalayan horizons",        sample: "Darjeeling, couple, 3 nights, nature, budget",             tags: ["3n", "couple", "hills"] },
+  { slug: "hampi",      name: "Hampi",      hook: "boulder ruins & Vijayanagara grandeur",  sample: "Hampi, solo, 3 nights, heritage, budget",                  tags: ["3n", "solo", "heritage"] },
 ];
 
 function getTimeGreeting(): string {
@@ -43,6 +43,35 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
   const [composerText, setComposerText] = useState("");
   const [signingIn, setSigningIn] = useState(false);
+  const [micState, setMicState] = useState<"idle" | "recording" | "transcribing">("idle");
+  const mediaRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  async function toggleMic() {
+    if (micState === "idle") {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const rec = new MediaRecorder(stream);
+        chunksRef.current = [];
+        rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+        rec.onstop = async () => {
+          setMicState("transcribing");
+          const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+          stream.getTracks().forEach(t => t.stop());
+          try {
+            const text = await transcribeAudio(blob);
+            if (text) setComposerText(prev => prev ? `${prev} ${text}` : text);
+          } catch { /* silent */ }
+          setMicState("idle");
+        };
+        rec.start();
+        mediaRef.current = rec;
+        setMicState("recording");
+      } catch { setMicState("idle"); }
+    } else if (micState === "recording") {
+      mediaRef.current?.stop();
+    }
+  }
 
   const isAuth = ctx.mode === "authenticated";
   const firstName = ctx.auth_user?.name?.split(" ")[0] ?? null;
@@ -68,11 +97,6 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
       seed_prompt: text,
       current_stage: "trip_input",
     });
-    navigate("/planner");
-  }
-
-  function handleDemo() {
-    onSetContext({ mode: "demo", current_stage: "trip_input" });
     navigate("/planner");
   }
 
@@ -128,9 +152,9 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
               <div className="hero">
                 <div className="hero-eyebrow">Travel AI · for India</div>
                 {firstName ? (
-                  <h1>{getTimeGreeting()},<br />{firstName} —<br /><span className="sw">where to? ✦</span></h1>
+                  <h1>{getTimeGreeting()}, {firstName} — <span className="sw">where to? ✦</span></h1>
                 ) : (
-                  <h1>ooh, where<br />are we<br /><span className="sw">off to? ✦</span></h1>
+                  <h1>ooh, where are we <span className="sw">off to? ✦</span></h1>
                 )}
                 <div className="sathi-note">↑ namaste, i'm sathi — tell me anything</div>
               </div>
@@ -153,8 +177,31 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                         handleComposerSubmit();
                       }
                     }}
-                    rows={3}
+                    rows={4}
                   />
+                  <div style={{ display: "flex", justifyContent: "center", paddingTop: 8, paddingBottom: 4 }}>
+                    <button
+                      type="button"
+                      onClick={toggleMic}
+                      disabled={micState === "transcribing"}
+                      title={micState === "recording" ? "Stop recording" : micState === "transcribing" ? "Transcribing..." : "Voice input"}
+                      style={{
+                        background: micState === "recording" ? "rgba(176,73,47,0.12)" : "var(--surface)",
+                        border: `1.5px solid ${micState === "recording" ? "var(--accent)" : "var(--border-strong)"}`,
+                        borderRadius: "50%", width: 44, height: 44,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: micState === "transcribing" ? "not-allowed" : "pointer",
+                        opacity: micState === "transcribing" ? 0.5 : 1,
+                        color: micState === "recording" ? "var(--accent)" : "var(--fg-2)",
+                        boxShadow: micState === "recording" ? "0 0 0 5px rgba(176,73,47,0.15)" : "0 2px 8px rgba(0,0,0,0.08)",
+                        transition: "all 0.2s",
+                      }}
+                    >
+                      {micState === "transcribing"
+                        ? <Loader2 size={18} strokeWidth={2.5} style={{ animation: "spin 1s linear infinite" }} />
+                        : <Mic size={18} strokeWidth={2} />}
+                    </button>
+                  </div>
                 </div>
                 <div style={{
                   fontSize: 12, color: "var(--fg-3)", fontFamily: "var(--font-body)",
@@ -195,12 +242,6 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   <ArrowRight size={16} strokeWidth={2.5} />
                 </button>
 
-                <button className="entry-cta-secondary" onClick={handleDemo}>
-                  <span style={{ fontSize: 12, letterSpacing: "0.04em" }}>
-                    or try the Kerala sample →
-                  </span>
-                </button>
-
                 {!isAuth && (
                   <GoogleSignInButton onToken={handleGoogleToken} loading={signingIn} />
                 )}
@@ -223,10 +264,61 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
               <div className="footer-note">made for Indian trips, in India ✦</div>
             </div>
 
-            {/* Right — illustrated hero scene */}
-            <div className="entry-right">
-              <div style={{ width: "100%", maxWidth: 420 }}>
-                <HeroScene />
+            {/* Right — destination grid */}
+            <div className="entry-right" style={{ alignItems: "start" }}>
+              <div style={{ width: "100%" }}>
+                <div style={{
+                  fontSize: 10, fontWeight: 700, letterSpacing: "0.16em",
+                  textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 10,
+                  display: "flex", alignItems: "baseline", gap: 8,
+                }}>
+                  Popular destinations
+                  {isAuth && topInterest && (
+                    <span style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--secondary)", textTransform: "none", letterSpacing: 0 }}>
+                      because you like {topInterest} ✦
+                    </span>
+                  )}
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+                  {CURATED_DESTINATIONS.map(({ slug, name, hook, sample, tags }) => {
+                    const img = getDestinationImageUrl(slug);
+                    return (
+                      <div
+                        key={slug}
+                        className="dest-shelf-card"
+                        onClick={() => setComposerText(sample)}
+                        title={sample}
+                        style={{ width: "100%", height: 96 }}
+                      >
+                        {img && (
+                          <img src={img} alt={name}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                        )}
+                        <div className="dest-shelf-overlay" />
+                        <div className="dest-shelf-content">
+                          <div className="dest-shelf-name">{name}</div>
+                          <div className="dest-shelf-hook">{hook}</div>
+                          <div style={{ display: "flex", gap: 4, marginTop: 4, flexWrap: "wrap" }}>
+                            {tags.map(t => (
+                              <span key={t} style={{
+                                fontSize: 8, fontWeight: 700, letterSpacing: "0.04em",
+                                background: "rgba(255,255,255,0.18)", borderRadius: 3,
+                                padding: "1px 4px", color: "rgba(244,236,219,0.9)",
+                                fontFamily: "var(--font-body)",
+                              }}>{t}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{
+                  fontSize: 10, color: "var(--fg-3)", fontFamily: "var(--font-body)",
+                  fontWeight: 600, marginTop: 8,
+                }}>
+                  ↑ tap any destination to start a plan
+                </div>
               </div>
             </div>
 
@@ -284,63 +376,6 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
       </div>
 
       <div className="cx"><MountainRule /></div>
-
-      {/* ── Destination shelf ── */}
-      <div className="cx" style={{ paddingTop: 28, paddingBottom: 10 }}>
-        <div style={{
-          display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14,
-        }}>
-          <div style={{
-            fontSize: 11, fontWeight: 700, letterSpacing: "0.16em",
-            textTransform: "uppercase", color: "var(--fg-3)",
-          }}>
-            Popular destinations
-          </div>
-          {isAuth && (
-            <div style={{
-              fontFamily: "var(--font-script)", fontSize: 15, color: "var(--secondary)",
-            }}>
-              {topInterest ? `because you like ${topInterest} ✦` : "tailored for you ✦"}
-            </div>
-          )}
-        </div>
-
-        <div className="dest-shelf">
-          {CURATED_DESTINATIONS.map(({ slug, name, hook }) => {
-            const img = getDestinationImageUrl(slug);
-            return (
-              <div
-                key={slug}
-                className="dest-shelf-card"
-                onClick={() => setComposerText(`${name} trip`)}
-                title={`Start a ${name} plan`}
-              >
-                {img && (
-                  <img
-                    src={img}
-                    alt={name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                )}
-                <div className="dest-shelf-overlay" />
-                <div className="dest-shelf-content">
-                  <div className="dest-shelf-name">{name}</div>
-                  <div className="dest-shelf-hook">{hook}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={{
-          fontSize: 11, color: "var(--fg-3)", fontFamily: "var(--font-body)",
-          fontWeight: 600, marginBottom: 24,
-        }}>
-          ↑ tap any destination to start a plan
-        </div>
-      </div>
-
-      <div className="cx"><DottedPathRule /></div>
 
       {/* ── Map section ── */}
       <div className="cx" style={{ paddingTop: 28, paddingBottom: 30 }}>
