@@ -2,7 +2,7 @@ import { RefreshCw, Coffee, Soup, UtensilsCrossed } from "lucide-react";
 import { getIllustration } from "./TravelIllustrations";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getPlaceImageUrl } from "../../lib/placeImage";
-import type { DayPlan } from "../../types";
+import type { DayPlan, LunchMeal, DinnerOption } from "../../types";
 
 export function cleanName(name: string): string {
   return name
@@ -176,22 +176,64 @@ export default function DayJournalCard({ day, listMode = false }: Props) {
         borderTop: "1.5px solid rgba(62,47,35,0.12)",
         display: "flex", gap: 8,
       }}>
-        {([
-          { Icon: Coffee, label: "B", meal: day.meals.breakfast },
-          { Icon: Soup, label: "L", meal: day.meals.lunch },
-          { Icon: UtensilsCrossed, label: "D", meal: day.meals.dinner },
-        ]).map(({ Icon, label, meal }) => (
-          <div key={label} style={{
-            flex: 1, padding: "6px 8px",
-            background: "rgba(244,236,219,0.8)",
-            border: "1px solid rgba(62,47,35,0.12)",
-            borderRadius: 8,
-          }}>
-            <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><Icon size={13} strokeWidth={2} /></div>
-            <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>{label}</div>
-            <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{meal}</div>
-          </div>
-        ))}
+        {/* Breakfast */}
+        <MealStamp Icon={Coffee} label="B" text={day.meals.breakfast} />
+        {/* Lunch */}
+        <LunchStamp lunch={day.meals.lunch} />
+        {/* Dinner */}
+        <DinnerStamp dinner={day.meals.dinner} />
+      </div>
+    </div>
+  );
+}
+
+function MealStamp({ Icon, label, text }: { Icon: (props: { size?: number; strokeWidth?: number }) => JSX.Element; label: string; text: string }) {
+  return (
+    <div style={{ flex: 1, padding: "6px 8px", background: "rgba(244,236,219,0.8)", border: "1px solid rgba(62,47,35,0.12)", borderRadius: 8 }}>
+      <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><Icon size={13} strokeWidth={2} /></div>
+      <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>{label}</div>
+      <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{text}</div>
+    </div>
+  );
+}
+
+function LunchStamp({ lunch }: { lunch: LunchMeal | string }) {
+  // Handle legacy string format gracefully
+  if (typeof lunch === "string") {
+    return <MealStamp Icon={Soup} label="L" text={lunch} />;
+  }
+  return (
+    <div style={{ flex: 1, padding: "6px 8px", background: "rgba(244,236,219,0.8)", border: "1px solid rgba(62,47,35,0.12)", borderRadius: 8 }}>
+      <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><Soup size={13} strokeWidth={2} /></div>
+      <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>L</div>
+      <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{lunch.description}</div>
+      {lunch.location_note && (
+        <div style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--bark-3)", marginTop: 2 }}>{lunch.location_note}</div>
+      )}
+      {lunch.restaurant_name && (
+        <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 700, color: "var(--moss)", marginTop: 1 }}>{lunch.restaurant_name}</div>
+      )}
+    </div>
+  );
+}
+
+function DinnerStamp({ dinner }: { dinner: DinnerOption[] | string }) {
+  // Handle legacy string format gracefully
+  if (typeof dinner === "string") {
+    return <MealStamp Icon={UtensilsCrossed} label="D" text={dinner} />;
+  }
+  const local = dinner.find(d => d.cuisine_tag === "local");
+  return (
+    <div style={{ flex: 1, padding: "6px 8px", background: "rgba(244,236,219,0.8)", border: "1px solid rgba(62,47,35,0.12)", borderRadius: 8 }}>
+      <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><UtensilsCrossed size={13} strokeWidth={2} /></div>
+      <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 800, color: "var(--bark-3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 2 }}>D</div>
+      {local ? (
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{local.description}</div>
+      ) : (
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 12, color: "var(--bark)", lineHeight: 1.3 }}>{dinner[0]?.description ?? ""}</div>
+      )}
+      <div style={{ fontFamily: "var(--font-body)", fontSize: 9, fontWeight: 700, color: "var(--rust)", marginTop: 2 }}>
+        3 options →
       </div>
     </div>
   );

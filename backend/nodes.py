@@ -563,6 +563,142 @@ def _parallel_place_search(queries: list[str]) -> list[dict]:
     return merged
 
 
+def _fetch_places_for_plan(
+    destination: str,
+    plan_days: list,
+    user_profile: dict,
+    trip_parameters: dict,
+) -> dict:
+    """Fetch hotels and per-day meals from Google Maps. Called from /api/places/stream.
+
+    Returns {"hotels": [FetchedHotel, ...], "days": [{"day_number", "lunch", "dinner"}, ...]}.
+    All searches run in parallel via ThreadPoolExecutor.
+    """
+    from tools import _search_places_structured
+
+    budget = trip_parameters.get("budget", "mid")
+    kid_ages = [a for a in (trip_parameters.get("kid_ages") or []) if isinstance(a, int)]
+    elderly = bool(trip_parameters.get("elderly"))
+    dietary = (
+        (user_profile.get("constraints") or {}).get("dietary_restrictions")
+        or trip_parameters.get("dietary_restrictions")
+        or []
+    )
+    dietary_prefix = " ".join(dietary) if dietary else ""
+
+    price_map = {
+        "budget": ["PRICE_LEVEL_FREE", "PRICE_LEVEL_INEXPENSIVE"],
+        "mid": ["PRICE_LEVEL_INEXPENSIVE", "PRICE_LEVEL_MODERATE"],
+        "premium": ["PRICE_LEVEL_EXPENSIVE", "PRICE_LEVEL_VERY_EXPENSIVE"],
+    }
+    price_levels = price_map.get(budget, price_map["mid"])
+
+    taste = (user_profile or {}).get("taste_profile") or {}
+    at = taste.get("accommodation_taste", 3)
+    acc_type = "homestay guesthouse" if at <= 2 else "resort" if at >= 4 else "hotel"
+    budget_prefix = {"budget": "budget", "premium": "luxury", "mid": "mid-range"}.get(budget, "mid-range")
+    context = "family" if kid_ages else ("accessible" if elderly else "")
+
+    hotel_queries: list[str] = [f"{budget_prefix} {acc_type} {destination}"]
+    hotel_queries.append(f"{acc_type} {destination} central")
+    if context:
+        hotel_queries.append(f"{context} {acc_type} {destination}")
+    seen_q: set[str] = set()
+    hotel_queries = [q for q in hotel_queries if not (q in seen_q or seen_q.add(q))]  # type: ignore[func-returns-value]
+
+    def _hotel_why(idx: int) -> str:
+        if kid_ages:
+            return "Family-friendly, with space and facilities for kids"
+        if elderly:
+            return "Accessible, with comfortable amenities and easy terrain"
+        return ["Budget match for your trip", "Central — walking distance to sights", "Great value with solid reviews"][min(idx, 2)]
+
+    DINNER_WHY = {
+        "local": f"The unmissable {destination} experience — eat what locals eat",
+        "family": "Safe bet for the group" + (" · Vegetarian menu available" if dietary else ""),
+        "premium": "For a special evening — worth the splurge" + (" · Early sitting recommended" if elderly else ""),
+    }
+
+    day_clusters = [
+        (d.get("activities") or [{}])[0].get("name", destination)[:30] if d.get("activities") else destination
+        for d in plan_days
+    ]
+
+    dinner_suffix = " early dinner accessible" if elderly else ""
+
+    with ThreadPoolExecutor(max_workers=min(32, 3 + len(plan_days) * 4)) as pool:
+        hotel_futs = [pool.submit(_search_places_structured, q, price_levels) for q in hotel_queries]
+
+        lunch_futs = [
+            pool.submit(
+                _search_places_structured,
+                f"{dietary_prefix + ' ' if dietary_prefix else ''}restaurant near {c} {destination}".strip(),
+                price_levels,
+            )
+            for c in day_clusters
+        ]
+
+        dinner_futs = [
+            (
+                pool.submit(_search_places_structured, f"{'vegetarian ' if dietary_prefix else ''}local food {destination}{dinner_suffix}"),
+                pool.submit(_search_places_structured, f"family restaurant {destination}{dinner_suffix}", price_levels),
+                pool.submit(_search_places_structured, f"fine dining {destination}{dinner_suffix}", ["PRICE_LEVEL_EXPENSIVE", "PRICE_LEVEL_VERY_EXPENSIVE"]),
+            )
+            for _ in plan_days
+        ]
+
+        # Collect hotels
+        hotel_results: list[dict] = []
+        seen_names: set[str] = set()
+        for idx, fut in enumerate(hotel_futs):
+            for p in fut.result():
+                if p.get("name") and p["name"] not in seen_names:
+                    seen_names.add(p["name"])
+                    hotel_results.append({
+                        "name": p["name"],
+                        "rating": p.get("rating", ""),
+                        "address": p.get("address", ""),
+                        "why_chosen": _hotel_why(idx),
+                        **({"website_url": p["website_url"]} if p.get("website_url") else {}),
+                        **({"phone": p["phone"]} if p.get("phone") else {}),
+                        **({"maps_url": p["maps_url"]} if p.get("maps_url") else {}),
+                    })
+
+        # Collect per-day meals
+        days_data: list[dict] = []
+        for day, lunch_fut, (d_local_f, d_family_f, d_premium_f) in zip(plan_days, lunch_futs, dinner_futs):
+            lunch_places = lunch_fut.result()
+            lp = lunch_places[0] if lunch_places else None
+            lunch = {
+                "why_chosen": f"On your route — no detour needed",
+                **({"restaurant_name": lp["name"]} if lp else {}),
+                **({"phone": lp["phone"]} if lp and lp.get("phone") else {}),
+                **({"maps_url": lp["maps_url"]} if lp and lp.get("maps_url") else {}),
+            }
+
+            dinners: list[dict] = []
+            for tag, fut in zip(("local", "family", "premium"), (d_local_f, d_family_f, d_premium_f)):
+                places = fut.result()
+                p = places[0] if places else None
+                dinners.append({
+                    "cuisine_tag": tag,
+                    "why_chosen": DINNER_WHY[tag],
+                    **({"restaurant_name": p["name"]} if p else {}),
+                    **({"rating": p["rating"]} if p and p.get("rating") else {}),
+                    **({"phone": p["phone"]} if p and p.get("phone") else {}),
+                    **({"maps_url": p["maps_url"]} if p and p.get("maps_url") else {}),
+                    **({"website_url": p["website_url"]} if p and p.get("website_url") else {}),
+                })
+
+            days_data.append({
+                "day_number": day.get("day_number", 0),
+                "lunch": lunch,
+                "dinner": dinners,
+            })
+
+    return {"hotels": hotel_results[:5], "days": days_data}
+
+
 def _enforce_plan_quality(plan: dict, kid_ages: list, research_synthesis: dict | None, destination: str = "", elderly: bool = False) -> dict:
     """Post-process: enforce toddler rules and surface RAG warnings the LLM missed."""
     toddler = any(isinstance(age, int) and age <= 3 for age in kid_ages)
@@ -971,35 +1107,31 @@ def destination_intelligence(state: TripSathiState) -> dict:
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
 
-    # Call 3a: pre-fetch hotels + restaurants from Google Maps in parallel.
-    # We do this ourselves rather than asking the synthesis LLM to call search_places,
-    # so we control query quality and run all searches simultaneously.
-    hotel_queries, restaurant_queries = _build_place_search_queries(state)
-    logger.info(
-        "place_search destination=%s hotel_queries=%r restaurant_queries=%r",
-        state["destination"], hotel_queries, restaurant_queries,
-    )
-    with ThreadPoolExecutor(max_workers=2) as _places_pool:
-        _hotel_future = _places_pool.submit(_parallel_place_search, hotel_queries)
-        _rest_future = _places_pool.submit(_parallel_place_search, restaurant_queries)
-        prefetched_hotels = _hotel_future.result()
-        prefetched_restaurants = _rest_future.result()
-    logger.info(
-        "place_search_done destination=%s hotels=%d restaurants=%d",
-        state["destination"], len(prefetched_hotels), len(prefetched_restaurants),
-    )
+    # Pre-fetch weather + web context in parallel — inject into synthesis prompt so the
+    # LLM doesn't need to make slow tool calls for these common requests.
+    from tools import get_weather, web_search as _web_search
+    _tp = state.get("trip_parameters") or {}
+    _travel_dates = _tp.get("start_date", "")
+    with ThreadPoolExecutor(max_workers=3) as _pre_pool:
+        _weather_fut = _pre_pool.submit(get_weather, state["destination"], _travel_dates)
+        _web1_fut = _pre_pool.submit(_web_search, f"recent traveller reports {state['destination']} 2025")
+        _web2_fut = _pre_pool.submit(_web_search, f"{state['destination']} restaurant prices current season")
+        _weather_data = _weather_fut.result()
+        _web1_data = _web1_fut.result()
+        _web2_data = _web2_fut.result()
 
-    # Call 3b: synthesize via tool-calling agent.
-    # Hotels/restaurants are already pre-fetched — LLM only needs weather + web search here.
+    # Synthesize via tool-calling agent.
+    # Weather + web already pre-fetched — LLM should not call those tools.
     synthesis_prompt = (
         f"Destination: {state['destination']}\n"
         f"Traveller profile: {json.dumps(state['user_profile'])}\n"
         f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
         f"Retrieved knowledge (RAG):\n{knowledge_block}\n\n"
-        f"MANDATORY tool use: call get_weather for current seasonal warnings, and web_search "
-        f"for recent traveller reports or pricing not covered by the RAG content. "
-        f"Do NOT call search_places for hotels or restaurants — those have already been fetched. "
-        f"After all tool calls, produce the synthesis JSON."
+        f"PRE-FETCHED WEATHER:\n{_weather_data}\n\n"
+        f"PRE-FETCHED WEB CONTEXT:\n{_web1_data}\n\n{_web2_data}\n\n"
+        f"Weather and web data already provided above — do NOT call get_weather or web_search. "
+        f"Do NOT call search_places — hotel and restaurant data will be fetched separately. "
+        f"Produce the synthesis JSON now."
     )
     try:
         from tools import TOOL_SCHEMAS
@@ -1071,8 +1203,6 @@ def destination_intelligence(state: TripSathiState) -> dict:
 
     return {
         "research_synthesis": research_synthesis,
-        "prefetched_hotels": prefetched_hotels,
-        "prefetched_restaurants": prefetched_restaurants,
         "current_node": "plan_assembly",
         "stage_label": "Generating your itinerary",
         "error": None,
@@ -1212,30 +1342,6 @@ def plan_assembly(state: TripSathiState) -> dict:
             ranked_block += f"\nActivities/experiences:\n{_fmt(activities, 12)}"
         ranked_block += "\nPrioritise higher-scored items. Include a lower-scored item only if logistically essential."
 
-    # Verified places block — pre-fetched from Google Maps in parallel during destination_intelligence.
-    # These are live data and must take precedence over LLM training knowledge.
-    search_hotels = state.get("prefetched_hotels") or []
-    search_restaurants = state.get("prefetched_restaurants") or []
-    verified_block = ""
-    if search_hotels:
-        hotel_lines = "\n".join(
-            f"  - {h['name']} | {h.get('rating', '?')}/5 | {h.get('address', '')}"
-            for h in search_hotels
-        )
-        verified_block += (
-            f"\n\nVERIFIED HOTELS from Google Maps (use ONLY these names in the hotels array — "
-            f"do NOT invent hotel names from training knowledge):\n{hotel_lines}"
-        )
-    if search_restaurants:
-        rest_lines = "\n".join(
-            f"  - {r['name']} | {r.get('rating', '?')}/5 | {r.get('address', '')}"
-            for r in search_restaurants
-        )
-        verified_block += (
-            f"\n\nVERIFIED RESTAURANTS from Google Maps (prefer these names for meal recommendations — "
-            f"do NOT invent restaurant names from training knowledge):\n{rest_lines}"
-        )
-
     generation_prompt = (
         f"Destination: {state['destination']}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
@@ -1244,11 +1350,9 @@ def plan_assembly(state: TripSathiState) -> dict:
         f"{req_block}"
         f"{toddler_block}"
         f"{ranked_block}"
-        f"{verified_block}"
         f"\nResearch: {json.dumps(state.get('research_synthesis'))}"
-        f"\n\nHOTEL REQUIREMENT (non-negotiable): the hotels array MUST contain at least 3 entries. "
-        f"Use hotels from the VERIFIED HOTELS list above. If that list has fewer than 3 entries, "
-        f"supplement with general knowledge to reach 3–5 hotels spanning budget tiers."
+        f"\n\nHOTEL INSTRUCTION: Return `hotels: []` — hotel names will be sourced from a live "
+        f"Google Maps search shown to the user after the itinerary. Do NOT generate hotel names."
     )
     try:
         plan = _call_llm(PLAN_GENERATION_SYSTEM, generation_prompt, task="plan")

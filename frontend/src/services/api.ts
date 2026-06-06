@@ -1,4 +1,4 @@
-import type { PlanResponse, BookingResponse, AuthResponse, TripParameters, SavedTrip, WishlistItem, SavedHotel, AuthUser } from "../types";
+import type { PlanResponse, BookingResponse, AuthResponse, TripParameters, SavedTrip, WishlistItem, SavedHotel, AuthUser, YouTubeVideo, FetchedHotel, LunchMeal, DinnerOption } from "../types";
 import { getAuthHeaders, getAuthState } from "../lib/auth";
 
 import mockPlan from "../mocks/plan.json";
@@ -357,6 +357,59 @@ export async function deleteHotel(hotelId: string): Promise<void> {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error(`/api/saves/hotels DELETE failed: ${res.status}`);
+}
+
+export async function fetchYouTubePreview(destination: string): Promise<YouTubeVideo | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/youtube/${encodeURIComponent(destination)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.video_id ? (data as YouTubeVideo) : null;
+  } catch {
+    return null;
+  }
+}
+
+interface PlacesCallbacks {
+  onHotels: (hotels: FetchedHotel[]) => void;
+  onDayMeals: (dayNumber: number, lunch: LunchMeal, dinner: DinnerOption[]) => void;
+  onDone: () => void;
+}
+
+export function streamPlaces(
+  destination: string,
+  planDays: { day_number: number }[],
+  userProfile: Record<string, unknown>,
+  tripParameters: Record<string, unknown>,
+  callbacks: PlacesCallbacks,
+): void {
+  fetch(`${API_BASE}/api/places/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ destination, plan_days: planDays, user_profile: userProfile, trip_parameters: tripParameters }),
+  }).then(async (res) => {
+    if (!res.ok || !res.body) { callbacks.onDone(); return; }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.type === "hotels") callbacks.onHotels(data.hotels);
+          else if (data.type === "day_meals") callbacks.onDayMeals(data.day_number, data.lunch, data.dinner);
+          else if (data.type === "done") callbacks.onDone();
+        } catch { /* ignore malformed */ }
+      }
+    }
+    callbacks.onDone();
+  }).catch(() => callbacks.onDone());
 }
 
 export async function parseTaste(text: string, userId: string): Promise<Record<string, unknown>> {

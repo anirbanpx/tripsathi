@@ -5,13 +5,14 @@ import "leaflet/dist/leaflet.css";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getCoordinates, getRouteWaypoints } from "../../lib/destinationCoordinates";
-import type { TripParameters } from "../../types";
+import type { TripParameters, YouTubeVideo } from "../../types";
 
 interface Props {
   stageIndex: number;
   stageLabel: string;
   destination?: string;
   tripParams?: TripParameters | null;
+  youtubeVideo?: YouTubeVideo | null;
 }
 
 interface JournalLine {
@@ -270,7 +271,7 @@ const STYLE = `
   .gp-journal { scrollbar-width: none; }
 `;
 
-export default function GenerationProgress({ stageIndex, stageLabel, destination = "", tripParams }: Props) {
+export default function GenerationProgress({ stageIndex, stageLabel, destination = "", tripParams, youtubeVideo }: Props) {
   const [journal, setJournal] = useState<JournalLine[]>([]);
   const [cursor, setCursor] = useState(true);
   const [wide, setWide] = useState(() => window.innerWidth >= 960);
@@ -425,27 +426,83 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
     );
   }
 
+  function YouTubeCard() {
+    if (!youtubeVideo) return null;
+    const { video_id, title, view_count, duration_seconds, tags } = youtubeVideo;
+    const mins = Math.floor(duration_seconds / 60);
+    const secs = String(duration_seconds % 60).padStart(2, "0");
+    const viewFmt = view_count >= 1_000_000
+      ? `${(view_count / 1_000_000).toFixed(1)}M`
+      : view_count >= 1_000 ? `${Math.round(view_count / 1000)}K` : String(view_count);
+    return (
+      <div style={{
+        background: "rgba(244,236,219,0.06)",
+        border: "1.5px solid rgba(244,236,219,0.12)",
+        borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 10,
+      }}>
+        <div style={{ borderRadius: 8, overflow: "hidden", aspectRatio: "16/9" }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${video_id}?autoplay=1&mute=1&rel=0&modestbranding=1&fs=1`}
+            allow="autoplay; encrypted-media; fullscreen"
+            style={{ width: "100%", height: "100%", border: "none" }}
+            title={title}
+          />
+        </div>
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 16, color: "rgba(244,236,219,0.9)", lineHeight: 1.3 }}>
+          {title}
+        </div>
+        <div style={{ fontSize: 11, color: "rgba(244,236,219,0.5)", fontFamily: "var(--font-body)" }}>
+          {viewFmt} views · {mins}:{secs}
+        </div>
+        <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+          {tags.slice(0, 5).map((t, i) => (
+            <span key={t} style={{
+              fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "lowercase",
+              padding: "2px 7px", borderRadius: 12,
+              border: `1px solid ${i % 2 === 0 ? "var(--bark-3)" : "rgba(216,149,64,0.5)"}`,
+              color: i % 2 === 0 ? "rgba(244,236,219,0.45)" : "rgba(255,195,100,0.6)",
+            }}>
+              #{t}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (wide) {
     return (
       <>
         <style>{STYLE}</style>
         <div style={{ display: "flex", height: "100svh", background: "var(--ink-deep)" }}>
-          {/* Left: photo + map */}
+          {/* Left: YouTube card (if available) OR photo + map */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
-            {imgUrl ? (
-              <div style={{ height: "42%", position: "relative", flexShrink: 0, overflow: "hidden" }}>
-                <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(26,17,8,0.25) 0%,rgba(26,17,8,0.05) 40%,rgba(26,17,8,0.7) 100%)" }} />
-                <div style={{ position: "absolute", bottom: 14, left: 20, fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.6)", fontFamily: "var(--font-body)" }}>
-                  tripsathi
+            {youtubeVideo ? (
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "24px 20px", gap: 14, overflowY: "auto" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.4)", fontFamily: "var(--font-body)" }}>
+                  tripsathi · {dest}
                 </div>
+                <YouTubeCard />
+                <RouteMap destination={destination} waypoints={visWpts} />
               </div>
             ) : (
-              <div style={{ height: "10%", flexShrink: 0, display: "flex", alignItems: "center", padding: "0 20px" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.4)" }}>tripsathi</span>
-              </div>
+              <>
+                {imgUrl ? (
+                  <div style={{ height: "42%", position: "relative", flexShrink: 0, overflow: "hidden" }}>
+                    <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(26,17,8,0.25) 0%,rgba(26,17,8,0.05) 40%,rgba(26,17,8,0.7) 100%)" }} />
+                    <div style={{ position: "absolute", bottom: 14, left: 20, fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.6)", fontFamily: "var(--font-body)" }}>
+                      tripsathi
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ height: "10%", flexShrink: 0, display: "flex", alignItems: "center", padding: "0 20px" }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.4)" }}>tripsathi</span>
+                  </div>
+                )}
+                <RouteMap destination={destination} waypoints={visWpts} />
+              </>
             )}
-            <RouteMap destination={destination} waypoints={visWpts} />
           </div>
           <RightPanel />
         </div>
@@ -458,7 +515,11 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
     <>
       <style>{STYLE}</style>
       <div style={{ height: "100svh", display: "flex", flexDirection: "column", background: "var(--ink-deep)", overflow: "hidden" }}>
-        {imgUrl && (
+        {youtubeVideo ? (
+          <div style={{ padding: "14px 14px 0", flexShrink: 0 }}>
+            <YouTubeCard />
+          </div>
+        ) : imgUrl ? (
           <div style={{ height: "32%", flexShrink: 0, position: "relative", overflow: "hidden" }}>
             <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(26,17,8,0.2) 0%,rgba(26,17,8,0.85) 100%)" }} />
@@ -466,8 +527,8 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
               {dest} <span style={{ color: "rgba(255,195,100,0.9)" }}>✦</span>
             </div>
           </div>
-        )}
-        <RightPanel fill hideDestHeader={!!imgUrl} />
+        ) : null}
+        <RightPanel fill hideDestHeader={!!imgUrl || !!youtubeVideo} />
       </div>
     </>
   );
