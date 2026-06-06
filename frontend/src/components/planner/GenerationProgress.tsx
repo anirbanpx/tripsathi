@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Check } from "lucide-react";
+import { memo, useEffect, useRef, useState } from "react";
+import { Check, Share2 } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
@@ -204,6 +204,74 @@ function journalLines(stage: string, p: TripParameters | null | undefined, desti
   return [`Crafting your ${dest} plan...`];
 }
 
+// ── YouTube embed — thumbnail shown instantly, iframe fades in on load ────────
+
+function YouTubeEmbed({ video_id, title, style }: { video_id: string; title: string; style?: React.CSSProperties }) {
+  const [iframeReady, setIframeReady] = useState(false);
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", ...style }}>
+      {/* Thumbnail visible from frame 0 */}
+      <img
+        src={`https://img.youtube.com/vi/${video_id}/hqdefault.jpg`}
+        alt="" aria-hidden
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      {/* Iframe fades in once YouTube is ready */}
+      <iframe
+        src={`https://www.youtube.com/embed/${video_id}?autoplay=1&rel=0&modestbranding=1&fs=1`}
+        allow="autoplay; encrypted-media; fullscreen"
+        onLoad={() => setIframeReady(true)}
+        style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%", border: "none",
+          opacity: iframeReady ? 1 : 0,
+          transition: "opacity 0.5s ease",
+        }}
+        title={title}
+      />
+    </div>
+  );
+}
+
+// ── YouTube card (memo'd to prevent iframe remount on typewriter ticks) ───────
+
+const YouTubeCard = memo(function YouTubeCard({ video }: { video: { video_id: string; title: string; view_count: number; duration_seconds: number; tags: string[] } }) {
+  const { video_id, title, view_count, duration_seconds, tags } = video;
+  const mins = Math.floor(duration_seconds / 60);
+  const secs = String(duration_seconds % 60).padStart(2, "0");
+  const viewFmt = view_count >= 1_000_000
+    ? `${(view_count / 1_000_000).toFixed(1)}M`
+    : view_count >= 1_000 ? `${Math.round(view_count / 1000)}K` : String(view_count);
+  return (
+    <div style={{
+      background: "var(--surface)",
+      border: "1.5px solid var(--border)",
+      borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 10,
+    }}>
+      <div style={{ position: "relative", borderRadius: 8, overflow: "hidden", aspectRatio: "16/9" }}>
+        <YouTubeEmbed video_id={video_id} title={title} />
+      </div>
+      <div style={{ fontFamily: "var(--font-script)", fontSize: 16, color: "var(--fg-1)", lineHeight: 1.3 }}>
+        {title}
+      </div>
+      <div style={{ fontSize: 11, color: "var(--fg-3)", fontFamily: "var(--font-body)" }}>
+        {viewFmt} views · {mins}:{secs}
+      </div>
+      <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+        {tags.slice(0, 5).map((t, i) => (
+          <span key={t} style={{
+            fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "lowercase",
+            padding: "2px 7px", borderRadius: 12,
+            border: `1px solid ${i % 2 === 0 ? "var(--border-strong)" : "var(--border)"}`,
+            color: i % 2 === 0 ? "var(--fg-3)" : "var(--secondary)",
+          }}>
+            #{t}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+});
+
 // ── Route Map ─────────────────────────────────────────────────────────────────
 
 function RouteMap({ destination, waypoints }: { destination: string; waypoints: [number, number][] }) {
@@ -334,6 +402,9 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
 
     return () => {
       dead = true;
+      typing.current = false;
+      queue.current = [];
+      setJournal([]);
       if (timer.current) clearTimeout(timer.current);
       delete (window as unknown as Record<string, unknown>).__gpEnqueue;
     };
@@ -426,85 +497,111 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
     );
   }
 
-  function YouTubeCard() {
-    if (!youtubeVideo) return null;
-    const { video_id, title, view_count, duration_seconds, tags } = youtubeVideo;
-    const mins = Math.floor(duration_seconds / 60);
-    const secs = String(duration_seconds % 60).padStart(2, "0");
-    const viewFmt = view_count >= 1_000_000
-      ? `${(view_count / 1_000_000).toFixed(1)}M`
-      : view_count >= 1_000 ? `${Math.round(view_count / 1000)}K` : String(view_count);
-    return (
-      <div style={{
-        background: "rgba(244,236,219,0.06)",
-        border: "1.5px solid rgba(244,236,219,0.12)",
-        borderRadius: 12, padding: 14, display: "flex", flexDirection: "column", gap: 10,
-      }}>
-        <div style={{ borderRadius: 8, overflow: "hidden", aspectRatio: "16/9" }}>
-          <iframe
-            src={`https://www.youtube.com/embed/${video_id}?autoplay=1&mute=1&rel=0&modestbranding=1&fs=1`}
-            allow="autoplay; encrypted-media; fullscreen"
-            style={{ width: "100%", height: "100%", border: "none" }}
-            title={title}
-          />
-        </div>
-        <div style={{ fontFamily: "var(--font-script)", fontSize: 16, color: "rgba(244,236,219,0.9)", lineHeight: 1.3 }}>
-          {title}
-        </div>
-        <div style={{ fontSize: 11, color: "rgba(244,236,219,0.5)", fontFamily: "var(--font-body)" }}>
-          {viewFmt} views · {mins}:{secs}
-        </div>
-        <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-          {tags.slice(0, 5).map((t, i) => (
-            <span key={t} style={{
-              fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "lowercase",
-              padding: "2px 7px", borderRadius: 12,
-              border: `1px solid ${i % 2 === 0 ? "var(--bark-3)" : "rgba(216,149,64,0.5)"}`,
-              color: i % 2 === 0 ? "rgba(244,236,219,0.45)" : "rgba(255,195,100,0.6)",
-            }}>
-              #{t}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   if (wide) {
     return (
       <>
         <style>{STYLE}</style>
-        <div style={{ display: "flex", height: "100svh", background: "var(--ink-deep)" }}>
-          {/* Left: YouTube card (if available) OR photo + map */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
-            {youtubeVideo ? (
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "24px 20px", gap: 14, overflowY: "auto" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.4)", fontFamily: "var(--font-body)" }}>
-                  tripsathi · {dest}
-                </div>
-                <YouTubeCard />
+        <div style={{ display: "flex", flexDirection: "column", height: "100svh", background: "var(--paper)", border: "1.5px solid var(--border)" }}>
+
+          {/* ── Top bar ── */}
+          <div style={{
+            height: 44, flexShrink: 0,
+            borderBottom: "1px solid var(--border)",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "0 20px",
+          }}>
+            <span style={{ fontFamily: "var(--font-display)", fontSize: 15, color: "var(--fg-1)" }}>
+              trip<i>sathi</i>
+            </span>
+            <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+              {[`${nights} nights`, budgetChip, ...styles].map(c => (
+                <span key={c} style={{
+                  fontSize: 9, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase",
+                  padding: "2px 7px", border: "1px solid var(--border-strong)",
+                  borderRadius: 20, color: "var(--fg-3)",
+                }}>{c}</span>
+              ))}
+            </div>
+            <button style={{
+              background: "none", border: "1.5px solid var(--border)", borderRadius: "50%",
+              width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", color: "var(--fg-3)",
+            }}>
+              <Share2 size={13} strokeWidth={2} />
+            </button>
+          </div>
+
+          {/* ── Video / map center ── */}
+          <div style={{
+            flex: 1, minHeight: 0,
+            display: "flex", flexDirection: "column", alignItems: "center",
+            padding: "14px 10% 0",
+            overflow: "hidden",
+          }}>
+            {/* Context text */}
+            <div style={{
+              fontSize: 12, color: "var(--fg-3)", fontFamily: "var(--font-body)",
+              textAlign: "center", marginBottom: 12, flexShrink: 0, letterSpacing: "0.01em",
+            }}>
+              {youtubeVideo
+                ? <>enjoy a detailed look at <strong style={{ color: "var(--fg-2)" }}>{dest}</strong> while your plan is being crafted ✦</>
+                : <>crafting your perfect <strong style={{ color: "var(--fg-2)" }}>{dest}</strong> plan — hang tight ✦</>}
+            </div>
+
+            {/* Video (centered, bounded) */}
+            <div style={{ width: "100%", maxWidth: 720, flex: 1, minHeight: 0, position: "relative", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.08)" }}>
+              {youtubeVideo ? (
+                <YouTubeEmbed video_id={youtubeVideo.video_id} title={youtubeVideo.title} />
+              ) : (
+                <RouteMap destination={destination} waypoints={visWpts} />
+              )}
+            </div>
+          </div>
+
+          {/* ── Bottom strip: map (left) + journal (right) ── */}
+          <div style={{ height: 220, flexShrink: 0, display: "flex", borderTop: "1px solid var(--border)" }}>
+
+            {/* Map — shown only when video is playing */}
+            {youtubeVideo && (
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", borderRight: "1px solid var(--border)" }}>
                 <RouteMap destination={destination} waypoints={visWpts} />
               </div>
-            ) : (
-              <>
-                {imgUrl ? (
-                  <div style={{ height: "42%", position: "relative", flexShrink: 0, overflow: "hidden" }}>
-                    <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(26,17,8,0.25) 0%,rgba(26,17,8,0.05) 40%,rgba(26,17,8,0.7) 100%)" }} />
-                    <div style={{ position: "absolute", bottom: 14, left: 20, fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.6)", fontFamily: "var(--font-body)" }}>
-                      tripsathi
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ height: "10%", flexShrink: 0, display: "flex", alignItems: "center", padding: "0 20px" }}>
-                    <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(244,236,219,0.4)" }}>tripsathi</span>
-                  </div>
-                )}
-                <RouteMap destination={destination} waypoints={visWpts} />
-              </>
             )}
+
+            {/* Journal stream */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+              {/* Stage pill */}
+              <div style={{ padding: "9px 16px 7px", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--fg-1)", fontFamily: "var(--font-body)", marginBottom: 5, letterSpacing: "0.02em" }}>
+                  {PROGRESS_STAGES[stageIndex]?.label ?? "Planning..."}
+                </div>
+                <div style={{ display: "flex", gap: 3 }}>
+                  {PROGRESS_STAGES.map((_, i) => (
+                    <div key={i} style={{
+                      flex: 1, height: 2, borderRadius: 2,
+                      background: i <= stageIndex ? "#B0492F" : "var(--border)",
+                      opacity: i > stageIndex ? 0.3 : 1,
+                      transition: "background 0.4s",
+                    }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Streaming messages */}
+              <div ref={journalEl} className="gp-journal" style={{ flex: 1, overflowY: "auto", padding: "10px 16px", display: "flex", flexDirection: "column", gap: 7 }}>
+                {journal.map(line => (
+                  <div key={line.id} style={{ display: "flex", gap: 7, alignItems: "flex-start", animation: "slideUp 0.35s ease" }}>
+                    <span style={{ color: "var(--secondary)", fontSize: 9, marginTop: 3, flexShrink: 0 }}>✦</span>
+                    <span style={{ fontSize: 12, lineHeight: 1.55, fontFamily: "var(--font-body)", color: line.complete ? "var(--fg-2)" : "var(--fg-1)" }}>
+                      {line.shown}
+                      {!line.complete && <span style={{ opacity: cursor ? 1 : 0, color: "var(--accent)", transition: "opacity 0.1s" }}>|</span>}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
-          <RightPanel />
         </div>
       </>
     );
@@ -514,10 +611,10 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   return (
     <>
       <style>{STYLE}</style>
-      <div style={{ height: "100svh", display: "flex", flexDirection: "column", background: "var(--ink-deep)", overflow: "hidden" }}>
+      <div style={{ height: "100svh", display: "flex", flexDirection: "column", background: "var(--paper)", overflow: "hidden" }}>
         {youtubeVideo ? (
           <div style={{ padding: "14px 14px 0", flexShrink: 0 }}>
-            <YouTubeCard />
+            <YouTubeCard video={youtubeVideo} />
           </div>
         ) : imgUrl ? (
           <div style={{ height: "32%", flexShrink: 0, position: "relative", overflow: "hidden" }}>

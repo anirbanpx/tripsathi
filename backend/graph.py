@@ -1,3 +1,4 @@
+import os
 from langgraph.graph import StateGraph, END
 import sqlite3
 from langgraph.checkpoint.sqlite import SqliteSaver
@@ -65,7 +66,8 @@ def build_graph():
     builder.add_edge("finalize", END)
     builder.add_edge("error", END)
 
-    conn = sqlite3.connect("checkpoints.db", check_same_thread=False)
+    db_path = os.path.join(os.path.dirname(__file__), "..", "checkpoints.db")
+    conn = sqlite3.connect(db_path, check_same_thread=False)
     checkpointer = SqliteSaver(conn)
     return builder.compile(checkpointer=checkpointer)
 

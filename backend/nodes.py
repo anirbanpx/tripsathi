@@ -110,12 +110,12 @@ _disabled_until: dict[str, float] = {}
 # gemini_only → Gemini exclusively
 # default → Groq-first
 _TASK_CHAINS: dict[str, list[str]] = {
-    "synthesis":     ["openrouter", "groq", "cerebras", "gemini"],
-    "candidate_gen": ["openrouter", "groq", "cerebras", "gemini"],
-    "plan":          ["openrouter", "groq", "cerebras", "gemini"],
-    "critic":        ["openrouter", "groq", "cerebras", "gemini"],
-    "gemini_only":   ["openrouter", "gemini"],
-    "default":       ["openrouter", "groq", "cerebras", "gemini"],
+    "synthesis":     ["gemini", "groq", "cerebras", "openrouter"],
+    "candidate_gen": ["gemini", "groq", "cerebras", "openrouter"],
+    "plan":          ["groq", "cerebras", "gemini", "openrouter"],
+    "critic":        ["groq", "cerebras", "gemini", "openrouter"],
+    "gemini_only":   ["gemini", "openrouter"],
+    "default":       ["groq", "cerebras", "gemini", "openrouter"],
 }
 
 
@@ -126,6 +126,8 @@ def _classify_error(e) -> str:
         return "quota"
     if isinstance(e, APIStatusError) and e.status_code == 403:
         return "quota"  # permission denied / project blocked — skip provider, try next
+    if isinstance(e, APIStatusError) and e.status_code == 404:
+        return "not_found"  # model doesn't exist on this provider — skip, no cooldown
     if isinstance(e, APIStatusError):
         msg = str(e).lower()
         if "rate_limit_exceeded" in msg or "tokens per day" in msg:
@@ -846,8 +848,8 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
                     _disabled_until[provider.name] = time.time() + cooldown
                     logger.warning("provider %s exhausted → failing over (cooldown %.0fs)", provider.name, cooldown)
                     break  # try next provider
-                if kind == "context":
-                    logger.warning("provider %s context-length error → failing over", provider.name)
+                if kind in ("context", "not_found"):
+                    logger.warning("provider %s %s → failing over", provider.name, "context-length error" if kind == "context" else "model not found (404)")
                     break  # try next provider (don't disable — request-specific)
                 if attempt == 2:
                     raise
@@ -940,8 +942,8 @@ def _call_llm_with_tools(
                     _disabled_until[provider.name] = time.time() + cooldown
                     logger.warning("provider %s exhausted → failing over (cooldown %.0fs)", provider.name, cooldown)
                     break
-                if kind == "context":
-                    logger.warning("provider %s context-length error → failing over", provider.name)
+                if kind in ("context", "not_found"):
+                    logger.warning("provider %s %s → failing over", provider.name, "context-length error" if kind == "context" else "model not found (404)")
                     break
                 logger.warning("provider %s tool_call error → failing over: %s", provider.name, e)
                 break

@@ -48,7 +48,7 @@ export default function PlannerPage({ ctx, onSetContext }: Props) {
     const plan = ctx.plan;
     if (!plan || !ctx.destination) return;
 
-    const planKey = `${ctx.destination}:${plan.thread_id ?? ""}`;
+    const planKey = `${ctx.destination}:${ctx.thread_id ?? ""}`;
     if (placesFetchedRef.current === planKey) return;
     placesFetchedRef.current = planKey;
 
@@ -61,7 +61,7 @@ export default function PlannerPage({ ctx, onSetContext }: Props) {
     const tripParams = ctx.trip_params;
     streamPlaces(
       ctx.destination,
-      plan.plan.days.map((d) => ({ day_number: d.day_number })),
+      plan.days.map((d) => ({ day_number: d.day_number })),
       {},
       tripParams
         ? { budget: tripParams.budget_bracket, kid_ages: tripParams.kid_ages, elderly: tripParams.elderly }
