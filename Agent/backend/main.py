@@ -189,6 +189,13 @@ class PreferencesRequest(BaseModel):
     taste_data: dict
 
 
+class PlacesStreamRequest(BaseModel):
+    destination: str
+    plan_days: list[dict]
+    user_profile: dict = {}
+    trip_parameters: dict = {}
+
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 def _get_state(config: dict) -> dict:
@@ -615,6 +622,44 @@ async def book_item(req: BookRequest):
         "check_out": req.item.get("check_out"),
         "is_demo": True,
     }
+
+
+@app.get("/api/youtube/{destination}")
+async def get_youtube_video(destination: str):
+    from tools import youtube_best_video
+    video = youtube_best_video(destination)
+    if video is None:
+        raise HTTPException(status_code=404, detail="No video found")
+    return video
+
+
+@app.post("/api/places/stream")
+async def stream_places_endpoint(req: PlacesStreamRequest):
+    from nodes import _fetch_places_for_plan
+
+    async def generate():
+        loop = asyncio.get_event_loop()
+        try:
+            result = await loop.run_in_executor(
+                None,
+                _fetch_places_for_plan,
+                req.destination,
+                req.plan_days,
+                req.user_profile,
+                req.trip_parameters,
+            )
+            yield f"data: {json.dumps({'type': 'hotels', 'hotels': result['hotels']})}\n\n"
+            for day in result["days"]:
+                yield f"data: {json.dumps({'type': 'day_meals', 'day_number': day['day_number'], 'lunch': day['lunch'], 'dinner': day['dinner']})}\n\n"
+        except Exception as e:
+            _logger.warning("places/stream error: %s", e)
+        yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 if __name__ == "__main__":
