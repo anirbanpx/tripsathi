@@ -46,6 +46,20 @@ LangGraph state machine
 
 RAG knowledge base covers 54 destinations with curated markdown docs and 50 YouTube video transcripts indexed into ChromaDB.
 
+### Key design decisions
+
+| Decision | Choice | Why |
+|---|---|---|
+| Orchestration | LangGraph state machine | SQLite checkpointing enables HITL pause/resume; conditional edges encode retry logic cleanly |
+| LLM | Groq + 3-provider failover | 200k tok/day free tier; task-aware routing (Groq for reasoning, Gemini for long-context synthesis) |
+| Vector store | LlamaIndex + Qdrant Cloud | Metadata filtering by destination before vector search; cloud free tier; no self-hosted infra |
+| Streaming | SSE over WebSockets | One-directional push; browser-native EventSource; works through Vercel CDN without WS upgrade |
+| Memory | 3-layer model | LangGraph checkpoints (session HITL), TasteProfile SQLite (permanent preferences), Mem0 Cloud (cross-device) |
+| Eval | DeepEval + GEval | LLM-as-judge metrics (answer relevancy, faithfulness, personalization delta, constraint adherence) |
+| Observability | Arize Phoenix | OpenInference auto-instrumentors for LangGraph + LlamaIndex + OpenAI; manual OTel spans for tool calls |
+
+Full architecture document with state machine diagrams, RAG pipeline, failover chain, auth flow, and known trade-offs: **[specs/backend_architecture.md](specs/backend_architecture.md)**
+
 ---
 
 ## Quick Start
