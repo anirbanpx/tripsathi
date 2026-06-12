@@ -1,73 +1,78 @@
-# React + TypeScript + Vite
+# Frontend — React + Vite UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite chat interface for TripSathi.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+UI available at `http://localhost:5173`. Proxies `/api/*` requests to the backend at `http://localhost:8000` in dev mode (configured in `vite.config.ts`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Backend URL for production builds |
+
+In production this is set to the Railway backend URL. There is also a hardcoded fallback in `src/services/api.ts` — update that line if the Railway URL changes.
+
+For local dev, no env var is needed — Vite's proxy handles API routing.
+
+---
+
+## Project Structure
+
 ```
+src/
+├── components/
+│   ├── planner/     # Core planning UI (TripInputStepper, PlanDisplay, GenerationProgress, BookingScreen, ...)
+│   ├── auth/        # AuthNav, GoogleSignInButton
+│   ├── booking/     # BookableItemCard, BookingSection
+│   ├── explore/     # IndiaDestinationsMap (Leaflet)
+│   └── shared/      # PageTransition
+├── pages/
+│   ├── OnboardingPage.tsx   # Persona wizard + interests
+│   ├── PlannerPage.tsx      # Main chat + plan view
+│   ├── ProfilePage.tsx      # Saved trips + wishlist
+│   └── DemoEntryPage.tsx    # Entry page / homepage
+├── lib/             # Auth helpers, image resolvers, destination data, utilities
+├── services/        # api.ts — all backend calls
+├── styles/          # Design tokens (tokens.css) + design system (ds.css)
+├── types/           # Shared TypeScript types (index.ts)
+└── mocks/           # Static JSON fixtures for offline dev
+```
+
+---
+
+## Testing
+
+```bash
+# End-to-end tests (requires running backend + frontend)
+npx playwright test frontend/e2e/
+
+# Sanity + component tests
+npx playwright test frontend/tests/
+```
+
+Playwright config is at `playwright.config.ts`.
+
+---
+
+## Build + Deploy (Vercel)
+
+Standard `npm run build` won't pick up `VITE_*` env vars reliably via Vercel CLI. Use the pre-built deploy flow:
+
+```bash
+vercel pull --yes --environment production --scope tripsathi --token $VERCEL_TOKEN
+vercel build --prod --yes --token $VERCEL_TOKEN --scope tripsathi
+vercel deploy --prebuilt --prod --token $VERCEL_TOKEN --scope tripsathi
+```
+
+The `/dev-start` Claude Code skill handles local startup automatically.
