@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# One-off debug scripts
+verify_gen.mjs
