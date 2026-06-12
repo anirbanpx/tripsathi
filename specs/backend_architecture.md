@@ -18,6 +18,7 @@ A deep-dive into what was built, why each technical choice was made, and how the
 10. [Known Trade-offs and Gaps](#10-known-trade-offs-and-gaps)
 11. [Memory Architecture](#11-memory-architecture)
 12. [Evaluation Framework](#12-evaluation-framework)
+13. [Observability — Arize Phoenix](#13-observability--arize-phoenix)
 
 ---
 
@@ -52,7 +53,8 @@ Railway — FastAPI + Uvicorn  (Python 3.12)
     ├─ OpenWeather API ──────────────────────► Weather tool
     ├─ Google Maps Places API ───────────────► Place search tool
     ├─ Voyage / Cohere Rerank ───────────────► Candidate reranking
-    └─ Mem0 Cloud ───────────────────────────► Long-term user memory
+    ├─ Mem0 Cloud ───────────────────────────► Long-term user memory
+    └─ Arize Phoenix (OTLP) ─────────────────► Observability traces
 
 Local state (Railway ephemeral disk):
     ├─ checkpoints.db   LangGraph HITL session state  (SQLite)
@@ -899,6 +901,133 @@ Not yet covered:
   - Hallucination detection (are named prices / venues real?)
   - Latency regression (does adding a new node slow plan generation?)
 ```
+
+---
+
+## 13. Observability — Arize Phoenix
+
+### What it is
+
+[Arize Phoenix](https://phoenix.arize.com) is an open-source LLM observability platform built on OpenTelemetry. It collects traces from LLM calls, RAG retrievals, tool calls, and agent steps — and renders them as a waterfall trace showing exactly what happened inside a pipeline run: which node called which model, what the prompt was, what tokens were used, and where latency was spent.
+
+For an agent system like TripSathi, Phoenix answers questions that logs cannot: "Why did this plan miss the toddler nap block? Which RAG chunk was retrieved? Did the Groq call fail over to Gemini?"
+
+### Instrumentation setup
+
+Phoenix is opt-in via `PHOENIX_ENABLED=true` in `.env`. When enabled, three OpenInference auto-instrumentors are registered at server startup:
+
+```python
+# main.py (startup, gated on PHOENIX_ENABLED=true)
+
+from phoenix.otel import register
+from openinference.instrumentation.langchain import LangChainInstrumentor
+from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+from openinference.instrumentation.openai import OpenAIInstrumentor
+
+register(
+    project_name="tripsathi",
+    endpoint=os.getenv("PHOENIX_COLLECTOR_ENDPOINT", "http://localhost:6006/v1/traces"),
+    headers={"api_key": os.getenv("PHOENIX_API_KEY")} if PHOENIX_API_KEY else {},
+)
+LangChainInstrumentor().instrument()   # covers LangGraph node calls
+LlamaIndexInstrumentor().instrument()  # covers RAG queries + embeddings
+OpenAIInstrumentor().instrument()      # covers all openai.ChatCompletion calls
+```
+
+**Why auto-instrumentors?** They hook into the library internals — no changes needed to application code. Every LLM call, retrieval, and embedding is automatically captured as an OpenTelemetry span without adding `@tracer.start_as_current_span` everywhere.
+
+### What gets traced automatically
+
+| Instrumentor | What it captures |
+|---|---|
+| **LangChainInstrumentor** | LangGraph node execution: node name, input state, output state, elapsed time |
+| **LlamaIndexInstrumentor** | RAG queries: query text, retrieved chunk count, chunk text, relevance scores, embedding model |
+| **OpenAIInstrumentor** | Every `chat.completions.create` call: model, provider (Groq/Cerebras/Gemini), prompt tokens, completion tokens, latency, finish reason |
+
+### Manual spans in tools.py
+
+The `web_search()` tool adds explicit span attributes using the OpenInference semantic conventions — the same schema Phoenix uses to render tool calls distinctly:
+
+```python
+# tools.py
+_tracer = trace.get_tracer(__name__)
+
+def web_search(query: str) -> str:
+    with _tracer.start_as_current_span("web_search") as span:
+        span.set_attribute("openinference.span.kind", "TOOL")
+        span.set_attribute("tool.name", "tavily")
+        span.set_attribute("input.value", query)
+        # ... call Tavily ...
+        span.set_attribute("output.value", output[:2000])
+        span.set_attribute("search.result_count", len(snippets))
+        # On fallback to DuckDuckGo:
+        span.set_attribute("tool.name", "duckduckgo")
+        span.record_exception(tavily_err)
+```
+
+This gives Phoenix enough data to show `web_search` as a named tool span with input query, result count, and whether the Tavily→DuckDuckGo fallback fired.
+
+### What a plan generation trace looks like
+
+```
+POST /api/plan/stream
+└── LangGraph: tripsathi pipeline
+    ├── [node] persona_classification         ~2.1s
+    │   └── [llm] groq/openai-gpt-oss-120b
+    │         prompt_tokens: 412
+    │         completion_tokens: 187
+    ├── [node] destination_intelligence       ~9.4s
+    │   ├── [retrieval] LlamaIndex query      (parallel ×7)
+    │   │     query: "toddler-friendly Goa beaches"
+    │   │     retrieved_chunks: 12
+    │   ├── [tool] web_search                 ~1.2s
+    │   │     tool.name: tavily
+    │   │     input: "Goa travel tips monsoon 2025"
+    │   │     result_count: 5
+    │   └── [llm] groq/openai-gpt-oss-120b    ~3.8s
+    │         prompt_tokens: 3,241
+    │         completion_tokens: 892
+    ├── [node] candidate_gen                  ~4.2s
+    │   └── [llm] gemini/gemini-2.5-flash
+    │         (Groq rate-limited → failed over)
+    ├── [node] ranker                         ~0.3s
+    ├── [node] plan_assembly                  ~8.1s
+    │   └── [llm] groq/openai-gpt-oss-120b
+    │         prompt_tokens: 4,890
+    │         completion_tokens: 2,103
+    └── [node] critic                         ~2.9s
+        └── [llm] groq/openai-gpt-oss-120b
+              verdict: pass
+```
+
+This trace shows exactly where latency is spent (destination_intelligence dominates), which provider served each call, whether failover fired, and RAG retrieval quality.
+
+### Local vs production
+
+```
+Local dev:
+  Docker: docker run -d -p 6006:6006 -p 4317:4317 --name phoenix arizephoenix/phoenix:latest
+  UI:     http://localhost:6006   (project: tripsathi)
+  Env:    PHOENIX_ENABLED=true
+          PHOENIX_COLLECTOR_ENDPOINT=http://localhost:6006/v1/traces
+
+  Start: /dev-start phoenix  (handles Docker daemon + container lifecycle)
+
+Production (Phoenix Cloud):
+  Env:    PHOENIX_ENABLED=true
+          PHOENIX_COLLECTOR_ENDPOINT=<cloud OTLP endpoint>
+          PHOENIX_API_KEY=<cloud API key>
+  Traces stream to Phoenix Cloud dashboard — no self-hosted infra
+```
+
+### Why Phoenix over alternatives
+
+| Option | Why not |
+|---|---|
+| **LangSmith** | LangChain-native but paid beyond free tier; ties observability to one vendor |
+| **Weights & Biases** | Strong for model training; less suited to production inference traces |
+| **Custom logging** | Works for simple cases; misses structured span hierarchy, RAG chunk content, token-level breakdown |
+| **Arize Phoenix** | Open-source, self-hostable, OpenTelemetry-native; OpenInference auto-instrumentors cover LangChain + LlamaIndex + OpenAI with zero code changes; free cloud tier |
 
 ---
 
