@@ -16,6 +16,8 @@ A deep-dive into what was built, why each technical choice was made, and how the
 8. [Technology Decisions — The WHY](#8-technology-decisions--the-why)
 9. [Agentic Patterns Used](#9-agentic-patterns-used)
 10. [Known Trade-offs and Gaps](#10-known-trade-offs-and-gaps)
+11. [Memory Architecture](#11-memory-architecture)
+12. [Evaluation Framework](#12-evaluation-framework)
 
 ---
 
@@ -676,6 +678,227 @@ Being explicit about gaps is part of good engineering practice — it demonstrat
 | **CORS origins hardcoded** | P3 | Production URLs must be kept in sync with `FRONTEND_URL` env var manually | `allow_origins` list constructed at startup from env | Low risk for single-domain deployment |
 | **Reranking requires paid API keys** | P3 | Without Voyage/Cohere keys, candidates served in identity order — reduces itinerary quality | Cross-encoder reranking is the best quality option but has no free tier | Identity fallback is functional; add open-source cross-encoder (e.g. BGE-Reranker) as second fallback |
 | **No token-size pre-check** | P3 | Context overflow wastes one provider attempt before failing over | `_call_llm` doesn't estimate prompt size before sending | Rough pre-check: if `len(prompt) > provider_limit * 3`, skip to next provider |
+
+---
+
+## 11. Memory Architecture
+
+TripSathi has three distinct memory layers, each serving a different time horizon and purpose.
+
+```
+─────────────────────────────────────────────────────────────────────
+Layer           Store           Horizon         What's kept
+─────────────────────────────────────────────────────────────────────
+Session state   SQLite          24 hours        Full LangGraph graph
+                checkpoints.db  (TTL cleanup)   state after every node:
+                                                plan, research, profile,
+                                                HITL interrupt point
+
+Taste profile   SQLite          Permanent       7 scalar dimensions,
+                taste.db        (user account)  10 interest scores,
+                                                per-dim confidence,
+                                                dietary restrictions
+
+Long-term       Mem0 Cloud      Permanent       Free-text travel
+memory                          (cross-device)  preference summaries
+                                                extracted from
+                                                refinement sessions
+─────────────────────────────────────────────────────────────────────
+```
+
+### Layer 1 — Session state (LangGraph checkpoints)
+
+Every time a LangGraph node completes, `SqliteSaver` serialises the full `AgentState` to `checkpoints.db`. This is the mechanism behind HITL: when `human_feedback` calls `interrupt()`, the graph state is frozen in the DB. When the user submits a change via `/api/refine`, LangGraph deserialises the state and resumes from that exact point — no recomputation of earlier nodes.
+
+Sessions expire after 24 hours via a background cleanup coroutine. This is a deliberate trade-off: open-ended session TTLs would fill the Railway ephemeral disk.
+
+### Layer 2 — Taste profile (SQLite taste.db)
+
+The taste profile is the persistent user model — 7 scalar preference dimensions plus 10 interest scores, each with a confidence value (0.0–1.0). It accumulates signal from every user action:
+
+```
+Signal source           What updates              How
+─────────────────────────────────────────────────────────
+Hotel saved (> ₹8k)     accommodation_taste → 4.5  30% blend toward value
+Hotel saved (< ₹2.5k)   accommodation_taste → 2    30% blend toward value
+Hotel (source=rag)       immersion_style → 2        signals local preference
+Wishlist add             matching interest +0.1     keyword map lookup
+  ("trek" → adventure,
+   "spa" → wellness, ...)
+Destination save         top 2 dest. tags +0.08     e.g. Kerala → nature, wellness
+Plan refinement          dims extracted by LLM      TASTE_DELTA_SYSTEM prompt
+                         confidence +0.2 per dim    capped at 1.0
+```
+
+The confidence layer matters: the `clarify` node only generates questions for dimensions where confidence < 0.5. As the user interacts more, the system asks fewer clarifying questions because it already knows their preferences.
+
+### Layer 3 — Long-term memory (Mem0 Cloud)
+
+At the end of each planning session, the `finalize` node calls `TASTE_DELTA_SYSTEM` to extract a natural-language summary of what the user's refinements revealed, then writes it to Mem0 Cloud.
+
+```python
+# memory.py
+
+def read_memories(user_id: str) -> str:
+    # Queries Mem0 with "travel preferences past trips"
+    # Returns formatted string injected into persona_classification context
+    results = mem.search("travel preferences past trips",
+                         filters={"user_id": user_id}, limit=10)
+
+def write_memory(user_id: str, summary: str) -> None:
+    # Persists free-text summary to Mem0
+    mem.add([{"role": "user", "content": summary}], user_id=user_id)
+```
+
+**Why Mem0 over a custom table?** Cross-device by default (API-based, not SQLite). The `search()` API does semantic retrieval — relevant memories surface even if phrased differently from the query. The trade-off: requires an API key and a network call at session start.
+
+**Current gap (P0):** `write_memory()` is called correctly in `finalize`. But `read_memories()` is implemented and never called in `persona_classification`. Every session starts cold — past preferences are not injected. One-line fix pending.
+
+### Memory read/write flow
+
+```
+New session starts
+        │
+        ▼
+persona_classification
+  read_memories(user_id)         ← [P0 GAP: not wired yet]
+    → Mem0 search                   should inject "Past preferences:
+    → formatted string              - prefers slow pace
+                                    - avoids crowded beaches"
+        │                           into persona prompt
+        │
+  ... plan executes ...
+        │
+        ▼
+human_feedback  ⚡ HITL
+  graph pauses → state in checkpoints.db
+        │
+  user submits feedback
+        │
+        ▼
+finalize
+  TASTE_DELTA_SYSTEM(refinement_history)
+    → "User rejected busy market day; prefers nature over shopping"
+  merge_taste() → save_taste() → taste.db
+  write_memory(user_id, summary) → Mem0 Cloud ✓
+        │
+        ▼
+Next session (same user, different destination)
+  read_memories()                 ← [P0 GAP: would surface this summary]
+    → "Past user travel preferences:
+       - Rejects busy markets
+       - Nature and wildlife over shopping
+       - Slow pace, avoids crowds"
+```
+
+---
+
+## 12. Evaluation Framework
+
+### Why evaluation matters for agent systems
+
+Agent pipelines are non-deterministic: the same input produces different outputs on different runs. Unit tests that assert exact strings are useless. The question is whether the plan is *semantically correct* — does it honour the user's constraints, reflect destination knowledge, and personalise appropriately?
+
+TripSathi uses **DeepEval with GEval (LLM-as-judge)** to answer this. Each test case runs the full live pipeline and scores the output against named criteria using a Groq-backed judge model. This catches regressions that no regex can.
+
+### Metric types
+
+Four custom metrics are implemented:
+
+| Metric | Type | What it measures | Threshold |
+|---|---|---|---|
+| **GEval** (per criterion) | LLM-as-judge | Semantic correctness of a named property in the plan output | 0.5 (pass/fail) |
+| **PersonalizationDelta** | Rule-based | Jaccard distance between two plans for the same destination with different personas — are they actually different? | ≥ 0.4 (40% different activities) |
+| **TasteAdherence** | LLM-as-judge | How well a plan matches a given taste profile (0.0–1.0 scale, using `TASTE_ADHERENCE_JUDGE_SYSTEM`) | ≥ 0.6 |
+| **ConstraintAdherence** | Rule-based | Binary check: are hard constraints honoured? (toddler nap block present, no overnight houseboat, no meat for vegetarians) | 1.0 (must be perfect) |
+
+### Test case structure
+
+10 cases across 3 suites:
+
+```
+Suite BASE  — baseline correctness (does the plan get destination facts right?)
+  BASE-KL   Kerala      5 criteria  family + 5yo
+  BASE-PU   Puri        6 criteria  family + elderly + 4yo
+  BASE-GW   Guwahati    7 criteria  elderly parents
+
+Suite A  — personalisation (does the plan change when persona changes?)
+  A-KL-01   Kerala      5 criteria  toddler (2yo) — strictest constraints
+  A-KL-02   Kerala      4 criteria  elderly + knee mobility
+  A-KL-03   Kerala      4 criteria  budget-conscious, avoids tourist traps
+  A-PU-01   Puri        3 criteria  family without elderly (slot timing changes)
+
+Suite B  — proactive local knowledge (does the plan surface non-obvious risks?)
+  B-KL-01   Kerala      2 criteria  houseboat operator scam warning
+  B-GW-01   Guwahati    2 criteria  Shillong return timing, Kamakhya queue depth
+  B-PU-01   Puri        3 criteria  temple entry restriction, Chilika scam, child food scarcity
+```
+
+### What each criterion looks like
+
+```python
+# A-KL-01: toddler Kerala trip
+"criteria": [
+    ("Midday nap block",
+     "Every day in the plan includes a midday rest or nap block around 1-2 PM."),
+
+    ("No overnight houseboat",
+     "The plan does NOT recommend an overnight houseboat for accommodation; "
+     "it either offers a day cruise or land hotel instead."),
+
+    ("Soft food named",
+     "The plan names specific soft foods suitable for a toddler "
+     "(idli, plain rice, dal, appam, puttu, or similar) — not just 'kid-friendly'."),
+
+    ("High chair noted",
+     "The plan mentions high chair availability or the need to pre-request it."),
+
+    ("Reduced activities",
+     "The plan limits activities to 1-2 per day, not 3+."),
+]
+```
+
+The criteria are intentionally precise. "Kid-friendly food" doesn't pass — the plan must name `idli`, `puttu`, `appam`. This catches the common LLM failure of producing generic, plausible-sounding text that misses the actual constraint.
+
+### Results
+
+| Case | Passed | Total | Notes |
+|---|---|---|---|
+| A-KL-01 | 6 | 6 | Toddler constraints fully respected |
+| BASE-PU | 5 | 6 | Missed: child food fallbacks not specific enough |
+| BASE-GW | 7 | 7 | All criteria including VIP darshan price and doli mention |
+
+### Eval pipeline
+
+```
+python run_eval_deepeval.py                    # all 10 cases
+python run_eval_deepeval.py BASE-KL A-KL-01   # specific cases
+python run_eval_deepeval.py --suite personalization  # PersonalizationDelta + TasteAdherence + ConstraintAdherence
+
+For each case:
+  1. graph.invoke(initial_state, config)       # full live pipeline (~30-45s)
+  2. For each criterion:
+     GEval(criteria=..., model=GroqJudge())    # LLM-as-judge scoring
+     metric.measure(LLMTestCase(plan_text))
+  3. Print pass/fail per criterion + overall score
+  30s sleep between cases (Groq rate limit)
+```
+
+**GroqJudge** wraps the same Groq model used in production as the eval judge — this is deliberate: no external eval service dependency, and the judge has the same knowledge base as the system under test.
+
+### What good eval coverage looks like here
+
+```
+BASE suite  → destination knowledge + constraint correctness
+A suite     → personalisation fidelity (does persona actually change the plan?)
+B suite     → proactive local intelligence (non-obvious scam/risk warnings)
+Personalization suite → PersonalizationDelta + TasteAdherence + ConstraintAdherence
+
+Not yet covered:
+  - Refinement coherence (does the refined plan preserve prior constraints?)
+  - Hallucination detection (are named prices / venues real?)
+  - Latency regression (does adding a new node slow plan generation?)
+```
 
 ---
 
