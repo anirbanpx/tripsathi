@@ -34,6 +34,9 @@ export/
 # ChromaDB and SQLite generated at runtime
 backend/data/
 
+# Unused duplicate images (canonical copy is in frontend/public/)
+backend/static/images/destinations/
+
 # Internal working docs (not for public repo)
 reports/
 

@@ -7,6 +7,8 @@ settings.local.json
 /ai-analyst-plus/
 /ai-analyst-starter/
 /playbox/
+/NR-sandbox/
+/SF/
 
 # ── Backend runtime artifacts ────────────────────────────
 Agent/backend/.deepeval/
