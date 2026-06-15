@@ -85,7 +85,10 @@ class SimpleGroqJudge(DeepEvalBaseLLM):
             messages=[{"role": "user", "content": prompt}],
             max_tokens=1024,
         )
-        return response.choices[0].message.content or ""
+        text = response.choices[0].message.content or ""
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        return text[start:end] if start != -1 and end > start else text
 
     async def a_generate(self, prompt: str, schema=None) -> str:
         return self.generate(prompt, schema)
@@ -572,7 +575,9 @@ def run_case(case_id: str, case: dict) -> dict:
             AnswerRelevancyMetric(model=simple_judge, threshold=0.7),
             ContextualRelevancyMetric(model=simple_judge, threshold=0.7),
         ]
-        for m in rag_metrics:
+        for i, m in enumerate(rag_metrics):
+            if i > 0:
+                time.sleep(6)  # stay within llama-3.3-70b-versatile 12K TPM
             try:
                 m.measure(rag_test_case)
                 icon = "✅" if m.is_successful() else "❌"
