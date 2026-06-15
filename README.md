@@ -55,7 +55,7 @@ RAG knowledge base covers 54 destinations with curated markdown docs and 50 YouT
 | Vector store | LlamaIndex + Qdrant Cloud | Metadata filtering by destination before vector search; cloud free tier; no self-hosted infra |
 | Streaming | SSE over WebSockets | One-directional push; browser-native EventSource; works through Vercel CDN without WS upgrade |
 | Memory | 3-layer model | LangGraph checkpoints (session HITL), TasteProfile SQLite (permanent preferences), Mem0 Cloud (cross-device) |
-| Eval | DeepEval + GEval | LLM-as-judge metrics (answer relevancy, faithfulness, personalization delta, constraint adherence) |
+| Eval | DeepEval + GEval | GEval (plan quality, 4–7 criteria/case) + RAG metrics (Faithfulness, AnswerRelevancy, ContextualRelevancy) + 3 custom BaseMetric (PersonalizationDelta, TasteAdherence, ConstraintAdherence) |
 | Observability | Arize Phoenix | OpenInference auto-instrumentors for LangGraph + LlamaIndex + OpenAI; manual OTel spans for tool calls |
 
 Full architecture document with state machine diagrams, RAG pipeline, failover chain, auth flow, and known trade-offs: **[specs/backend_architecture.md](specs/backend_architecture.md)**
@@ -113,14 +113,41 @@ Agent/
 
 ## Evaluation
 
-DeepEval test suite covering query expansion, RAG retrieval quality, and plan synthesis:
+Three-tier eval suite — regex smoke tests, LLM-as-judge GEval, and RAG-layer metrics:
 
 ```bash
 cd backend
+
+# Run a single case
+python run_eval_deepeval.py BASE-KL
+
+# Run specific cases
+python run_eval_deepeval.py BASE-KL A-KL-01 B-PU-01
+
+# Run all 10 cases
 python run_eval_deepeval.py
+
+# Named suites
+python run_eval_deepeval.py --suite personalization   # PersonalizationDelta, TasteAdherence, ConstraintAdherence
+python run_eval_deepeval.py --suite refinement        # HITL loop: plan v1 → user feedback → plan v2
+python run_eval_deepeval.py --suite all               # everything above + all 10 cases
 ```
 
-Results: 6/6 on A-KL-01 (Kerala), 5/6 on BASE-PU (Puri), 7/7 on BASE-GW (Gateway).
+**Metrics per case:**
+- GEval (4–7 criteria, `GroqJudge` / `gpt-oss-120b`) — semantic plan quality: routing, constraints, implicit local knowledge
+- `FaithfulnessMetric` — plan does not contradict retrieved RAG context (hallucination check)
+- `AnswerRelevancyMetric` — plan addresses the user's actual request
+- `ContextualRelevancyMetric` — retrieved RAG chunks are relevant to the query (retriever quality signal)
+
+RAG metrics use `SimpleGroqJudge` (`llama-3.3-70b-versatile`) — required for schema-structured output that DeepEval's built-in metrics expect.
+
+**10 test cases** across Kerala, Puri, and Guwahati: BASE (baseline), A-series (explicit constraints), B-series (implicit local knowledge).
+
+Fast regex smoke test (no API keys, offline):
+```bash
+python run_eval.py            # BASE-PU and BASE-GW
+python run_eval.py BASE-PU    # specific case
+```
 
 ---
 
