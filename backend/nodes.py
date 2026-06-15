@@ -1175,6 +1175,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
             logger.warning("retrieval quality gate query failed: %s", e)
 
         if _risk_content:
+            retrieved_content = retrieved_content + _risk_content
             _risk_gate_system = (
                 "You are a travel safety analyst. Extract local risks, scams, and seasonal warnings "
                 "from the retrieved content below. Return ONLY valid JSON: "
@@ -1205,6 +1206,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
 
     return {
         "research_synthesis": research_synthesis,
+        "retrieved_chunks": retrieved_content,
         "current_node": "plan_assembly",
         "stage_label": "Generating your itinerary",
         "error": None,

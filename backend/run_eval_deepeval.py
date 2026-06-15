@@ -25,8 +25,8 @@ load_dotenv()
 
 from openai import OpenAI
 from deepeval.models.base_model import DeepEvalBaseLLM
-from deepeval.metrics import GEval, BaseMetric
-from deepeval.test_case import LLMTestCase, LLMTestCaseParams, SingleTurnParams
+from deepeval.metrics import GEval, BaseMetric, FaithfulnessMetric, AnswerRelevancyMetric, ContextualRelevancyMetric
+from deepeval.test_case import LLMTestCase, SingleTurnParams
 from graph import graph
 
 
@@ -49,7 +49,12 @@ class GroqJudge(DeepEvalBaseLLM):
             messages=[{"role": "user", "content": prompt}],
             max_tokens=2048,
         )
-        return response.choices[0].message.content or ""
+        text = response.choices[0].message.content or ""
+        # Reasoning models prefix output with thinking tokens — strip to the JSON boundary
+        # so DeepEval's built-in metrics can json.loads() the response cleanly.
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        return text[start:end] if start != -1 and end > start else text
 
     async def a_generate(self, prompt: str, schema=None) -> str:
         return self.generate(prompt, schema)
@@ -59,6 +64,37 @@ class GroqJudge(DeepEvalBaseLLM):
 
 
 judge = GroqJudge()
+
+
+class SimpleGroqJudge(DeepEvalBaseLLM):
+    """Non-reasoning Groq model for built-in DeepEval metrics that require clean JSON schema output."""
+
+    def __init__(self):
+        self._client = OpenAI(
+            base_url=os.environ.get("LLM_BASE_URL"),
+            api_key=os.environ.get("LLM_API_KEY"),
+        )
+        self._model = "llama-3.3-70b-versatile"
+
+    def load_model(self):
+        return self._client
+
+    def generate(self, prompt: str, schema=None) -> str:
+        response = self._client.chat.completions.create(
+            model=self._model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1024,
+        )
+        return response.choices[0].message.content or ""
+
+    async def a_generate(self, prompt: str, schema=None) -> str:
+        return self.generate(prompt, schema)
+
+    def get_model_name(self) -> str:
+        return self._model
+
+
+simple_judge = SimpleGroqJudge()
 
 
 # ── Test cases (all 10 from evaluations_data.csv) ───────────────────────────
@@ -399,6 +435,73 @@ def run_personalization_suite():
     print("\nPersonalization suite complete.")
 
 
+# ── Refinement (HITL) test ───────────────────────────────────────────────────
+
+def run_refinement_case():
+    """Test the HITL refinement loop: plan v1 → user feedback → plan v2.
+
+    Uses BASE-KL (Kerala 5-night family) as the base. Sends a budget-downgrade
+    feedback message and checks whether plan v2 responds correctly.
+    """
+    from uuid import uuid4
+    print(f"\n{'='*60}\n  REFINEMENT: BASE-KL + budget feedback\n{'='*60}")
+
+    base = CASES["BASE-KL"]
+    thread_id = str(uuid4())
+    config = {"configurable": {"thread_id": thread_id}}
+
+    # Step 1 — generate plan v1
+    state_v1 = {
+        "destination": base["destination"],
+        "trip_parameters": base["trip_parameters"],
+        "onboarding_answers": base["onboarding_answers"],
+        "user_profile": None, "research_synthesis": None, "retrieved_chunks": None,
+        "plan": None, "user_feedback": None, "regenerate_requested": False,
+        "refinement_count": 0, "refinement_history": [],
+        "awaiting_feedback": False, "current_node": "persona_classification",
+        "stage_label": None, "error": None,
+    }
+    print("Running pipeline (plan v1)...")
+    result_v1 = graph.invoke(state_v1, config)
+    if result_v1.get("error"):
+        print(f"  ERROR (v1): {result_v1['error']}")
+        return
+
+    # Step 2 — send refinement feedback
+    feedback = "Switch to budget hotels only — no resorts or luxury properties."
+    state_v2 = {**result_v1, "user_feedback": feedback, "regenerate_requested": False}
+    print("Sending feedback and re-invoking (plan v2)...")
+    result_v2 = graph.invoke(state_v2, config)
+    if result_v2.get("error"):
+        print(f"  ERROR (v2): {result_v2['error']}")
+        return
+
+    plan_v2 = result_v2.get("plan") or {}
+    plan_v2_text = json.dumps(plan_v2, ensure_ascii=False)
+
+    # Step 3 — GEval: did v2 respond to the feedback?
+    test_case = LLMTestCase(input=feedback, actual_output=plan_v2_text)
+    metric = GEval(
+        name="Refinement responsiveness",
+        criteria=(
+            "The plan recommends mid-range or budget hotels (approximately ₹2000–₹3500 per night) "
+            "and does not include luxury resorts or premium properties, in response to the user's "
+            "explicit request to switch to budget hotels only."
+        ),
+        evaluation_params=[SingleTurnParams.INPUT, SingleTurnParams.ACTUAL_OUTPUT],
+        model=judge,
+        threshold=0.6,
+    )
+    try:
+        metric.measure(test_case)
+        icon = "✅" if metric.is_successful() else "❌"
+        print(f"  {icon} Refinement responsiveness — {metric.score:.2f}  {metric.reason or ''}")
+    except Exception as e:
+        print(f"  ⚠️  Refinement eval error: {e}")
+
+    print("\nRefinement test complete.")
+
+
 # ── Runner ───────────────────────────────────────────────────────────────────
 
 def run_case(case_id: str, case: dict) -> dict:
@@ -426,14 +529,17 @@ def run_case(case_id: str, case: dict) -> dict:
 
     plan = result.get("plan") or {}
     plan_text = json.dumps(plan, ensure_ascii=False)
+    retrieved_chunks = result.get("retrieved_chunks") or []
+
+    test_case = LLMTestCase(
+        input=case["onboarding_answers"][0]["answer"],
+        actual_output=plan_text,
+        retrieval_context=retrieved_chunks if retrieved_chunks else None,
+    )
 
     print("Scoring with GEval...")
     scores = []
     for label, criterion in case["criteria"]:
-        test_case = LLMTestCase(
-            input=case["onboarding_answers"][0]["answer"],
-            actual_output=plan_text,
-        )
         metric = GEval(
             name=label,
             criteria=criterion,
@@ -451,6 +557,31 @@ def run_case(case_id: str, case: dict) -> dict:
             scores.append({"label": label, "score": 0, "passed": False, "reason": str(e)})
             print(f"  ⚠️  {label} — eval error: {e}")
 
+    if retrieved_chunks:
+        print("\nScoring RAG layer...")
+        # Truncate chunks to stay within Groq's 8K TPM limit — FaithfulnessMetric
+        # sends all chunks + the full plan in one request (can exceed 14K tokens otherwise).
+        truncated_chunks = [c[:300] for c in retrieved_chunks]
+        rag_test_case = LLMTestCase(
+            input=test_case.input,
+            actual_output=test_case.actual_output,
+            retrieval_context=truncated_chunks,
+        )
+        rag_metrics = [
+            FaithfulnessMetric(model=simple_judge, threshold=0.7),
+            AnswerRelevancyMetric(model=simple_judge, threshold=0.7),
+            ContextualRelevancyMetric(model=simple_judge, threshold=0.7),
+        ]
+        for m in rag_metrics:
+            try:
+                m.measure(rag_test_case)
+                icon = "✅" if m.is_successful() else "❌"
+                print(f"  {icon} {m.__class__.__name__} — {m.score:.2f}  {getattr(m, 'reason', '') or ''}")
+                scores.append({"label": m.__class__.__name__, "score": round(m.score, 2), "passed": m.is_successful(), "reason": getattr(m, "reason", "")})
+            except Exception as e:
+                print(f"  ⚠️  {m.__class__.__name__} — error: {e}")
+                scores.append({"label": m.__class__.__name__, "score": 0, "passed": False, "reason": str(e)})
+
     passed_count = sum(1 for s in scores if s["passed"])
     total = len(scores)
     print(f"\n  Score: {passed_count}/{total}")
@@ -462,15 +593,21 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="TripSathi DeepEval runner")
     parser.add_argument("cases", nargs="*", help="Specific case IDs to run (e.g. BASE-KL A-KL-01)")
-    parser.add_argument("--suite", choices=["personalization", "all"], help="Run a named eval suite")
+    parser.add_argument("--suite", choices=["personalization", "refinement", "all"], help="Run a named eval suite")
     args = parser.parse_args()
 
     if args.suite == "personalization":
         run_personalization_suite()
         sys.exit(0)
 
+    if args.suite == "refinement":
+        run_refinement_case()
+        sys.exit(0)
+
     if args.suite == "all":
         run_personalization_suite()
+        print()
+        run_refinement_case()
         print()
 
     cases_to_run = args.cases if args.cases else list(CASES.keys())

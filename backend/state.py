@@ -10,6 +10,7 @@ class TripSathiState(TypedDict):
     # Agent-owned (written progressively by nodes)
     user_profile: Optional[dict]        # written by persona_classification
     research_synthesis: Optional[dict]  # written by destination_intelligence
+    retrieved_chunks: Optional[list]    # raw RAG strings from destination_intelligence (for eval)
     plan: Optional[dict]                # updated by plan_assembly each iteration
 
     # HITL refinement state
