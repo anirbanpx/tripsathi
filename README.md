@@ -2,6 +2,8 @@
 
 Planning a multi-day trip across India usually means a dozen browser tabs: generic top-10 lists, scattered forum warnings about houseboat scams, monsoon road closures nobody mentions until you're stuck, and zero accounting for traveling with a toddler or elderly parents. TripSathi does that stitching for you — a multi-agent system that researches, plans, and refines a day-by-day itinerary against your actual constraints.
 
+The original idea was bigger than a planner: a personal travel concierge that researches, plans, books, and remembers you across trips — not just a one-shot itinerary generator. What's live today is the core of that — research, planning, self-critique, human-in-the-loop refinement, voice input, and memory that carries across sessions and trips, plus a simulated end-to-end booking flow. Group trip coordination and real OTA booking integration are the next layers, not yet built.
+
 It works like a small team of specialist agents handing the trip off to each other:
 
 | What | Tech | Why |
@@ -31,6 +33,7 @@ It works like a small team of specialist agents handing the trip off to each oth
 | Reranker | Voyage rerank-2.5 + Cohere fallback |
 | Memory | LangGraph checkpoints + TasteProfile SQLite + Mem0 Cloud |
 | Evaluation | DeepEval |
+| Observability | Arize Phoenix (OpenInference auto-instrumentation) |
 
 **Integrations**
 
@@ -45,7 +48,9 @@ It works like a small team of specialist agents handing the trip off to each oth
 | Layer | Technology |
 |---|---|
 | Frontend | React 19 + TypeScript + Vite + Tailwind CSS |
+| Maps (frontend) | Mapbox GL (plan view) + Leaflet/react-leaflet on CARTO tiles (explore view) |
 | Backend | FastAPI + Python 3.12 |
+| Testing (E2E) | Playwright |
 | Deployment | Railway (backend) + Vercel (frontend) |
 
 ---
