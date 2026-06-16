@@ -1038,6 +1038,11 @@ def persona_classification(state: TripSathiState) -> dict:
     if state.get("traveler_notes"):
         answers_text += f"\n\nUser's original request (verbatim): {state['traveler_notes']}"
 
+    from guardrails import check_input_safety
+    is_safe, reason = check_input_safety(answers_text)
+    if not is_safe:
+        return {"error": f"unsafe_input: {reason}", "current_node": "error"}
+
     user_id = state["trip_parameters"].get("user_id", "")
     past_memories = read_memories(user_id)
     if past_memories:
@@ -1408,7 +1413,15 @@ def human_feedback(state: TripSathiState) -> dict:
     # user_input is the value passed to Command(resume=...) on resume
     if isinstance(user_input, dict) and user_input.get("regenerate"):
         return {"regenerate_requested": True, "user_feedback": None}
-    return {"user_feedback": str(user_input), "regenerate_requested": False}
+
+    feedback_text = str(user_input)
+    from guardrails import check_input_safety
+    is_safe, reason = check_input_safety(feedback_text)
+    if not is_safe:
+        return {"error": f"unsafe_input: {reason}", "current_node": "error",
+                "user_feedback": None, "regenerate_requested": False}
+
+    return {"user_feedback": feedback_text, "regenerate_requested": False}
 
 
 def finalize(state: TripSathiState) -> dict:
@@ -1768,6 +1781,8 @@ def error_node(state: TripSathiState) -> dict:
         friendly = "All AI providers are temporarily at capacity. Please wait a minute and try again."
     elif "exhausted" in raw:
         friendly = "Could not generate a valid response after multiple attempts. Please try again."
+    elif raw.startswith("unsafe_input:"):
+        friendly = "Your message couldn't be processed — please rephrase your request."
     elif raw:
         friendly = f"Planning failed: {raw}"
     else:
@@ -1780,8 +1795,11 @@ def error_node(state: TripSathiState) -> dict:
 
 
 def route_after_feedback(state: TripSathiState) -> str:
-    """Route after human_feedback: loop to plan_assembly or finalize."""
+    """Route after human_feedback: loop to plan_assembly, finalize, or error."""
     from langgraph.graph import END
+
+    if state.get("current_node") == "error":
+        return "error"
 
     if state.get("regenerate_requested"):
         return "plan_assembly"

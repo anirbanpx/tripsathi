@@ -61,6 +61,7 @@ def build_graph():
     builder.add_conditional_edges("human_feedback", route_after_feedback, {
         "plan_assembly": "plan_assembly",
         "finalize": "finalize",
+        "error": "error",
         END: END,
     })
     builder.add_edge("finalize", END)

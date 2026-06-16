@@ -113,6 +113,12 @@ Keep this section updated. Before starting any task, check here first to avoid r
 ### Leaflet in Vite
 - Default icon paths break in Vite. Fix already applied in both map components: delete `_getIconUrl` and call `L.Icon.Default.mergeOptions(...)` with unpkg URLs.
 
+### Input guardrails (`backend/guardrails.py`)
+- Two-tier check on raw free-text user input (onboarding answers + refinement feedback), wired into `persona_classification` and `human_feedback` in `nodes.py`. Tier 1 = regex/keyword checks (free, no LLM call). Tier 2 = `openai/gpt-oss-safeguard-20b` via Groq, only called if tier 1 passes.
+- **`meta-llama/llama-guard-4-12b` is decommissioned on Groq** — don't use it, it 400s with `model_decommissioned`. Use `openai/gpt-oss-safeguard-20b` instead (override via `GUARDRAILS_MODEL` env var if Groq changes this again).
+- `gpt-oss-safeguard-20b` is a reasoning model — same gotcha as `gpt-oss-120b`: needs `max_tokens >= 1024` or returns an empty string.
+- Tier 2 fails open on any exception (network error, rate limit, etc.) — a moderation-call hiccup shouldn't block a legitimate user since tier 1 already screened the obvious cases.
+
 ---
 
 ## IMPORTANT Principles
