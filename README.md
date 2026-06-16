@@ -21,15 +21,29 @@ It works like a small team of specialist agents handing the trip off to each oth
 
 ## Tech Stack
 
+**AI & Orchestration**
+
 | Layer | Technology |
 |---|---|
-| LLM | Groq (`openai/gpt-oss-120b`), 4-tier failover: Groq → Cerebras → Gemini → OpenRouter |
-| RAG / Indexing | LlamaIndex + Qdrant Cloud |
+| LLM | Groq (`openai/gpt-oss-120b`) + 3-provider failover (Cerebras, Gemini, OpenRouter) |
 | Orchestration | LangGraph state machine |
-| Tools | Tavily (web search), OpenWeatherMap, Google Maps |
-| Auth | Google OAuth + JWT |
-| Voice | Whisper STT |
+| RAG / Indexing | LlamaIndex + Qdrant Cloud |
+| Reranker | Voyage rerank-2.5 + Cohere fallback |
+| Memory | LangGraph checkpoints + TasteProfile SQLite + Mem0 Cloud |
 | Evaluation | DeepEval |
+
+**Integrations**
+
+| Layer | Technology |
+|---|---|
+| Web / Maps / Weather | Tavily, Google Maps, OpenWeatherMap |
+| Voice | Whisper STT |
+| Auth | Google OAuth + JWT |
+
+**Application**
+
+| Layer | Technology |
+|---|---|
 | Frontend | React 19 + TypeScript + Vite + Tailwind CSS |
 | Backend | FastAPI + Python 3.12 |
 | Deployment | Railway (backend) + Vercel (frontend) |
