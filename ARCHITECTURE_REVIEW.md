@@ -346,7 +346,7 @@ No prompt caching in place — large system prompts (PLAN_GENERATION_SYSTEM, CRI
 ### P3 — Portfolio Completeness
 
 16. **Scale eval suite to CI** — wire `run_eval_deepeval.py` into GitHub Actions; add 3-5× test case coverage
-17. **Cost analysis report** — run eval batch, parse token logs, produce ₹/plan figure
+17. ~~**Cost analysis report**~~ — done, see `reports/cost_analysis.md` (~₹4.13/plan measured avg)
 18. **Complete TTS** — ElevenLabs/Deepgram endpoint in `main.py` + frontend audio playback
 19. **Index remaining 10 destinations** — run `reindex.py` for full corpus
 20. **Deploy Phoenix to production** — currently localhost:6006 only

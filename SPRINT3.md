@@ -43,10 +43,10 @@
 
 - [x] **Deploy frontend to Vercel** — `https://frontend-agent-demo-s-projects.vercel.app`
 
-- [ ] **Cost analysis** (~2–3h)
-  - After token logging is added: run all 3 baseline eval cases, capture token counts.
-  - Calculate ₹ cost per plan generation (Groq pricing).
-  - Document in a `reports/cost_analysis.md`.
+- [x] **Cost analysis**
+  - Ran all 3 baseline eval cases live (`backend/run_cost_analysis.py`), captured real token counts.
+  - Measured avg ~54.6K tokens/plan, ~₹4.13/plan (blended Groq rate) — ~2.45× the earlier back-of-envelope estimate.
+  - Documented in `reports/cost_analysis.md`.
 
 ### High-value — portfolio differentiators
 
