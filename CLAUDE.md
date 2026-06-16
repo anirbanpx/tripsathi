@@ -1,4 +1,4 @@
-# Claude Instructions — Anirban's AI Agent Bootcamp Workspace
+# Claude Instructions — Anirban's AI Agent Workspace
 
 ## For Claude Code (or similar AI assistants)
 

@@ -10,7 +10,7 @@ before mockup generation in Claude Design.
 
 ### Decision 1 — Demo Mode entry path (no auth wall for visitors)
 
-Sprint 2 is a portfolio demo. Recruiters, bootcamp reviewers, and peers will not give a
+Sprint 2 is a portfolio demo. Recruiters and peers will not give a
 phone number to see a working agent.
 
 **Solution:** First screen offers two paths:

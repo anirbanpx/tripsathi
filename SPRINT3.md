@@ -28,13 +28,12 @@
 
 ## Sprint 3 backlog (priority order)
 
-### Must-have — bootcamp deliverables
+### Must-have
 
 - [ ] **Scaled eval with LLM-as-judge** (~6–8h)
   - Wire `data/evaluations_data.csv` test cases to LangGraph via DeepEval.
   - Use LLM-as-judge to auto-score all 10 cases (currently manual-only).
   - Target: 3–5× eval coverage from Sprint 2.
-  - Bootcamp curriculum explicitly requires this for Sprint 3.
 
 - [x] **Deploy backend to Railway** — `https://tripsathi-production.up.railway.app`
   - FastAPI app + SQLite checkpoints.

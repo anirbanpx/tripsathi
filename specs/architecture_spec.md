@@ -206,7 +206,7 @@ The overall system is one LangGraph graph. Clusters A and B are service nodes wi
 
 ### Scope Check
 
-**Agent count: 1** (one LangGraph graph, with one internal HITL loop) — within the bootcamp max-2 guideline.
+**Agent count: 1** (one LangGraph graph, with one internal HITL loop) — within a self-imposed max-2 agent guideline.
 
 **Sprint 3 deferred:**
 - Destination Intelligence Node → Agent: add retrieval quality check + conditional re-query (Angle B quality gate). Not needed for Sprint 2 — the fixed RAG pipeline is sufficient to test Context Awareness Failure.
