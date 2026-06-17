@@ -97,27 +97,28 @@ RAG knowledge base covers 54 destinations with curated markdown docs and 50 YouT
 
 Two routing chains, picked by task type — reasoning-heavy tasks favor Groq's quality, long-context tasks favor Gemini's window:
 
-```
-  plan, critic              Groq → Cerebras → Gemini → OpenRouter
-  synthesis, candidate_gen  Gemini → Groq → Cerebras → OpenRouter
+| Chain | Order |
+|---|---|
+| `plan`, `critic` | Groq → Cerebras → Gemini → OpenRouter |
+| `synthesis`, `candidate_gen` | Gemini → Groq → Cerebras → OpenRouter |
 
-  call LLM
-    │
-    ▼
-  next provider in chain
-    │
-    ├─ 429 / RateLimitError ──► cooldown 600s, try next provider
-    ├─ 403                  ──► cooldown 600s, try next provider
-    ├─ 404 (model missing)  ──► disable permanently, try next provider
-    ├─ context too long     ──► skip immediately, try next provider
-    ├─ other error          ──► retry same provider 3x (8s × attempt backoff)
-    └─ success              ──► return response
-    │
-    ▼  all 4 providers in cooldown
-  RuntimeError("all LLM providers are currently rate-limited")
-    │
-    ▼
-  error node → user-facing degraded response (graph does not crash)
+```mermaid
+flowchart TD
+    A([call LLM]) --> B[next provider in chain]
+    B --> C{response?}
+    C -->|429 / RateLimitError| D[cooldown 600s → try next]
+    C -->|403| D
+    C -->|404 model missing| E[disable permanently → try next]
+    C -->|context too long| F[skip immediately → try next]
+    C -->|other error| G[retry same provider 3× with backoff]
+    G --> C
+    C -->|success| H([return response])
+    D --> I{providers left?}
+    E --> I
+    F --> I
+    I -->|yes| B
+    I -->|no — all in cooldown| J[RuntimeError: all providers rate-limited]
+    J --> K([error node → degraded response\ngraph does not crash])
 ```
 
 Full failover mechanics (Gemini SDK special-casing, cost notes) and the rest of the state machine: **[specs/backend_architecture.md](specs/backend_architecture.md)**
