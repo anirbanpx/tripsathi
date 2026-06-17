@@ -334,7 +334,7 @@ Full scorecard and punch list: **[ARCHITECTURE_REVIEW.md](ARCHITECTURE_REVIEW.md
 
 ## Deployment
 
-- **Backend:** Railway — root directory `Agent/backend`, builds from `Procfile`
+- **Backend:** Hugging Face Spaces (Docker) — [`anirbanpx/tripsathi-api`](https://huggingface.co/spaces/anirbanpx/tripsathi-api); root `Dockerfile` copies `backend/` and runs uvicorn on port 8000
 - **Frontend:** Vercel — pre-built deploy (see `frontend/README.md` for the exact commands)
 
 Built and maintained solo as an ongoing personal project.
