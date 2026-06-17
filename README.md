@@ -1,3 +1,13 @@
+---
+title: TripSathi API
+emoji: 🧳
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # TripSathi — AI Travel Planning Agent
 
 [![CI](https://github.com/anirbanpx/tripsathi/actions/workflows/ci.yml/badge.svg)](https://github.com/anirbanpx/tripsathi/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) ![Python](https://img.shields.io/badge/python-3.12-blue) ![React](https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=white) [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://tripsathi-app.vercel.app)
