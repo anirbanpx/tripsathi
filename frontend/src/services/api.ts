@@ -7,7 +7,7 @@ import mockBooking from "../mocks/booking.json";
 import mockAuth from "../mocks/auth.json";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
-const API_BASE = import.meta.env.DEV ? "" : (import.meta.env.VITE_API_URL || "https://tripsathi-production.up.railway.app");
+const API_BASE = import.meta.env.DEV ? "" : (import.meta.env.VITE_API_URL || "https://anirbanpx-tripsathi-api.hf.space");
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
