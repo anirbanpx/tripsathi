@@ -34,6 +34,7 @@ uvicorn main:app --reload
 | `FALLBACK1_LLM_*` | Cerebras fallback (1M tok/day free) |
 | `FALLBACK2_LLM_*` | Gemini 2.5 Flash fallback (native google-genai SDK) |
 | `FALLBACK3_LLM_*` | OpenRouter fallback (multiple free models) |
+| `GUARDRAILS_MODEL` | Optional override for the tier-2 safety classifier (default `openai/gpt-oss-safeguard-20b`, via Groq) |
 | `TAVILY_API_KEY` | Web search |
 | `OPENWEATHER_API_KEY` | Weather tool |
 | `GOOGLE_MAPS_API_KEY` | Places lookup |
@@ -92,6 +93,15 @@ Failover triggers on 429 (rate limit) or 403 (quota). Gemini uses the native `go
 ### LangGraph Checkpointing
 
 Session state is persisted to `data/checkpoints.db` (SQLite). Human-in-the-loop interrupts are supported — the graph pauses at `clarify` nodes and resumes when the user responds.
+
+### Input Guardrails
+
+`guardrails.py` runs a two-tier safety check on raw free-text user input (onboarding answers + refinement feedback), called from `persona_classification` and `human_feedback` in `nodes.py`:
+
+1. **Tier 1** — regex prompt-injection patterns + a banned-topic keyword list. Free, instant, no LLM call.
+2. **Tier 2** — only if tier 1 passes: `gpt-oss-safeguard-20b` via Groq classifies the input as SAFE/UNSAFE against a short policy. Fails open on any error (network hiccup, rate limit) so a moderation outage never blocks a legitimate user.
+
+Unsafe input short-circuits to the existing `error` node — no downstream pipeline LLM calls run, and the user sees a generic "please rephrase" message rather than the matched pattern or category.
 
 ---
 

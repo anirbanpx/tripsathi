@@ -1,4 +1,5 @@
 import functools
+import hashlib
 import json
 import logging
 import os
@@ -10,8 +11,10 @@ from dataclasses import dataclass
 from openai import OpenAI, RateLimitError, APIStatusError, BadRequestError
 from google import genai
 from google.genai import types
+from opentelemetry import trace
 
 logger = logging.getLogger(__name__)
+_tracer = trace.get_tracer(__name__)
 
 _thread_tokens = threading.local()   # per-thread token accumulator
 _COST_PER_1M = 0.90                  # blended $/1M tokens (Groq gpt-oss-120b approx)
@@ -73,12 +76,11 @@ def _build_gemini_provider():
 
 
 _DEFAULT_OPENROUTER_MODELS = (
-    "meta-llama/llama-3.3-70b-instruct:free,"
-    "google/gemma-4-31b-it:free,"
-    "deepseek/deepseek-r1-0528:free,"
-    "z-ai/glm-4.5-air:free,"
+    "openai/gpt-oss-120b:free,"
+    "qwen/qwen3-next-80b-a3b-instruct:free,"
     "nvidia/nemotron-3-super-120b-a12b:free,"
-    "qwen/qwen3-next-80b-a3b-instruct:free"
+    "meta-llama/llama-3.3-70b-instruct:free,"
+    "google/gemma-4-31b-it:free"
 )
 
 
@@ -101,6 +103,10 @@ _PROVIDERS: list = [p for p in [
     _build_gemini_provider(),
 ] if p] + _build_openrouter_providers()
 
+logger.info("providers initialized: %s", [p.name for p in _PROVIDERS])
+if not _PROVIDERS:
+    logger.warning("no LLM providers configured — check API key environment variables")
+
 # session stickiness: provider name -> epoch time it becomes usable again
 _disabled_until: dict[str, float] = {}
 
@@ -114,6 +120,7 @@ _TASK_CHAINS: dict[str, list[str]] = {
     "candidate_gen": ["gemini", "groq", "cerebras", "openrouter"],
     "plan":          ["groq", "cerebras", "gemini", "openrouter"],
     "critic":        ["groq", "cerebras", "gemini", "openrouter"],
+    "cheap":         ["gemini", "groq", "cerebras", "openrouter"],
     "gemini_only":   ["gemini", "openrouter"],
     "default":       ["groq", "cerebras", "gemini", "openrouter"],
 }
@@ -800,7 +807,59 @@ def _resolve_chain(task: str) -> list:
     return result
 
 
+_LLM_CACHE_PATH = os.path.join(os.path.dirname(__file__), ".cache", "llm_cache.json")
+_llm_cache_lock = threading.Lock()
+
+
+def _make_cache_key(task: str, system: str, user_message: str) -> str:
+    raw = f"{task}|{system}|{user_message}"
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def _cache_get(key: str):
+    if not os.path.exists(_LLM_CACHE_PATH):
+        return None
+    with _llm_cache_lock:
+        try:
+            with open(_LLM_CACHE_PATH) as f:
+                return json.load(f).get(key)
+        except Exception:
+            return None
+
+
+def _cache_set(key: str, value) -> None:
+    with _llm_cache_lock:
+        try:
+            os.makedirs(os.path.dirname(_LLM_CACHE_PATH), exist_ok=True)
+            data: dict = {}
+            if os.path.exists(_LLM_CACHE_PATH):
+                try:
+                    with open(_LLM_CACHE_PATH) as f:
+                        data = json.load(f)
+                except Exception:
+                    pass
+            data[key] = value
+            with open(_LLM_CACHE_PATH, "w") as f:
+                json.dump(data, f)
+        except Exception:
+            pass
+
+
 def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str = "default") -> dict | list:
+    cache_enabled = bool(os.environ.get("LLM_CACHE_ENABLED"))
+    if cache_enabled:
+        key = _make_cache_key(task, system, user_message)
+        cached = _cache_get(key)
+        if cached is not None:
+            logger.info("llm_cache hit task=%s", task)
+            return cached
+    result = _call_llm_uncached(system, user_message, max_tokens, task)
+    if cache_enabled:
+        _cache_set(key, result)
+    return result
+
+
+def _call_llm_uncached(system: str, user_message: str, max_tokens: int = 4096, task: str = "default") -> dict | list:
     now = time.time()
     ordered = _resolve_chain(task)
     available = [p for p in ordered if _disabled_until.get(p.name, 0) <= now]
@@ -848,8 +907,12 @@ def _call_llm(system: str, user_message: str, max_tokens: int = 4096, task: str 
                     _disabled_until[provider.name] = time.time() + cooldown
                     logger.warning("provider %s exhausted → failing over (cooldown %.0fs)", provider.name, cooldown)
                     break  # try next provider
-                if kind in ("context", "not_found"):
-                    logger.warning("provider %s %s → failing over", provider.name, "context-length error" if kind == "context" else "model not found (404)")
+                if kind == "not_found":
+                    _disabled_until[provider.name] = float("inf")
+                    logger.warning("provider %s model not found (404) — permanently disabled", provider.name)
+                    break
+                if kind == "context":
+                    logger.warning("provider %s context-length error → failing over", provider.name)
                     break  # try next provider (don't disable — request-specific)
                 if attempt == 2:
                     raise
@@ -1011,16 +1074,32 @@ def _drain_tokens() -> int:
 
 
 def _timed_node(fn):
-    """Decorator: log per-node elapsed time and token count; accumulate session_tokens in state."""
+    """Decorator: per-node Phoenix span, elapsed time, token count, and catch-all error→error-state."""
     @functools.wraps(fn)
     def _wrapper(state: TripSathiState) -> dict:
         t0 = time.perf_counter()
-        result = fn(state)
-        elapsed_ms = (time.perf_counter() - t0) * 1000
-        node_tokens = _drain_tokens()
-        result["session_tokens"] = state.get("session_tokens", 0) + node_tokens
-        logger.info("node=%s elapsed_ms=%.0f tokens=%d", fn.__name__, elapsed_ms, node_tokens)
-        return result
+        with _tracer.start_as_current_span(f"node.{fn.__name__}") as span:
+            span.set_attribute("node.name", fn.__name__)
+            try:
+                result = fn(state)
+            except Exception as e:
+                elapsed_ms = (time.perf_counter() - t0) * 1000
+                span.set_attribute("node.elapsed_ms", elapsed_ms)
+                span.set_attribute("node.tokens", 0)
+                span.record_exception(e)
+                logger.error("node=%s unhandled_error elapsed_ms=%.0f error=%s", fn.__name__, elapsed_ms, e)
+                return {
+                    "error": f"{fn.__name__}_failed: {e}",
+                    "current_node": "error",
+                    "session_tokens": state.get("session_tokens", 0),
+                }
+            elapsed_ms = (time.perf_counter() - t0) * 1000
+            node_tokens = _drain_tokens()
+            span.set_attribute("node.elapsed_ms", elapsed_ms)
+            span.set_attribute("node.tokens", node_tokens)
+            result["session_tokens"] = state.get("session_tokens", 0) + node_tokens
+            logger.info("node=%s elapsed_ms=%.0f tokens=%d", fn.__name__, elapsed_ms, node_tokens)
+            return result
     return _wrapper
 
 
@@ -1072,7 +1151,7 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Trip: {json.dumps(state['trip_parameters'])}"
     )
     try:
-        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024, task="default")
+        expanded_queries = _call_llm(QUERY_EXPANSION_SYSTEM, expansion_prompt, max_tokens=1024, task="cheap")
     except Exception as e:
         # Graceful degradation: LLM down → fall back to generic queries so RAG still runs
         logger.warning("query expansion failed (%s) — using fallback queries", e)
