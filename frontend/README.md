@@ -21,7 +21,7 @@ UI available at `http://localhost:5173`. Proxies `/api/*` requests to the backen
 |---|---|
 | `VITE_API_URL` | Backend URL for production builds |
 
-In production this is set to the Railway backend URL. There is also a hardcoded fallback in `src/services/api.ts` — update that line if the Railway URL changes.
+In production this is set to the HF Spaces backend URL (`https://anirbanpx-tripsathi-api.hf.space`). There is also a hardcoded fallback in `src/services/api.ts` — update that line if the backend URL changes.
 
 For local dev, no env var is needed — Vite's proxy handles API routing.
 
