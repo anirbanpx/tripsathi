@@ -1,5 +1,7 @@
 # TripSathi — AI Travel Planning Agent
 
+[![CI](https://github.com/anirbanpx/tripsathi/actions/workflows/ci.yml/badge.svg)](https://github.com/anirbanpx/tripsathi/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) ![Python](https://img.shields.io/badge/python-3.12-blue) ![React](https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=white) [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://tripsathi-app.vercel.app)
+
 Planning a multi-day trip across India usually means a dozen browser tabs: generic top-10 lists, scattered forum warnings about houseboat scams, monsoon road closures nobody mentions until you're stuck, and zero accounting for traveling with a toddler or elderly parents. TripSathi does that stitching for you — a multi-agent system that researches, plans, and refines a day-by-day itinerary against your actual constraints.
 
 The original idea was bigger than a planner: a personal travel concierge that researches, plans, books, and remembers you across trips — not just a one-shot itinerary generator. What's live today is the core of that — research, planning, self-critique, human-in-the-loop refinement, voice input, and memory that carries across sessions and trips, plus a simulated end-to-end booking flow. Group trip coordination and real OTA booking integration are the next layers, not yet built.
@@ -19,6 +21,16 @@ It works like a small team of specialist agents handing the trip off to each oth
 
 **Live demo:** [tripsathi-app.vercel.app](https://tripsathi-app.vercel.app)
 
+### Screenshots
+
+| Landing | Onboarding | Trip style |
+|:---:|:---:|:---:|
+| ![Landing page](docs/screenshots/01-home.png) | ![Onboarding wizard](docs/screenshots/02-onboarding.png) | ![Trip type selection](docs/screenshots/04-onboarding-step3.png) |
+
+| Agent pipeline (persona + guardrails) | Agent pipeline (research + map) |
+|:---:|:---:|
+| ![Plan generating — persona stage](docs/screenshots/05-plan-generating.png) | ![Plan generating — research stage](docs/screenshots/06-plan-view.png) |
+
 ---
 
 ## Tech Stack
@@ -32,6 +44,7 @@ It works like a small team of specialist agents handing the trip off to each oth
 | RAG / Indexing | LlamaIndex + Qdrant Cloud |
 | Reranker | Voyage rerank-2.5 + Cohere fallback |
 | Memory | LangGraph checkpoints + TasteProfile SQLite + Mem0 Cloud |
+| Guardrails | Regex prompt-injection filter + `gpt-oss-safeguard-20b` (Groq) unsafe-content classifier |
 | Evaluation | DeepEval |
 | Observability | Arize Phoenix (OpenInference auto-instrumentation) |
 
@@ -59,39 +72,21 @@ It works like a small team of specialist agents handing the trip off to each oth
 
 ### Request → plan pipeline
 
-```
-User input
-    │
-    ▼
-TripInputStepper (React)
-    │  SSE stream
-    ▼
-FastAPI /api/plan/stream
-    │
-    ▼
-LangGraph state machine
-    persona_classification    — classify traveler type + constraints from onboarding
-         │
-         ▼
-    destination_intelligence  — RAG + web search + weather, persona-aware query expansion
-         │
-         ▼
-    candidate_gen             — generate destination/activity candidates
-         │
-         ▼
-    ranker                    — taste-profile scoring + reranking
-         │
-         ▼
-    plan_assembly  ◄──────┐   — day-by-day itinerary generation
-         │                │
-         ▼                │ retry, max 2 passes
-       critic ──fail──────┘
-         │ pass
-         ▼
-    human_feedback         — HITL pause (SQLite checkpoint); resumes plan_assembly
-         │ approved             on edit request, else continues
-         ▼
-    finalize → END
+```mermaid
+flowchart TD
+    A([User input]) --> B["TripInputStepper\n— React"]
+    B -->|SSE stream| C["FastAPI /api/plan/stream"]
+    C --> D["LangGraph state machine"]
+    D --> E["persona_classification\nguardrail check · traveler type + constraints"]
+    E --> F["destination_intelligence\nRAG + web search + weather"]
+    F --> G["candidate_gen\ndestination & activity candidates"]
+    G --> H["ranker\ntaste-profile scoring + Voyage reranking"]
+    H --> I["plan_assembly\nday-by-day itinerary"]
+    I --> J["critic"]
+    J -->|"fail · max 2 passes"| I
+    J -->|pass| K["human_feedback\nHITL pause · guardrail check on feedback"]
+    K -->|approved| L["finalize"]
+    L --> M([END])
 ```
 
 Every node also has a conditional edge to a terminal `error` node — a failed node never lets a downstream node run on corrupted state.
@@ -222,6 +217,8 @@ Output (excerpt):
 | Memory | 3-layer model | LangGraph checkpoints (session HITL, 24h TTL) + TasteProfile SQLite (permanent preferences) + Mem0 Cloud (cross-device recall). Accepted cost: an extra network call to Mem0 at session start; degrades to a cold start if Mem0 is unavailable |
 | Eval | DeepEval + GEval | GEval (plan quality, 4–7 criteria/case) + RAG metrics (Faithfulness, AnswerRelevancy, ContextualRelevancy) + 3 custom BaseMetric (PersonalizationDelta, TasteAdherence, ConstraintAdherence) |
 | Observability | Arize Phoenix | OpenInference auto-instrumentors for LangGraph + LlamaIndex + OpenAI; manual OTel spans for tool calls |
+| Guardrails | Two-tier: free regex filter, then `gpt-oss-safeguard-20b` (Groq) only if tier 1 passes | Avoids a heavy `llm-guard`/NeMo Guardrails dependency (torch + transformers, multi-GB) for a project with no PII/auth in its core flow. Accepted cost: regex patterns need manual upkeep and miss novel injection phrasing that an ML classifier would catch |
+| LLM caching | Exact-match SHA-256 cache (opt-in, `LLM_CACHE_ENABLED=true`), not semantic caching | Semantic caching risks returning a cached plan for a superficially similar but constraint-different query — e.g. same destination, different party composition. Correctness under personalization constraints outweighs the latency saving. Exact-match is safe: identical inputs produce identical outputs, so cache hits are never wrong |
 
 Full architecture document with state machine diagrams, RAG pipeline, failover chain, auth flow, and known trade-offs: **[specs/backend_architecture.md](specs/backend_architecture.md)**
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { RefreshCw, Coffee, Soup, UtensilsCrossed } from "lucide-react";
 import { getIllustration } from "./TravelIllustrations";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
@@ -187,7 +188,7 @@ export default function DayJournalCard({ day, listMode = false }: Props) {
   );
 }
 
-function MealStamp({ Icon, label, text }: { Icon: (props: { size?: number; strokeWidth?: number }) => JSX.Element; label: string; text: string }) {
+function MealStamp({ Icon, label, text }: { Icon: React.ComponentType<{ size?: number; strokeWidth?: number }>; label: string; text: string }) {
   return (
     <div style={{ flex: 1, padding: "6px 8px", background: "rgba(244,236,219,0.8)", border: "1px solid rgba(62,47,35,0.12)", borderRadius: 8 }}>
       <div style={{ marginBottom: 3, color: "var(--bark-2)", lineHeight: 0 }}><Icon size={13} strokeWidth={2} /></div>

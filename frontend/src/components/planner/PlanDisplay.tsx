@@ -2,19 +2,17 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, Check,
-  Loader2, BookOpen, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
-  GalleryHorizontal, LayoutList, Map, Hotel as HotelIcon,
+  Loader2, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
+  GalleryHorizontal, LayoutList, Map,
 } from "lucide-react";
 import MapView, { haversineDist, driveTime } from "./MapView";
 import DayJournalCard, { cleanName } from "./DayJournalCard";
 import TripJournal from "./TripJournal";
 import GoogleSignInButton from "../auth/GoogleSignInButton";
-import { refinePlan, streamRegenerate, saveTrip, toggleHotel, getTasteProfile, googleSignIn } from "../../services/api";
-import { isBookmarked, toggleBookmark } from "../../lib/bookmarks";
+import { refinePlan, streamRegenerate, saveTrip, getTasteProfile, googleSignIn } from "../../services/api";
 import { setAuthState } from "../../lib/auth";
-import { getDestinationImageUrl } from "../../lib/destinationImage";
 import { getCoordinates } from "../../lib/destinationCoordinates";
-import type { UserContext, DayPlan, Hotel, FetchedHotel } from "../../types";
+import type { UserContext, DayPlan, Hotel, FetchedHotel, DinnerOption } from "../../types";
 
 interface Props {
   ctx: UserContext;
@@ -38,7 +36,6 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
   const [saveFlash, setSaveFlash] = useState(false);
   const [tasteToast, setTasteToast] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [hotelSaved, setHotelSaved] = useState<Record<string, boolean>>({});
   const [tasteProfile, setTasteProfile] = useState<Record<string, unknown> | null>(null);
   const [loginDismissed, setLoginDismissed] = useState(() => {
     try { return localStorage.getItem("ts_login_dismiss") === "1"; } catch { return false; }
@@ -91,26 +88,6 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
         setSaveFlash(true);
         setTimeout(() => setSaveFlash(false), 2000);
       } catch { /* storage quota */ }
-    }
-  }
-
-  async function handleHotelBookmark(hotel: Hotel) {
-    const key = hotel.name + hotel.location;
-    if (ctx.mode === "authenticated") {
-      try {
-        const added = await toggleHotel({
-          name: hotel.name,
-          location: hotel.location,
-          approx_cost_per_night: hotel.approx_cost_per_night,
-          reasoning: hotel.reasoning,
-          content_source: hotel.content_source,
-        });
-        setHotelSaved((prev) => ({ ...prev, [key]: added }));
-      } catch (e) { console.error("toggleHotel failed:", e); }
-    } else {
-      const next = !isBookmarked(hotel.name);
-      toggleBookmark({ name: hotel.name, location: hotel.location, type: "hotel" });
-      setHotelSaved((prev) => ({ ...prev, [key]: next }));
     }
   }
 
@@ -777,128 +754,6 @@ function WarningsCarousel({ warnings }: { warnings: string[] }) {
     </div>
   );
 }
-
-function HotelCard({ hotel }: { hotel: Hotel }) {
-  const imgUrl = getDestinationImageUrl(hotel.location);
-  const [bookmarked, setBookmarked] = useState(() => isBookmarked(hotel.name));
-
-  function handleBookmark() {
-    const added = toggleBookmark({ name: hotel.name, type: "hotel", location: hotel.location });
-    setBookmarked(added);
-  }
-
-  return (
-    <div style={{
-      borderRadius: 16, overflow: "hidden",
-      border: "1.5px solid rgba(62,47,35,0.14)",
-      boxShadow: "0 2px 0 rgba(62,47,35,.07), 0 8px 20px -10px rgba(62,47,35,.2)",
-      background: "var(--surface)",
-      marginBottom: 14,
-    }}>
-      {/* Photo — kraft paper frame */}
-      <div style={{ position: "relative", margin: "10px 10px 0" }}>
-        <div style={{
-          height: 130, borderRadius: 10, overflow: "hidden",
-          border: "3px solid var(--paper)",
-          outline: "1px solid rgba(62,47,35,0.12)",
-          boxShadow: "0 3px 14px rgba(62,47,35,0.18)",
-          background: "var(--paper-3)",
-          backgroundImage: imgUrl ? `url(${imgUrl})` : undefined,
-          backgroundSize: "cover", backgroundPosition: "center",
-        }}>
-          {!imgUrl && (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--bark-3)" }}><HotelIcon size={30} strokeWidth={1.5} /></div>
-          )}
-        </div>
-        {/* Tape tab on photo */}
-        <div style={{
-          position: "absolute", top: -5, left: "50%", transform: "translateX(-50%)",
-          width: 36, height: 11, background: "var(--tape)", borderRadius: 2, zIndex: 2,
-        }} />
-        {/* Bookmark button */}
-        <button
-          onClick={handleBookmark}
-          title={bookmarked ? "Remove bookmark" : "Bookmark hotel"}
-          style={{
-            position: "absolute", top: 8, right: 8,
-            width: 30, height: 30, borderRadius: "50%",
-            background: "rgba(244,236,219,0.9)", border: "none",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", boxShadow: "0 1px 6px rgba(62,47,35,0.2)",
-            color: bookmarked ? "var(--rust)" : "var(--bark-3)",
-          }}
-        >
-          {bookmarked ? <BookmarkCheck size={14} strokeWidth={2} /> : <Bookmark size={14} strokeWidth={2} />}
-        </button>
-        {/* Source postmark stamp */}
-        <div style={{
-          position: "absolute", bottom: 8, right: 8,
-          padding: "3px 8px", borderRadius: 20,
-          border: `1.5px solid ${hotel.content_source === "rag" ? "var(--moss)" : "var(--bark-3)"}`,
-          background: "rgba(244,236,219,0.92)",
-          display: "flex", alignItems: "center", gap: 4,
-          fontFamily: "var(--font-body)", fontWeight: 800, fontSize: 9,
-          letterSpacing: "0.12em", textTransform: "uppercase",
-          color: hotel.content_source === "rag" ? "var(--moss)" : "var(--bark-3)",
-        }}>
-          {hotel.content_source === "rag"
-            ? <><BookOpen size={9} strokeWidth={2.5} />verified</>
-            : <><AlertCircle size={9} strokeWidth={2.5} />general</>}
-        </div>
-      </div>
-
-      {/* Content — journal entry */}
-      <div style={{
-        padding: "12px 14px 14px",
-        backgroundImage: "repeating-linear-gradient(transparent,transparent 23px,rgba(62,47,35,0.06) 23px,rgba(62,47,35,0.06) 24px)",
-        backgroundPositionY: "28px",
-      }}>
-        {/* Hotel name in script */}
-        <div style={{ fontFamily: "var(--font-script)", fontSize: 22, color: "var(--bark)", lineHeight: 1.2, fontWeight: 700 }}>
-          {hotel.name}
-        </div>
-        <div style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--bark-3)", fontWeight: 600, marginBottom: 8 }}>
-          {hotel.location}
-        </div>
-
-        {/* Reasoning in italic script */}
-        <div style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark-2)", lineHeight: 1.55, marginBottom: 10, borderLeft: "3px solid var(--tape)", paddingLeft: 8 }}>
-          {hotel.reasoning}
-        </div>
-
-        {hotel.updated_in_refinement && (
-          <div style={{ fontSize: 10, color: "var(--rust)", marginBottom: 8, fontWeight: 700, fontFamily: "var(--font-body)" }}>
-            ↻ updated in this refinement
-          </div>
-        )}
-
-        {/* Price stamp */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 6 }}>
-          <div style={{
-            display: "inline-flex", alignItems: "baseline", gap: 3,
-            padding: "4px 12px", borderRadius: 6,
-            border: "2px solid var(--rust)",
-            background: "rgba(176,73,47,0.06)",
-          }}>
-            <span style={{ fontFamily: "var(--font-script)", fontSize: 20, fontWeight: 700, color: "var(--rust)" }}>
-              ₹{hotel.approx_cost_per_night.toLocaleString()}
-            </span>
-            <span style={{ fontFamily: "var(--font-body)", fontSize: 10, fontWeight: 700, color: "var(--rust)", opacity: 0.7 }}>
-              / night
-            </span>
-          </div>
-          {hotel.content_source === "general" && (
-            <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10, color: "var(--bark-3)", fontFamily: "var(--font-body)", fontWeight: 600 }}>
-              <AlertCircle size={11} strokeWidth={2} />
-              verify on Booking.com
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ── Map split panel — right-side day detail card ──────────────────────────────
 
 function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: Hotel[]; selectedDay: number }) {
@@ -1039,7 +894,7 @@ function MapDayPanel({ days, hotels, selectedDay }: { days: DayPlan[]; hotels: H
           {
             label: "D",
             text: Array.isArray(day.meals.dinner)
-              ? ((day.meals.dinner as { description?: string }[]).find((d: { cuisine_tag?: string }) => d.cuisine_tag === "local")?.description ?? (day.meals.dinner as { description?: string }[])[0]?.description ?? "")
+              ? ((day.meals.dinner as DinnerOption[]).find((d) => d.cuisine_tag === "local")?.description ?? (day.meals.dinner as DinnerOption[])[0]?.description ?? "")
               : String(day.meals.dinner),
           },
         ]).map(({ label, text }) => (

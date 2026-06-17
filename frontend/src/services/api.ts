@@ -26,7 +26,7 @@ export async function parseIntent(text: string): Promise<TripParameters & { onbo
 export async function generatePlan(params: TripParameters): Promise<PlanResponse> {
   if (USE_MOCK) {
     await delay(200);
-    return mockPlan as PlanResponse;
+    return mockPlan as unknown as PlanResponse;
   }
 
   const kidPart = params.kid_ages.length > 0
@@ -74,7 +74,7 @@ export async function streamPlan(
     await delay(400);
     onStage("Researching destinations & logistics...");
     await delay(400);
-    return mockPlan as PlanResponse;
+    return mockPlan as unknown as PlanResponse;
   }
 
   const kidPart = params.kid_ages.length > 0
@@ -155,7 +155,7 @@ export async function streamPlan(
 export async function refinePlan(threadId: string, userFeedback: string): Promise<PlanResponse> {
   if (USE_MOCK) {
     await delay(200);
-    return mockRefine as PlanResponse;
+    return mockRefine as unknown as PlanResponse;
   }
   const res = await fetch(`${API_BASE}/api/refine`, {
     method: "POST",
@@ -174,7 +174,7 @@ export async function streamRegenerate(
     await delay(200);
     onStage("Regenerating your itinerary...");
     await delay(400);
-    return mockPlan as PlanResponse;
+    return mockPlan as unknown as PlanResponse;
   }
 
   const res = await fetch(`${API_BASE}/api/regenerate/stream`, {

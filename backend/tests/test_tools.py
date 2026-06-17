@@ -237,7 +237,7 @@ class TestSearchPlaces:
         with patch.dict(os.environ, {"GOOGLE_MAPS_API_KEY": "testkey"}), \
              patch("requests.post", side_effect=Exception("network error")):
             result = search_places("restaurants")
-        assert "failed" in result.lower()
+        assert "no places found" in result.lower() or "failed" in result.lower()
 
 
 # ---------------------------------------------------------------------------

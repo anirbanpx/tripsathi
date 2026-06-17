@@ -21,6 +21,7 @@ export interface DinnerOption {
   description: string;
   cuisine_tag: "local" | "family" | "premium";
   restaurant_name?: string;
+  rating?: string;
   why_chosen?: string;
   phone?: string;
 }
