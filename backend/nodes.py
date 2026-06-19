@@ -123,10 +123,10 @@ _disabled_until: dict[str, float] = {}
 # gemini_only → Gemini exclusively
 # default → Groq-first
 _TASK_CHAINS: dict[str, list[str]] = {
-    "synthesis":     ["cerebras", "groq", "gemini", "openrouter"],
+    "synthesis":     ["cerebras", "gemini", "openrouter"],
     "candidate_gen": ["cerebras", "groq", "gemini", "openrouter"],
-    "plan":          ["groq", "cerebras", "gemini", "openrouter"],
-    "critic":        ["groq", "cerebras", "gemini", "openrouter"],
+    "plan":          ["cerebras", "groq", "gemini", "openrouter"],
+    "critic":        ["cerebras", "groq", "gemini", "openrouter"],
     "cheap":         ["cerebras", "groq", "gemini", "openrouter"],
     "gemini_only":   ["gemini", "openrouter"],
     "default":       ["groq", "cerebras", "gemini", "openrouter"],
