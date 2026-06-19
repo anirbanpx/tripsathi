@@ -210,12 +210,36 @@ function YouTubeEmbed({ video_id, title, style }: { video_id: string; title: str
   const [iframeReady, setIframeReady] = useState(false);
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", ...style }}>
-      {/* Thumbnail visible from frame 0 */}
+      {/* Thumbnail — Ken Burns while player loads */}
       <img
         src={`https://img.youtube.com/vi/${video_id}/hqdefault.jpg`}
         alt="" aria-hidden
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+          animation: iframeReady ? "none" : "kenBurns 14s ease-in-out infinite alternate" }}
       />
+      {/* Overlay shown while iframe loads: gradient + play button + title */}
+      {!iframeReady && (
+        <>
+          <div style={{ position: "absolute", inset: 0,
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.55) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 62, height: 62, borderRadius: "50%",
+              background: "rgba(255,255,255,0.14)", backdropFilter: "blur(6px)",
+              border: "2px solid rgba(255,255,255,0.45)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              animation: "playPulse 2.2s ease-in-out infinite",
+              color: "rgba(255,255,255,0.9)", fontSize: 20, paddingLeft: 4 }}>
+              ▶
+            </div>
+          </div>
+          <div style={{ position: "absolute", bottom: 12, left: 12, right: 12,
+            fontSize: 11, color: "rgba(255,255,255,0.65)", fontFamily: "var(--font-body)",
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+            animation: "fadeSlideUp 0.6s ease both" }}>
+            {title}
+          </div>
+        </>
+      )}
       {/* Iframe fades in once YouTube is ready */}
       <iframe
         src={`https://www.youtube.com/embed/${video_id}?autoplay=1&rel=0&modestbranding=1&fs=1`}
@@ -331,10 +355,65 @@ function RouteMap({ destination, waypoints }: { destination: string; waypoints: 
   );
 }
 
+// ── Loading placeholder shown while YouTube video is being fetched ────────────
+
+function VideoLoadingPlaceholder({ dest, imgUrl, chips }: { dest: string; imgUrl?: string; chips: string[] }) {
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", background: "var(--paper-2)" }}>
+      {imgUrl && (
+        <img
+          src={imgUrl} alt={dest}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+            animation: "kenBurns 14s ease-in-out infinite alternate" }}
+        />
+      )}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(26,17,8,0.08) 0%, rgba(26,17,8,0.78) 100%)" }} />
+      {/* Scan line */}
+      <div style={{ position: "absolute", left: 0, right: 0, height: 2,
+        background: "linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)",
+        animation: "scanLine 5s linear infinite" }} />
+      {/* Content */}
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center", gap: 14, padding: "0 28px" }}>
+        <div style={{ fontFamily: "var(--font-script)", fontSize: 40, color: "rgba(244,236,219,0.95)",
+          lineHeight: 1, textAlign: "center", animation: "fadeSlideUp 0.9s ease both" }}>
+          {dest}
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+          {chips.map((chip, i) => (
+            <span key={chip} style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.13em", textTransform: "uppercase",
+              padding: "3px 9px", border: "1px solid rgba(244,236,219,0.32)", borderRadius: 20,
+              color: "rgba(244,236,219,0.7)", backdropFilter: "blur(4px)", background: "rgba(26,17,8,0.28)",
+              animation: `fadeSlideUp 0.5s ${0.25 + i * 0.1}s ease both` }}>
+              {chip}
+            </span>
+          ))}
+        </div>
+        <div style={{ fontSize: 10, color: "rgba(244,236,219,0.42)", letterSpacing: "0.1em",
+          fontFamily: "var(--font-body)", textTransform: "uppercase",
+          animation: "fadeSlideUp 0.8s 0.7s ease both" }}>
+          curating your travel preview ✦
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
 const STYLE = `
   @keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeSlideUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes kenBurns { from { transform:scale(1); } to { transform:scale(1.07); } }
+  @keyframes playPulse {
+    0%,100% { transform:scale(1); box-shadow:0 0 0 0 rgba(255,255,255,0.25); }
+    50% { transform:scale(1.1); box-shadow:0 0 0 14px rgba(255,255,255,0); }
+  }
+  @keyframes scanLine {
+    0% { top:-3px; opacity:0.6; }
+    80% { opacity:0.35; }
+    100% { top:100%; opacity:0; }
+  }
   .gp-journal::-webkit-scrollbar { display: none; }
   .gp-journal { scrollbar-width: none; }
 `;
@@ -343,6 +422,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   const [journal, setJournal] = useState<JournalLine[]>([]);
   const [cursor, setCursor] = useState(true);
   const [wide, setWide] = useState(() => window.innerWidth >= 960);
+  const [slowWarning, setSlowWarning] = useState(false);
 
   const queue = useRef<string[]>([]);
   const typing = useRef(false);
@@ -360,6 +440,11 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   useEffect(() => {
     const t = setInterval(() => setCursor(c => !c), 530);
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => setSlowWarning(true), 45000);
+    return () => clearTimeout(t);
   }, []);
 
   // Typewriter engine — defined once via useEffect so refs are always current
@@ -430,6 +515,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   const budget = tripParams?.budget_bracket ?? "mid";
   const budgetChip = budget === "budget" ? "Budget" : budget === "premium" ? "Premium" : "Mid-range";
   const styles = (tripParams?.trip_style ?? []).slice(0, 2);
+  const placeholderChips = [`${nights} nights`, budgetChip, personaLabel(tripParams), ...styles].filter(Boolean);
 
   // ── Shared right panel ────────────────────────────────────────────────────
   function RightPanel({ fill, hideDestHeader }: { fill?: boolean; hideDestHeader?: boolean }) {
@@ -504,6 +590,15 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
               </span>
             </div>
           ))}
+          {slowWarning && (
+            <div style={{
+              marginTop: 6, fontSize: 10, color: "rgba(244,236,219,0.3)",
+              fontFamily: "var(--font-body)", letterSpacing: "0.07em",
+              textAlign: "center", animation: "fadeSlideUp 1s ease both",
+            }}>
+              switching to backup servers — almost there ✦
+            </div>
+          )}
         </div>
       </div>
     );
@@ -565,7 +660,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
               {youtubeVideo ? (
                 <YouTubeEmbed video_id={youtubeVideo.video_id} title={youtubeVideo.title} />
               ) : (
-                <RouteMap destination={destination} waypoints={visWpts} />
+                <VideoLoadingPlaceholder dest={dest} imgUrl={imgUrl ?? undefined} chips={placeholderChips} />
               )}
             </div>
           </div>
@@ -642,7 +737,8 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
           </div>
         ) : imgUrl ? (
           <div style={{ height: "32%", flexShrink: 0, position: "relative", overflow: "hidden" }}>
-            <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={imgUrl} alt={dest} style={{ width: "100%", height: "100%", objectFit: "cover",
+              animation: "kenBurns 14s ease-in-out infinite alternate" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(26,17,8,0.2) 0%,rgba(26,17,8,0.85) 100%)" }} />
             <div style={{ position: "absolute", bottom: 12, left: 16, fontSize: 18, fontFamily: "var(--font-display)", color: "rgba(244,236,219,0.95)" }}>
               {dest} <span style={{ color: "rgba(255,195,100,0.9)" }}>✦</span>

@@ -108,6 +108,11 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     }
   }
 
+  function advance() {
+    if (step === 0 && params.destination) onSetContext({ destination: params.destination });
+    setStep(s => s + 1);
+  }
+
   function recapLabel(i: number): string {
     if (i === 0) return params.destination;
     if (i === 1) return `${params.start_date} · ${params.duration_days} nights`;
@@ -175,7 +180,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
       if (e.key !== "Enter") return;
       if ((e.target as HTMLElement).tagName === "TEXTAREA") return;
       if (!canProceed) return;
-      if (step < 5) setStep(s => s + 1);
+      if (step < 5) advance();
       else handleGenerate();
     }
     window.addEventListener("keydown", onKey);
@@ -507,7 +512,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
               <button
                 className="cta-primary"
                 disabled={!canProceed}
-                onClick={() => setStep((s) => s + 1)}
+                onClick={advance}
               >
                 next <ArrowRight size={15} strokeWidth={2.5} />
               </button>

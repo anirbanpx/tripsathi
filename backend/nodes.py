@@ -1753,7 +1753,7 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
         f"  interests top: {sorted(profile.interests.items(), key=lambda x: -x[1])[:3]}"
     )
     try:
-        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=1024, task="default")
+        result = _call_llm(CLARIFY_SYSTEM, prompt, max_tokens=1024, task="cheap")
         if isinstance(result, list):
             return [str(q) for q in result[:2] if q]
     except Exception:
@@ -1776,7 +1776,7 @@ def critic(state: TripSathiState) -> dict:
         f"Plan: {json.dumps(plan)}"
     )
     try:
-        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024, task="critic")
+        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024, task="synthesis")
     except Exception as e:
         logger.warning("critic failed (%s) — passing through", e)
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
@@ -1813,7 +1813,7 @@ def _persist_taste_deltas(state: TripSathiState) -> None:
 
     refinement_text = "\n".join(f"- {r}" for r in refinements)
     try:
-        deltas = _call_llm(TASTE_DELTA_SYSTEM, f"Refinements:\n{refinement_text}", max_tokens=512, task="default")
+        deltas = _call_llm(TASTE_DELTA_SYSTEM, f"Refinements:\n{refinement_text}", max_tokens=512, task="cheap")
     except Exception as e:
         logger.warning("taste delta extraction failed: %s", e)
         return
