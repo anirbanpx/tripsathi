@@ -10,20 +10,6 @@ import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
 import DatePicker from "./DatePicker";
 
-// ── demo / stepper constants ──────────────────────────────────────────────────
-
-const DEMO_PARAMS: TripParameters = {
-  destination: "Kerala",
-  start_date: "2026-06-10",
-  duration_days: 5,
-  party_size: 2,
-  kid_ages: [5],
-  elderly: false,
-  budget_bracket: "mid",
-  trip_style: ["nature", "culture"],
-  special_needs: "",
-};
-
 interface Props {
   ctx: UserContext;
   onSetContext: (patch: Partial<UserContext>) => void;
@@ -36,23 +22,20 @@ const STEP_LABELS = ["where", "when", "who", "budget", "style", "needs"];
 
 export default function TripInputStepper({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
-  const [isDemoMode] = useState(ctx.mode === "demo" && !ctx.seed_prompt);
 
-  const [step, setStep] = useState(isDemoMode ? 2 : 0);
+  const [step, setStep] = useState(0);
   const [groupType, setGroupType] = useState<string | null>(null);
-  const [params, setParams] = useState<TripParameters>(
-    isDemoMode ? DEMO_PARAMS : {
-      destination: "",
-      start_date: "",
-      duration_days: 5,
-      party_size: 2,
-      kid_ages: [],
-      elderly: false,
-      budget_bracket: "mid",
-      trip_style: [],
-      special_needs: "",
-    }
-  );
+  const [params, setParams] = useState<TripParameters>({
+    destination: "",
+    start_date: "",
+    duration_days: 5,
+    party_size: 2,
+    kid_ages: [],
+    elderly: false,
+    budget_bracket: "mid",
+    trip_style: [],
+    special_needs: "",
+  });
 
   function patch(u: Partial<TripParameters>) {
     setParams((p) => ({ ...p, ...u }));
@@ -206,13 +189,6 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
 
       {/* ── Left column — form ── */}
       <div className="stepper-left">
-      {isDemoMode && (
-        <div className="demo-banner">
-          <span className="tag">Demo</span>
-          using a sample Kerala trip — no login needed
-        </div>
-      )}
-
       <div className="topbar">
         <div style={{ width: 36 }} />
         <div className="brand-mini">

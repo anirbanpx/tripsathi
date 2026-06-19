@@ -73,6 +73,11 @@ export default function SelectionScreen({
           }}>
             Choose your hotel
           </div>
+          {fetchedHotels.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--fg-3)", fontWeight: 600, padding: "16px 0" }}>
+              No hotel options loaded — go back and wait a moment, or search on MakeMyTrip or Booking.com.
+            </p>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {fetchedHotels.map((hotel, i) => {
               const selected = selectedHotel?.name === hotel.name;

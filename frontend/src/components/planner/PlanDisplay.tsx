@@ -177,15 +177,11 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
     try { localStorage.setItem("ts_plan_view", m); } catch { /* quota */ }
   }
 
+  const isAuth = ctx.mode === "authenticated";
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+
   return (
     <div className="screen" style={{ minHeight: "unset", paddingBottom: 200 }}>
-      {ctx.mode === "demo" && (
-        <div className="demo-banner">
-          <span className="tag">Demo</span>
-          sample Kerala trip — no booking will be made
-        </div>
-      )}
-
       <div className="topbar">
         <button className="back" onClick={() => onSetContext({ current_stage: "trip_input" })}>
           <ArrowLeft size={16} strokeWidth={2} />
@@ -243,7 +239,7 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
       {/* Trip header — hidden in journal mode to free vertical space for nav */}
       {viewMode !== "journal" && (
       <div className="trip-head">
-        <h1>your <span className="sw">{plan.days[0]?.location.split(",")[0] ?? "trip"}</span><br />plan, sketched.</h1>
+        <h1>your <span className="sw">{ctx.destination || plan.days[0]?.location.split(",")[0] || "trip"}</span><br />plan, sketched.</h1>
         <div className="meta-pills" style={{ padding: 0, marginTop: 12 }}>
           {ctx.kid_ages.length > 0 && (
             <span className="meta-pill">family · {ctx.kid_ages.length} kid{ctx.kid_ages.length > 1 ? "s" : ""}</span>
@@ -425,19 +421,29 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
         <div className="plan-col-right">
           {/* Hotels tile */}
           <div style={{ marginTop: 22 }}>
-            <PlacesSummaryTile
-              title="HOTELS"
-              loadingText="Finding your best match..."
-              ready={!!placesReady}
-              count={fetchedHotels?.length}
-              priceRange={fetchedHotels && fetchedHotels.length > 0 ? (() => {
-                const ratings = fetchedHotels.map(h => parseFloat(h.rating)).filter(r => !isNaN(r));
-                const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : null;
-                return avgRating ? `★ ${avgRating} avg · Google verified` : "Google verified";
-              })() : undefined}
-              ctaLabel="View & Choose →"
-              onCta={() => onSetContext({ current_stage: "selection" })}
-            />
+            {!isAuth && !!placesReady && (fetchedHotels?.length ?? 0) === 0 ? (
+              <div style={{ border: "1.5px solid rgba(62,47,35,0.14)", borderRadius: 12, padding: "14px 16px", background: "var(--surface)" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", color: "var(--bark-3)", fontFamily: "var(--font-body)", textTransform: "uppercase", marginBottom: 8 }}>HOTELS</div>
+                <p style={{ fontSize: 13, color: "var(--fg-2)", fontWeight: 600, marginBottom: 10 }}>
+                  Sign in to see curated hotel options matched to your budget.
+                </p>
+                <GoogleSignInButton onToken={handleEarnLogin} loading={false} />
+              </div>
+            ) : (
+              <PlacesSummaryTile
+                title="HOTELS"
+                loadingText="Finding your best match..."
+                ready={!!placesReady}
+                count={fetchedHotels?.length}
+                priceRange={fetchedHotels && fetchedHotels.length > 0 ? (() => {
+                  const ratings = fetchedHotels.map(h => parseFloat(h.rating)).filter(r => !isNaN(r));
+                  const avgRating = ratings.length > 0 ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : null;
+                  return avgRating ? `★ ${avgRating} avg · Google verified` : "Google verified";
+                })() : undefined}
+                ctaLabel="View & Choose →"
+                onCta={() => onSetContext({ current_stage: "selection" })}
+              />
+            )}
           </div>
 
           {/* Dining tile */}
@@ -485,7 +491,7 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
       </div>{/* end .plan-two-col */}
 
       {/* Earn-the-login card — after value is seen, before sticky bar */}
-      {ctx.mode === "demo" && !loginDismissed && (
+      {!isAuth && !loginDismissed && (
         <div style={{
           background: "linear-gradient(135deg, rgba(216,149,64,0.08), rgba(79,107,74,0.05))",
           border: "1.5px dashed var(--ochre-deep)",
@@ -562,7 +568,19 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
               <ArrowUp size={14} strokeWidth={2.5} />
             </button>
           </div>
-          <button className="approve-btn" style={{ width: "100%", marginTop: 8 }} onClick={() => onSetContext({ current_stage: "booking" })}>
+          <div style={{ height: 1, background: "var(--border)", margin: "6px 0" }} />
+          {showAuthPrompt && (
+            <div style={{ marginBottom: 8, padding: "10px 12px", background: "rgba(216,149,64,0.1)", border: "1.5px dashed var(--ochre-deep)", borderRadius: 10 }}>
+              <div style={{ fontSize: 12, color: "var(--bark)", fontWeight: 600, marginBottom: 8 }}>
+                Sign in to book your trip and save your plan.
+              </div>
+              <GoogleSignInButton onToken={handleEarnLogin} loading={false} />
+            </div>
+          )}
+          <button className="approve-btn" style={{ width: "100%", marginTop: 8 }} onClick={() => {
+            if (!isAuth) { setShowAuthPrompt(true); return; }
+            onSetContext({ current_stage: "selection" });
+          }}>
             <Check size={15} strokeWidth={2.5} />looks good — book it
           </button>
           <button className="regenerate-btn" style={{ width: "100%", marginTop: 6 }} onClick={handleRegenerate} disabled={refining}>
@@ -599,6 +617,9 @@ function PlacesSummaryTile({
   ctaLabel: string;
   onCta: () => void;
 }) {
+  const emptyReady = ready && count !== undefined && count === 0;
+  const showCta = !emptyReady && onCta && (!ready || (count !== undefined && count > 0) || count === undefined);
+
   return (
     <div style={{
       border: "1.5px solid rgba(62,47,35,0.14)",
@@ -618,6 +639,10 @@ function PlacesSummaryTile({
         <div style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--bark-2)" }}>
           {loadingText}
         </div>
+      ) : emptyReady ? (
+        <span style={{ color: "var(--fg-3)", fontSize: 12, fontFamily: "var(--font-body)", fontWeight: 600 }}>
+          not loaded — try refreshing
+        </span>
       ) : (
         <>
           {count !== undefined && (
@@ -635,18 +660,20 @@ function PlacesSummaryTile({
               {subline}
             </div>
           )}
-          <button
-            onClick={onCta}
-            style={{
-              marginTop: 10, padding: "7px 14px", borderRadius: 8,
-              background: "var(--accent)", color: "var(--paper)",
-              border: "none", cursor: "pointer",
-              fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
-              letterSpacing: "0.02em",
-            }}
-          >
-            {ctaLabel}
-          </button>
+          {showCta && (
+            <button
+              onClick={onCta}
+              style={{
+                marginTop: 10, padding: "7px 14px", borderRadius: 8,
+                background: "var(--accent)", color: "var(--paper)",
+                border: "none", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontWeight: 700, fontSize: 12,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {ctaLabel}
+            </button>
+          )}
         </>
       )}
     </div>

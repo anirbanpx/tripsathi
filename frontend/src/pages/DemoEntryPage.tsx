@@ -280,12 +280,12 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   )}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-                  {CURATED_DESTINATIONS.map(({ slug, name, hook, sample, tags }) => {
+                  {CURATED_DESTINATIONS.map(({ slug, name, hook, sample, tags }, i) => {
                     const img = getDestinationImageUrl(slug);
                     return (
                       <div
                         key={slug}
-                        className="dest-shelf-card"
+                        className={`dest-shelf-card${i >= 6 ? " dest-shelf-card-extra" : ""}`}
                         onClick={() => setComposerText(sample)}
                         title={sample}
                         style={{ width: "100%", height: 96 }}

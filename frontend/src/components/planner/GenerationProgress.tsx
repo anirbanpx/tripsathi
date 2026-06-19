@@ -464,6 +464,18 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
 
         {/* Live journal */}
         <div ref={journalEl} className="gp-journal" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 11, minHeight: 0 }}>
+          {journal.length === 0 && (
+            <div style={{ padding: "16px 0", display: "flex", flexDirection: "column", gap: 10 }}>
+              {[90, 70, 50].map((w, i) => (
+                <div key={i} style={{
+                  height: 11, borderRadius: 6,
+                  background: "rgba(244,236,219,0.18)",
+                  width: `${w}%`,
+                  animation: `skeletonPulse 1.6s ease-in-out ${i * 0.25}s infinite`,
+                }} />
+              ))}
+            </div>
+          )}
           {journal.map(line => (
             <div key={line.id} style={{ display: "flex", gap: 9, alignItems: "flex-start", animation: "slideUp 0.35s ease" }}>
               <span style={{ color: "rgba(255,195,100,0.6)", fontSize: 9, marginTop: 4, flexShrink: 0 }}>✦</span>
@@ -589,6 +601,18 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
 
               {/* Streaming messages */}
               <div ref={journalEl} className="gp-journal" style={{ flex: 1, overflowY: "auto", padding: "10px 16px", display: "flex", flexDirection: "column", gap: 7 }}>
+                {journal.length === 0 && (
+                  <div style={{ padding: "16px 0", display: "flex", flexDirection: "column", gap: 10 }}>
+                    {[90, 70, 50].map((w, i) => (
+                      <div key={i} style={{
+                        height: 11, borderRadius: 6,
+                        background: "rgba(62,47,35,0.08)",
+                        width: `${w}%`,
+                        animation: `skeletonPulse 1.6s ease-in-out ${i * 0.25}s infinite`,
+                      }} />
+                    ))}
+                  </div>
+                )}
                 {journal.map(line => (
                   <div key={line.id} style={{ display: "flex", gap: 7, alignItems: "flex-start", animation: "slideUp 0.35s ease" }}>
                     <span style={{ color: "var(--secondary)", fontSize: 9, marginTop: 3, flexShrink: 0 }}>✦</span>
