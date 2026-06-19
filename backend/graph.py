@@ -10,7 +10,6 @@ from nodes import (
     ranker,
     plan_assembly,
     critic,
-    route_after_critic,
     human_feedback,
     finalize,
     route_after_feedback,
@@ -54,10 +53,7 @@ def build_graph():
         "critic": "critic",
         "error": "error",
     })
-    builder.add_conditional_edges("critic", route_after_critic, {
-        "plan_assembly": "plan_assembly",
-        "human_feedback": "human_feedback",
-    })
+    builder.add_edge("critic", "human_feedback")
     builder.add_conditional_edges("human_feedback", route_after_feedback, {
         "plan_assembly": "plan_assembly",
         "finalize": "finalize",

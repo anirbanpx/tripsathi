@@ -1810,3 +1810,50 @@ body {
   text-align: center;
   box-shadow: 0 3px 10px rgba(176,73,47,0.3);
 }
+
+/* ── Selection screen card grids ────────────────────────────────── */
+
+.hotel-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.hotel-card-initial {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-3);
+  border-radius: 8px 8px 0 0;
+  font-family: var(--font-script);
+  font-size: 32px;
+  color: var(--bark-2);
+  letter-spacing: -0.02em;
+  user-select: none;
+  overflow: hidden;
+  position: relative;
+}
+.hotel-card-initial::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(62,47,35,0.04) 6px,
+    rgba(62,47,35,0.04) 7px
+  );
+}
+
+.dinner-option-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 560px) {
+  .hotel-card-grid { grid-template-columns: 1fr; }
+  .dinner-option-grid { grid-template-columns: 1fr; }
+}

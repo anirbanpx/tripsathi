@@ -618,7 +618,7 @@ function PlacesSummaryTile({
   onCta: () => void;
 }) {
   const emptyReady = ready && count !== undefined && count === 0;
-  const showCta = !emptyReady && onCta && (!ready || (count !== undefined && count > 0) || count === undefined);
+  const showCta = !emptyReady && !!onCta && (!ready || (count !== undefined && count > 0) || count === undefined);
 
   return (
     <div style={{

@@ -1128,7 +1128,7 @@ def persona_classification(state: TripSathiState) -> dict:
         answers_text += f"\n\n{past_memories}"
 
     try:
-        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024, task="default")
+        user_profile = _call_llm(PERSONA_CLASSIFICATION_SYSTEM, answers_text, max_tokens=1024, task="cheap")
     except Exception as e:
         return {"error": f"persona_classification_failed: {e}", "current_node": "error"}
 
@@ -1220,17 +1220,9 @@ def destination_intelligence(state: TripSathiState) -> dict:
         f"Produce the synthesis JSON now."
     )
     try:
-        from tools import TOOL_SCHEMAS
-        research_synthesis = _call_llm_with_tools(
-            RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, tools=TOOL_SCHEMAS,
-            max_tokens=4096, task="synthesis",
-        )
+        research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096, task="synthesis")
     except Exception as e:
-        logger.warning("tool-calling synthesis failed (%s) — falling back to plain synthesis", e)
-        try:
-            research_synthesis = _call_llm(RESEARCH_SYNTHESIS_SYSTEM, synthesis_prompt, max_tokens=4096, task="synthesis")
-        except Exception as e2:
-            return {"error": f"destination_intelligence_failed: {e2}", "current_node": "error"}
+        return {"error": f"destination_intelligence_failed: {e}", "current_node": "error"}
 
     if rag_failed:
         warnings = research_synthesis.get("implicit_warnings", [])
@@ -1654,6 +1646,14 @@ def _candidate_to_doc(c: dict) -> str:
 @_timed_node
 def candidate_gen(state: TripSathiState) -> dict:
     """Extract a structured item pool from research_synthesis using the LLM."""
+    if not state.get("taste_profile") and not (state["trip_parameters"] or {}).get("user_id"):
+        logger.info("candidate_gen skipped — no taste profile for logged-out user")
+        return {
+            "candidates": [],
+            "current_node": "ranker",
+            "stage_label": "Personalising your plan",
+            "error": None,
+        }
     synthesis = state.get("research_synthesis") or {}
     extraction_input = (
         f"Destination: {state['destination']}\n"
@@ -1763,7 +1763,7 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
 
 @_timed_node
 def critic(state: TripSathiState) -> dict:
-    """Red-team the assembled plan against the user's taste + constraints."""
+    """Red-team the assembled plan against the user's taste + constraints. Advisory only — never loops."""
     plan = state.get("plan")
     if not plan:
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
@@ -1782,28 +1782,16 @@ def critic(state: TripSathiState) -> dict:
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
 
     issues = result.get("issues", []) if isinstance(result, dict) else []
-    verdict = result.get("verdict", "pass") if isinstance(result, dict) else "pass"
-    passes = state.get("critic_passes", 0) + 1
+    if issues:
+        existing = plan.get("warnings", [])
+        new_warnings = [w for w in issues if w not in existing]
+        if new_warnings:
+            plan["warnings"] = existing + new_warnings
+        logger.info("critic issues=%d — folded into plan warnings, proceeding to human_feedback", len(issues))
 
-    if verdict == "fail" and issues and passes <= 2:
-        correction = (
-            "CRITIC REVIEW — fix ALL of the following before presenting to user:\n"
-            + "\n".join(f"- {issue}" for issue in issues)
-        )
-        logger.info("critic pass=%d issues=%d — looping to plan_assembly", passes, len(issues))
-        return {
-            "critic_passes": passes,
-            "user_feedback": correction,
-            "current_node": "plan_assembly",
-            "stage_label": "Refining your plan",
-            "error": None,
-        }
-
-    if passes > 2:
-        logger.info("critic max passes reached — proceeding to human_feedback")
     return {
-        "critic_passes": passes,
-        "user_feedback": None,
+        "critic_passes": (state.get("critic_passes", 0) + 1),
+        "plan": plan,
         "current_node": "human_feedback",
         "stage_label": "Review your plan",
         "error": None,
@@ -1811,8 +1799,7 @@ def critic(state: TripSathiState) -> dict:
 
 
 def route_after_critic(state: TripSathiState) -> str:
-    """Route after critic: loop to plan_assembly for fixes, or proceed to human_feedback."""
-    return state.get("current_node", "human_feedback")
+    return "human_feedback"
 
 
 def _persist_taste_deltas(state: TripSathiState) -> None:

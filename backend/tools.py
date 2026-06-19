@@ -187,8 +187,12 @@ def youtube_best_video(destination: str) -> dict | None:
             _youtube_videos_cache = {}
 
     dest_lower = destination.lower()
+    dest_first_token = dest_lower.split(",")[0].strip()
     for key, value in _youtube_videos_cache.items():
-        if key.lower() == dest_lower:
+        key_lower = key.lower()
+        if key_lower == dest_lower:
+            return value
+        if dest_first_token and (dest_first_token in key_lower or key_lower in dest_lower):
             return value
 
     # Live fallback if YOUTUBE_API_KEY is set and destination not in cache

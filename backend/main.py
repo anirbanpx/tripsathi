@@ -246,7 +246,7 @@ async def parse_intent(req: ParseRequest):
     from nodes import _call_llm
     from prompts import INTENT_PARSE_SYSTEM
     try:
-        parsed = _call_llm(INTENT_PARSE_SYSTEM, req.text, max_tokens=512)
+        parsed = _call_llm(INTENT_PARSE_SYSTEM, req.text, max_tokens=512, task="cheap")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"parse_failed: {e}")
     return parsed
@@ -627,7 +627,8 @@ async def book_item(req: BookRequest):
 @app.get("/api/youtube/{destination}")
 async def get_youtube_video(destination: str):
     from tools import youtube_best_video
-    video = youtube_best_video(destination)
+    loop = asyncio.get_event_loop()
+    video = await loop.run_in_executor(None, youtube_best_video, destination)
     if video is None:
         raise HTTPException(status_code=404, detail="No video found")
     return video
