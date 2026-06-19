@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Heart } from "lucide-react";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
-import { toggleWishlistItem } from "../../services/api";
+import { toggleWishlistItem, warmDestination } from "../../services/api";
 
 // Fix Leaflet's broken default icon paths in Vite
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -119,7 +119,8 @@ export default function IndiaDestinationsMap({ isAuthenticated = false }: MapPro
         />
 
         {DESTINATIONS.map((dest) => (
-          <Marker key={dest.name} position={dest.coord} icon={dotIcon}>
+          <Marker key={dest.name} position={dest.coord} icon={dotIcon}
+            eventHandlers={{ popupopen: () => warmDestination(dest.name) }}>
             <Popup>
               <DestinationPopup name={dest.name} label={dest.label} coord={dest.coord} isAuthenticated={isAuthenticated} />
             </Popup>

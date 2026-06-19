@@ -4,7 +4,7 @@ import {
   MapPin, Calendar, Users, Wallet, Sparkles, Accessibility,
   Home, Heart, User, Baby, Ear, ArrowRight, Pencil,
 } from "lucide-react";
-import { streamPlan, parseIntent } from "../../services/api";
+import { streamPlan, parseIntent, warmDestination } from "../../services/api";
 import { PROGRESS_STAGES } from "../../lib/fakeProgress";
 import { getDestinationImageUrl } from "../../lib/destinationImage";
 import type { UserContext, TripParameters } from "../../types";
@@ -305,6 +305,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                 placeholder="e.g. Kerala, Puri, Guwahati"
                 value={params.destination}
                 onChange={(e) => patch({ destination: e.target.value })}
+                onBlur={(e) => warmDestination(e.target.value)}
                 autoFocus
               />
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
@@ -312,7 +313,7 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
                   <span
                     key={d}
                     className={`chip ${params.destination === d ? "active" : ""}`}
-                    onClick={() => patch({ destination: d })}
+                    onClick={() => { patch({ destination: d }); warmDestination(d); }}
                   >
                     {d}
                   </span>

@@ -36,3 +36,4 @@ class TripSathiState(TypedDict):
 
     # Observability
     session_tokens: int                 # cumulative tokens across all LLM calls this session
+    thread_id: Optional[str]            # LangGraph checkpointer thread id; threaded through for critic bg future

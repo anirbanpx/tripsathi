@@ -6,8 +6,6 @@ from state import TripSathiState
 from nodes import (
     persona_classification,
     destination_intelligence,
-    candidate_gen,
-    ranker,
     plan_assembly,
     critic,
     human_feedback,
@@ -30,8 +28,6 @@ def build_graph():
 
     builder.add_node("persona_classification", persona_classification)
     builder.add_node("destination_intelligence", destination_intelligence)
-    builder.add_node("candidate_gen", candidate_gen)
-    builder.add_node("ranker", ranker)
     builder.add_node("plan_assembly", plan_assembly)
     builder.add_node("critic", critic)
     builder.add_node("human_feedback", human_feedback)
@@ -43,12 +39,10 @@ def build_graph():
         "destination_intelligence": "destination_intelligence",
         "error": "error",
     })
-    builder.add_conditional_edges("destination_intelligence", _error_router("candidate_gen"), {
-        "candidate_gen": "candidate_gen",
+    builder.add_conditional_edges("destination_intelligence", _error_router("plan_assembly"), {
+        "plan_assembly": "plan_assembly",
         "error": "error",
     })
-    builder.add_edge("candidate_gen", "ranker")
-    builder.add_edge("ranker", "plan_assembly")
     builder.add_conditional_edges("plan_assembly", _error_router("critic"), {
         "critic": "critic",
         "error": "error",

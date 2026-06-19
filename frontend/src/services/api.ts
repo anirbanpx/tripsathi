@@ -13,6 +13,15 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function warmDestination(destination: string): void {
+  if (!destination.trim()) return;
+  fetch(`${API_BASE}/api/warm`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ destination }),
+  }).catch(() => {});
+}
+
 export async function parseIntent(text: string): Promise<TripParameters & { onboarding_summary: string }> {
   const res = await fetch(`${API_BASE}/api/parse`, {
     method: "POST",

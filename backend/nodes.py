@@ -19,6 +19,13 @@ _tracer = trace.get_tracer(__name__)
 _thread_tokens = threading.local()   # per-thread token accumulator
 _COST_PER_1M = 0.90                  # blended $/1M tokens (Groq gpt-oss-120b approx)
 
+# Shared background pool for pre-fetch (C), inlined candidate_gen (B), and background critic (A)
+_bg_pool = ThreadPoolExecutor(max_workers=8, thread_name_prefix="ts_bg")
+# destination → {weather_fut, web1_fut, web2_fut}; populated by persona_classification (Option C)
+_dest_prefetch: dict = {}
+# thread_id → Future[list[str]]; critic issues computed in background (Option A)
+_critic_futures: dict = {}
+
 from langgraph.types import interrupt
 from state import TripSathiState
 from prompts import (
@@ -1122,6 +1129,18 @@ def persona_classification(state: TripSathiState) -> dict:
     if not is_safe:
         return {"error": f"unsafe_input: {reason}", "current_node": "error"}
 
+    # Option C: pre-fetch weather + web while persona LLM runs; dest_intel will consume these
+    _dest_pf = state.get("destination", "")
+    if _dest_pf and _dest_pf not in _dest_prefetch:
+        from tools import get_weather, web_search as _ws_pf
+        _tp_pf = state.get("trip_parameters") or {}
+        _dest_prefetch[_dest_pf] = {
+            "weather_fut": _bg_pool.submit(get_weather, _dest_pf, _tp_pf.get("start_date", "")),
+            "web1_fut": _bg_pool.submit(_ws_pf, f"recent traveller reports {_dest_pf} 2025"),
+            "web2_fut": _bg_pool.submit(_ws_pf, f"{_dest_pf} restaurant prices current season"),
+        }
+        logger.info("prefetch started destination=%s", _dest_pf)
+
     user_id = state["trip_parameters"].get("user_id", "")
     past_memories = read_memories(user_id)
     if past_memories:
@@ -1193,18 +1212,31 @@ def destination_intelligence(state: TripSathiState) -> dict:
         else "No destination-specific content retrieved. Use your general knowledge and flag knowledge gaps in implicit_warnings."
     )
 
-    # Pre-fetch weather + web context in parallel — inject into synthesis prompt so the
-    # LLM doesn't need to make slow tool calls for these common requests.
+    # Option C: resolve pre-fetched futures from persona_classification; fall back to fresh fetch
     from tools import get_weather, web_search as _web_search
     _tp = state.get("trip_parameters") or {}
     _travel_dates = _tp.get("start_date", "")
-    with ThreadPoolExecutor(max_workers=3) as _pre_pool:
-        _weather_fut = _pre_pool.submit(get_weather, state["destination"], _travel_dates)
-        _web1_fut = _pre_pool.submit(_web_search, f"recent traveller reports {state['destination']} 2025")
-        _web2_fut = _pre_pool.submit(_web_search, f"{state['destination']} restaurant prices current season")
-        _weather_data = _weather_fut.result()
-        _web1_data = _web1_fut.result()
-        _web2_data = _web2_fut.result()
+    _prefetch = _dest_prefetch.pop(state["destination"], None)
+    _weather_data = _web1_data = _web2_data = None
+
+    if _prefetch:
+        try:
+            _weather_data = _prefetch["weather_fut"].result(timeout=30)
+            _web1_data = _prefetch["web1_fut"].result(timeout=30)
+            _web2_data = _prefetch["web2_fut"].result(timeout=30)
+            logger.info("prefetch_hit destination=%s", state["destination"])
+        except Exception as _e:
+            logger.warning("prefetch resolve failed (%s) — fresh fetch", _e)
+            _weather_data = None
+
+    if _weather_data is None:
+        with ThreadPoolExecutor(max_workers=3) as _pre_pool:
+            _weather_fut = _pre_pool.submit(get_weather, state["destination"], _travel_dates)
+            _web1_fut = _pre_pool.submit(_web_search, f"recent traveller reports {state['destination']} 2025")
+            _web2_fut = _pre_pool.submit(_web_search, f"{state['destination']} restaurant prices current season")
+            _weather_data = _weather_fut.result()
+            _web1_data = _web1_fut.result()
+            _web2_data = _web2_fut.result()
 
     # Synthesize via tool-calling agent.
     # Weather + web already pre-fetched — LLM should not call those tools.
@@ -1232,6 +1264,23 @@ def destination_intelligence(state: TripSathiState) -> dict:
             "Verify local risks, pricing, and logistics independently before booking."
         ))
         research_synthesis["implicit_warnings"] = warnings
+
+    # Option B: launch candidate_gen LLM in background now; it will overlap with the risk gate below
+    _has_taste = bool(state.get("taste_profile") or (state["trip_parameters"] or {}).get("user_id"))
+    _candidate_fut = None
+    if _has_taste:
+        _extraction_input = (
+            f"Destination: {state['destination']}\n"
+            f"User profile: {json.dumps(state.get('user_profile'))}\n"
+            f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
+            f"Key places: {json.dumps(research_synthesis.get('key_places', []))}\n"
+            f"Routing: {research_synthesis.get('routing', '')}\n"
+            f"Seasonal context: {research_synthesis.get('seasonal_context', '')}"
+        )
+        _candidate_fut = _bg_pool.submit(
+            _call_llm, CANDIDATE_GEN_SYSTEM, _extraction_input, 4096, "candidate_gen"
+        )
+        logger.info("candidate_gen background task started destination=%s", state["destination"])
 
     # Retrieval quality gate: if synthesis returned < 2 local_risks, re-query with
     # targeted risk/scam/seasonal queries and supplement the synthesis.
@@ -1280,9 +1329,45 @@ def destination_intelligence(state: TripSathiState) -> dict:
             except Exception as e:
                 logger.warning("retrieval quality gate synthesis failed: %s", e)
 
+    # Option B: collect candidate_gen result and run ranker inline
+    candidates: list = []
+    ranked_candidates: list = []
+
+    if _candidate_fut is not None:
+        try:
+            _raw = _candidate_fut.result(timeout=90)
+        except Exception as e:
+            logger.warning("candidate_gen (bg) failed (%s) — empty pool", e)
+            _raw = []
+        if isinstance(_raw, dict):
+            _raw = _raw.get("candidates", _raw.get("items", []))
+        candidates = _raw if isinstance(_raw, list) else []
+
+        if candidates:
+            _filtered = _filter_candidates(candidates, state.get("taste_profile"), state.get("user_profile"))
+            _query = _build_taste_query(
+                state.get("taste_profile"), state.get("user_profile"), state["trip_parameters"]
+            )
+            _docs = [_candidate_to_doc(c) for c in _filtered]
+            _scored = _rerank(_query, _docs, top_k=min(len(_docs), 30))
+            for _idx, _score in _scored:
+                if _idx < len(_filtered):
+                    _item = dict(_filtered[_idx])
+                    _item["match_score"] = round(float(_score), 4)
+                    ranked_candidates.append(_item)
+            logger.info(
+                "ranker (inlined) destination=%s candidates=%d ranked=%d top=%r",
+                state["destination"], len(_filtered), len(ranked_candidates),
+                ranked_candidates[0]["name"] if ranked_candidates else "—",
+            )
+    else:
+        logger.info("candidate_gen skipped — no taste profile for logged-out user")
+
     return {
         "research_synthesis": research_synthesis,
         "retrieved_chunks": retrieved_content,
+        "candidates": candidates,
+        "ranked_candidates": ranked_candidates,
         "current_node": "plan_assembly",
         "stage_label": "Generating your itinerary",
         "error": None,
@@ -1459,6 +1544,27 @@ def plan_assembly(state: TripSathiState) -> dict:
             return {"error": f"plan_assembly_failed: {e2}", "current_node": "error"}
     is_elderly = _get_elderly(state)
     plan = _enforce_plan_quality(plan, kid_ages, state.get("research_synthesis"), state["destination"], elderly=is_elderly)
+
+    # Option A: run critic in background so human_feedback fires without blocking on it
+    _tid = state.get("thread_id") or ""
+    if _tid:
+        def _critic_bg(p, s):
+            critic_input = (
+                f"User profile: {json.dumps(s.get('user_profile'))}\n"
+                f"Taste profile: {json.dumps(s.get('taste_profile'))}\n"
+                f"Trip parameters: {json.dumps(s['trip_parameters'])}\n"
+                f"Seasonal context: {json.dumps((s.get('research_synthesis') or {}).get('seasonal_context', ''))}\n"
+                f"Plan: {json.dumps(p)}"
+            )
+            try:
+                result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024, task="synthesis")
+                return result.get("issues", []) if isinstance(result, dict) else []
+            except Exception as _e:
+                logger.warning("critic (bg) failed (%s)", _e)
+                return []
+        _critic_futures[_tid] = _bg_pool.submit(_critic_bg, plan, state)
+        logger.info("critic background task started thread_id=%s", _tid)
+
     return {
         "plan": plan,
         "refinement_count": 1,
@@ -1763,31 +1869,29 @@ def get_clarify_questions(user_id: str, destination: str) -> list[str]:
 
 @_timed_node
 def critic(state: TripSathiState) -> dict:
-    """Red-team the assembled plan against the user's taste + constraints. Advisory only — never loops."""
+    """Option A: critic runs in background (spawned by plan_assembly). This node is now a fast
+    pass-through that folds in any warnings already resolved, then lets the SSE loop push
+    any remaining ones as a separate event after the done event."""
     plan = state.get("plan")
     if not plan:
         return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
 
-    critic_input = (
-        f"User profile: {json.dumps(state.get('user_profile'))}\n"
-        f"Taste profile: {json.dumps(state.get('taste_profile'))}\n"
-        f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
-        f"Seasonal context: {json.dumps((state.get('research_synthesis') or {}).get('seasonal_context', ''))}\n"
-        f"Plan: {json.dumps(plan)}"
-    )
-    try:
-        result = _call_llm(CRITIC_SYSTEM, critic_input, max_tokens=1024, task="synthesis")
-    except Exception as e:
-        logger.warning("critic failed (%s) — passing through", e)
-        return {"current_node": "human_feedback", "stage_label": "Review your plan", "error": None}
+    _tid = state.get("thread_id") or ""
+    fut = _critic_futures.get(_tid)
+    issues: list = []
+    if fut is not None and fut.done():
+        try:
+            issues = fut.result() or []
+            _critic_futures.pop(_tid, None)
+        except Exception as _e:
+            logger.warning("critic future collect failed (%s)", _e)
 
-    issues = result.get("issues", []) if isinstance(result, dict) else []
     if issues:
         existing = plan.get("warnings", [])
         new_warnings = [w for w in issues if w not in existing]
         if new_warnings:
             plan["warnings"] = existing + new_warnings
-        logger.info("critic issues=%d — folded into plan warnings, proceeding to human_feedback", len(issues))
+        logger.info("critic (bg, already done) issues=%d folded into plan", len(new_warnings))
 
     return {
         "critic_passes": (state.get("critic_passes", 0) + 1),

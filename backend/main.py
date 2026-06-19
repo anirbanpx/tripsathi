@@ -215,7 +215,7 @@ def _plan_response(state: dict, thread_id: str) -> dict:
     }
 
 
-def _build_initial_state(req: PlanRequest) -> dict:
+def _build_initial_state(req: PlanRequest, thread_id: str = "") -> dict:
     return {
         "destination": req.destination,
         "trip_parameters": req.trip_parameters,
@@ -236,10 +236,32 @@ def _build_initial_state(req: PlanRequest) -> dict:
         "current_node": "persona_classification",
         "stage_label": "Understanding your profile",
         "error": None,
+        "thread_id": thread_id,
+        "session_tokens": 0,
     }
 
 
 # ── Endpoints ────────────────────────────────────────────────────────────────
+
+@app.post("/api/warm")
+async def warm_destination(body: dict):
+    """Option D: pre-fetch RAG + weather + web for a destination when the user selects it.
+    Fire-and-forget from the frontend — fills _dest_prefetch so dest_intel finds a warm cache."""
+    destination = (body.get("destination") or "").strip()
+    if not destination:
+        return {"status": "noop"}
+    from nodes import _dest_prefetch, _bg_pool
+    if destination in _dest_prefetch:
+        return {"status": "already_warm"}
+    from tools import get_weather, web_search as _ws
+    _dest_prefetch[destination] = {
+        "weather_fut": _bg_pool.submit(get_weather, destination, ""),
+        "web1_fut": _bg_pool.submit(_ws, f"recent traveller reports {destination} 2025"),
+        "web2_fut": _bg_pool.submit(_ws, f"{destination} restaurant prices current season"),
+    }
+    _logger.info("warm endpoint fired destination=%s", destination)
+    return {"status": "warming"}
+
 
 @app.post("/api/parse")
 async def parse_intent(req: ParseRequest):
@@ -345,7 +367,7 @@ async def start_plan(req: PlanRequest):
     thread_id = str(uuid4())
     _register_thread(thread_id)
     config = {"configurable": {"thread_id": thread_id}}
-    graph.invoke(_build_initial_state(req), config=config)
+    graph.invoke(_build_initial_state(req, thread_id), config=config)
     state = _get_state(config)
     return _plan_response(state, thread_id)
 
@@ -369,7 +391,7 @@ async def stream_plan(req: PlanRequest):
         # events incrementally instead of buffering the whole pipeline first.
         def run_graph():
             try:
-                for chunk in graph.stream(_build_initial_state(req), config=config, stream_mode="updates"):
+                for chunk in graph.stream(_build_initial_state(req, thread_id), config=config, stream_mode="updates"):
                     loop.call_soon_threadsafe(queue.put_nowait, chunk)
             except Exception as e:  # noqa: BLE001 — surfaced to client below
                 loop.call_soon_threadsafe(queue.put_nowait, e)
@@ -410,7 +432,29 @@ async def stream_plan(req: PlanRequest):
         if state.get("error"):
             yield f"data: {json.dumps({'type': 'error', 'detail': state['error']})}\n\n"
         else:
-            yield f"data: {json.dumps({'type': 'done', 'plan': state.get('plan'), 'thread_id': thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
+            plan_out = state.get("plan") or {}
+            yield f"data: {json.dumps({'type': 'done', 'plan': plan_out, 'thread_id': thread_id, 'stage_label': state.get('stage_label', ''), 'refinement_count': state.get('refinement_count', 0)})}\n\n"
+
+            # Option A: wait up to 8s for background critic future, push warnings as a separate event
+            from nodes import _critic_futures
+            _fut = _critic_futures.get(thread_id)
+            if _fut is not None:
+                try:
+                    _issues = await asyncio.wait_for(
+                        asyncio.get_event_loop().run_in_executor(None, _fut.result),
+                        timeout=8.0,
+                    )
+                    _critic_futures.pop(thread_id, None)
+                    if _issues:
+                        existing_warnings = plan_out.get("warnings", [])
+                        new_warnings = [w for w in _issues if w not in existing_warnings]
+                        if new_warnings:
+                            yield f"data: {json.dumps({'type': 'critic_warnings', 'warnings': new_warnings})}\n\n"
+                            _logger.info("critic_warnings emitted thread_id=%s count=%d", thread_id, len(new_warnings))
+                except asyncio.TimeoutError:
+                    _logger.info("critic future timed out after 8s — skipping warnings for thread_id=%s", thread_id)
+                except Exception as _e:
+                    _logger.warning("critic future error in SSE loop: %s", _e)
 
     return StreamingResponse(generate(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
