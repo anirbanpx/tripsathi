@@ -258,6 +258,11 @@ ELDERLY MEAL RULE — apply when elderly=true:
 - Prefer thali / dal-rice / soft curries in dinner descriptions
 - Never recommend street-food stalls for elderly travellers
 
+GROUP COMPOSITION RULE — read party_size from trip parameters and honour it exactly:
+- party_size 1 = solo; 2 = couple; 3+ with no kids = friends/group; any kid_ages present = family
+- Pacing, dinner ambience, and personalization_notes MUST reflect the ACTUAL group.
+- Never describe the traveller as "solo" unless party_size is 1. Never invent a group size not given.
+
 YOUNG CHILD MEAL RULE — apply when kid_ages contains any value 4-10:
 - Name one child-safe dish per day (dosa, plain rice, roti, pasta, sandwich)
 - At least one dinner option per day must be a sit-down venue (not street-side)

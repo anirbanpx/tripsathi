@@ -407,6 +407,26 @@ def _get_elderly(state) -> bool:
     )
 
 
+def _group_label(state) -> str:
+    """Human-readable group descriptor so the plan LLM can't default to 'solo'."""
+    tp = state.get("trip_parameters") or {}
+    party = tp.get("party_size") or 1
+    kid_ages = _get_kid_ages(state)
+    elderly = _get_elderly(state)
+    parts = []
+    if kid_ages:
+        parts.append("family with " + ", ".join(f"{a}yo" for a in kid_ages if isinstance(a, int)))
+    elif party == 1:
+        parts.append("solo traveller")
+    elif party == 2:
+        parts.append("couple (2 travellers)")
+    else:
+        parts.append(f"group of {party} travellers")
+    if elderly:
+        parts.append("includes senior(s)")
+    return f"{', '.join(parts)} — party_size={party}"
+
+
 def _season_qualifier(start_date: str | None) -> str:
     """Derive a seasonal amenity hint from trip start date."""
     if not start_date:
@@ -1510,7 +1530,8 @@ def plan_assembly(state: TripSathiState) -> dict:
     generation_prompt = (
         f"Destination: {state['destination']}\n"
         f"User profile: {json.dumps(state.get('user_profile'))}\n"
-        f"Trip parameters: {json.dumps(state['trip_parameters'])}"
+        f"Trip parameters: {json.dumps(state['trip_parameters'])}\n"
+        f"Group: {_group_label(state)}"
         f"{notes_block}"
         f"{req_block}"
         f"{toddler_block}"
