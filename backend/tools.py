@@ -149,6 +149,11 @@ def _search_places_structured(query: str, price_levels: list[str] | None = None)
                 "phone": p.get("nationalPhoneNumber"),
                 "maps_url": p.get("googleMapsUri"),
             })
+        # Many places (esp. hotels) have no priceLevel set in Google's data, so a
+        # price-filtered search can return zero. Retry once without the filter rather
+        # than yield nothing — preserves price intent only when the data supports it.
+        if price_levels and not results:
+            return _search_places_structured(query)
         return results
     except Exception as e:
         logger.warning("_search_places_structured failed query=%r: %s", query, e)
