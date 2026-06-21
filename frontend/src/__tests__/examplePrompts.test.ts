@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { getSeasonalCards, getSeasonalChips, ALL_TEMPLATE_SPECS } from "../lib/examplePrompts";
 
 // Helper to mock the current month
