@@ -43,6 +43,7 @@ function getTimeGreeting(): string {
 export default function DemoEntryPage({ ctx, onSetContext }: Props) {
   const navigate = useNavigate();
   const [composerText, setComposerText] = useState("");
+  const [pendingCardParams, setPendingCardParams] = useState<TripParameters | null>(null);
   const [signingIn, setSigningIn] = useState(false);
   const [micState, setMicState] = useState<"idle" | "recording" | "transcribing">("idle");
   const mediaRef = useRef<MediaRecorder | null>(null);
@@ -91,6 +92,11 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
   }, [isAuth, ctx.user_id]);
 
   function handleComposerSubmit() {
+    if (pendingCardParams) {
+      setPendingCardParams(null);
+      handleChipPlan(pendingCardParams);
+      return;
+    }
     const text = composerText.trim();
     if (!text) return;
     onSetContext({
@@ -180,7 +186,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                     className="journal-textarea"
                     placeholder={COMPOSER_PLACEHOLDER}
                     value={composerText}
-                    onChange={e => setComposerText(e.target.value)}
+                    onChange={e => { setComposerText(e.target.value); setPendingCardParams(null); }}
                     onKeyDown={e => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
@@ -220,16 +226,21 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   {COMPOSER_HELPER}
                 </div>
 
-                {/* Seasonal chips — cross-season teasers, instant fast-path */}
+                {/* Seasonal chips — cross-season teasers */}
                 {!composerText && (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
                     {getSeasonalChips().map((spec) => (
                       <span
                         key={spec.destination}
                         className="chip"
-                        onClick={() => handleChipPlan(spec.params)}
+                        onClick={() => {
+                          const nights = spec.params.duration_days - 1;
+                          const styles = spec.params.trip_style.join(" + ");
+                          setComposerText(`${nights} nights in ${spec.destination} · ${spec.params.budget_bracket} · ${styles}`);
+                          setPendingCardParams(spec.params);
+                        }}
                         style={{ fontSize: 11, cursor: "pointer" }}
-                        title="Tap to instantly plan this trip"
+                        title={`Select ${spec.destination}`}
                       >
                         {spec.chipLabel}
                       </span>
@@ -303,9 +314,18 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                       <div
                         key={spec.destination}
                         className={`dest-shelf-card${i >= 6 ? " dest-shelf-card-extra" : ""}`}
-                        onClick={() => handleChipPlan(spec.params)}
-                        title={`Instant plan: ${spec.destination}`}
-                        style={{ width: "100%", height: 96, cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s" }}
+                        onClick={() => {
+                          const nights = spec.params.duration_days - 1;
+                          const styles = spec.params.trip_style.join(" + ");
+                          setComposerText(`${nights} nights in ${spec.destination} · ${spec.params.budget_bracket} · ${styles}`);
+                          setPendingCardParams(spec.params);
+                        }}
+                        title={`Select ${spec.destination}`}
+                        style={{
+                          width: "100%", height: 96, cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s",
+                          outline: pendingCardParams === spec.params ? "2.5px solid var(--accent)" : "none",
+                          outlineOffset: 2,
+                        }}
                         onMouseEnter={e => {
                           (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
                           (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(62,47,35,0.28)";
@@ -352,7 +372,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   fontSize: 10, color: "var(--fg-3)", fontFamily: "var(--font-body)",
                   fontWeight: 600, marginTop: 8,
                 }}>
-                  ⚡ tap any card — instant plan, no wait
+                  ⚡ tap a card · edit if you like · then click plan
                 </div>
               </div>
             </div>
