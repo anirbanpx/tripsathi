@@ -34,7 +34,10 @@ _load()
 
 def canonical_key(destination: str, trip_parameters: dict) -> str:
     dest = destination.lower().replace(" ", "_")
-    nights = trip_parameters.get("duration_nights", 0)
+    # frontend sends duration_days; backend bake script sends duration_nights — handle both
+    nights = trip_parameters.get("duration_nights")
+    if nights is None:
+        nights = max(0, trip_parameters.get("duration_days", 1) - 1)
     party = trip_parameters.get("party_size", 1)
     kid_ages = trip_parameters.get("kid_ages") or []
     elderly = trip_parameters.get("elderly", False)
@@ -58,12 +61,11 @@ def match(
 ) -> Optional[dict]:
     """Return a pre-baked template if key matches and there is no personalization signal.
 
-    Personalization guard: if the user supplied traveler_notes or onboarding_answers,
-    the live pipeline is needed to honour them — skip the template.
+    Personalization guard: only traveler_notes is a real signal.
+    onboarding_answers from streamPlan are always present (derived from params),
+    so they are NOT a signal — only block on non-empty traveler_notes.
     """
     if traveler_notes and traveler_notes.strip():
-        return None
-    if onboarding_answers:
         return None
 
     key = canonical_key(destination, trip_parameters)

@@ -1,11 +1,40 @@
-// Shared example trip prompts — used by the homepage composer and the
-// natural-language trip stepper so the two never drift apart.
+import type { TripParameters } from "../types";
 
-export const EXAMPLE_PROMPTS: string[] = [
-  "Kerala, 5 nights, family, vegetarian",
-  "Goa, couple, 4 nights, no alcohol",
-  "Ladakh solo trek, 10 days, July",
-  "Rajasthan, 7 nights, seniors, Jain food",
+// Explore chips — pre-baked params that bypass parseIntent and hit the template fast-path.
+// Each entry maps exactly to a template in backend/templates/.
+export const EXPLORE_CHIPS: { label: string; params: TripParameters }[] = [
+  {
+    label: "Munnar · couple · 3N nature",
+    params: {
+      destination: "Munnar", start_date: "", duration_days: 4,
+      party_size: 2, kid_ages: [], elderly: false,
+      budget_bracket: "mid", trip_style: ["nature", "tea"], special_needs: "",
+    },
+  },
+  {
+    label: "Hampi · couple · 3N budget heritage",
+    params: {
+      destination: "Hampi", start_date: "", duration_days: 4,
+      party_size: 2, kid_ages: [], elderly: false,
+      budget_bracket: "budget", trip_style: ["heritage", "photography"], special_needs: "",
+    },
+  },
+  {
+    label: "Udaipur · couple · 4N premium romance",
+    params: {
+      destination: "Udaipur", start_date: "", duration_days: 5,
+      party_size: 2, kid_ages: [], elderly: false,
+      budget_bracket: "premium", trip_style: ["heritage", "romance"], special_needs: "",
+    },
+  },
+  {
+    label: "Rishikesh · solo · 4N budget adventure",
+    params: {
+      destination: "Rishikesh", start_date: "", duration_days: 5,
+      party_size: 1, kid_ages: [], elderly: false,
+      budget_bracket: "budget", trip_style: ["adventure", "spiritual"], special_needs: "",
+    },
+  },
 ];
 
 // A single, well-crafted static placeholder for the composer empty state.

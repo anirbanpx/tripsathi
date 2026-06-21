@@ -5,7 +5,8 @@ import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
 import GoogleSignInButton from "../components/auth/GoogleSignInButton";
 import AuthNav from "../components/auth/AuthNav";
 import { getDestinationImageUrl } from "../lib/destinationImage";
-import { EXAMPLE_PROMPTS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
+import { EXPLORE_CHIPS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
+import type { TripParameters } from "../types";
 import {
   DoodleTell, DoodlePlan, DoodleBook,
   MountainRule,
@@ -95,6 +96,15 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
     onSetContext({
       mode: isAuth ? "authenticated" : "demo",
       seed_prompt: text,
+      current_stage: "trip_input",
+    });
+    navigate("/planner");
+  }
+
+  function handleChipPlan(params: TripParameters) {
+    onSetContext({
+      mode: isAuth ? "authenticated" : "demo",
+      seed_params: params,
       current_stage: "trip_input",
     });
     navigate("/planner");
@@ -210,17 +220,18 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   {COMPOSER_HELPER}
                 </div>
 
-                {/* Example chips — only shown when composer is empty */}
+                {/* Explore chips — tap to instantly plan (bypasses parseIntent, hits template fast-path) */}
                 {!composerText && (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                    {EXAMPLE_PROMPTS.map(s => (
+                    {EXPLORE_CHIPS.map(({ label, params }) => (
                       <span
-                        key={s}
+                        key={label}
                         className="chip"
-                        onClick={() => setComposerText(s)}
+                        onClick={() => handleChipPlan(params)}
                         style={{ fontSize: 11, cursor: "pointer" }}
+                        title="Tap to instantly plan this trip"
                       >
-                        {s}
+                        {label}
                       </span>
                     ))}
                   </div>

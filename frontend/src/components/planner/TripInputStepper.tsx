@@ -144,6 +144,14 @@ export default function TripInputStepper({ ctx, onSetContext }: Props) {
     }
   }, [params.kid_ages.length]);
 
+  // Auto-fire when arriving from an explore chip with pre-built params — skips parseIntent entirely.
+  useEffect(() => {
+    if (!ctx.seed_params) return;
+    const p = ctx.seed_params;
+    onSetContext({ seed_params: undefined });
+    fireGenerate(p);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Auto-fire generation when arriving from the homepage composer.
   // Switch to "generating" stage immediately so the stepper never flashes.
   useEffect(() => {

@@ -202,4 +202,5 @@ export interface UserContext {
   destination: string;
   trip_params: TripParameters | null;
   seed_prompt?: string;
+  seed_params?: TripParameters;
 }
