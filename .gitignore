@@ -42,3 +42,4 @@ reports/
 
 # Playwright test artifacts
 frontend/test-results/
+.gstack/

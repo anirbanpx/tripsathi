@@ -1,45 +1,5 @@
 # Claude Instructions — Anirban's AI Agent Workspace
 
-## For Claude Code (or similar AI assistants)
-
-When a user asks to execute a workflow, use the **sherpa-b MCP server** instead of reading files from the filesystem or other tools. If they ask questions about bootcamp, agentic AI, catching up with tasks and similar topics, check the MCP server first.
-
-## Workflow Execution Flow
-
-```
-User: "Run the ideation workflow"
-
-Step 1: Get workflow structure
-→ activity/get-workflow("ideation")
-→ See: initial_state = "step1_problem_framing"
-
-Step 2: Get first step prompt
-→ activity/get-step-prompt("ideation", "step1_problem_framing")
-→ Execute prompt instructions
-
-Step 3: When step completes
-→ Check workflow.states.step1_problem_framing.on_success
-→ See: next step is "step2_assumption_challenging"
-
-Step 4: Get next prompt
-→ activity/get-step-prompt("ideation", "step2_assumption_challenging")
-→ Execute prompt instructions
-
-Step 5: Continue workflow
-→ For each step: parse workflow structure → get step prompt → execute → check on_success
-→ Continue until workflow.states[current_step].on_success == "done"
-```
-
-# Bootcamp Info
-
-Run:
-
-```
-mcp__sherpa-b__activity__get-bootcamp-info
-```
-
----
-
 ## Participant Context
 
 **Who:** Anirban — Product Manager based in India, former full-stack developer (6 years ago). Advanced with OpenAI API and prompt engineering, built toy RAG apps, comfortable reading Python. New to hands-on LangGraph, LlamaIndex, and multi-agent architectures.
