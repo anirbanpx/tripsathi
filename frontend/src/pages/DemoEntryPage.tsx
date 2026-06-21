@@ -5,7 +5,7 @@ import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
 import GoogleSignInButton from "../components/auth/GoogleSignInButton";
 import AuthNav from "../components/auth/AuthNav";
 import { getDestinationImageUrl } from "../lib/destinationImage";
-import { EXPLORE_CHIPS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
+import { EXPLORE_CHIPS, TEMPLATE_PARAMS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
 import type { TripParameters } from "../types";
 import {
   DoodleTell, DoodlePlan, DoodleBook,
@@ -108,6 +108,20 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
       current_stage: "trip_input",
     });
     navigate("/planner");
+  }
+
+  function handleMapPlanClick(dest: string) {
+    const params = TEMPLATE_PARAMS[dest.toLowerCase()];
+    if (params) {
+      handleChipPlan(params);
+    } else {
+      onSetContext({
+        mode: isAuth ? "authenticated" : "demo",
+        seed_prompt: `Trip to ${dest}`,
+        current_stage: "trip_input",
+      });
+      navigate("/planner");
+    }
   }
 
   async function handleGoogleToken(credential: string) {
@@ -396,7 +410,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
         }}>
           Explore India · 50+ destinations
         </div>
-        <IndiaDestinationsMap isAuthenticated={isAuth} />
+        <IndiaDestinationsMap isAuthenticated={isAuth} onPlanClick={handleMapPlanClick} />
       </div>
 
     </div>

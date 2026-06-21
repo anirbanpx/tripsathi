@@ -96,9 +96,10 @@ const DESTINATIONS: Array<{ name: string; label: string; coord: [number, number]
 
 interface MapProps {
   isAuthenticated?: boolean;
+  onPlanClick?: (dest: string) => void;
 }
 
-export default function IndiaDestinationsMap({ isAuthenticated = false }: MapProps) {
+export default function IndiaDestinationsMap({ isAuthenticated = false, onPlanClick }: MapProps) {
   return (
     <div style={{
       borderRadius: 18,
@@ -122,7 +123,7 @@ export default function IndiaDestinationsMap({ isAuthenticated = false }: MapPro
           <Marker key={dest.name} position={dest.coord} icon={dotIcon}
             eventHandlers={{ popupopen: () => warmDestination(dest.name) }}>
             <Popup>
-              <DestinationPopup name={dest.name} label={dest.label} coord={dest.coord} isAuthenticated={isAuthenticated} />
+              <DestinationPopup name={dest.name} label={dest.label} coord={dest.coord} isAuthenticated={isAuthenticated} onPlanClick={onPlanClick} />
             </Popup>
           </Marker>
         ))}
@@ -131,7 +132,7 @@ export default function IndiaDestinationsMap({ isAuthenticated = false }: MapPro
   );
 }
 
-function DestinationPopup({ name, label, coord, isAuthenticated }: { name: string; label: string; coord: [number, number]; isAuthenticated: boolean }) {
+function DestinationPopup({ name, label, coord, isAuthenticated, onPlanClick }: { name: string; label: string; coord: [number, number]; isAuthenticated: boolean; onPlanClick?: (dest: string) => void }) {
   const imgUrl = getDestinationImageUrl(name);
   const [wishlisted, setWishlisted] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -180,6 +181,20 @@ function DestinationPopup({ name, label, coord, isAuthenticated }: { name: strin
           </button>
         )}
       </div>
+      {onPlanClick && (
+        <button
+          onClick={() => onPlanClick(name)}
+          style={{
+            marginTop: 8, width: "100%", padding: "6px 0",
+            background: "#B0492F", color: "#F4ECDB",
+            border: "none", borderRadius: 6, cursor: "pointer",
+            fontFamily: "Nunito, sans-serif", fontWeight: 800, fontSize: 11,
+            letterSpacing: "0.04em",
+          }}
+        >
+          Plan this trip →
+        </button>
+      )}
     </div>
   );
 }
