@@ -73,6 +73,12 @@ Keep this section updated. Before starting any task, check here first to avoid r
 ### Leaflet in Vite
 - Default icon paths break in Vite. Fix already applied in both map components: delete `_getIconUrl` and call `L.Icon.Default.mergeOptions(...)` with unpkg URLs.
 
+### Python — always use the venv
+- **Never run bare `python`, `python3`, or `py` for backend commands.** The system Python on this machine is 3.14, which breaks pydantic v1, langchain_core, and several other dependencies.
+- Always use the venv interpreter: `backend/venv/Scripts/python.exe`
+- Examples: `backend/venv/Scripts/python.exe -m pytest ...`, `backend/venv/Scripts/python.exe -m uvicorn main:app ...`, `backend/venv/Scripts/python.exe script.py`
+- The venv Python is 3.12.10 — that's the version everything was built and tested against.
+
 ### Input guardrails (`backend/guardrails.py`)
 - Two-tier check on raw free-text user input (onboarding answers + refinement feedback), wired into `persona_classification` and `human_feedback` in `nodes.py`. Tier 1 = regex/keyword checks (free, no LLM call). Tier 2 = `openai/gpt-oss-safeguard-20b` via Groq, only called if tier 1 passes.
 - **`meta-llama/llama-guard-4-12b` is decommissioned on Groq** — don't use it, it 400s with `model_decommissioned`. Use `openai/gpt-oss-safeguard-20b` instead (override via `GUARDRAILS_MODEL` env var if Groq changes this again).
