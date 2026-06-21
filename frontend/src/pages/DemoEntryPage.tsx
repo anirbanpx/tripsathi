@@ -5,7 +5,7 @@ import IndiaDestinationsMap from "../components/explore/IndiaDestinationsMap";
 import GoogleSignInButton from "../components/auth/GoogleSignInButton";
 import AuthNav from "../components/auth/AuthNav";
 import { getDestinationImageUrl } from "../lib/destinationImage";
-import { EXPLORE_CHIPS, TEMPLATE_PARAMS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
+import { getSeasonalCards, getSeasonalChips, TEMPLATE_PARAMS, COMPOSER_PLACEHOLDER, COMPOSER_HELPER } from "../lib/examplePrompts";
 import type { TripParameters } from "../types";
 import {
   DoodleTell, DoodlePlan, DoodleBook,
@@ -20,18 +20,18 @@ interface Props {
   onSetContext: (patch: Partial<UserContext>) => void;
 }
 
-const CURATED_DESTINATIONS = [
-  { slug: "kerala",     name: "Kerala",     hook: "backwaters, spice trails & hill mist",   sample: "Kerala, 5 nights, family, mid-range, vegetarian",          tags: ["5n", "family", "veg"] },
-  { slug: "goa",        name: "Goa",        hook: "beaches, forts & afternoon sunsets",      sample: "Goa, couple, 4 nights, ₹60k, beach, no alcohol",           tags: ["4n", "couple", "no alcohol"] },
-  { slug: "jaipur",     name: "Jaipur",     hook: "pink city, palaces & desert edge",        sample: "Jaipur, 4 nights, family, mid-range, veg",                 tags: ["4n", "family", "veg"] },
-  { slug: "udaipur",    name: "Udaipur",    hook: "lake palaces & Rajput romance",           sample: "Udaipur, couple, 3 nights, premium, romantic",             tags: ["3n", "couple", "premium"] },
-  { slug: "manali",     name: "Manali",     hook: "snow peaks, treks & riverside calm",      sample: "Manali, group of friends, 5 nights, adventure, budget",    tags: ["5n", "friends", "trek"] },
-  { slug: "leh",        name: "Ladakh",     hook: "high roads & big, starlit skies",         sample: "Ladakh, solo, 10 days, July, pure veg",                    tags: ["10d", "solo", "veg"] },
-  { slug: "varanasi",   name: "Varanasi",   hook: "ancient ghats & dawn on the Ganga",      sample: "Varanasi, 3 nights, family, spiritual, vegetarian",        tags: ["3n", "family", "spiritual"] },
-  { slug: "andaman",    name: "Andamans",   hook: "turquoise water & world-class beaches",  sample: "Andamans, family, 6 nights, mid-range, beach",             tags: ["6n", "family", "beach"] },
-  { slug: "darjeeling", name: "Darjeeling", hook: "tea estates & Himalayan horizons",        sample: "Darjeeling, couple, 3 nights, nature, budget",             tags: ["3n", "couple", "hills"] },
-  { slug: "hampi",      name: "Hampi",      hook: "boulder ruins & Vijayanagara grandeur",  sample: "Hampi, solo, 3 nights, heritage, budget",                  tags: ["3n", "solo", "heritage"] },
-];
+const SEASON_LABEL: Record<string, string> = {
+  summer: "summer escapes · Apr – Jun",
+  monsoon: "monsoon picks · Jul – Sep",
+  winter: "winter favourites · Oct – Mar",
+};
+
+function getCurrentSeasonLabel(): string {
+  const m = new Date().getMonth() + 1;
+  if (m >= 4 && m <= 6) return SEASON_LABEL.summer;
+  if (m >= 7 && m <= 9) return SEASON_LABEL.monsoon;
+  return SEASON_LABEL.winter;
+}
 
 function getTimeGreeting(): string {
   const h = new Date().getHours();
@@ -234,18 +234,18 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   {COMPOSER_HELPER}
                 </div>
 
-                {/* Explore chips — tap to instantly plan (bypasses parseIntent, hits template fast-path) */}
+                {/* Seasonal chips — cross-season teasers, instant fast-path */}
                 {!composerText && (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                    {EXPLORE_CHIPS.map(({ label, params }) => (
+                    {getSeasonalChips().map((spec) => (
                       <span
-                        key={label}
+                        key={spec.destination}
                         className="chip"
-                        onClick={() => handleChipPlan(params)}
+                        onClick={() => handleChipPlan(spec.params)}
                         style={{ fontSize: 11, cursor: "pointer" }}
                         title="Tap to instantly plan this trip"
                       >
-                        {label}
+                        {spec.chipLabel}
                       </span>
                     ))}
                   </div>
@@ -289,7 +289,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
               <div className="footer-note">made for Indian trips, in India ✦</div>
             </div>
 
-            {/* Right — destination grid */}
+            {/* Right — seasonal destination cards (fast-path) */}
             <div className="entry-right" style={{ alignItems: "start" }}>
               <div style={{ width: "100%" }}>
                 <div style={{
@@ -297,7 +297,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   textTransform: "uppercase", color: "var(--fg-3)", marginBottom: 10,
                   display: "flex", alignItems: "baseline", gap: 8,
                 }}>
-                  Popular destinations
+                  {getCurrentSeasonLabel()}
                   {isAuth && topInterest && (
                     <span style={{ fontFamily: "var(--font-script)", fontSize: 14, color: "var(--secondary)", textTransform: "none", letterSpacing: 0 }}>
                       because you like {topInterest} ✦
@@ -305,24 +305,48 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   )}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-                  {CURATED_DESTINATIONS.map(({ slug, name, hook, sample, tags }, i) => {
-                    const img = getDestinationImageUrl(slug);
+                  {getSeasonalCards().map((spec, i) => {
+                    const img = getDestinationImageUrl(spec.slug);
+                    const nights = spec.params.duration_days - 1;
+                    const tags = [
+                      `${nights}N`,
+                      spec.params.budget_bracket,
+                      spec.params.trip_style[0],
+                    ];
                     return (
                       <div
-                        key={slug}
+                        key={spec.destination}
                         className={`dest-shelf-card${i >= 6 ? " dest-shelf-card-extra" : ""}`}
-                        onClick={() => setComposerText(sample)}
-                        title={sample}
-                        style={{ width: "100%", height: 96 }}
+                        onClick={() => handleChipPlan(spec.params)}
+                        title={`Instant plan: ${spec.destination}`}
+                        style={{ width: "100%", height: 96, cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s" }}
+                        onMouseEnter={e => {
+                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.03)";
+                          (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 24px rgba(62,47,35,0.28)";
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                          (e.currentTarget as HTMLDivElement).style.boxShadow = "";
+                        }}
                       >
                         {img && (
-                          <img src={img} alt={name}
+                          <img src={img} alt={spec.destination}
                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                         )}
+                        {/* ⚡ badge */}
+                        <div style={{
+                          position: "absolute", top: 5, right: 5,
+                          background: "rgba(26,17,8,0.72)", backdropFilter: "blur(4px)",
+                          borderRadius: 4, padding: "2px 5px",
+                          fontSize: 8, fontWeight: 800, letterSpacing: "0.06em",
+                          color: "#F4ECDB", fontFamily: "var(--font-body)",
+                        }}>
+                          ⚡ instant
+                        </div>
                         <div className="dest-shelf-overlay" />
                         <div className="dest-shelf-content">
-                          <div className="dest-shelf-name">{name}</div>
-                          <div className="dest-shelf-hook">{hook}</div>
+                          <div className="dest-shelf-name">{spec.destination}</div>
+                          <div className="dest-shelf-hook">{spec.hook}</div>
                           <div style={{ display: "flex", gap: 4, marginTop: 4, flexWrap: "wrap" }}>
                             {tags.map(t => (
                               <span key={t} style={{
@@ -342,7 +366,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
                   fontSize: 10, color: "var(--fg-3)", fontFamily: "var(--font-body)",
                   fontWeight: 600, marginTop: 8,
                 }}>
-                  ↑ tap any destination to start a plan
+                  ⚡ tap any card — instant plan, no wait
                 </div>
               </div>
             </div>
@@ -410,7 +434,7 @@ export default function DemoEntryPage({ ctx, onSetContext }: Props) {
         }}>
           Explore India · 50+ destinations
         </div>
-        <IndiaDestinationsMap isAuthenticated={isAuth} onPlanClick={handleMapPlanClick} />
+        <IndiaDestinationsMap isAuthenticated={isAuth} />
       </div>
 
     </div>
