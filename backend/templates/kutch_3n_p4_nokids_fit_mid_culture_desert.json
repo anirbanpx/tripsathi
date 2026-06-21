@@ -1,0 +1,300 @@
+{
+  "key": "kutch_3n_p4_nokids_fit_mid_culture_desert",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Bhuj",
+        "activities": [
+          {
+            "name": "Private minivan transfer Ahmedabad → Bhuj (arrive by afternoon) — ensures comfort for a group of 4 and fits moderate pace",
+            "bookable": true,
+            "approx_cost": 3500
+          },
+          {
+            "name": "Visit Kutch Museum (official ticket counter) — showcases Kutchi culture and history",
+            "bookable": false,
+            "approx_cost": 20
+          }
+        ],
+        "meals": {
+          "breakfast": "Masala dosa with coconut chutney at the Ahmedabad hotel",
+          "lunch": {
+            "description": "Gujarati thali with kadhi, roti, rice, and seasonal veggies",
+            "location_note": "near Kutch Museum — approx 0.5 km from the museum"
+          },
+          "dinner": [
+            {
+              "description": "Kutchi dabeli served with sweet‑sour chutney — local street‑food favorite",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Methi thepla set with mango pickle and curd — reliable group‑friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Seafood thali at a rooftop restaurant in Bhuj — premium ambience with sea‑view",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive in Bhuj early afternoon, check‑in, and keep the evening relaxed. Moderate walking distances; all sites are within a short stroll from each other."
+      },
+      {
+        "day_number": 2,
+        "location": "Dhordo (Rann of Kutch)",
+        "activities": [
+          {
+            "name": "Scenic road transfer Bhuj → Dhordo (≈ 2 hrs) — bookable minivan, includes driver allowance",
+            "bookable": true,
+            "approx_cost": 2500
+          },
+          {
+            "name": "Explore Rann Utsav Village – cultural performances, handicraft stalls (bookable entry) — core desert experience",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "Plain poha with sev at the Bhuj hotel",
+          "lunch": {
+            "description": "Kadhi pakora with steamed rice – light and warming for the desert climate",
+            "location_note": "near the Rann Utsav entry gate — approx 2 km from the accommodation"
+          },
+          "dinner": [
+            {
+              "description": "Kutchi bhat (millet rice) with bhindi sabzi — local cuisine highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Rann Utsav cultural thali with assorted vegetarian dishes — group‑friendly sit‑down",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Candle‑lit dinner under the stars at Rann Utsav’s premium pavilion — special ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "December evenings are cool; enjoy sunset at White Rann. Keep an eye on hidden charges for camel rides and lanterns – request a written itemised quote."
+      },
+      {
+        "day_number": 3,
+        "location": "Mandvi",
+        "activities": [
+          {
+            "name": "Morning jeep ride to Kalo Dungar (Black Hill) — best viewpoint of the Great Rann, short 30‑min walk from parking",
+            "bookable": true,
+            "approx_cost": 300
+          },
+          {
+            "name": "Relax at Mandvi Beach – sunset stroll and optional shell‑collecting (free) — cool sea breeze after desert day",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "Methi thepla with curd at the Dhordo guesthouse",
+          "lunch": {
+            "description": "Mango pickle rice with a side of kadhi — simple, satisfying desert fare",
+            "location_note": "near Kalo Dungar parking — approx 15 km from the hill base"
+          },
+          "dinner": [
+            {
+              "description": "Fresh fish curry with steamed rice at a beachfront eatery — local seafood highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mandvi beachfront thali with mixed veg, dal, and chapati — reliable sit‑down for the group",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Private sunset dinner on a chartered boat (if available) — premium experience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Travel between Kalo Dungar and Mandvi is short; keep walking under 20 minutes per activity. Beware of souvenir overpricing near the beach parking area."
+      },
+      {
+        "day_number": 4,
+        "location": "Ahmedabad (return)",
+        "activities": [
+          {
+            "name": "Visit Vijay Vilas Palace in Mandvi (guided entry) — showcases royal Kutchi architecture",
+            "bookable": true,
+            "approx_cost": 20
+          },
+          {
+            "name": "Explore the historic Shipbuilding Yard – observe traditional wooden ship construction (free)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Private minivan transfer Mandvi → Ahmedabad (≈ 5 hrs) — includes driver allowance and fuel",
+            "bookable": true,
+            "approx_cost": 4000
+          }
+        ],
+        "meals": {
+          "breakfast": "Sabudana khichdi with a side of curd at the Mandvi hotel",
+          "lunch": {
+            "description": "Gujarati thali with roti, dal, rice, and seasonal vegetables",
+            "location_note": "near Vijay Vilas Palace — approx 2 km from the palace"
+          },
+          "dinner": [
+            {
+              "description": "Gujarati thali with khichdi, kadhi, and shrikhand — local cuisine highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Group‑friendly restaurant setting offering mixed Gujarati dishes — reliable sit‑down",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium rooftop dining in Ahmedabad with live folk music — splurge option",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive back in Ahmedabad by late evening. Ensure all transport fares are agreed in advance to avoid inflation. Road conditions are good in December."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 10500,
+      "transport": 12000,
+      "activities": 8000,
+      "food": 12800,
+      "total": 43300
+    },
+    "warnings": [
+      "Museum ticket overcharge: purchase tickets only at the official Kutch Museum counter (Adults ₹20, Children ₹10).",
+      "Rann Utsav package bait: verify written itemised quotes; hidden fees for camel rides, lanterns, and meals are common.",
+      "Beachside souvenir overpricing near Mandvi parking lot – walk 200 m inland to the official souvenir shop for fair prices.",
+      "Transport pricing inflation: negotiate a round‑trip rate of ₹35,000–₹45,000 for the Ahmedabad‑Bhuj‑Dhordo‑Mandvi circuit, inclusive of driver allowance.",
+      "Kutchi cuisine often uses ground peanuts – travelers with peanut allergies should alert restaurant staff.",
+      "Museum ticket overcharge: Unofficial vendors may sell 'premium entry' tickets for ₹150; mitigation: Purchase tickets only at the official counter (Adults: ₹20, Children 3–12: ₹10).",
+      "Rann Utsav package bait: Operators may quote all-inclusive prices of ₹5,000 then add hidden charges for meals, camel rides, and lanterns; mitigation: Insist on a written itemised quote and verify costs on the official Rann Utsav website.",
+      "Beachside souvenir overpricing: Vendors near Mandvi parking lot often inflate shell prices to ₹200; mitigation: Walk 200m inland to the official souvenir shop to compare prices.",
+      "Transport pricing inflation: Metered fares are rare; mitigation: Negotiate a round-trip rate of ₹3,500–₹4,500 for the Ahmedabad-Bhuj-Dhordo-Mandvi circuit including driver allowance.",
+      "Road conditions: The Kutch Expressway (NH 41) from Rajkot can shave 30 minutes off the journey to Bhuj, but road quality varies during monsoon (though not an issue for December).",
+      "Dietary allergy risk: Kutchi cuisine is heavily reliant on ground peanuts, which poses a risk for those with allergies.",
+      "App-based transport limitations: Uber and Ola operate in Bhuj and Ahmedabad, but in rural stretches only Ola Share (₹250–₹350 per 10 km) is available, and coverage is spotty after dusk.",
+      "Auto/rickshaw pricing: Short hops (e.g., Bhuj ↔ Kutch Museum) have a fixed rate of ₹80–₹120; always confirm the fare before boarding."
+    ],
+    "personalization_notes": [
+      "Focused on culture (museums, palaces, Rann Utsav) and desert experiences (White Rann, Kalo Dungar) matching your trip_style.",
+      "Mid‑range activities and dining keep the budget moderate while still offering premium evenings for a group of friends.",
+      "Pacing is moderate: travel blocks are limited to ~2‑5 hrs and daily activities stay under 2 major stops, ensuring comfortable exploration."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kutch experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kutch experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kutch experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kutch experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 4,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "culture",
+      "desert"
+    ],
+    "start_date": "2026-12-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:12:52.899450+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 24204,
+    "tier": "dynamic",
+    "season": "winter"
+  }
+}

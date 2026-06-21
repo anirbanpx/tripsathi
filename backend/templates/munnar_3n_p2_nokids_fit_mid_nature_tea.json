@@ -1,0 +1,303 @@
+{
+  "key": "munnar_3n_p2_nokids_fit_mid_nature_tea",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Munnar",
+        "activities": [
+          {
+            "name": "Tea Museum visit – learn about tea processing in a compact indoor setting (easy walking, great for a couple’s first day)",
+            "bookable": true,
+            "approx_cost": 50
+          },
+          {
+            "name": "Stroll through Munnar Market – browse local spices, handicrafts and fresh produce (free, short walk)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – South Indian filter coffee, idli with coconut chutney, and fresh fruit",
+          "lunch": {
+            "description": "Vegetarian Kerala thali (rice, sambar, avial, papad) served near the Tea Museum",
+            "location_note": "near Tea Museum — approx 0.5 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala thali – steamed rice, lentil rasam, vegetable thoran, banana chips",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly restaurant – paneer butter masala with naan and cucumber raita",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium rooftop venue – Malabar spice‑infused grilled fish (vegetarian version available) with panoramic tea‑estate views",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Easy‑going start; early check‑in gives time to unwind. Keep an eye on traffic on NH 85 as fog can appear later in the day."
+      },
+      {
+        "day_number": 2,
+        "location": "Munnar – Mattupetty Dam area",
+        "activities": [
+          {
+            "name": "Mattupetty Dam boat ride – 30‑minute shikara cruise on the reservoir (bookable, gentle on the legs)",
+            "bookable": true,
+            "approx_cost": 120
+          },
+          {
+            "name": "Echo Point visit – short walk to the viewpoint and try the echo (free, minimal walking)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain dosa with coconut chutney, fresh orange juice",
+          "lunch": {
+            "description": "Veg pulao with cucumber raita served at a small eatery close to Mattupetty Dam",
+            "location_note": "near Mattupetty Dam — approx 3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala style dal‑rice platter with sautéed greens",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family spot – mushroom masala with jeera rice and a side salad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium option – lakeside restaurant offering a multi‑course tasting menu with tea‑infused desserts",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Boat ride cost can be inflated; use the official dam ticket counter. Afternoon fog may reduce visibility at Echo Point – carry a light jacket."
+      },
+      {
+        "day_number": 3,
+        "location": "Top Station & Kundala Lake",
+        "activities": [
+          {
+            "name": "Top Station viewpoint – early‑morning visit for clear vistas of the Western Ghats (short walk, free)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Kundala Lake shikara ride – 45‑minute guided boat tour (bookable, gentle activity)",
+            "bookable": true,
+            "approx_cost": 120
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – poha with peanuts, masala chai",
+          "lunch": {
+            "description": "Masala rice bowl with curd and pickle, served near Top Station",
+            "location_note": "near Top Station — approx 2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala vegetable stew with appam (soft, easy to digest)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly eatery – paneer tikka masala with butter naan",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium garden setting – six‑course vegetarian feast with tea‑infused sauces",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Fog can roll in quickly at Top Station; start before 9 AM. Verify shikara price at the Kundala Lake office (official rate ₹120)."
+      },
+      {
+        "day_number": 4,
+        "location": "Chinnakanal – return to Kochi",
+        "activities": [
+          {
+            "name": "Chinnakanal Waterfalls – brief walk to the base of the falls (easy, free)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Indo‑Swiss Dairy Farm tour – learn about organic dairy practices (bookable, short guided walk)",
+            "bookable": true,
+            "approx_cost": 70
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal, banana slices, and filter coffee",
+          "lunch": {
+            "description": "Farm‑style thali with fresh cheese, curd, chapati and vegetable sabzi",
+            "location_note": "near Indo‑Swiss Dairy Farm — approx 4 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala style vegetable stew with rice",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family option – dal makhani with jeera rice and mixed veg fry",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium farewell dinner – riverside restaurant featuring a curated Kerala seafood platter (vegetarian alternative available)",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "After farm visit, begin the drive back to Kochi. Confirm taxi fare (₹3,200–3,500 fixed) before boarding. Carry a light raincoat as December showers are possible."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 0,
+      "transport": 3500,
+      "activities": 480,
+      "food": 3200,
+      "total": 7180
+    },
+    "warnings": [
+      "Auto‑rickshaw minimum fare often starts at ₹100 for short hops – always confirm distance first.",
+      "Unlicensed boat operators at Mattupetty Dam may overcharge; use the official ticket counter.",
+      "Shikara rides at Kundala Lake advertised at ₹250 are overpriced; official rate is ₹120.",
+      "Combined tour tickets for Chinnakanal attractions can be inflated – purchase separate tickets at each gate.",
+      "Heavy fog in December can restrict visibility at Top Station and cause road delays on NH 85.",
+      "Kochi airport transfer to Munnar is a fixed‑rate taxi (₹3,200–3,500); negotiate before boarding as meters are not used.",
+      "Cab/Auto Pricing Inflation: Local auto-rickshaws may quote a 'minimum fare' of ₹100 for short hops; confirm distance first. Local taxis typically cost ₹12–₹15 per km. Mitigation: Agree on a total fare (e.g., ₹500–₹800 for a 30 km round trip) or ask for a meter.",
+      "Boat Operator Scams: Unlicensed boat operators at Mattupetty Dam may charge ₹300–₹400 per ride, claiming 'premium' service. Mitigation: Use the official dam office ticket counter and verify the boat's registration number.",
+      "Shikara Ride Pricing: 'Premium' rides at Kundala Lake are advertised at ₹250, but the official rate is ₹120. Mitigation: Insist on the standard ticket at the lake office and negotiate any extra guide fees beforehand.",
+      "Tour Pricing Traps: Some 'guided' tours in Chinnakanal claim a combined entry fee of ₹500 for the waterfall and farm, but the official combined ticket is only ₹70. Mitigation: Purchase separate tickets at each entry gate and ask for a printed receipt.",
+      "Transport Logistics: Uber and Ola only operate to Munnar's outskirts. Beyond that, use local 'Munnar Taxi' apps (e.g., 'Munnar Cabs') which charge ₹12 per km and accept cash only.",
+      "Weather Visibility: During December–January, heavy fog may limit visibility at Top Station and can clog NH 85. An alternative route via Coimbatore (NH 181) can avoid morning fog but adds 30 minutes of distance on winding roads.",
+      "Dietary Caution: Non-vegetarian dishes frequently include beef or fish; specifically ask for 'vegetarian only' to avoid hidden meat stocks.",
+      "Airport Transfer: Taxis from Kochi Airport to Munnar have a fixed rate of ₹3,200–₹3,500 for the 130 km journey; negotiate this before boarding as meters are not used."
+    ],
+    "personalization_notes": [
+      "Focus on tea‑estate scenery and nature spots matches your \"nature\" and \"tea\" trip style.",
+      "Moderate pace with short walks and early starts respects your \"moderate\" pacing preference.",
+      "Mid‑range dining options (local, family, premium) align with your medium budget sensitivity."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Munnar experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "Parakkat Spice Merchant Restaurant - Munnar",
+            "rating": "4.8",
+            "maps_url": "https://maps.google.com/?cid=1072186247843068613&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Munnar experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "MUNNAR SAMRUDHI RESTAURANT",
+            "rating": "4.7",
+            "phone": "094965 80200",
+            "maps_url": "https://maps.google.com/?cid=10821528006543757710&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Munnar experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Munnar experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "tea"
+    ],
+    "start_date": "2026-12-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:18:44.014626+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 28975,
+    "tier": "static",
+    "season": null
+  }
+}

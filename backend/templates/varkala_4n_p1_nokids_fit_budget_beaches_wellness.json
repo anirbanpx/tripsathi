@@ -1,0 +1,356 @@
+{
+  "key": "varkala_4n_p1_nokids_fit_budget_beaches_wellness",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Varkala",
+        "activities": [
+          {
+            "name": "Cliff Viewpoint stroll – gentle 15‑minute walk with sea views, perfect for a relaxed start",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Sunset beach yoga – 1‑hour session on Varkala Beach (instructor provided mats)",
+            "bookable": true,
+            "approx_cost": 400
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – continental spread with fresh fruit, toast and tea/coffee",
+          "lunch": {
+            "description": "Masala dosa with coconut chutney and sambar – near Varkala Beach",
+            "location_note": "near Varkala Beach — approx 0.5 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Karimeen (Pearl Spot) fry with steamed rice and lemon pickle – classic coastal dish",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian Kerala thali (rice, sambar, avial, papadam) – hearty and familiar",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Sea‑view rooftop restaurant: Kerala Sadya (12‑dish banquet) with live percussion",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Easy start for a solo traveller; keep an eye on rain‑gear as showers are forecasted. Watch for beachside vendor overcharging on water bottles."
+      },
+      {
+        "day_number": 2,
+        "location": "Varkala",
+        "activities": [
+          {
+            "name": "Ayurvedic Abhyanga massage (90 min) at Shankara Ayurveda Centre – deep relaxation and wellness",
+            "bookable": true,
+            "approx_cost": 1500
+          },
+          {
+            "name": "Janardhana Swamy Temple visit – short 10‑minute walk, cultural insight",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – idli with coconut chutney and filter coffee",
+          "lunch": {
+            "description": "Kerala thali (rice, sambar, thoran, rasam) – served near Sivagiri Mutt",
+            "location_note": "near Sivagiri Mutt — approx 1 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Fish moilee (mild coconut‑milk curry) with appam – soothing local flavor",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Plain rice with dal and sautéed greens – simple, comforting option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Boutique seaside venue: grilled lobster with herb butter, candlelit tables",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rain may be intermittent; the massage centre has indoor facilities. Carry a small umbrella for the temple walk."
+      },
+      {
+        "day_number": 3,
+        "location": "Kappil",
+        "activities": [
+          {
+            "name": "Kappil Lake boat cruise – 4‑hour guided ride on a certified KTDC boat",
+            "bookable": true,
+            "approx_cost": 1200
+          },
+          {
+            "name": "Kappil Beach walk – short stroll on the sandy stretch, low‑impact activity",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain dosa with potato masala and ginger tea",
+          "lunch": {
+            "description": "Prawn fried rice with mild spices – lakeside eatery",
+            "location_note": "near Kappil Lake boat house — approx 0.2 km from landing point"
+          },
+          "dinner": [
+            {
+              "description": "Kerala fish curry (mild) with steamed rice – aromatic and soothing",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian thali (rice, sambar, vegetable stir‑fry) – balanced and filling",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium beach club: seafood platter with crab, mussels, and champagne",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Beware of unregistered boat operators quoting higher rates; book through the official KTDC desk. Carry raincoat as showers are possible."
+      },
+      {
+        "day_number": 4,
+        "location": "Anjengo",
+        "activities": [
+          {
+            "name": "Guided tour of Anjengo Fort – official guide (₹150 per group), historic insight",
+            "bookable": true,
+            "approx_cost": 150
+          },
+          {
+            "name": "Anjengo Lighthouse viewpoint – enjoy the base view without climbing stairs (steep steps avoided)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – puttu with ripe banana and a cup of masala chai",
+          "lunch": {
+            "description": "Chicken stew with appam – modest beachfront café",
+            "location_note": "near Anjengo Beach — approx 0.5 km from the fort"
+          },
+          "dinner": [
+            {
+              "description": "Kerala style crab roast with Kerala red rice – local specialty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Plain rice with dal and sautéed spinach – easy, nutritious choice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale resort dining: multi‑course tasting menu with fusion Kerala cuisine",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Lighthouse climb involves narrow steps; skip the ascent for safety. Keep cash handy for guide fees; official guide costs are low compared to unlicensed offers."
+      },
+      {
+        "day_number": 5,
+        "location": "Varkala – Departure",
+        "activities": [
+          {
+            "name": "Sunrise yoga on the cliff – 1‑hour private session to close the trip",
+            "bookable": true,
+            "approx_cost": 500
+          },
+          {
+            "name": "Transfer to Trivandrum Airport – pre‑arranged taxi (metered) for smooth departure",
+            "bookable": true,
+            "approx_cost": 1300
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal and banana slices",
+          "lunch": {
+            "description": "Veg thali (rice, sambar, vegetable curry) at airport lounge",
+            "location_note": "Trivandrum Airport — approx 45 km from Varkala"
+          },
+          "dinner": [
+            {
+              "description": "No dinner scheduled; travel day",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled; travel day",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled; travel day",
+              "cuisine_tag": "none"
+            }
+          ]
+        },
+        "notes": "Check out by 11:00 AM. Keep umbrella handy for possible rain en route to the airport. Confirm taxi fare before departure."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 6000,
+      "transport": 2600,
+      "activities": 3850,
+      "food": 4500,
+      "total": 16950
+    },
+    "warnings": [
+      "January forecast shows intermittent heavy rain; pack waterproof jacket and plan indoor alternatives.",
+      "Beachside vendors may overcharge for water bottles and sun‑shade rentals – negotiate price or use public shaded pavilions.",
+      "Unregistered boat operators at Kappil Lake sometimes quote inflated rates – book only through the official KTDC desk or the Kerala Boat app.",
+      "Climbing the Anjengo Lighthouse involves narrow steps; skip the ascent if you have mobility concerns.",
+      "Taxi from the airport may quote higher fares; insist on meter or pre‑agree a rate (≈₹1300 for 45 km).",
+      "Beachside vendor overcharging: water bottles ₹30→₹80, sun‑shade rentals ₹150→₹300 during peak hours. Mitigation: carry reusable water bottle, portable sun‑hat, negotiate fixed rate before use or use public shaded pavilions near the cliff.",
+      "Unlicensed historical guides at Anjengo Fort charging ₹500/hr for repetitive tours. Mitigation: use official guide service at the fort office (₹150 per group) or download the free audio guide from Kerala Tourism website.",
+      "Inflated boat rates by unregistered operators: quoting ₹300/person plus hidden fuel surcharges. Mitigation: book through Kerala Tourism Development Corporation (KTDC) desk in Varkala or the official ‘Kerala Boat’ app for transparent pricing and safety checklist.",
+      "Taxi/cab from airport to Varkala: ₹1,200‑1,500 for 45 km; risk of overcharge if meter not used. Mitigation: insist on meter or pre‑agreed fare; negotiate if driver refuses meter.",
+      "Auto‑rickshaw fare: ₹12‑15 per km; short rides (e.g., Varkala→Cliff) ₹80‑₹120; risk of overcharge if fare not confirmed. Mitigation: always confirm fare before boarding.",
+      "Anjengo Lighthouse climb: ten narrow steps and steep spiral; unsuitable for those with mobility issues. Mitigation: skip the climb and enjoy the base viewpoint; if ascent is essential, inquire locally about doli/palanquin services (pricing not specified).",
+      "Dietary: Kerala coastal cuisine uses coconut oil, tamarind, spices; seafood is common. Allergy risks include coconut oil (in sautéed vegetables), raw fish (sashimi‑style), and red chilies. Vegetarian options are abundant; most restaurants serve a vegetarian thali and honor ‘no onion‑no garlic’ requests. Advise staff of any allergies and consider vegetarian thali or carry safe snacks if needed.",
+      "Medical: Nearest major hospital is Government Medical College, Thiruvananthapuram (~45 km, 24‑hr emergency). For quicker basic care, Dr. Ramesh Hospital in Varkala offers outpatient services. Carry personal medication, oral rehydration salts, basic first‑aid kit, insect repellent, and a copy of any chronic prescriptions.",
+      "Weather readiness: Although Jan is generally dry and pleasant, the forecast indicates rain. Pack waterproof jacket/umbrella and plan indoor activities (spa, yoga, cultural visits) for wet periods.",
+      "Beach safety: Rocks near Varkala Beach can be slippery; avoid swimming after heavy rain. Supervise children if present (none in this profile).",
+      "Transport alternative: Arriving by train at Varkala Railway Station (Kollam‑Thiruvananthapuram line) and using auto‑rickshaws for day trips avoids parking hassles in peak season."
+    ],
+    "personalization_notes": [
+      "Focused on beach and wellness experiences (yoga, Ayurvedic massage) matching your trip style.",
+      "Moderate pace with a mix of indoor and outdoor activities to accommodate possible rain.",
+      "Budget‑friendly dining and transport choices keep overall costs within a budget tier while still offering a premium dinner for a special evening."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Varkala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Varkala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Varkala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Varkala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Varkala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 1,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "beaches",
+      "wellness"
+    ],
+    "start_date": "2027-01-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:14:35.162571+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 28720,
+    "tier": "dynamic",
+    "season": "winter"
+  }
+}

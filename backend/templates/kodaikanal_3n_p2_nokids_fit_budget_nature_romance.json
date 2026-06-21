@@ -1,0 +1,297 @@
+{
+  "key": "kodaikanal_3n_p2_nokids_fit_budget_nature_romance",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Kodaikanal (arrival & lake area)",
+        "activities": [
+          {
+            "name": "Lake stroll & government‑run paddle‑boat ride – gentle walk around the lake with a short 45‑minute boat ride (official ₹150 per hour, safe and scenic)",
+            "bookable": true,
+            "approx_cost": 150
+          },
+          {
+            "name": "Coaker's Walk sunset walk – a flat, well‑maintained promenade offering lake views; minimal walking effort",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – simple South Indian spread (idli, sambar, filter coffee)",
+          "lunch": {
+            "description": "Masala dosa with coconut chutney and a side of plain curd – enjoyed near Kodaikanal Lake promenade (≈0.5 km from hotel)",
+            "location_note": "near Kodaikanal Lake — approx 0.5 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Vegetarian mushroom pepper fry with appam – local specialty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with naan – reliable family‑friendly venue",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Malabar fish curry (or paneer for vegetarians) with steamed rice at a rooftop restaurant offering valley views – splurge ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Relaxed arrival day; keep evening free for early rest. Warning: verify boat operator is government‑run to avoid overcharges."
+      },
+      {
+        "day_number": 2,
+        "location": "Bryant Park & Green Valley View",
+        "activities": [
+          {
+            "name": "Bryant Park visit – landscaped garden with flower beds; entry ₹30 per adult (bookable at gate)",
+            "bookable": false,
+            "approx_cost": 60
+          },
+          {
+            "name": "Green Valley View (Pine Forest) viewpoint – short walk on paved path, panoramic misty valley outlook",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal, a warm and easy start",
+          "lunch": {
+            "description": "Vegetarian lemon rice with cucumber raita – enjoyed at a shaded spot close to Bryant Park",
+            "location_note": "near Bryant Park — approx 0.3 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Kerala style vegetable stew with puttu – local taste",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Chettinad style vegetable biryani with raita – comforting group option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Grilled paneer tikka with herb‑infused butter naan at a boutique garden restaurant – premium setting",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Monsoon clouds may lower visibility at the viewpoint; carry a rain jacket. Beware of unofficial park‑gate fee offers – pay only the official ₹30."
+      },
+      {
+        "day_number": 3,
+        "location": "Silver Cascade Falls & Pillar Rocks",
+        "activities": [
+          {
+            "name": "Silver Cascade Falls stop – short 5‑minute walk from parking, photo spot; no entry fee",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Pillar Rocks viewpoint – easy access from parking, gentle walk; no entry fee",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain dosa with coconut chutney and sambhar",
+          "lunch": {
+            "description": "Aloo paratha with curd and pickle – picnicked near Silver Cascade (bring from hotel or local bakery)",
+            "location_note": "near Silver Cascade Falls — approx 2 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mixed vegetable kurma with appam – local comfort dish",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer tikka masala with jeera rice – crowd‑pleasing family choice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Saffron‑infused veg pulao with roasted vegetables at a hill‑top restaurant offering candlelight ambience – premium romantic dinner",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rain can make the rocks slippery; wear good grip shoes. No extra charges expected at these natural sites."
+      },
+      {
+        "day_number": 4,
+        "location": "Kodaikanal Market & departure",
+        "activities": [
+          {
+            "name": "Morning stroll through Kodaikanal Market – browse local spices, handicrafts; easy flat walk",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Check‑out and taxi transfer to Dindigul for onward travel",
+            "bookable": true,
+            "approx_cost": 2800
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal and a side of fresh fruit",
+          "lunch": {
+            "description": "Vegetable pulao with cucumber raita – enjoyed at a café near the market before departure",
+            "location_note": "near Kodaikanal Market — approx 0.2 km from base"
+          },
+          "dinner": [
+            {
+              "description": "No dinner scheduled (departure in the afternoon)",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled",
+              "cuisine_tag": "none"
+            }
+          ]
+        },
+        "notes": "Leave early to allow extra travel time in case of Ghat Road landslide or heavy rain. Keep umbrellas handy."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 4500,
+      "transport": 3800,
+      "activities": 710,
+      "food": 4800,
+      "total": 13810
+    },
+    "warnings": [
+      "Monsoon season (Sept) – expect frequent rain, mist and possible landslides on the Kodaikanal Ghat Road; check road status before departure each day.",
+      "Boat rides on Kodaikanal Lake may be cancelled in heavy rain; use the government‑run service to avoid overcharging.",
+      "Unofficial vendors may demand extra entry fees at Bryant Park; pay only the official ₹30.",
+      "Slippery stones at Silver Cascade Falls and Pillar Rocks – wear sturdy shoes and exercise caution.",
+      "Boat‑overcharge: Unlicensed operators sometimes demand ₹500 per ride (double the official ₹150 rate). Mitigation: Use the government‑run boat service at the lake pier and verify the ₹150 rate on the notice board before boarding.",
+      "Park‑gate overcharging: Unofficial vendors may ask for ‘premium entry’ fees of ₹100–₹150 per adult at Bryant Park gate. Mitigation: Pay the official fee of ₹30 at the park office, keep the receipt, and ignore any extra charge.",
+      "Guided‑photo scam: Some ‘local guides’ offer photo‑session packages at ₹500 per picture. Mitigation: Decline the offer and use your own camera or phone; if a guide is needed, hire a certified guide from the Kodaikanal Tourist Office at ₹1500 per day.",
+      "Taxi/auto pricing inflation: Taxi from Dindigul to Kodaikanal is fixed‑rate ₹2,800–₹3,200 for a 4‑seat vehicle (meters not used); auto‑rickshaw within town charges ~₹200/km with a minimum fare of ₹100 for distances <1 km; app‑based options (Kodaikanal Cabs, Ola, Uber) are typically 10 % higher than negotiated taxi rates. Mitigation: Negotiate the taxi fare before boarding, confirm auto‑rickshaw rates, and consider app‑based services only if GPS tracking is worth the extra cost.",
+      "Landslide risk on Ghat Road during monsoon (July–early September): Mitigation: Check road conditions before departure, travel early in the day, allow extra travel time, and be prepared to use the Madurai‑Dindigul alternative if the Ghat Road is closed.",
+      "Dietary: Dominant cuisine is South Indian with liberal use of coconut oil, mustard seeds, and tamarind. Vegetarian options are abundant (≈95 % of stalls), but coconut oil may be a concern for those with coconut allergy; peanuts appear in chutneys, and pork is rare in non‑vegetarian outlets.",
+      "Medical: Nearest quality hospital is Kodaikanal Government Hospital (≈2 km from the market) with a 24‑hour emergency department, basic imaging, and a pharmacy. For serious cases, Coimbatore Medical College Hospital (~250 km) is the regional tertiary centre; air‑ambulance services may be arranged during winter peaks.",
+      "Travel checklist: Carry a personal first‑aid kit (antihistamines, motion‑sickness tablets, basic antibiotics), a reusable water bottle, and a lightweight rain jacket for sudden monsoon showers.",
+      "Transport within town: Auto‑rickshaw drivers may quote a ‘minimum fare’ of ₹100 for distances under 1 km—confirm the fare before starting.",
+      "Weather: Forecast shows light rain, overcast skies, and moderate rain likelihood; pack waterproof clothing and footwear.",
+      "Crowds: Monsoon season reduces tourist density, so expect fewer crowds at attractions, but be prepared for possible road disruptions and occasional attraction closures.",
+      "Attraction pricing (for reference): Bryant Park entry ₹30/adult, ₹15/child (3‑12 yrs), free for toddlers <3 yrs; Kodaikanal Lake entry ₹20/adult, ₹10/child (3‑12 yrs), free for toddlers; boat rides ₹150/hour (rowboat); Coaker’s Walk is free; Pillar Rocks and Silver Cascade Falls have no entry fee."
+    ],
+    "personalization_notes": [
+      "Romantic evenings feature sunset walks and rooftop dining with valley views, matching your romance travel style.",
+      "Nature‑focused itinerary visits the most scenic viewpoints and gardens while keeping walking distances moderate for a relaxed pace."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kodaikanal experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kodaikanal experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kodaikanal experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Kodaikanal experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "nature",
+      "romance"
+    ],
+    "start_date": "2026-09-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:11:09.617854+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 26810,
+    "tier": "dynamic",
+    "season": "monsoon"
+  }
+}

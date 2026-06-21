@@ -44,8 +44,14 @@ if not os.getenv("LLM_API_KEY"):
     raise RuntimeError("LLM_API_KEY not set in .env.")
 
 from graph import graph  # noqa: E402 — import after env check
+from templates_store import match as _template_match
 
 _logger = logging.getLogger(__name__)
+
+# thread_id -> original PlanRequest for un-hydrated template threads.
+# When the user refines/regenerates a template-served plan, we run graph.invoke
+# to create a real checkpoint first (lazy hydration), then resume normally.
+_template_threads: dict[str, "PlanRequest"] = {}
 _CHECKPOINTS_DB = os.path.join(os.path.dirname(__file__), "..", "checkpoints.db")
 _SESSION_TTL_SECONDS = 86400  # 24 hours
 
@@ -381,6 +387,23 @@ async def stream_plan(req: PlanRequest):
     async def generate():
         yield f"data: {json.dumps({'type': 'thread_id', 'thread_id': thread_id})}\n\n"
 
+        # Fast-path: serve pre-baked template with no LLM calls (~1.2s vs 10-30s)
+        tmpl = _template_match(
+            req.destination,
+            req.trip_parameters,
+            traveler_notes=req.traveler_notes or "",
+            onboarding_answers=req.onboarding_answers,
+        )
+        if tmpl is not None:
+            _template_threads[thread_id] = req
+            _logger.info("template_hit destination=%s thread_id=%s", req.destination, thread_id)
+            for stage in ["Understanding your profile", "Researching your destination",
+                          "Generating your itinerary", "Review your plan"]:
+                await asyncio.sleep(0.28)
+                yield f"data: {json.dumps({'type': 'stage', 'stage_label': stage})}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'plan': tmpl['plan'], 'thread_id': thread_id, 'stage_label': 'Review your plan', 'refinement_count': 0, 'from_template': True})}\n\n"
+            return
+
         loop = asyncio.get_event_loop()
         queue: asyncio.Queue = asyncio.Queue()
         _SENTINEL = object()
@@ -462,6 +485,13 @@ async def stream_plan(req: PlanRequest):
 
 @app.post("/api/refine")
 async def refine_plan(req: RefineRequest):
+    # Lazy hydration: template threads have no graph checkpoint yet — create one now
+    if req.thread_id in _template_threads:
+        orig_req = _template_threads.pop(req.thread_id)
+        config = {"configurable": {"thread_id": req.thread_id}}
+        _logger.info("template_hydrate thread_id=%s destination=%s", req.thread_id, orig_req.destination)
+        graph.invoke(_build_initial_state(orig_req, req.thread_id), config=config)
+
     config = {"configurable": {"thread_id": req.thread_id}}
     try:
         graph.invoke(Command(resume=req.user_feedback), config=config)
@@ -473,6 +503,11 @@ async def refine_plan(req: RefineRequest):
 
 @app.post("/api/regenerate/stream")
 async def regenerate_plan_stream(req: RegenerateRequest):
+    if req.thread_id in _template_threads:
+        orig_req = _template_threads.pop(req.thread_id)
+        _logger.info("template_hydrate thread_id=%s destination=%s", req.thread_id, orig_req.destination)
+        graph.invoke(_build_initial_state(orig_req, req.thread_id), config={"configurable": {"thread_id": req.thread_id}})
+
     config = {"configurable": {"thread_id": req.thread_id}}
 
     async def generate():
@@ -517,6 +552,11 @@ async def regenerate_plan_stream(req: RegenerateRequest):
 
 @app.post("/api/regenerate")
 async def regenerate_plan(req: RegenerateRequest):
+    if req.thread_id in _template_threads:
+        orig_req = _template_threads.pop(req.thread_id)
+        _logger.info("template_hydrate thread_id=%s destination=%s", req.thread_id, orig_req.destination)
+        graph.invoke(_build_initial_state(orig_req, req.thread_id), config={"configurable": {"thread_id": req.thread_id}})
+
     config = {"configurable": {"thread_id": req.thread_id}}
     try:
         graph.invoke(Command(resume={"regenerate": True}), config=config)

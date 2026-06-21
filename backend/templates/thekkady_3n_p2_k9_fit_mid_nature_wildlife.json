@@ -1,0 +1,290 @@
+{
+  "key": "thekkady_3n_p2_k9_fit_mid_nature_wildlife",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Thekkady",
+        "activities": [
+          {
+            "name": "Check‑in at hotel and short stroll through Thekkady market – easy walk to let the 9‑year‑old stretch legs and see local spices",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — simple South‑Indian spread (idli, plain dosa, coconut chutney)",
+          "lunch": {
+            "description": "Plain rice with mild dal and a side of boiled sweet potato mash – kid‑friendly and easy to eat",
+            "location_note": "near Thekkady market — approx 0.5 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala vegetable thali (soft rice, dal, vegetable sambar, curd) – local wholesome meal",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly restaurant serving plain rice with mild chicken curry and a side of roti – suitable for a 9‑year‑old",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium lakeside eatery offering coconut‑infused fish moilee with aromatic rice – quiet ambience for a special night",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive by early afternoon, settle in and keep the evening relaxed. No strenuous walking; good pace for a family with a child."
+      },
+      {
+        "day_number": 2,
+        "location": "Thekkady",
+        "activities": [
+          {
+            "name": "Periyar Boat Safari (official Forest Department ticket) – 2‑hour boat ride on Periyar Lake for wildlife spotting (elephants, deer, birds)",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Guided short nature trail (≈20 min) around the boat jetty – easy terrain, good for spotting small fauna and learning about the ecosystem",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft appam with coconut milk, plain rice with ghee",
+          "lunch": {
+            "description": "Mashed banana with a drizzle of ghee and a side of plain rice – soft, child‑safe food",
+            "location_note": "on the boat jetty area after the safari — approx 1 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Spicy but mild Kerala fish curry with soft steamed rice – local flavor",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly plate of plain rice with mild paneer butter masala and curd – kid‑safe",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale restaurant serving Kerala beef fry (optional for non‑vegetarians) with aromatic rice and a calm garden setting",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Monsoon clouds may cause boat cancellations; check status at the Forest Department counter early. Carry rain gear."
+      },
+      {
+        "day_number": 3,
+        "location": "Thekkady",
+        "activities": [
+          {
+            "name": "Spice Plantation Tour (government‑run) – learn about cardamom, pepper and vanilla, with tasting of fresh spices (indoor portions available if rain)",
+            "bookable": true,
+            "approx_cost": 1000
+          },
+          {
+            "name": "Elephant Camp visit – short elephant ride and interaction session (no long trekking)",
+            "bookable": true,
+            "approx_cost": 3000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with coconut chutney, soft boiled eggs (optional)",
+          "lunch": {
+            "description": "Plain rice with mild lentil stew (dal) and a side of boiled carrots – easy for the child",
+            "location_note": "near the spice plantation – approx 2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Traditional Kerala vegetable stew (ishtu) with appam – soft and aromatic",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family restaurant offering plain rice with chicken tikka masala (mild) and roti – child‑friendly",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium dining at a riverside resort serving grilled pomfret with coconut rice and a tranquil view",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rain is common in August; the plantation tour includes indoor sections. Elephant ride lasts ≤30 min, suitable for a 9‑year‑old."
+      },
+      {
+        "day_number": 4,
+        "location": "Thekkady",
+        "activities": [
+          {
+            "name": "Kadathanadan Kalari demonstration – short cultural martial‑arts show (≈30 min) with audience participation",
+            "bookable": true,
+            "approx_cost": 500
+          },
+          {
+            "name": "Leisurely walk to Kallar River viewpoint – flat, well‑maintained path, great photo spot before departure",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft idli with sambar (mild) and a dash of ghee",
+          "lunch": {
+            "description": "Pasta with light tomato sauce and grated cheese – familiar, kid‑safe dish",
+            "location_note": "near Kallar River viewpoint — approx 3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Mild coconut milk based fish stew (meen moilee) with soft rice – local favorite",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly plate of plain rice with vegetable pulao and a side of yogurt – suitable for the child",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium option: rooftop dining with Kerala banana leaf meal (soft curries, rice, payasam) – special ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Early finish to allow travel back to Kochi. Keep rain gear handy for the viewpoint walk."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 10500,
+      "transport": 12000,
+      "activities": 5300,
+      "food": 4000,
+      "total": 27800
+    },
+    "warnings": [
+      "August is monsoon season in Thekkady; boat safaris may be cancelled and trails become slippery – carry waterproof clothing and sturdy shoes.",
+      "Private boat operators sometimes overcharge (₹500‑₹800 per person). Purchase tickets only at the official Forest Department counter.",
+      "Spice vendors may quote high “organic” prices without certification. Opt for the government‑run plantation tour for genuine prices.",
+      "Private boat operators inflate rates to ₹500 per person claiming exclusive wildlife view; mitigate by purchasing tickets only at the official Forest Department counter near the jetty and verifying the printed ticket’s serial number.",
+      "Spice vendors quote “organic” prices up to 40 % higher without certification; mitigate by insisting on a government‑run plantation tour (ticketed at the forest office) or asking to see organic certification before paying.",
+      "Monsoon‑season trails become slippery and boat safaris often halted (mid‑June to early July); mitigate by carrying rain gear, checking safari status with the forest office, and planning indoor alternatives such as the Kadathanadan Kalari demonstration.",
+      "Child‑friendly food options are readily available: soft appam with plain coconut milk, boiled sweet potato mash, plain rice with ghee and a spoon of curd; soft idli, plain rice with dal, mashed banana with ghee; vegetarian meals are excellent.",
+      "Dominant cuisine is coconut‑rich; be aware of coconut oil/grated coconut, mustard seeds, and occasional raw red chili as allergy risks.",
+      "Pork is uncommon in mainstream restaurants but may appear in Christian‑run eateries; always ask if avoided.",
+      "Vegetarian options are abundant; almost any meal can be made vegetarian on request.",
+      "Medical facilities: nearest quality hospital is Government Medical College, Kottayam (~80 km, 2 h drive); private Kumily Medical Centre (5 km from town) offers basic emergency care; carry personal prescription meds, basic first‑aid kit, antidiarrheal tablets, insect repellent (DEET ≥ 30 %), and oral rehydration salts for children."
+    ],
+    "personalization_notes": [
+      "Wildlife‑focused days (Periyar boat safari, elephant camp) match your trip style of wildlife and nature.",
+      "All meals include at least one kid‑friendly dish (plain rice, dosa, pasta) for your 9‑year‑old.",
+      "Mid‑range budget assumptions keep costs moderate while still offering a premium dinner experience."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Thekkady experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Thekkady experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Thekkady experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Thekkady experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [
+      9
+    ],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "wildlife",
+      "nature"
+    ],
+    "start_date": "2026-08-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:08:37.475416+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 28937,
+    "tier": "dynamic",
+    "season": "monsoon"
+  }
+}

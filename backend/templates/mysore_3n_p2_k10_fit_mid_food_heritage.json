@@ -1,0 +1,409 @@
+{
+  "key": "mysore_3n_p2_k10_fit_mid_food_heritage",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Mysore City Centre",
+        "activities": [
+          {
+            "name": "Mysore Palace – guided tour (marble corridors are stroller‑friendly and the palace opens early, perfect for a family with a 10‑year‑old)",
+            "bookable": true,
+            "approx_cost": 70
+          },
+          {
+            "name": "Devaraja Market – short walk to explore local spices and silk (flat paths, good for a child to see colours and textures)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – soft idli with mild sambar (kid‑friendly, easy to chew)",
+          "lunch": {
+            "description": "plain rice with dal and carrot‑stir fry – near Devaraja Market (≈0.5 km from Palace)",
+            "location_note": "near Devaraja Market — approx 0.5km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mysore masala dosa – crisp, served with coconut chutney (local specialty)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetable pulao with raita – mild flavors, sit‑down restaurant, child‑safe",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Rooftop heritage restaurant – thali with ghee‑roasted veggies and mango lassi (premium ambience)",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Moderate pace; early evening dinner before 8 PM works well for the child. Watch out for auto‑rickshaw drivers who may divert you to commission‑based silk shops; insist on meter. Keep stroller handy for palace corridors, but be prepared to leave it at security for Durbar Hall."
+      },
+      {
+        "day_number": 2,
+        "location": "Karanji Lake Nature Park",
+        "activities": [
+          {
+            "name": "Karanji Lake – nature walk & bird‑watching (flat boardwalk, stroller‑friendly)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Boat ride on Karanji Lake (30 min gentle ride, great for the 10‑year‑old)",
+            "bookable": true,
+            "approx_cost": 100
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – soft poha with peanuts (easy to chew, kid‑friendly)",
+          "lunch": {
+            "description": "roti with paneer butter masala – near the lake entrance (≈0.2 km from parking)",
+            "location_note": "near Karanji Lake entrance — approx 0.2km from base"
+          },
+          "dinner": [
+            {
+              "description": "Ragi mudde with sambar – traditional Karnataka comfort food (local)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Creamy pasta primavera – kid‑safe, served in a family‑friendly bistro",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining terrace – set menu with Mysore wine pairing (premium ambience)",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rain is possible in December; carry a light rain jacket. The lake area is flat and safe for the child. Snacks may be needed for the boat ride as on‑site stalls offer limited child‑appropriate meals."
+      },
+      {
+        "day_number": 3,
+        "location": "Chamundi Hills & Brindavan Gardens",
+        "activities": [
+          {
+            "name": "Chamundi Hill – temple visit via paved road (avoids the 1,008‑step climb, suitable for a 10‑year‑old)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Brindavan Gardens – evening fountain show (arrive early for a comfortable seat, child can enjoy lights and music)",
+            "bookable": true,
+            "approx_cost": 90
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain dosa with coconut chutney (soft, child‑friendly)",
+          "lunch": {
+            "description": "plain rice with mixed vegetable curry – near Chamundi Temple (≈5 km from city centre)",
+            "location_note": "near Chamundi Temple — approx 5km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mysore veg thali – includes soft rotis, rice, and dal (local comfort)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Cheese pizza with thin crust – sit‑down family restaurant, kid loves it",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Royal Heritage dining room – candlelit thali with ghee‑roasted vegetables (premium ambience)",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Use a shared auto (₹60/seat) or private cab for Chamundi to avoid the steep steps. Carry snacks for the hilltop as stalls mainly sell vada/bajji. Book the Brindavan fountain show in advance; seats fill quickly. Evening temperatures drop to ~15 °C, so bring a light jacket."
+      },
+      {
+        "day_number": 4,
+        "location": "Srirangapatna",
+        "activities": [
+          {
+            "name": "Srirangapatna Fort & Tipu Sultan’s Summer Palace – short walks, flat terrain (ideal for a 10‑year‑old)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – soft upma with grated carrots (easy to eat, child‑friendly)",
+          "lunch": {
+            "description": "plain rice with sambar and carrot sticks – near Srirangapatna Fort (≈2 km from railway station)",
+            "location_note": "near Srirangapatna Fort — approx 2km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mysore style vegetable korma with naan – local flavor",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mild butter paneer with jeera rice – family‑friendly, well‑cooked for the child",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium riverside lounge – set menu with live music (premium ambience)",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Depart Mysore by evening Shatabdi. Keep an eye on train timings; booking ahead avoids last‑minute price hikes. The town is compact, so walking is easy for the child. Remember to carry water and a small snack for the train journey."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 9000,
+      "transport": 3000,
+      "activities": 800,
+      "food": 12000,
+      "total": 23800
+    },
+    "warnings": [
+      "Auto‑rickshaw drivers in Mysore often divert tourists to commission‑based silk shops; always ask for the meter and state your exact destination.",
+      "Chamundi Hill’s 1,008‑step ascent is unsuitable for a child; use the flat paved road or shared auto to reach the temple.",
+      "Food stalls at Chamundi and Brindavan Gardens have limited child‑friendly meals; carry snacks and drinks for the 10‑year‑old.",
+      "December can bring light rain; pack a rain jacket and be ready to shift indoor activities if needed.",
+      "Booking the Brindavan fountain show in advance is essential as seats fill quickly, especially for families.",
+      "Auto drivers often divert tourists to private \"government emporium\" silk saree and sandalwood shops on commission – tell your auto driver the destination only; buy genuine Mysore silk at the KSIC showroom (Mananthody Road, near the Palace) and authentic sandalwood at the KS&DL retail outlet near Lalitha Mahal Road.",
+      "Station and palace‑area touts quote ₹800–1,500 for a \"Chamundi + Brindavan package\" – legitimate rates are Bus No. 201 to Chamundi Hills (₹25/person) and direct bus to Brindavan Gardens (₹35/person); a private cab booked via Ola costs ₹400–500 return, which is ₹100–150 cheaper than the touts.",
+      "The 1,008‑step ascent at Chamundi Hills is not suitable for young children; use the flat, paved road (shared auto ₹60/seat, private cab ₹300–400 return) instead.",
+      "Chamundi hilltop stalls and Brindavan Gardens canteen offer limited, overpriced food (vada, bajji, coffee ₹30–60; meals ₹100–150/plate) – neither location has child‑appropriate meals, so carry snacks from Mysore city.",
+      "Auto‑rickshaws within the city charge ₹50–120; most drivers use meters – insist on meter use to avoid overcharging.",
+      "Veg‑centric cuisine dominates; coconut is used in many chutneys and gravies – note this for any coconut allergies.",
+      "For toddlers and young kids, plain idli with mild sambar is available at all Udupi restaurants; Mysore Pak in small pieces is fine for children 2+. Carry familiar snacks for the 10‑year‑old if dining at hilltop stalls.",
+      "Stroller access is fine in the outer marble corridors of Mysore Palace and the flat paths of Karanji Lake, but the Durbar Hall requires depositing strollers at security; plan to keep the child close.",
+      "Musical fountain shows at Brindavan Gardens cost ₹90 per person (7 PM, 8 PM, 9 PM slots) and attract dense crowds – arrive early and sit at the outer edge for a comfortable view."
+    ],
+    "personalization_notes": [
+      "Heritage focus: Palace, Chamundi Hill, and Srirangapatna align with your interest in history.",
+      "Food‑centric plan: each day features a kid‑safe dish and a local specialty, matching your food‑travel style.",
+      "Child‑friendly pacing: activities are limited to short walks or easy rides, keeping the 10‑year‑old engaged without fatigue."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [
+      {
+        "name": "OYO Hotel Tanishk Residency",
+        "rating": "3.6",
+        "address": "212, T Narsipura Rd, Netaji Nagar, Mysuru, Chikkalli, Karnataka 570028",
+        "why_chosen": "Family-friendly, with space and facilities for kids",
+        "website_url": "https://www.oyorooms.com/247983/",
+        "phone": "0124 620 1327",
+        "maps_url": "https://maps.google.com/?cid=4363823401041423016&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Nityotsava Residency",
+        "rating": "4",
+        "address": "No1099, G & H, Prerana Hospital, Udayaravi Rd, Block K, Kuvempu Nagara, Mysuru, Karnataka 570023",
+        "why_chosen": "Family-friendly, with space and facilities for kids",
+        "website_url": "http://www.nityotsavaresidency.com/",
+        "phone": "0821 424 4283",
+        "maps_url": "https://maps.google.com/?cid=14719172097372139639&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Eagle Fantasy",
+        "rating": "3.1",
+        "address": "Deepanagar, Bhogadi, Karnataka 570032",
+        "why_chosen": "Family-friendly, with space and facilities for kids",
+        "phone": "073384 54562",
+        "maps_url": "https://maps.google.com/?cid=7479390776023488543&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Hotel Hanumanthu original since 1930",
+        "rating": "3.9",
+        "address": "1720, Akbar Rd, opposite Venus Egg centre, Mandi Mohalla, Mysuru, Karnataka 570001",
+        "why_chosen": "Family-friendly, with space and facilities for kids",
+        "phone": "099004 10075",
+        "maps_url": "https://maps.google.com/?cid=16281847512837998022&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Hotel Paradise",
+        "rating": "3.8",
+        "address": "104, Vivekananda Road, Brindavan Extension 2nd Stage, Brindavan Extension, Yadavagiri, 104, Vivekananda Rd, Yadavagiri, Mysuru, Karnataka 570020",
+        "why_chosen": "Family-friendly, with space and facilities for kids",
+        "website_url": "http://mysoredasaprakashgroup.com/paradise/",
+        "phone": "081977 33338",
+        "maps_url": "https://maps.google.com/?cid=2356918320963175257&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      }
+    ],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "Gufha Restaurant, Mysuru",
+          "phone": "099005 57327",
+          "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mysore experience — eat what locals eat",
+            "restaurant_name": "MYSORE ADUGE | BEST RESTAURANT",
+            "rating": "4.6",
+            "phone": "097412 92376",
+            "maps_url": "https://maps.google.com/?cid=15179740525208499984&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.mysoreaduge.com/"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "Gufha Restaurant, Mysuru",
+            "rating": "4.1",
+            "phone": "099005 57327",
+            "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.paihotels.com/vista-mysore/restaurants/restaurants.html"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "Kailash Parbat - Fine Dine Restaurant",
+            "rating": "4.7",
+            "phone": "076764 79960",
+            "maps_url": "https://maps.google.com/?cid=10886479127119030416&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.kailashparbatgroup.com/"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "Gufha Restaurant, Mysuru",
+          "phone": "099005 57327",
+          "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mysore experience — eat what locals eat",
+            "restaurant_name": "MYSORE ADUGE | BEST RESTAURANT",
+            "rating": "4.6",
+            "phone": "097412 92376",
+            "maps_url": "https://maps.google.com/?cid=15179740525208499984&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.mysoreaduge.com/"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "Gufha Restaurant, Mysuru",
+            "rating": "4.1",
+            "phone": "099005 57327",
+            "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.paihotels.com/vista-mysore/restaurants/restaurants.html"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "Kailash Parbat - Fine Dine Restaurant",
+            "rating": "4.7",
+            "phone": "076764 79960",
+            "maps_url": "https://maps.google.com/?cid=10886479127119030416&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.kailashparbatgroup.com/"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "Gufha Restaurant, Mysuru",
+          "phone": "099005 57327",
+          "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mysore experience — eat what locals eat",
+            "restaurant_name": "The Fisherman's Wharf Mysuru",
+            "rating": "4.7",
+            "phone": "088611 95333",
+            "maps_url": "https://maps.google.com/?cid=2455479999635982238&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.thefishermanswharf.in/"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "Gufha Restaurant, Mysuru",
+            "rating": "4.1",
+            "phone": "099005 57327",
+            "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.paihotels.com/vista-mysore/restaurants/restaurants.html"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "Kailash Parbat - Fine Dine Restaurant",
+            "rating": "4.7",
+            "phone": "076764 79960",
+            "maps_url": "https://maps.google.com/?cid=10886479127119030416&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.kailashparbatgroup.com/"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "Thotada Mane",
+          "phone": "097412 17009",
+          "maps_url": "https://maps.google.com/?cid=18362024834017952625&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mysore experience — eat what locals eat",
+            "restaurant_name": "Sri Gayatri Tiffin Room (GTR) - Vegetarian Restaurant",
+            "rating": "4.1",
+            "phone": "099005 99359",
+            "maps_url": "https://maps.google.com/?cid=12454353879189718313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://gtrfoods.com/inside-gtr/"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "Gufha Restaurant, Mysuru",
+            "rating": "4.1",
+            "phone": "099005 57327",
+            "maps_url": "https://maps.google.com/?cid=7400768783711711353&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.paihotels.com/vista-mysore/restaurants/restaurants.html"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "Kailash Parbat - Fine Dine Restaurant",
+            "rating": "4.7",
+            "phone": "076764 79960",
+            "maps_url": "https://maps.google.com/?cid=10886479127119030416&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.kailashparbatgroup.com/"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [
+      10
+    ],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "heritage",
+      "food"
+    ],
+    "start_date": "2026-12-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:16:05.219498+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 25683,
+    "tier": "static",
+    "season": null
+  }
+}

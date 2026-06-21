@@ -1,0 +1,351 @@
+{
+  "key": "shimla_4n_p2_k8_fit_mid_heritage_nature",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Shimla (arrival)",
+        "activities": [
+          {
+            "name": "Taxi transfer from Kalka to Shimla – short 2‑hour ride to settle into hotel",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Evening walk on Mall Road – gentle orientation, easy paved paths",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "On the Delhi–Kalka train – idli with mild coconut chutney (soft, kid‑friendly)",
+          "lunch": {
+            "description": "Plain dosa with simple tomato chutney – enjoyed near the Cart Road stop",
+            "location_note": "near Cart Road — approx 1 km from the hotel"
+          },
+          "dinner": [
+            {
+              "description": "Dal‑rice thali with soft roti – served at the hotel restaurant (family‑friendly, early seating)",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Paneer butter masala with naan – reliable group‑friendly option at a mid‑range eatery on Mall Road",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Kashmiri Rogan Josh with fragrant basmati rice – premium choice with cosy ambience at a heritage‑styled restaurant",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrival day is kept light to recover from travel; hotel provides a high chair on request."
+      },
+      {
+        "day_number": 2,
+        "location": "Shimla – Mall Road & Heritage Walk",
+        "activities": [
+          {
+            "name": "Guided heritage walk covering Mall Road, The Ridge, and Christ Church – short stops, flat surfaces",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Relaxed tea‑break at a café on The Ridge – child can enjoy a soft banana‑pudding",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal (soft, easy for the 8‑year‑old)",
+          "lunch": {
+            "description": "Veg pulao with raita – served near the Viceregal Lodge entrance",
+            "location_note": "near Viceregal Lodge — approx 2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Simple roti‑curry set (soft aloo sabzi + roti) – sit‑down dining at a family‑run restaurant on Mall Road",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Mild butter chicken with steamed rice – reliable group option, not too spicy",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Heritage dining experience with grilled trout and herb butter – premium ambience, perfect for a special evening",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "All routes are level; no steep climbs for the child. Keep water handy."
+      },
+      {
+        "day_number": 3,
+        "location": "Jakhu Temple",
+        "activities": [
+          {
+            "name": "Rope‑way ride to Jakhu Temple – 10‑minute ascent, panoramic views, child‑friendly",
+            "bookable": true,
+            "approx_cost": 500
+          },
+          {
+            "name": "Explore Jakhu Temple grounds – short walk, easy steps, view of the giant Hanuman statue",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – soft dosa with mild tomato chutney",
+          "lunch": {
+            "description": "Plain rice with simple lentil soup (dal) – enjoyed at the rope‑way base café",
+            "location_note": "near Rope‑way base — approx 0.5 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Mild paneer tikka with naan – sit‑down venue at a well‑reviewed restaurant on Mall Road",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Veg thali with dal, rice, and soft sabzi – reliable group‑friendly choice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium Himalayan trout fry with herb butter – elegant setting for a splurge dinner",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rope‑way avoids the steep 2.5 km walk that could tire an 8‑year‑old. Bring a light jacket as altitude is slightly cooler."
+      },
+      {
+        "day_number": 4,
+        "location": "Kufri Day Excursion",
+        "activities": [
+          {
+            "name": "Scenic drive to Kufri and pony‑ride on the meadow – 1‑hour round‑trip, kid‑friendly",
+            "bookable": true,
+            "approx_cost": 1200
+          },
+          {
+            "name": "Leisurely nature walk around Kufri lake – flat trail, bird‑watching",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – appam with mild vegetable stew (soft, easy for child)",
+          "lunch": {
+            "description": "Simple aloo paratha with curd – served at a modest eatery near Kufri market",
+            "location_note": "near Kufri market — approx 3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Dal‑rice thali with soft roti – sit‑down family restaurant back in Shimla",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Mild chicken curry with steamed rice – reliable group option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium Himalayan lamb chops with roasted vegetables – elegant ambience for a special night",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Kufri’s terrain is gentle; pony rides are safe for an 8‑year‑old under supervision."
+      },
+      {
+        "day_number": 5,
+        "location": "Viceregal Lodge & Departure",
+        "activities": [
+          {
+            "name": "Guided tour of Viceregal Lodge – ramp access used, limited stairs, 1‑hour visit",
+            "bookable": true,
+            "approx_cost": 300
+          },
+          {
+            "name": "Return transfer to Kalka (train) and onward travel to Delhi – relaxed departure",
+            "bookable": true,
+            "approx_cost": 1000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain rice with dal (soft, comforting)",
+          "lunch": {
+            "description": "Veg sandwich with cheese and cucumber – enjoyed near the Lodge exit",
+            "location_note": "near Viceregal Lodge — approx 0.3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Light vegetable soup with soft bread – sit‑down cafe near the railway station (early dinner before travel)",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Mild butter paneer with rice – reliable group‑friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium multi‑course meal with local Kashmiri delicacies – splurge before departure",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Viceregal Lodge has a few steps; use ramp and avoid upper floors if stairs become uncomfortable for the child."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 16000,
+      "transport": 3800,
+      "activities": 2300,
+      "food": 5000,
+      "total": 27100
+    },
+    "warnings": [
+      "Steep walk to Jakhu Temple (2.5 km) is avoided by using the rope‑way; otherwise it could tire an 8‑year‑old.",
+      "Viceregal Lodge interior includes some stairs; use the ramp and limit time on upper levels for child safety.",
+      "April evenings in Shimla can be chilly (down to 10 °C); carry warm layers for the family.",
+      "Steep 2.5 km walk to Jakhu Temple from Mall Road may be tiring for an 8‑year‑old; mitigate by taking the ropeway (₹250 each way from near Cart Road) or a shared taxi.",
+      "Hotels situated below the Ridge (Cart Road, Lakkar Bazaar) require steep uphill walks to Mall Road, which can be fatiguing for a child; mitigate by choosing accommodation on or near Mall Road or The Ridge (e.g., Hotel Willow Banks, Hotel Combermere).",
+      "Viceregal Lodge interior includes some stairs; while generally manageable, use the ramp or skip upper floors if the child finds stairs uncomfortable.",
+      "Kid‑friendly soft foods such as plain dosa, idli, roti/paratha and Maggi are readily available on Mall Road, ensuring easy meals for picky eaters.",
+      "Even in April, temperatures can drop sharply at night; carry warm layers as advised for year‑round cool evenings.",
+      "April falls before the peak May‑June rush, so crowds and prices are moderate; however, book accommodation and transport 3–4 weeks ahead to secure mid‑range rates."
+    ],
+    "personalization_notes": [
+      "Heritage sites (Christ Church, Viceregal Lodge) match your interest in history.",
+      "Nature outings (Kufri meadow, Jakhu ridge) cater to the ‘nature’ trip style while keeping walks short for the child.",
+      "Mid‑range dining with specific kid‑friendly dishes ensures the 8‑year‑old enjoys familiar soft foods."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Shimla experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Shimla experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Shimla experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Shimla experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Shimla experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 2,
+    "kid_ages": [
+      8
+    ],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "heritage"
+    ],
+    "start_date": "2026-04-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:42:24.317007+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 28275,
+    "tier": "dynamic",
+    "season": "summer"
+  }
+}

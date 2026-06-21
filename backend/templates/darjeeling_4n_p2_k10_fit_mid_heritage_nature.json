@@ -1,0 +1,341 @@
+{
+  "key": "darjeeling_4n_p2_k10_fit_mid_heritage_nature",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Darjeeling",
+        "activities": [
+          {
+            "name": "Acclimatization walk on Mall Road – gentle 15‑minute stroll to stretch legs and get a feel for the town (easy for a 10‑year‑old)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — boiled egg, toast, warm masala chai (soft for the child)",
+          "lunch": {
+            "description": "Vegetable pulao with cucumber raita – served near Mall Road (≈0.5 km from hotel)",
+            "location_note": "near Mall Road — approx 0.5 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Steamed vegetable momos with mild chilli sauce – local Darjeeling street‑food style (kid‑friendly plain momo)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Thali platter (dal, soft rice, mixed veg, chapati) – sit‑down family restaurant",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Pan‑seared trout with herb butter, served on a terrace with mountain view – premium experience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Light first day to adjust to altitude (≈2,050 m). Keep water handy and wear warm layers."
+      },
+      {
+        "day_number": 2,
+        "location": "Darjeeling",
+        "activities": [
+          {
+            "name": "Tiger Hill sunrise – early‑morning viewpoint (short 10‑minute walk, hold child's hand at railings)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Batasia Loop toy‑train ride – 30‑minute scenic loop (bookable via Darjeeling Railway)",
+            "bookable": true,
+            "approx_cost": 1000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with mild coconut chutney (soft for the child)",
+          "lunch": {
+            "description": "Paneer butter masala with soft naan – eaten near Batasia Loop (≈2 km from hotel)",
+            "location_note": "near Batasia Loop — approx 2 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mutton curry with soft rice – classic local flavor (mild for a child)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian thali (dal, rice, veg sabzi, curd) – family‑friendly sit‑down venue",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Ginger‑infused tea‑smoked chicken, served in a heritage hotel lounge – premium ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Start early to avoid midday chill. Watch for rain; carry a small umbrella."
+      },
+      {
+        "day_number": 3,
+        "location": "Darjeeling",
+        "activities": [
+          {
+            "name": "Himalayan Mountaineering Institute + Padmaja Naidu Himalayan Zoo – educational visit (short walking paths, easy for a 10‑year‑old)",
+            "bookable": false,
+            "approx_cost": 1200
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft idli with mild sambar (kid‑friendly)",
+          "lunch": {
+            "description": "Butter chicken pasta (mild sauce) – served close to the institute (≈1 km from hotel)",
+            "location_note": "near HMI – approx 1 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Spicy chicken fried rice – local favorite (adjust spice level for child)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg thali with dal, rice, roti, and sweet curd – sit‑down family restaurant",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining set menu featuring Darjeeling tea‑infused sauces – premium setting",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "The zoo has gentle slopes; keep child’s shoes secure. Take short breaks between exhibits."
+      },
+      {
+        "day_number": 4,
+        "location": "Darjeeling",
+        "activities": [
+          {
+            "name": "Guided tour of Happy Valley Tea Estate – short walk through tea gardens (uneven hillside, wear sturdy shoes, suitable breaks for a 10‑year‑old)",
+            "bookable": true,
+            "approx_cost": 800
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal and a banana (soft, child‑friendly)",
+          "lunch": {
+            "description": "Grilled vegetable sandwich with cheese – enjoyed at the tea‑estate visitor centre (≈3 km from hotel)",
+            "location_note": "near Happy Valley Tea Estate — approx 3 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Darjeeling chicken thukpa (soft noodle soup) – local comfort food",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family thali with dal, rice, soft veg curries – sit‑down venue",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Luxury dinner on a rooftop garden with live acoustic music – premium experience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Watch for occasional drizzle; the estate walk includes gentle inclines – pause often for the child."
+      },
+      {
+        "day_number": 5,
+        "location": "Darjeeling",
+        "activities": [
+          {
+            "name": "Ghum Monastery (Yiga Choeling) & Peace Pagoda – brief visits (short steps, safe for a 10‑year‑old)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Return transfer to NJP/Bagdogra for departure",
+            "bookable": true,
+            "approx_cost": 1500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft dosa with tomato chutney (easy for child)",
+          "lunch": {
+            "description": "Mild aloo paratha with yogurt dip – enjoyed near Ghum (≈5 km from hotel)",
+            "location_note": "near Ghum Monastery — approx 5 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Light vegetable soup with soft bread – final local bite before travel",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Simple veg thali (dal, rice, soft sabzi) – family-friendly sit‑down",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "No dinner scheduled – early departure; optional airport lounge snack",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Early dinner to allow timely departure. Keep travel documents ready."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 16000,
+      "transport": 12500,
+      "activities": 3000,
+      "food": 15000,
+      "total": 46500
+    },
+    "warnings": [
+      "Altitude (~2,050 m) may cause mild sickness; allow 24 h of light activity before strenuous outings.",
+      "November forecast shows light to moderate rain – pack rain gear and waterproof footwear.",
+      "Toy‑train tickets sold by unofficial agents near Mall Road are often overpriced; purchase at Darjeeling Railway Station counter or via IRCTC.",
+      "Taxi/jeep fares are negotiable – confirm rates (shared jeep ~₹15‑30 per seat, private day‑cab ₹1,500‑2,500).",
+      "Tiger Hill railings have gaps; hold the child’s hand at all times.",
+      "Uneven hillside terrain at Happy Valley Tea Estate and the zoo can be challenging for a 10‑year‑old; wear sturdy shoes and take frequent breaks.",
+      "Toy train joyride ticket scam: agents near Mall Road claim sold out and charge ₹2,000–3,000; buy directly at Darjeeling railway station counter or via IRCTC to avoid overpayment.",
+      "Taxi/jeep pricing is negotiated; confirm rates before hiring to avoid inflation: shared jeep within town ₹15–30/seat, full-day sightseeing cab ₹1,500–2,500; NJP→Darjeeling shared jeep ₹250–300/person, private cab ₹2,000–2,500.",
+      "Altitude 2,050m may cause mild altitude sickness; allow 24 hours of light activity before strenuous outings, especially for those arriving from the plains.",
+      "Vegetarian meals must be explicitly requested as default dishes are non‑vegetarian; verify ingredients when ordering.",
+      "Limited toddler‑specific food options at outer sites (Happy Valley, Rock Garden); carry snacks from Darjeeling town for the child.",
+      "Current forecast shows light to moderate rain with high likelihood; pack rain gear and waterproof footwear.",
+      "Tiger Hill viewpoint has no barriers at the railing; hold the child’s hand at all times for safety.",
+      "Roads can be blocked by landslides July–September; while November is generally clear, check road status before travel."
+    ],
+    "personalization_notes": [
+      "Included nature‑rich stops (tea estate, mountain viewpoints) to match your \"nature\" travel style.",
+      "Heritage experiences (Toy‑train Batasia Loop, Himalayan Mountaineering Institute) align with your \"heritage\" interest.",
+      "Activities limited to 2 per day and paced with short walks, fitting the moderate pace you requested for a family with a 10‑year‑old."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Darjeeling experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Darjeeling experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Darjeeling experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Darjeeling experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Darjeeling experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 2,
+    "kid_ages": [
+      10
+    ],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "heritage"
+    ],
+    "start_date": "2026-11-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:19:26.800942+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 51418,
+    "tier": "dynamic",
+    "season": "winter"
+  }
+}

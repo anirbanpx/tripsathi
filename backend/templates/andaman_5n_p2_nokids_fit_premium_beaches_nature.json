@@ -1,0 +1,413 @@
+{
+  "key": "andaman_5n_p2_nokids_fit_premium_beaches_nature",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Port Blair",
+        "activities": [
+          {
+            "name": "Cellular Jail historic tour — gives a glimpse of the freedom struggle and is easily accessible from the city centre",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Corbyn's Cove Beach sunset walk — short 15‑minute stroll, perfect for a relaxed first evening",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — masala dosa with coconut chutney and sambar",
+          "lunch": {
+            "description": "Vegetable pulao with cucumber raita, served near the Governor's House garden",
+            "location_note": "near Governor's House — approx 0.5km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Andaman seafood thali (fish, prawns, rice, dal) — local highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with naan — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining sea view restaurant, grilled lobster with herb butter — premium splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Easy‑going arrival day; keep activities light to recover from the flight. No major warnings for day 1."
+      },
+      {
+        "day_number": 2,
+        "location": "Havelock Island",
+        "activities": [
+          {
+            "name": "Private catamaran transfer Port Blair → Havelock — fast, comfortable and offers a smoother ride for a couple",
+            "bookable": true,
+            "approx_cost": 2400
+          },
+          {
+            "name": "Check‑in and unwind at hotel beach front — short walk (≤10 min) to the sea",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with potato filling and coconut chutney",
+          "lunch": {
+            "description": "Grilled vegetable sandwich with mint yogurt dip, enjoyed near the Havelock jetty",
+            "location_note": "near jetty — approx 0.3km from accommodation"
+          },
+          "dinner": [
+            {
+              "description": "Goan fish curry with steamed rice — local cuisine highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mushroom tikka masala with jeera rice — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Beach‑front gourmet restaurant, tandoori lobster with saffron risotto — premium splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Transfer day; book catamaran at least 2 weeks ahead (see warnings). Keep the evening relaxed to adjust to island time."
+      },
+      {
+        "day_number": 3,
+        "location": "Havelock Island",
+        "activities": [
+          {
+            "name": "Radhanagar Beach sunrise walk — world‑renowned white sand, minimal walking (≈15 min from hotel)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Snorkelling at Elephant Beach — equipment hire and guide included",
+            "bookable": true,
+            "approx_cost": 3000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — idli with coconut chutney and sambar",
+          "lunch": {
+            "description": "Coconut fish fry with lemon rice, eaten near Elephant Beach",
+            "location_note": "near Elephant Beach — approx 2 km from hotel (short boat ride)"
+          },
+          "dinner": [
+            {
+              "description": "Andaman prawn biryani — local specialty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer tikka with butter naan — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale sunset dinner, grilled sea bass with herb quinoa — premium splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Moderate activity day; snorkeling is the main highlight. Carry reef‑safe sunscreen (see warnings)."
+      },
+      {
+        "day_number": 4,
+        "location": "Neil Island",
+        "activities": [
+          {
+            "name": "Ferry Havelock → Neil Island (30‑45 min) — bookable private catamaran for comfort",
+            "bookable": true,
+            "approx_cost": 1200
+          },
+          {
+            "name": "Check‑in and leisurely beach walk at Bharatpur Beach — short stroll, perfect for a relaxed afternoon",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal and a side of banana (soft food)",
+          "lunch": {
+            "description": "Prawn coconut curry with steamed rice, enjoyed near Bharatpur Beach",
+            "location_note": "near Bharatpur Beach — approx 0.4km from lodge"
+          },
+          "dinner": [
+            {
+              "description": "Local crab masala with rice — island flavour highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mixed vegetable pulao with raita — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Boutique sea‑view dining, lobster thermidor with garlic butter pasta — premium splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Transfer day; Neil Island has limited dining choices, so keep a small stock of ready‑to‑eat meals (see warnings)."
+      },
+      {
+        "day_number": 5,
+        "location": "Neil Island",
+        "activities": [
+          {
+            "name": "Laxmanpur Bridge photo walk — short 10‑minute walk, iconic natural arch",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Guided coral‑watch snorkeling at Bharatpur Beach — gentle reef exposure suitable for couples",
+            "bookable": true,
+            "approx_cost": 2000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with a side of mango chutney",
+          "lunch": {
+            "description": "Vegetarian thali (dal, rice, veg sabzi, papad) served near the island’s community hall",
+            "location_note": "near community hall — approx 0.6km from lodging"
+          },
+          "dinner": [
+            {
+              "description": "Andaman fish tikka with lemon rice — local favourite",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with jeera rice — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium beachfront restaurant, seared tuna steak with herb quinoa — splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Relaxed nature day; avoid strenuous hikes as terrain is uneven but short walks are safe. Keep sun protection handy."
+      },
+      {
+        "day_number": 6,
+        "location": "Port Blair",
+        "activities": [
+          {
+            "name": "Ferry Neil Island → Port Blair (1.5 h) — private catamaran for quickest return",
+            "bookable": true,
+            "approx_cost": 1600
+          },
+          {
+            "name": "Final city stroll: Aberdeen Bazaar for souvenirs — easy walking, perfect for a last‑minute shop",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal and banana slices",
+          "lunch": {
+            "description": "Chicken curry (can be requested mild) with steamed rice, eaten near the airport lounge",
+            "location_note": "near airport — approx 2km from city centre"
+          },
+          "dinner": [
+            {
+              "description": "Andaman fish fry with lemon rice — local highlight",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg biryani with cucumber raita — reliable group-friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale rooftop restaurant, lobster thermidor with saffron risotto — premium splurge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Departure day; ensure ferry tickets are confirmed a day ahead. Keep cash ready for airport purchases (see warnings)."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 60000,
+      "transport": 5000,
+      "activities": 7000,
+      "food": 9000,
+      "total": 81000
+    },
+    "warnings": [
+      "Private catamaran fares (≈₹1,200‑₹1,600 per person) are high in peak season; book 2‑4 weeks in advance to lock price.",
+      "Rough sea conditions can cause motion sickness; consider avomine tablets and choose the fastest catamaran.",
+      "Limited cash facilities on Havelock and Neil (single SBI ATM often out of cash); carry ₹10,000‑₹15,000 per person from Port Blair.",
+      "Medical services are basic on Havelock; serious issues require evacuation to Port Blair—ensure travel insurance covers emergency evacuation.",
+      "Seafood‑dominant menus; vegetarians should specifically request \"no spice\" or \"vegetarian\" dishes, as options are limited.",
+      "Neil Island has few restaurant choices; pack some non‑perishable meals from Havelock as a backup.",
+      "Boat operator pricing inflation: Government ferries cost ₹300–500/person, while private catamarans cost ₹800–1,200/person. During peak season (Oct–Feb) walk‑in tickets are often unavailable; book 2–4 weeks ahead via makruzz.com or andamans.nic.in to secure fair pricing and seats.",
+      "Rough seas warning: The Andaman Sea is one of the rougher ferry routes. Motion‑sickness is possible; carry avomine tablets and select the fastest catamaran to minimise time on the water.",
+      "ATM cash shortage: The sole SBI ATM on Havelock (near Beach 5 market) frequently runs out of cash on peak‑season weekends. Carry ₹10,000–15,000 per person from Port Blair to avoid being stranded.",
+      "Limited medical facilities: Havelock has only a small health centre; serious medical needs require air‑lift to Port Blair. Purchase travel insurance with emergency evacuation coverage.",
+      "Seafood‑dominant cuisine: most restaurants focus on fish, prawns and lobster; vegetarian dishes are available but limited—request \"no spice\" if you prefer milder food.",
+      "Cash‑only economy: Outside Port Blair cards are rarely accepted; bring sufficient cash for ferry tickets, ATM withdrawals, and meals on Havelock and Neil.",
+      "Reef‑safe sunscreen required: Regular sunscreen is discouraged; use reef‑safe products to protect coral reefs.",
+      "Mosquito‑borne dengue risk: Pack effective repellent and consider wearing long sleeves in the evenings.",
+      "Limited dining on Neil: Restaurant options are few; plan to have meals stocked from Havelock or carry packaged foods as a fallback."
+    ],
+    "personalization_notes": [
+      "Premium budget reflected in upscale dinner recommendations and comfortable private catamaran transfers.",
+      "Focus on beaches (Radhanagar, Bharatpur) and nature (Laxmanpur Bridge) matches your trip style preferences.",
+      "Moderate pacing with no more than two main activities per day ensures a relaxed couple experience."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 6,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Andaman experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 5,
+    "duration_days": 6,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "premium",
+    "budget": "premium",
+    "trip_style": [
+      "beaches",
+      "nature"
+    ],
+    "start_date": "2027-01-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:12:10.989774+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 24068,
+    "tier": "dynamic",
+    "season": "winter"
+  }
+}

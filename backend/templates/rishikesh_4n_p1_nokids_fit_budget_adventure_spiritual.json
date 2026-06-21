@@ -1,0 +1,353 @@
+{
+  "key": "rishikesh_4n_p1_nokids_fit_budget_adventure_spiritual",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Haridwar → Rishikesh",
+        "activities": [
+          {
+            "name": "Evening Ganga Aarti at Har Ki Pauri — iconic spiritual ceremony",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Transfer to Rishikesh and check‑in — short 45‑minute drive",
+            "bookable": true,
+            "approx_cost": 300
+          }
+        ],
+        "meals": {
+          "breakfast": "At Jolly Grant Airport lounge – light fruit, tea and biscuits",
+          "lunch": {
+            "description": "Vegetarian thali (dal, rice, roti, pickles, papad) – easy on the stomach after the Aarti",
+            "location_note": "near Har Ki Pauri — approx 0.5 km from the ceremony site"
+          },
+          "dinner": [
+            {
+              "description": "Kachori with aloo sabzi — classic local snack",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with naan — reliable vegetarian favourite",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Rooftop riverside restaurant – grilled paneer tikka with mint chutney",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive in Dehradun, drive to Haridwar for the evening Aarti then on to Rishikesh. Light activities keep the first day relaxed; evening rest at hotel."
+      },
+      {
+        "day_number": 2,
+        "location": "Shivpuri (Rishikesh outskirts)",
+        "activities": [
+          {
+            "name": "Shivpuri river rafting (Grade 2‑3) — thrilling yet safe Ganga run",
+            "bookable": true,
+            "approx_cost": 1000
+          },
+          {
+            "name": "Evening yoga & meditation session at Parmarth Niketan — gentle wind‑down",
+            "bookable": true,
+            "approx_cost": 300
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – porridge with fresh fruit and masala chai",
+          "lunch": {
+            "description": "Dal tadka with steamed rice – simple vegetarian fare served by the rafting camp",
+            "location_note": "near Shivpuri raft launch — approx 5 km from Rishikesh centre"
+          },
+          "dinner": [
+            {
+              "description": "Aloo tikki chaat — tangy street‑style snack (served in a clean café)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg thali (dal, rice, roti, sabzi, sweet) — wholesome family‑style dinner",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Riverside fine‑dining – mushroom masala with saffron rice",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Morning rafting is the adventure highlight; afternoon free for rest. Evening yoga matches your spiritual interest and moderates the adrenaline rush."
+      },
+      {
+        "day_number": 3,
+        "location": "Rishikesh town",
+        "activities": [
+          {
+            "name": "Beatles Ashram exploration — historical graffiti site with quiet gardens",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Triveni Ghat & Laxman Jhula stroll — riverside spiritual walk",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – poha with yogurt and tea",
+          "lunch": {
+            "description": "Aloo poori with curd and pickle – classic Rishikesh snack near Laxman Jhula",
+            "location_note": "near Laxman Jhula — approx 1 km from the ashram"
+          },
+          "dinner": [
+            {
+              "description": "Chana masala with bhatura — popular local vegetarian dish",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian khichdi with ghee — comforting family‑friendly option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Ambiance‑rich rooftop café – paneer tikka masala with herb rice",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Cultural day with minimal walking; both sites are easily reachable via rickshaw. Stay hydrated and keep an eye on uneven steps at Triveni Ghat."
+      },
+      {
+        "day_number": 4,
+        "location": "Marine Drive (upstream) & Jumpin Heights",
+        "activities": [
+          {
+            "name": "Marine Drive rafting (Grade 3‑4) — higher‑adrenaline stretch of the Ganga",
+            "bookable": true,
+            "approx_cost": 1500
+          },
+          {
+            "name": "Optional bungee jump at Jumpin Heights — 30 m plunge for adrenaline seekers",
+            "bookable": true,
+            "approx_cost": 2000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – idli with coconut chutney and filter coffee",
+          "lunch": {
+            "description": "Vegetarian wrap with spiced potatoes and coriander chutney – portable riverbank lunch",
+            "location_note": "near Marine Drive launch point — approx 17 km from Rishikesh centre"
+          },
+          "dinner": [
+            {
+              "description": "Momo (vegetable‑filled) with tangy sauce — Himalayan street‑style treat",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer bhurji with butter naan — reliable family‑friendly dinner",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale river‑view venue – saffron‑infused vegetable biryani",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Morning rafting is the peak adventure; if you skip bungee, you still have a full day of thrills. Return to Rishikesh by late afternoon for a relaxed dinner."
+      },
+      {
+        "day_number": 5,
+        "location": "Neelkanth Mahadev Temple → Dehradun",
+        "activities": [
+          {
+            "name": "Half‑day visit to Neelkanth Mahadev Temple — sacred mountain shrine",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Transfer to Jolly Grant Airport for departure — 2‑hour drive",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – plain dosa with coconut chutney (soft and easy)",
+          "lunch": {
+            "description": "Simple khichdi with ghee — light vegetarian fare near the temple",
+            "location_note": "near Neelkanth Mahadev — approx 30 km from Rishikesh"
+          },
+          "dinner": [
+            {
+              "description": "Light snack at airport lounge – fruit platter and herbal tea",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Standard airport café – paneer tikka wrap",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium lounge – saffron‑infused vegetable pulao",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Morning pilgrimage fulfills the spiritual side of the trip; the drive back allows time to reflect before departure."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 4800,
+      "transport": 2000,
+      "activities": 3500,
+      "food": 2000,
+      "total": 12300
+    },
+    "warnings": [
+      "River rafting resumes only in September‑October; book licensed operators (UTDB‑registered) early as slots fill quickly.",
+      "Taxi/auto fares can rise during peak yoga season (Oct‑Jan); always agree on price beforehand or pre‑book a ride.",
+      "Triveni Ghat steps are uneven; keep luggage light and watch your footing.",
+      "Bungee jump and higher‑grade rafting require good swimming ability and proper life‑jacket checks.",
+      "Unlicensed rafting operators on Mall Road undercut licensed operators at ₹200–400/person, routinely skip life‑jacket checks, overload rafts, and have no rescue protocol. Mitigation: Book only UTDB‑registered operators (counters display a Uttarakhand Tourism certification sticker) such as Aquaterra Adventures, Red Chilli Adventure, or Garhwal Himalayan Exploration, and inspect ISRS‑certified life jackets before boarding.",
+      "No metered autos – rates must be negotiated up‑front. Typical price ranges: Ram Jhula ↔ Laxman Jhula ₹60–80; within town ₹50–100. Risk of over‑charging during peak yoga season (Oct‑Jan). Mitigation: Agree on fare before boarding or use pre‑booked Ola/taxis.",
+      "Rafting age/grade restrictions: Shivpuri → Rishikesh (Grade 3‑4) costs ₹800–1,200/person with a minimum age of 14; Marine Drive (Grade 4‑5) costs ₹1,200–1,800/person and requires experienced swimmers. Mitigation: Choose grade matching your skill level and confirm age policy with the operator.",
+      "River rafting is suspended district‑wide from mid‑June to mid‑September (SDRF seasonal ban). October marks the restart; ensure bookings are made early as slots fill quickly.",
+      "Riverfront steps at Triveni Ghat are uneven; heavy luggage or bulky gear can be hazardous. Mitigation: Use a small backpack and keep belongings close to your body.",
+      "Taxi/auto fares may inflate during the peak yoga retreat season (Oct‑Jan); negotiate or pre‑book to avoid over‑paying.",
+      "All food in Rishikesh is legally vegetarian; restaurants serve dishes like Aloo Puri, Chhole Bhature, and Ashram Thali (₹80–150). No meat cross‑contamination risk, but egg availability varies (many places are ‘pure veg’).",
+      "Rafting camp kitchens serve only vegetarian fare (dal, rice, sabzi) and have no toddler‑specific options – carry your own snacks if you need specialised food.",
+      "Unsolicited ghat‑side puja touts demand ₹500–2,000 for unrequested ceremonies. Mitigation: Decline all such approaches and go directly to Parmarth Niketan’s reception for legitimate puja arrangements."
+    ],
+    "personalization_notes": [
+      "Solo traveler seeking a mix of adventure and spirituality – itinerary balances high‑adrenaline river runs with quiet temple visits.",
+      "Moderate pace respects your preference for a relaxed flow, with ample rest periods between activities.",
+      "Budget‑friendly meals and accommodation keep overall costs low while still offering a premium dinner option for occasional splurge."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Rishikesh experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Rishikesh experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Rishikesh experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Rishikesh experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Rishikesh experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 1,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "adventure",
+      "spiritual"
+    ],
+    "start_date": "2026-10-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:39:30.798912+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 24513,
+    "tier": "static",
+    "season": null
+  }
+}

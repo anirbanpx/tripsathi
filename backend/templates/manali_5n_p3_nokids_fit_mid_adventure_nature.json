@@ -1,0 +1,407 @@
+{
+  "key": "manali_5n_p3_nokids_fit_mid_adventure_nature",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Manali",
+        "activities": [
+          {
+            "name": "Long-drive Delhi → Manali – scenic Himalayan ascent (self‑drive or hired car)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Evening stroll on Mall Road – short walk, local shops, sunset view",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "Packed breakfast on the road – sandwiches, boiled eggs, fruit",
+          "lunch": {
+            "description": "Thali at a dhaba near Kullu – dal, rice, chapati, pickle",
+            "location_note": "near Kullu, approx 130 km from Delhi stop"
+          },
+          "dinner": [
+            {
+              "description": "Hearty Himachali madra (lentil‑yogurt curry) with plain rice",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Chicken tikka masala with butter naan – crowd‑friendly sit‑down",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Mountain‑view rooftop restaurant – butter lobster with garlic butter rice",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "First day is travel‑heavy; keep hydration levels high, rest early to recover from the 13‑15 h drive."
+      },
+      {
+        "day_number": 2,
+        "location": "Manali town",
+        "activities": [
+          {
+            "name": "Visit Hadimba Devi Temple – quiet cedar forest, short ascent (≈15 min walk)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Vashisht Hot Springs – dip in mineral‑rich baths, optional foot‑massages",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "Breakfast at hotel – poha, curd, fresh fruit",
+          "lunch": {
+            "description": "Paneer butter masala with steamed rice near Hadimba Temple",
+            "location_note": "≈1 km from the temple, in the Old Manali market area"
+          },
+          "dinner": [
+            {
+              "description": "Local trout fry with mustard greens (locally sourced) – Himachali style",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg thali with dal, rice, chapati, and sweet curd – family‑friendly",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale dining at a riverside lounge – lamb rogan josh with saffron rice",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Gentle cultural day; temple steps are modest, hot springs provide a relaxing soak after travel."
+      },
+      {
+        "day_number": 3,
+        "location": "Solang Valley",
+        "activities": [
+          {
+            "name": "Solang Ropeway & Paragliding – 30 min ropeway ascent, optional tandem paragliding (bookable)",
+            "bookable": true,
+            "approx_cost": 4000
+          },
+          {
+            "name": "Zorbing or Snow‑play (seasonal) – short 20‑minute session on the snow‑covered slope",
+            "bookable": true,
+            "approx_cost": 800
+          }
+        ],
+        "meals": {
+          "breakfast": "Hotel breakfast – aloo paratha with curd and chai",
+          "lunch": {
+            "description": "Dhabba‑style aloo paratha with pickles, served near the ropeway base",
+            "location_note": "≈5 km from Manali centre, on the Solang road"
+          },
+          "dinner": [
+            {
+              "description": "Kashmiri chai with baked momos (vegetable) – local snack",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Chicken curry with basmati rice – safe for group dining",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium mountain‑lodge dinner – grilled salmon with herb butter and roasted potatoes",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Adventure‑focused day; keep warm layers handy for high‑altitude chill. Ropeway tickets can be booked via local operators."
+      },
+      {
+        "day_number": 4,
+        "location": "Rohtang Pass",
+        "activities": [
+          {
+            "name": "Rohtang Pass Day‑tour – early departure, permit arranged through official portal, scenic drive, short photo stops",
+            "bookable": true,
+            "approx_cost": 2500
+          }
+        ],
+        "meals": {
+          "breakfast": "Early hotel breakfast – boiled eggs, toast, tea",
+          "lunch": {
+            "description": "Packed picnic – sandwich, boiled potatoes, fruit, and bottled water (enjoyed at Rohtang viewpoint)",
+            "location_note": "Mid‑way on Rohtang Pass, approx 2 hrs from Manali base"
+          },
+          "dinner": [
+            {
+              "description": "Mild Himachali dal with plain rice – soothing after altitude exposure",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mutton curry with naan – hearty family option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining experience at a hotel restaurant – cedar‑smoked duck with apple compote",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rohtang requires a permit (₹550/vehicle) booked 1–2 days ahead; carry Diamox for altitude sickness. Return before 1 PM to avoid evening traffic."
+      },
+      {
+        "day_number": 5,
+        "location": "Old Manali & Atal Tunnel region",
+        "activities": [
+          {
+            "name": "Leisure walk through Old Manali – cafés, riverbank benches, boutique shops",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Drive to Atal Tunnel viewpoint – short stop for photos of the 8.8 km tunnel entrance",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "Hotel breakfast – dosa with coconut chutney and sambar",
+          "lunch": {
+            "description": "Veg thali (dal, rice, chapati, bhindi) at a roadside eatery near Old Manali",
+            "location_note": "≈2 km from the Old Manali café strip"
+          },
+          "dinner": [
+            {
+              "description": "Himachali siddu (steamed wheat dumplings) with ghee – local treat",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Butter chicken with pulao – crowd‑pleaser for friends",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale lounge dinner – grilled lamb kebabs with mint yogurt dip",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Relaxed day after the high‑altitude Rohtang visit; suitable walking distances for a small group."
+      },
+      {
+        "day_number": 6,
+        "location": "Manali – Departure",
+        "activities": [
+          {
+            "name": "Final stroll on Mall Road – pick up souvenirs, enjoy local tea",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Drive back to Delhi – depart early to avoid night‑time mountain driving",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "Hotel breakfast – idli with sambar and coconut chutney",
+          "lunch": {
+            "description": "Highway dhaba thali – dal, rice, roti, salad",
+            "location_note": "midway near Mandi, approx 250 km from Manali"
+          },
+          "dinner": [
+            {
+              "description": "Light snack on the road – samosa and tea (if needed)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Simple pasta with tomato sauce – easy group option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "No premium dinner – travel day focus on safe arrival",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Wrap up the trip with souvenir shopping; ensure vehicle check before long return drive."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 15000,
+      "transport": 10000,
+      "activities": 6300,
+      "food": 14400,
+      "total": 45700
+    },
+    "warnings": [
+      "Rohtang Pass requires a government permit (₹550/vehicle) – book 1‑2 days in advance via rohtangpermits.nic.in; unofficial agents charge up to ₹2,000.",
+      "Altitude at Rohtang (≈4,000 m) can cause sickness – carry Diamox, stay hydrated, and limit strenuous exertion.",
+      "No Uber/Ola in Manali – negotiate private taxi fares beforehand; shared taxis cost around ₹100‑150 per seat, private hires ₹700‑900 for a round‑trip to Solang.",
+      "Roads may be congested after 10 AM at Rohtang and Solang; aim to depart Manali by 7 AM to beat crowds.",
+      "Winter‑type snowfall can linger in May at higher passes; pack warm layers and waterproof shoes.",
+      "Fake Rohtang permit agents near Manali hotels charge ₹1,500–2,000 claiming the portal is full; the official portal (rohtangpermits.nic.in) is straightforward and cancellations free up slots daily – book the permit yourself 1–2 days ahead.",
+      "Rohtang Pass requires a permit costing ₹550/vehicle (non‑Himachal registered) with a daily cap of 1,200 diesel + 800 petrol vehicles – book early to secure entry.",
+      "Altitude at Rohtang (3,978 m) has no medical facility within 30 km; solo travellers should carry Diamox (acetazolamide) and be aware of altitude sickness symptoms.",
+      "No Ola or Uber – taxi union controls all cabs. Negotiate fare before boarding to avoid overcharging.",
+      "Manali → Solang Valley round‑trip private taxi costs ₹700–900; shared taxi costs ₹100–150 per seat (from HRTC bus stand). Ensure you agree on price beforehand.",
+      "Rohtang Pass full‑day taxi price ranges ₹2,500–3,500 – compare with private hire rates before committing.",
+      "Crowds at Rohtang and Solang build after 10 AM; depart Manali by 7 AM to beat congestion (entry window closes at 1 PM).",
+      "Steep stairs at Hadimba Devi Temple and 200 m uneven stone paving may be challenging if you carry heavy luggage; consider using a luggage trolley or limiting gear.",
+      "Photo tout risk at Hadimba Temple: men with Himachali caps and yaks position themselves on the approach path. Once a cap is placed on a child, they demand ₹300–500. Decline before physical contact — walk past without eye contact."
+    ],
+    "personalization_notes": [
+      "Adventure‑focused activities (paragliding, Rohtang pass, Solang ropeway) match your stated interest in nature and thrill.",
+      "Mid‑range budget keeps accommodation and meals comfortable without luxury overspend, fitting the ‘medium’ budget preference.",
+      "Group of three friends benefits from shared transport and flexible dining options, allowing both local flavours and premium experiences."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 6,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Manali experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 5,
+    "duration_days": 6,
+    "party_size": 3,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "adventure",
+      "nature"
+    ],
+    "start_date": "2026-05-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:41:15.249036+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 24994,
+    "tier": "dynamic",
+    "season": "summer"
+  }
+}

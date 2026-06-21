@@ -1,0 +1,348 @@
+{
+  "key": "nainital_4n_p2_k7_fit_mid_lake_nature",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Nainital",
+        "activities": [
+          {
+            "name": "Evening stroll on Mall Road — gentle walk with plenty of benches, perfect for a 7‑year‑old and easy on the legs",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — poha with a side of fresh curd (soft, kid‑friendly)",
+          "lunch": {
+            "description": "Plain rice with dal and a side of boiled potato mash — light and easy for the child",
+            "location_note": "near Mall Road — approx 0.5 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Local highlight – aloo ke gutke (soft spiced potatoes) with plain roti",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family thali – dal, rice, soft vegetable sabzi, paneer butter masala (mild) and curd",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium lakeside restaurant – grilled fish (mild herbs) with buttered rice and a gentle sunset view",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrival via Kathgodam, settle in hotel. Light walking only. No strenuous activities on arrival day."
+      },
+      {
+        "day_number": 2,
+        "location": "Nainital",
+        "activities": [
+          {
+            "name": "Naini Lake boat cruise (2‑hour day cruise) — calm waters, safe for a 7‑year‑old, includes a short walk to the dock",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Cable‑car ride to Snow View Point — 5‑minute ride, brief 5‑minute summit walk on even ground",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft idli with mild coconut chutney (easy to chew)",
+          "lunch": {
+            "description": "Khichdi (soft broken‑wheat porridge) with a dollop of ghee — gentle for the child",
+            "location_note": "served on the boat deck during the lake cruise"
+          },
+          "dinner": [
+            {
+              "description": "Local favorite – bhuna bhindi with soft paratha (mild spices)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly thali – dal, rice, soft paneer tikka, curd and a small sweet (rasgulla)",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium garden view eatery – mild chicken curry with steamed rice and a side of cucumber raita",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Boat rides can be overcharged; use the official ticket counter. Cable‑car line may have a short wait during peak hours."
+      },
+      {
+        "day_number": 3,
+        "location": "Nainital",
+        "activities": [
+          {
+            "name": "Visit Pt. G.B. Pant High‑Altitude Zoo — short pathways, stroller‑friendly, ideal for a child’s wildlife curiosity",
+            "bookable": true,
+            "approx_cost": 400
+          },
+          {
+            "name": "Rope‑walk & zipline at Adventure Sports Centre — age 6+ allowed, short 10‑minute walk to the start point",
+            "bookable": true,
+            "approx_cost": 600
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with a tiny drizzle of coconut chutney (soft, kid‑safe)",
+          "lunch": {
+            "description": "Soft dalia (broken‑wheat porridge) with a spoonful of ghee — warm and easy to digest",
+            "location_note": "near the zoo entrance — approx 1 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Local dish – rajma (soft kidney beans) with plain rice",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family thali – mild butter chicken, dal, rice, soft roti and fresh salad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium hill‑top restaurant — paneer tikka masala with saffron rice and a gentle breezy ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Rope‑walk has a weight limit; verify the 7‑year‑old meets it. Paths are well‑maintained, no long continuous walking required."
+      },
+      {
+        "day_number": 4,
+        "location": "Bhimtal (day‑trip)",
+        "activities": [
+          {
+            "name": "Bhimtal Lake boat ride — short 1‑hour row‑boat, easy boarding for the child",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Visit Bhimtal Waterfall — brief 10‑minute walk from the lake dock, gentle terrain",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — warm upma with vegetables (softly cooked) and a side of curd",
+          "lunch": {
+            "description": "Plain rice with moong dal and a side of soft boiled carrot pieces",
+            "location_note": "at a lakeside dhaba near Bhimtal — approx 12 km from Nainital"
+          },
+          "dinner": [
+            {
+              "description": "Local specialty – aloo ke tikke (soft potato patties) with plain roti",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family thali – paneer bhurji, dal, rice, soft naan and a small mango lassi",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium waterfront café — mild fish fry with lemon butter, served with herb‑infused rice",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Travel back to Nainital by late afternoon. Ensure boat operator is licensed to avoid overcharging."
+      },
+      {
+        "day_number": 5,
+        "location": "Naukuchiatal (morning) & Departure",
+        "activities": [
+          {
+            "name": "Row‑boat kayaking on Naukuchiatal — calm water, supervised, suitable for a 7‑year‑old with adult help",
+            "bookable": true,
+            "approx_cost": 700
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — soft poha with a dash of lemon and peanuts (optional for child)",
+          "lunch": {
+            "description": "Mild pasta in tomato sauce with grated cheese — kid‑friendly and easy to eat",
+            "location_note": "near Naukuchiatal parking area — approx 15 km from Nainital"
+          },
+          "dinner": [
+            {
+              "description": "Local dish – gentle kadhi with rice (soft, mild)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family thali – dal makhani, rice, soft butter naan, and a small sweet (gulab jamun)",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium restaurant — paneer lababdar with saffron pulao and a quiet ambience for a relaxed final meal",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Morning activity, then return to hotel to collect luggage and head to Kathgodam for onward travel. No strenuous walking required."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 12000,
+      "transport": 3500,
+      "activities": 4200,
+      "food": 5000,
+      "total": 24700
+    },
+    "warnings": [
+      "Boat operators on Naini, Bhimtal and Naukuchiatal lakes may overcharge; always use the official ticket counter and confirm the price before boarding.",
+      "Cable‑car at Snow View Point can have queues during peak tourist hours; plan for a short wait.",
+      "Rope‑walk at the Adventure Sports Centre has weight and safety‑gear requirements; verify the child meets the criteria and that gear is included in the price.",
+      "Auto‑rickshaw and taxi fares are often quoted without meters; negotiate a clear price in advance.",
+      "Boat overcharging: Unlicensed operators often quote ₹300‑₹500 per boat, claiming “premium” service. Mitigation: Use the official lake‑side ticket counter; verify the boat’s registration sticker and agree on price before boarding.",
+      "Hidden guide fees: Locals may offer “official” guide services for ₹500‑₹800 per hour. Mitigation: Decline unsolicited offers; if a guide is needed, book through the Nainital Tourist Information Centre (₹200 per hour) or reputable tour operators.",
+      "Protective gear surcharge: Operators sometimes add a “protective gear” fee of ₹200‑₹300 per person, claiming it is mandatory. Mitigation: Verify that safety gear is included in the advertised price; ask for a written receipt and compare with other operators.",
+      "Auto‑rickshaw flat‑rate scams: Drivers often quote a flat rate for short hops. Mitigation: Ask for the meter or agree on a price before starting (usual rate ₹20‑₹30 per km).",
+      "Taxi/Car hire meter rarely used: Rates Kathgodam→Nainital ₹1,500‑₹2,000 for a 4‑seat sedan; meter rarely used, so negotiate the fare before departure.",
+      "Landslide risk during monsoon (July‑August): Boat rides halted, road conditions slippery. Not relevant for May travel but be aware if plans shift.",
+      "Soft food options for a 7‑year‑old are widely available: soft dalia (broken wheat porridge), plain steamed rice with ghee, curd with a pinch of sugar, soft idli with plain dal, boiled rice with ghee and moong dal, plain khichdi, soft poha with minimal spices, plain curd rice, and boiled potato mash. Seek these at local eateries or request them when ordering.",
+      "Allergy risk: Some sweets (e.g., Bal Mithai, Singhori) contain milk solids and ground nuts; check ingredients if the child has nut or dairy sensitivities.",
+      "Vegetarian food is abundant; most restaurants serve a thali with dal, sabzi, rice, and roti at ₹150‑₹250 per person, suitable for the group’s dietary preferences.",
+      "Boat boarding involves a 2‑step rise; adult assistance may be needed for the child when getting on/off the boat.",
+      "Snow View Point summit walk is a steep 0.8 km uneven path; while not restricted for children, ensure supervision and comfortable footwear.",
+      "Adventure Sports Centre has a minimum age of 6 y and weight restrictions; verify that the 7‑year‑old meets the weight criteria before participating.",
+      "Naukuchiatal kayaking requires balance and is not suitable for toddlers; a 7‑year‑old may try it with assistance, but the rowboat option (single step) is easier and manageable with help."
+    ],
+    "personalization_notes": [
+      "Selected nature‑focused activities (lake cruises, wildlife zoo, gentle hikes) match your \"nature\" and \"lake\" trip style.",
+      "All meals include a clearly named kid‑friendly dish each day, ensuring the 7‑year‑old has familiar, soft options."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Nainital experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Nainital experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Nainital experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Nainital experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Nainital experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 2,
+    "kid_ages": [
+      7
+    ],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "lake"
+    ],
+    "start_date": "2026-05-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:44:57.343590+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 33327,
+    "tier": "dynamic",
+    "season": "summer"
+  }
+}

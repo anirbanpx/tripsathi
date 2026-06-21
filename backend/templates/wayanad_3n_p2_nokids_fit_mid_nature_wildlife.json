@@ -1,0 +1,267 @@
+{
+  "key": "wayanad_3n_p2_nokids_fit_mid_nature_wildlife",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Kalpetta, Wayanad",
+        "activities": [
+          {
+            "name": "Kuruva Island boardwalk walk – gentle 2 km trail on elevated planks, perfect for a relaxed first day and easy on the eyes",
+            "bookable": true,
+            "approx_cost": 300
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – South‑Indian spread (idiyappam, coconut chutney, fresh fruit)",
+          "lunch": {
+            "description": "Kerala thali with steamed rice, sambar, avial and banana chips, enjoyed under the shade of Kuruva’s bamboo groves",
+            "location_note": "near Kuruva Island — approx 12 km from Kalpetta hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kerala style fish curry with appam – local specialty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian thali (rice, dal, vegetable stir‑fry, papad) at a family‑run eatery in Kalpetta",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining restaurant serving Malabar biryani with saffron‑infused rice and grilled prawns, candle‑lit ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive at Calicut Airport, pick up a monsoon‑ready SUV and drive ~2 hrs to Kalpetta. Keep the first day light to recover from travel; afternoon rest at hotel is optional."
+      },
+      {
+        "day_number": 2,
+        "location": "Tholpetty Wildlife Sanctuary",
+        "activities": [
+          {
+            "name": "Guided morning safari in Tholpetty Wildlife Sanctuary – 2‑hour jeep ride with a certified naturalist, spotting elephants, deer and birds",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – warm dosas with coconut chutney and sambar",
+          "lunch": {
+            "description": "Kerala chicken stew with appam, served at a dhaba near the sanctuary entrance",
+            "location_note": "near Tholpetty Sanctuary entrance — approx 18 km from Kalpetta hotel"
+          },
+          "dinner": [
+            {
+              "description": "Prawn roast with neer dosa – coastal flavor close to Wayanad’s backwaters",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with naan at a popular family restaurant in Kalpetta",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale garden terrace dinner featuring smoked duck breast with Kerala spices",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Leave Kalpetta by 7:00 AM to reach the sanctuary before the mid‑day heat. Carry raincoats; monsoon showers are common. Evening at hotel – optional spa for relaxation."
+      },
+      {
+        "day_number": 3,
+        "location": "Edakkal Caves area / Pookode Lake (alternate)",
+        "activities": [
+          {
+            "name": "Edakkal Caves trek – 3 km ascent with stone steps, guided by a local expert (check opening status early morning). If closed, replace with a serene boat ride on Pookode Lake.",
+            "bookable": true,
+            "approx_cost": 200
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – fresh fruit salad, boiled eggs, and filter coffee",
+          "lunch": {
+            "description": "Rice bowl with fish curry and a side of thoran (stir‑fried vegetables)",
+            "location_note": "near Edakkal Caves (or Pookode Lake) — approx 25 km from Kalpetta hotel"
+          },
+          "dinner": [
+            {
+              "description": "Malabar chicken biryani with raita – aromatic and hearty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetarian thali (steamed rice, dal, vegetable curries, pickle) at a well‑reviewed family eatery",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium lakeside dining with grilled salmon, herb‑infused butter, and a view of the sunset over the water",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Monsoon can make the cave steps slippery; verify open status the night before. Carry a torch, waterproof shoes and a rain poncho. If the caves are closed, the Pookode Lake boat ride offers a safe, scenic alternative."
+      },
+      {
+        "day_number": 4,
+        "location": "Kalpetta → Calicut Airport",
+        "activities": [
+          {
+            "name": "Morning tea‑estate walk – leisurely stroll through a tea plantation with a brief talk on organic tea processing (flat terrain, <20 min walk)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – traditional Kerala appam with sweet banana stew",
+          "lunch": {
+            "description": "Light vegetable pulao with cucumber raita, eaten at a roadside dhaba before departure",
+            "location_note": "on NH 766, approx 10 km from Kalpetta hotel"
+          },
+          "dinner": [
+            {
+              "description": "No dinner scheduled – departure for Calicut Airport in the afternoon",
+              "cuisine_tag": "none"
+            }
+          ]
+        },
+        "notes": "Check out by 11:00 AM, enjoy the tea‑estate walk, then drive to Calicut International Airport (≈2 hrs). Allow extra time for monsoon‑related road checks."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 9000,
+      "transport": 12000,
+      "activities": 1000,
+      "food": 6000,
+      "total": 28000
+    },
+    "warnings": [
+      "August is heavy monsoon season – expect frequent landslides on NH 766; keep a flexible schedule and monitor local traffic updates.",
+      "Edakkal Caves are often closed in monsoon due to safety concerns; confirm opening status the night before and have Pookode Lake as a fallback.",
+      "Leeches are common in wet forest trails; wear long trousers and apply insect repellent.",
+      "Unauthorized vendors may sell ‘cave lighting kits’; bring your own torch or join an official guided trek (₹200 per person).",
+      "Edakkal Caves involve a 3 km steep climb with uneven stone steps; not suitable for toddlers or elderly with limited mobility. Mitigation: assess fitness, use proper trekking shoes, start early (6‑9 am) to avoid heat and crowds.",
+      "Monsoon (June‑September) makes the trail slippery and the caves are officially closed due to safety concerns. Mitigation: avoid trekking during heavy rain, check local updates, and consider lower‑elevation walks if visiting in August.",
+      "Landslides are frequent on NH 766 during monsoon, potentially blocking the approach route. Mitigation: monitor road conditions, allow extra travel time, and have an alternate route via Mysore‑Gundlupet if needed.",
+      "Unauthorized vendors sell ‘cave lighting’ kits at ₹500 each, claiming they are required. Mitigation: carry a personal torch or join an official guided trek (₹200 per person) where lighting is provided.",
+      "Verify whether Edakkal Caves are open before setting out; monsoon closures are common.",
+      "Carry rain gear, insect repellent (leeches are prevalent), and a basic medical kit.",
+      "If trekking in moderate pace, consider hiring a local guide (₹200 per person) for safety and navigation.",
+      "Ensure vehicle is monsoon‑ready (good tires, brakes) and keep emergency contacts for landslide‑prone stretches.",
+      "As a fallback, explore easier trails such as the Kuruva Island boardwalk or guided walks in Tholpetty Sanctuary, which remain accessible during monsoon."
+    ],
+    "personalization_notes": [
+      "Couple‑focused itinerary balances nature immersion (wildlife safari, cave trek) with relaxed evenings for quality time.",
+      "Mid‑range budget tier kept in mind – activities and meals chosen to offer authentic Kerala experiences without premium price spikes.",
+      "Moderate pace respects your preference for comfortable travel days while still covering Wayanad’s top natural highlights."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Wayanad experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Wayanad experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Wayanad experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Wayanad experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "wildlife"
+    ],
+    "start_date": "2026-08-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:03:28.581248+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 24771,
+    "tier": "dynamic",
+    "season": "monsoon"
+  }
+}

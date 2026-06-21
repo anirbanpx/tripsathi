@@ -1,0 +1,284 @@
+{
+  "key": "mussoorie_3n_p2_nokids_fit_mid_nature_romance",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Mussoorie (arrival, settle in)",
+        "activities": [
+          {
+            "name": "Evening stroll on Mall Road — gentle walk to soak in hill‑station ambience, perfect for a romantic start",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – continental spread with eggs, fresh fruit and tea/coffee",
+          "lunch": {
+            "description": "Paneer butter masala with butter naan – enjoy near Mall Road, about 0.5 km from hotel",
+            "location_note": "near Mall Road — approx 0.5 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Garwal trout fry with steamed rice — local mountain specialty",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Dal makhani, butter naan, and mixed veg sabzi — reliable, comfortable sit‑down",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Mushroom and cheese stuffed roti with glass‑wine pairing at a boutique hill‑top restaurant — splurge romantic ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive by late afternoon, check‑in, unwind. Light walk on Mall Road; keep an eye on unlicensed vendors. Arrange private car for the Delhi‑Dehradun‑Mussoorie leg in advance."
+      },
+      {
+        "day_number": 2,
+        "location": "Mussoorie – central attractions",
+        "activities": [
+          {
+            "name": "Gun Hill rope‑way ride & view‑point — iconic panoramic vista, tickets bookable at official office",
+            "bookable": true,
+            "approx_cost": 600
+          },
+          {
+            "name": "Leisure walk along Camel’s Back Road — easy flat promenade with sunset views, ideal for couples",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – poha with curd and tea",
+          "lunch": {
+            "description": "Aloo paratha with curd and pickle – served at a small dhaba near Gun Hill",
+            "location_note": "near Gun Hill — approx 2 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Kumaoni rajma with basmati rice — hearty regional comfort",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Grilled chicken tikka, mint raita, and roomali roti — familiar, sit‑down favourite",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Seafood thali with fresh prawns, fish curry, and dessert at an upscale restaurant with mountain views",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Buy rope‑way tickets only at the official counter to avoid inflated rates. Sunset on Camel’s Back Road is especially romantic; carry a light rain jacket in case of April showers."
+      },
+      {
+        "day_number": 3,
+        "location": "Nature day – Company Bagh & Cloud’s End",
+        "activities": [
+          {
+            "name": "Morning walk in Company Bagh — well‑maintained garden with gentle paths, perfect for a relaxed nature immersion",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Afternoon at Cloud’s End viewpoint — short drive, minimal walking, spectacular valley view for photo‑ops",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – masala oats with fresh berries and tea",
+          "lunch": {
+            "description": "Veg thali with dal, rice, sabzi, papad, and sweet lassi – enjoyed at a garden café close to Company Bagh",
+            "location_note": "near Company Bagh — approx 1 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Mushroom shahi paneer with butter rice — rich local flavour",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Tandoori fish, cucumber salad, and garlic naan — comfortable sit‑down choice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Champagne brunch‑style dinner with a curated tasting menu and live acoustic music at a hill‑top lounge",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Both spots involve short, level walks (≤20 min continuous). Ideal for a moderate pace. Keep a rain jacket handy; early evening clouds may bring light drizzle."
+      },
+      {
+        "day_number": 4,
+        "location": "Departure – sunrise at Lal Tibba, then travel back",
+        "activities": [
+          {
+            "name": "Sunrise at Lal Tibba — early start (≈5:30 am) for a breathtaking view, easy access by car with minimal walking",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Leisurely checkout and drive back to Delhi via Dehradun — comfortable private car",
+            "bookable": true,
+            "approx_cost": 2000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – idli with coconut chutney and filter coffee (light, energising)",
+          "lunch": {
+            "description": "Vegetable pulao with raita – packed for the road, enjoyed en route near Dehradun",
+            "location_note": "on the highway — approx 40 km from base"
+          },
+          "dinner": [
+            {
+              "description": "No dinner planned – travel day; light snacks en route",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "No dinner planned – travel day; light snacks en route",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "No dinner planned – travel day; light snacks en route",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Early sunrise adds a romantic touch. Ensure the car is booked with a confirmed fare to avoid last‑minute price hikes. Pack a small snack box for the journey."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 18000,
+      "transport": 12000,
+      "activities": 1300,
+      "food": 9000,
+      "total": 40300
+    },
+    "warnings": [
+      "Unlicensed vendors near Mall Road may sell inflated rope‑way tickets; purchase only at the official counter or via the Uttarakhand Tourism app.",
+      "App‑based taxis operate only up to Dehradun; negotiate a fixed fare (≈₹1,500‑₹2,000) for the final 30 km stretch to Mussoorie.",
+      "April showers are possible; carry a light rain jacket for rope‑way rides and hill walks.",
+      "Auto‑rickshaws in Mussoorie often overcharge; insist on meter or pre‑agreed flat rate (≈₹150‑₹200 per km).",
+      "Unlicensed vendors near Mall Road sell \"official\" rope‑way tickets at inflated rates (up to ₹300 per adult). Mitigation: buy tickets only at the rope‑way office or through the Uttarakhand Tourism mobile app and keep a photo of the standard fare list for reference.",
+      "App‑based taxis (Uber/Ola) operate only up to Dehradun; arrange a taxi/car for the final 30 km stretch (₹1500‑2000) and negotiate fare before departure.",
+      "Auto‑rickshaws within Mussoorie charge ₹500‑800 for a Mall Road ↔ Gun Hill round‑trip; insist on meter or confirm flat rate (₹150‑200 per km) to avoid overcharging.",
+      "Light rain possible in April (low‑moderate likelihood); carry a light rain jacket for the rope‑way ride and hill walks."
+    ],
+    "personalization_notes": [
+      "Romantic sunset walks on Camel’s Back Road and sunrise at Lal Tibba match your \"romance\" travel style.",
+      "Nature‑focused spots like Company Bagh and Cloud’s End satisfy the \"nature\" preference while keeping the pace moderate for a comfortable couple experience."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mussoorie experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mussoorie experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mussoorie experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Mussoorie experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "romance"
+    ],
+    "start_date": "2026-04-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:48:01.360340+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 55266,
+    "tier": "dynamic",
+    "season": "summer"
+  }
+}

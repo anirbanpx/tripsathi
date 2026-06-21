@@ -1,0 +1,395 @@
+{
+  "key": "hampi_3n_p2_nokids_fit_budget_heritage_photography",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Hampi Bazaar",
+        "activities": [
+          {
+            "name": "Settle into hotel and explore Hampi Bazaar – short stroll to Virupaksha Temple (heritage entry, free)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Guided sunrise visit to Virupaksha Temple – 45‑minute guide (captures early light for photography)",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – simple South Indian spread (idli, chutney, filter coffee)",
+          "lunch": {
+            "description": "Vegetarian thali with rice, sambar, rasam, papad, and a sweet (served near the temple courtyard)",
+            "location_note": "near Virupaksha Temple — approx 0.2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Ragi mudde with sambar and coconut chutney — local Karnataka comfort food",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "South Indian veg thali – assorted veg curries, rice, papad, and mango pickle",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Rooftop restaurant with butter garlic prawns and masala potatoes – romantic ambience",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Easy first day to adjust; early breakfast, light lunch, and a relaxed evening. No strenuous walking."
+      },
+      {
+        "day_number": 2,
+        "location": "Hampi Bazaar",
+        "activities": [
+          {
+            "name": "Bicycle‑rented tour of Royal Enclosure – Lotus Mahal, Elephant Stables, and Queen’s Bath (flat terrain, easy pace)",
+            "bookable": true,
+            "approx_cost": 150
+          },
+          {
+            "name": "Coracle crossing to Hippie Island – short river ride for sunset photo‑ops",
+            "bookable": true,
+            "approx_cost": 80
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – poha with peanuts and a cup of chai",
+          "lunch": {
+            "description": "Masala dosa with coconut chutney and a side of potato fry (served near the Royal Enclosure entrance)",
+            "location_note": "near Lotus Mahal — approx 0.5 km from bicycle drop‑off"
+          },
+          "dinner": [
+            {
+              "description": "Bisi bele bhath with crunchy papad and a side of cucumber raita",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg thali with dal, rice, beans curry, and jaggery dessert",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Boutique garden dining – paneer tikka, naan, and glass of local wine",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Mid‑day heat mitigated by staying in shade; coracle ride scheduled after 4 PM to avoid peak sun."
+      },
+      {
+        "day_number": 3,
+        "location": "Hampi Bazaar",
+        "activities": [
+          {
+            "name": "Electric‑cart ride to Vittala Temple – explore Stone Chariot and musical pillars (cart mandatory)",
+            "bookable": true,
+            "approx_cost": 100
+          },
+          {
+            "name": "Matanga Hill sunset trek – short, steep climb for panoramic shots (fit moderate pace)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – upma with grated coconut and a glass of fresh orange juice",
+          "lunch": {
+            "description": "Rice bowls with tangy avarekalu chutney and a side of fried okra (served near Vittala entrance)",
+            "location_note": "near Stone Chariot — approx 1 km from cart drop‑off"
+          },
+          "dinner": [
+            {
+              "description": "Mysore masala dosa with coriander chutney and a bowl of sweet mango lassi",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑style veg thali — dal tadka, rice, mixed veg, and payasam",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Elegant terrace dinner – grilled fish, herb quinoa, and dessert tiramisu",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Cart fee includes round‑trip; carry water for the hill trek. Evening light ideal for silhouette photography."
+      },
+      {
+        "day_number": 4,
+        "location": "Hampi Bazaar",
+        "activities": [
+          {
+            "name": "Leisurely walk to Hemakuta Hill – gentle slopes, quick photo stops (no guide needed)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Return transfer to Hosapete railway station (taxi) for departure",
+            "bookable": true,
+            "approx_cost": 500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel – fresh fruit salad with yogurt and a cup of filter coffee",
+          "lunch": {
+            "description": "Veg pulao with cucumber raita and a sweet coconut laddu (served near Hemakuta viewpoint)",
+            "location_note": "near Hemakuta Hill — approx 1.2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Traditional Karnataka-style rotti with brinjal curry and beetroot pachadi",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Comfort veg thali – rice, sambar, mixed veg, and rice pudding",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining experience – lamb rogan josh, saffron rice, and chocolate mousse",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Final day kept light for smooth departure; no long walks after lunch."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 4500,
+      "transport": 3000,
+      "activities": 700,
+      "food": 4100,
+      "total": 12300
+    },
+    "warnings": [
+      "Coracle fare inflation: operators may quote ₹200‑500 per person; stick to the main ghat near Virupaksha Temple where competition keeps fares close to the official ₹30‑₹50 rate.",
+      "Electric cart is mandatory for Vittala Temple; walking the 1.5 km access road is prohibited, so factor the ₹50 per person fee into your budget.",
+      "Bicycle rentals are suitable only for flat zones like the Royal Enclosure; avoid using them on steep or uneven granite paths (e.g., Matanga Hill).",
+      "January mornings are crisp but midday sun can still be strong on exposed boulders; carry water, a hat, sunscreen, and limit continuous outdoor exposure between 10 AM‑4 PM.",
+      "Coracle fare inflation on Tungabhadra: operators at the Hampi–Virupapur Gaddi crossing quote ₹200–500 per person for the 5‑minute ride, while the government‑fixed rate is ₹30–50 one‑way. Mitigation: cross at the main ghat near Virupaksha Temple where competition holds fares closer to the official rate; always agree the price before boarding.",
+      "Heat exposure on exposed granite surfaces: even in cooler months (January) sun can cause heat exhaustion, especially for anyone carrying equipment or children. Mitigation: carry water, ORS, wear a hat, apply sunscreen, and limit midday exposure (plan visits 8‑10 AM or after 4 PM).",
+      "Stroller impracticality on graded gravel paths: most heritage zones have uneven stone/gravel, making strollers difficult to manoeuvre. Mitigation: use a carrier or rent a bicycle for flat sections; reserve a stroller only for paved hotel grounds.",
+      "Auto‑rickshaw pricing: ₹15–20 per km; half‑day heritage tour (Vittala + Royal Enclosure) ₹600–900. Confirm rates before hiring to avoid tourist‑spot inflation.",
+      "Electric cart mandatory at Vittala Temple costs ₹50 per person; no walking on the 1.5 km access road is allowed, so factor this into your budget.",
+      "Bicycle rental is ₹100–150 per day but only suitable for flat zones; avoid on the boulder‑laden trails of Hemakuta Hill or Matanga Hill.",
+      "Dining options are largely vegetarian in the heritage zone; non‑vegetarian meals and alcohol are only available on Hippie Island. Carry some packaged snacks if you require specific dietary items."
+    ],
+    "personalization_notes": [
+      "Heritage focus: each day centers on iconic Hampi monuments, matching your interest in history and photography.",
+      "Moderate pace: activities limited to two per day with built‑in rest periods, ideal for a couple wanting to explore without rushing.",
+      "Budget‑friendly selections: accommodation budget tier, affordable meals, and selective premium dining for memorable evenings."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [
+      {
+        "name": "Hampi Delmont Resort",
+        "rating": "4.5",
+        "address": "Near, Anjanadri Temple Rd, Hanmanhalli, Hampi, Karnataka 583227",
+        "why_chosen": "Budget match for your trip",
+        "website_url": "http://hampidelmontresort.com/",
+        "phone": "063620 92020",
+        "maps_url": "https://maps.google.com/?cid=4203327733110628042&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Dream Catcher Restaurant and Guesthouse",
+        "rating": "4.4",
+        "address": "Janatha Plot, and, Virupaksha Temple Rd, near Hampi Bazaar Street, opposite Hampi, Nijielimana Gudi, Hampi, Karnataka 583239",
+        "why_chosen": "Budget match for your trip",
+        "phone": "094821 29443",
+        "maps_url": "https://maps.google.com/?cid=7819758407963293655&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Veeru Home Stay Hampi",
+        "rating": "4.8",
+        "address": "Kadirampura, Hampi, Karnataka 583239",
+        "why_chosen": "Budget match for your trip",
+        "phone": "094817 03558",
+        "maps_url": "https://maps.google.com/?cid=7635743581295775393&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Hampi's Dream Cottage",
+        "rating": "4.7",
+        "address": "River Road, Hampi Bazaar St, Hampi, Karnataka 583239",
+        "why_chosen": "Budget match for your trip",
+        "phone": "091088 02503",
+        "maps_url": "https://maps.google.com/?cid=12773703957349813510&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      },
+      {
+        "name": "Supritha Homestay Hampi",
+        "rating": "4.4",
+        "address": "New Hampi Rd, near kadirampur, Hampi, Malpangudi, Karnataka 583239",
+        "why_chosen": "Budget match for your trip",
+        "phone": "089512 08122",
+        "maps_url": "https://maps.google.com/?cid=4126083784460690740&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+      }
+    ],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "MANGO TREE RESTAURANT",
+          "phone": "094487 65213",
+          "maps_url": "https://maps.google.com/?cid=771685909018070965&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Hampi experience — eat what locals eat",
+            "restaurant_name": "Annapurna Cafe And Restaurant",
+            "rating": "4.9",
+            "phone": "080741 28810",
+            "maps_url": "https://maps.google.com/?cid=14919233909234797811&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+          "phone": "076769 86517",
+          "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Hampi experience — eat what locals eat",
+            "restaurant_name": "Annapurna Cafe And Restaurant",
+            "rating": "4.9",
+            "phone": "080741 28810",
+            "maps_url": "https://maps.google.com/?cid=14919233909234797811&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+          "phone": "076769 86517",
+          "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Hampi experience — eat what locals eat",
+            "restaurant_name": "Annapurna Cafe And Restaurant",
+            "rating": "4.9",
+            "phone": "080741 28810",
+            "maps_url": "https://maps.google.com/?cid=14919233909234797811&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed",
+          "restaurant_name": "MANGO TREE RESTAURANT",
+          "phone": "094487 65213",
+          "maps_url": "https://maps.google.com/?cid=771685909018070965&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Hampi experience — eat what locals eat",
+            "restaurant_name": "Annapurna Cafe And Restaurant",
+            "rating": "4.9",
+            "phone": "080741 28810",
+            "maps_url": "https://maps.google.com/?cid=14919233909234797811&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "The Nest – Lakefront Restaurant || Hampi",
+            "rating": "4.6",
+            "phone": "076769 86517",
+            "maps_url": "https://maps.google.com/?cid=842475046075737313&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "heritage",
+      "photography"
+    ],
+    "start_date": "2027-01-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:17:16.545820+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 22557,
+    "tier": "static",
+    "season": null
+  }
+}

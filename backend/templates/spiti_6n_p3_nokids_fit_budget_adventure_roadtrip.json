@@ -1,0 +1,472 @@
+{
+  "key": "spiti_6n_p3_nokids_fit_budget_adventure_roadtrip",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Manali (arrival)",
+        "activities": [
+          {
+            "name": "Scenic drive Delhi → Manali via NH44 & NH3 — gentle ascent for altitude acclimatization",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Evening walk on Manali Mall Road — low‑impact sightseeing and light shopping",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — simple north‑Indian fare (poha, boiled eggs, tea)",
+          "lunch": {
+            "description": "Vegetarian thali (dal, rice, roti, seasonal sabzi) on the road near Kullu",
+            "location_note": "near Kullu — approx 80 km from Delhi stopover"
+          },
+          "dinner": [
+            {
+              "description": "Local Himachali dish – madra (chickpea & yogurt curry) with steamed rice",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly restaurant serving paneer butter masala, naan & salad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium option – rooftop restaurant with panoramic mountain views, order trout with herb butter",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Long drive; start hydrating early. Night in Manali to break journey."
+      },
+      {
+        "day_number": 2,
+        "location": "Manali → Kaza (overnight in Kaza)",
+        "activities": [
+          {
+            "name": "Shared jeep Manali → Kaza (≈200 km, 8‑9 hrs) — book seat in advance; negotiate fare ₹2,200 per person",
+            "bookable": true,
+            "approx_cost": 2200
+          },
+          {
+            "name": "Sunset at Kaza market square — gentle stroll, local handicrafts",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel in Manali — idli with coconut chutney & tea",
+          "lunch": {
+            "description": "Packed picnic: vegetable pulao, cucumber raita, fruit",
+            "location_note": "en‑route near Rohtang Pass — approx 110 km from Manali"
+          },
+          "dinner": [
+            {
+              "description": "Local Tibetan‑influenced thukpa (vegetarian broth, noodles, veggies)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family spot serving aloo paratha, curd & pickles",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: boutique eatery with apricot‑glazed yak meat (vegetarian substitution available) and ambience of stone walls",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Road may be slippery; keep chains handy. Altitude at Kaza ≈3,800 m – drink plenty of water, monitor for AMS."
+      },
+      {
+        "day_number": 3,
+        "location": "Kaza",
+        "activities": [
+          {
+            "name": "Visit Ki Monastery (free entry) — early morning to avoid crowd; optional certified guide ₹500–₹800",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Explore Kaza market & Spiti River promenade — short walk, photography",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with coconut chutney",
+          "lunch": {
+            "description": "Veg momos with chili sauce, served near Ki Monastery",
+            "location_note": "near Ki Monastery — approx 0.5 km from Kaza center"
+          },
+          "dinner": [
+            {
+              "description": "Local specialty – skyu (vegetarian dumpling soup) with apricot preserve",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly dhaba offering paneer tikka, roti & salad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: hotel’s rooftop restaurant, order baked trout with herb butter and local barley salad",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Ki Monastery has 200 m of stone steps; wear sturdy shoes. Keep extra cash for small guide fees."
+      },
+      {
+        "day_number": 4,
+        "location": "Langza & Hikkim",
+        "activities": [
+          {
+            "name": "Langza Fossil Park – view dinosaur fossils, optional purchase from official kiosk (₹200–₹500)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Visit Hikkim – world’s highest post office; short walk from parking area",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal & a side of yogurt",
+          "lunch": {
+            "description": "Simple thali (dal, rice, bhindi sabzi) at a roadside eatery near Langza",
+            "location_note": "near Langza village — approx 15 km from Kaza"
+          },
+          "dinner": [
+            {
+              "description": "Local: vegetable stew with barley dumplings (gyurma) — mild spices",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family: paneer butter masala with garlic naan",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: boutique café offering apricot cheesecake and herbal tea",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Altitude still high; stay hydrated. Fossil park entry free; avoid unofficial sellers."
+      },
+      {
+        "day_number": 5,
+        "location": "Kibber & Chandratal Lake (day‑trip)",
+        "activities": [
+          {
+            "name": "Drive to Kibber (≈25 km) — explore the highest inhabited village, photograph traditional houses",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Chandratal Lake trek (4 km round‑trip) — moderate walk, stunning lake; return to Kaza by evening",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — appam with vegetable stew",
+          "lunch": {
+            "description": "Packed lunch: buttered roti, mixed veg curry, nuts & dried fruits",
+            "location_note": "en‑route, consumed near Chandratal lake parking"
+          },
+          "dinner": [
+            {
+              "description": "Local: thukpa with extra veggies",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family: dal‑rice set with cucumber raita",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: lakeside campfire dinner – grilled corn & herb‑infused tofu",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Road to Chandratal can be slippery after rain; carry chains. Start early; return before dark."
+      },
+      {
+        "day_number": 6,
+        "location": "Tabo & Spiti River promenade",
+        "activities": [
+          {
+            "name": "Visit Tabo Monastery (entry ₹30) — admire ancient murals, optional certified guide ₹500",
+            "bookable": true,
+            "approx_cost": 800
+          },
+          {
+            "name": "Leisure walk along Spiti River promenade — gentle stroll, sunset photography",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain dosa with mild chutney",
+          "lunch": {
+            "description": "Vegetarian thali (dal, rice, bhindi, curd) near Tabo monastery",
+            "location_note": "near Tabo — approx 45 km from Kaza"
+          },
+          "dinner": [
+            {
+              "description": "Local: barley soup with vegetables",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family: paneer bhurji with naan",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: hotel’s garden dining area, order mushroom risotto with local herbs",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Tabo entry fee is modest; bring small change. Evening temperatures drop to near 5 °C – pack warm layers."
+      },
+      {
+        "day_number": 7,
+        "location": "Return to Delhi",
+        "activities": [
+          {
+            "name": "Shared jeep Kaza → Manali (early start) — same fare structure as inbound",
+            "bookable": true,
+            "approx_cost": 2200
+          },
+          {
+            "name": "Bus Manali → Delhi (overnight) — comfortable AC coach, approx 12 hrs",
+            "bookable": true,
+            "approx_cost": 1800
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal",
+          "lunch": {
+            "description": "Simple veg sandwich with tea, eaten on the road near Rohtang Pass",
+            "location_note": "mid‑way, approx 120 km from Kaza"
+          },
+          "dinner": [
+            {
+              "description": "Local: simple vegetable pulao with raita",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family: paneer tikka masala with rice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium: none (travel day) – opt for on‑board meal service if available",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Ensure all belongings are packed; keep travel documents handy for the night bus. Hydrate well before the long drive."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 9000,
+      "transport": 13800,
+      "activities": 1600,
+      "food": 10500,
+      "total": 34900
+    },
+    "warnings": [
+      "Road to Kunzum & Rohtang passes can be slippery in August thunderstorms – carry chains and drive cautiously.",
+      "Altitude above 3,500 m in Kaza, Langza, Kibber – monitor for AMS, keep hydrated, and have acetazolamide if prescribed.",
+      "Shared jeep fares often inflated; negotiate price (₹2,200‑₹2,500 per seat) or pre‑book shared seats (₹2,000‑₹2,500).",
+      "Ki Monastery entrance has 200 m of stone steps – wear sturdy shoes; consider skipping inner courtyard if uncomfortable.",
+      "Local vendors may overcharge for photography or fossil purchases – agree on price beforehand or decline.",
+      "Taxi/private cab pricing inflation – ₹12,000‑₹15,000 for the 200 km Manali→Kaza journey; meter not used, so prices can be inflated. Mitigation: negotiate the fare before boarding or choose the shared jeep (₹2,000‑₹2,500 per seat) which offers a transparent rate.",
+      "Ki Monastery unofficial guide overcharging – vendors near the entrance charge for guided tours. Mitigation: insist on a free self‑guided visit; if a guide is required, hire a certified guide from the Kaza Tourist Office (₹500‑₹800 per day) and confirm the fee beforehand.",
+      "Ki Monastery steep access – 200 m of stone steps and uneven flooring; not suitable for toddlers or mobility‑limited elderly. Mitigation: visit early morning, use walking support, or consider skipping the inner courtyard if mobility is limited.",
+      "Kibber inflated photography fees – local guides demand payment for a few minutes of picture‑taking. Mitigation: politely decline; most locals pose for free. If a professional photographer is needed, agree on a fixed rate beforehand.",
+      "Langza Fossil Park fossil‑selling overpricing – ‘exclusive’ stalls near the entrance overprice genuine specimens. Mitigation: do not purchase on impulse; buy only from the official park kiosk where prices are listed (₹200‑₹500 per specimen).",
+      "Chandratal unofficial entry permit – local youths often demand a fee double the official ₹200 vehicle charge. Mitigation: show the official ₹200 receipt; if a permit is requested, refuse and report the incident to the nearest police outpost.",
+      "Tabo Monastery mandatory souvenir claim – shop claims a souvenir purchase as entry fee. Mitigation: pay only the official entry fee (₹30/adult, ₹15/child 3‑10 y); buy any souvenirs separately at the market where prices are transparent.",
+      "Dietary: Tibetan‑influenced cuisine (thukpa, momos, skyu) uses yak butter and apricot preserves; vegetarian options are limited—always request ‘veg only’ to avoid hidden meat broth in thukpa or skyu.",
+      "Medical: Kaza Primary Health Centre offers 24‑hour basic care only; serious emergencies require travel to Manali (~200 km) or Shimla (~300 km). Air evacuation via the Kaza helipad is possible but weather‑dependent. Carry personal altitude‑sickness medication (acetazolamide), a basic first‑aid kit, extra water, and high‑energy snacks.",
+      "Transport: Shared jeeps from Manali to Kaza depart at 06:00 hrs and fill quickly in peak season; book seats early or be prepared for waiting.",
+      "Altitude: Although the gradual ascent via Manali helps prevent altitude‑related discomfort, travellers should still monitor for symptoms of AMS and be ready to descend if needed."
+    ],
+    "personalization_notes": [
+      "Adventure‑focused road‑trip aligns with your \"adventure\" and \"roadtrip\" style, covering key Spiti highlights.",
+      "Moderate pacing respects your \"moderate\" pace preference while still allowing ample time for acclimatization.",
+      "Budget‑friendly options (shared jeeps, local eateries, budget hotels) keep the total cost within a budget bracket."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 6,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 7,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Spiti experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 6,
+    "duration_days": 7,
+    "party_size": 3,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "adventure",
+      "roadtrip"
+    ],
+    "start_date": "2026-08-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:05:11.629000+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 29548,
+    "tier": "dynamic",
+    "season": "monsoon"
+  }
+}

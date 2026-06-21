@@ -1,0 +1,369 @@
+{
+  "key": "udaipur_4n_p2_nokids_fit_premium_heritage_romance",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Udaipur",
+        "activities": [
+          {
+            "name": "City Palace guided tour — iconic heritage site with panoramic lake views",
+            "bookable": true,
+            "approx_cost": 600
+          },
+          {
+            "name": "Lake Pichola sunset cruise (official RTDC counter) — romantic sunset on the lake, fixed price",
+            "bookable": true,
+            "approx_cost": 1600
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — Rajasthani thali with dal‑bati‑churma, fresh lassi",
+          "lunch": {
+            "description": "Rajasthani thali with gatte ki sabzi and bajra roti near City Palace",
+            "location_note": "near City Palace — approx 0.3 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Dal‑bati‑churma with sweet ghewar — classic Rajasthani fare",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer tikka platter with butter naan — family‑friendly, relaxed ambience",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining lakeside restaurant, saffron‑infused mushroom risotto with live music",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive, settle in, early evening cruise. Watch for private‑boat price‑switching; use RTDC counter only."
+      },
+      {
+        "day_number": 2,
+        "location": "Udaipur",
+        "activities": [
+          {
+            "name": "Saheliyon‑ki‑Bari stroll — tranquil garden with fountains, easy walking",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Shilpgram craft village visit — Rajasthani folk arts and live demonstrations",
+            "bookable": true,
+            "approx_cost": 200
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — fresh fruit, poha, masala chai",
+          "lunch": {
+            "description": "Dal baati churma with cucumber raita at a local eatery near Shilpgram",
+            "location_note": "near Shilpgram — approx 3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Ker Sangri and bajra roti — earthy local specialties",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg biryani with raita and papad — hearty family option",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Rooftop restaurant with candlelight, paneer malai kofta and glass‑wine pairing",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Gentle walking pace; avoid detours to private craft shops—insist on official Rajasthali emporium for souvenirs."
+      },
+      {
+        "day_number": 3,
+        "location": "Udaipur",
+        "activities": [
+          {
+            "name": "Jagdish Temple visit — beautiful marble temple, short walk",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Bagore‑ki‑Haveli evening cultural show — traditional dance and music",
+            "bookable": true,
+            "approx_cost": 1000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — masala omelette (vegetarian), toast, orange juice",
+          "lunch": {
+            "description": "Ker sangri thali with jeera rice near Jagdish Temple",
+            "location_note": "near Jagdish Temple — approx 0.4 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Laal maas (mild lamb curry) with basmati rice — signature local dish",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Paneer butter masala with naan — comfortable family setting",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Luxury heritage hotel banquet, thali with multiple Rajasthani delicacies and live sit‑ar",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Evening show starts at 7 pm; ensure you are back at hotel before 9 pm for a relaxed night."
+      },
+      {
+        "day_number": 4,
+        "location": "Udaipur",
+        "activities": [
+          {
+            "name": "Sajjangarh Monsoon Palace sunrise visit — panoramic city view, short drive up narrow road (avoid after 6 pm)",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Fateh Sagar Lake sunset walk and boat paddle — gentle activity, lake ambience",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — warm upma, fresh curd, mint tea",
+          "lunch": {
+            "description": "Methi thepla with chutney at a roadside dhaba near Fateh Sagar",
+            "location_note": "near Fateh Sagar Lake — approx 2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Makhana kheer and dal‑mahal — light local dinner",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg pasta in creamy sauce with garlic bread — familiar family-friendly choice",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Boutique lake‑front restaurant, truffle‑infused mushroom dal with premium wine",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Drive to Monsoon Palace early (sunrise) to avoid narrow, unlit road after 6 pm. Evening walk is safe and romantic."
+      },
+      {
+        "day_number": 5,
+        "location": "Udaipur",
+        "activities": [
+          {
+            "name": "Leisurely morning stroll through local market — souvenir shopping, easy pace",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Airport transfer — departure",
+            "bookable": true,
+            "approx_cost": 2000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — fresh parathas with pickle and yogurt",
+          "lunch": {
+            "description": "Light vegetable sandwich with lemon tea near city centre",
+            "location_note": "city centre — approx 1 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "No dinner scheduled (departure in afternoon)",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled (departure in afternoon)",
+              "cuisine_tag": "none"
+            },
+            {
+              "description": "No dinner scheduled (departure in afternoon)",
+              "cuisine_tag": "none"
+            }
+          ]
+        },
+        "notes": "Pack and head to airport. Confirm taxi fare in advance to avoid driver detours."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 48000,
+      "transport": 12000,
+      "activities": 4300,
+      "food": 6500,
+      "total": 70800
+    },
+    "warnings": [
+      "Use the official RTDC boat counter at City Palace jetty; private operators often inflate deposits after boarding.",
+      "When hiring a driver, refuse unscheduled stops at 'government‑approved' craft shops; they are private shops with marked‑up prices.",
+      "Sajjangarh Monsoon Palace road is narrow and unlit after 6 pm – schedule the visit for sunrise or early morning.",
+      "Private boat price-switching near Lal Ghat: Agents may quote ₹200–300 as a 'deposit' but later demand ₹2,000–3,000, or quote ₹500 for dinner cruises and revise it to ₹1,500 once seated. Mitigation: Use only the official RTDC counter at the City Palace jetty where rates are displayed on a board, or agree on the full trip price (not per-person) before boarding private boats.",
+      "Driver detours to 'government approved' craft shops: Drivers often detour to private emporiums claiming they are fixed-price government stores; prices are 3–5× market rate. Mitigation: Firmly decline driver 'quick stops' and go directly to Rajasthali (government emporium near Chetak Circle) for verified pricing.",
+      "Sajjangarh Monsoon Palace safety: The road is narrow and unlit. Mitigation: Do not drive up after 6 PM.",
+      "Transport: Auto-rickshaws (₹60–100 within city) have no meters; negotiate before boarding. For reliable point-to-point trips, use Ola or Uber.",
+      "City Palace Accessibility: The palace involves ~2.5 km of walking on stone steps and uneven marble; avoid strollers and use baby carriers if applicable.",
+      "Sajjangarh Logistics: Vehicle entry into the wildlife sanctuary zone costs ₹130 extra; driving is mandatory as walking is not permitted on the forest road.",
+      "Dietary: Local cuisine uses significant ghee and dairy. Most tourist-area restaurants are vegetarian by default; Laal Maas is the common non-vegetarian option."
+    ],
+    "personalization_notes": [
+      "Heritage focus: City Palace, Saheliyon‑ki‑Bari, and Monsoon Palace give deep immersion in Rajasthani history.",
+      "Romance angle: sunset lake cruise, rooftop dinner, and sunrise palace visit create intimate moments for a couple."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Udaipur experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "1559 AD",
+            "rating": "4.4",
+            "phone": "073570 41559",
+            "maps_url": "https://maps.google.com/?cid=2422489531384356702&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.1559ad.com/"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Udaipur experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Udaipur experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Udaipur experience — eat what locals eat",
+            "restaurant_name": "1559 AD",
+            "rating": "4.4",
+            "phone": "073570 41559",
+            "maps_url": "https://maps.google.com/?cid=2422489531384356702&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.1559ad.com/"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Udaipur experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group",
+            "restaurant_name": "Khamma Ghani Restaurant",
+            "rating": "4.1",
+            "phone": "073406 66622",
+            "maps_url": "https://maps.google.com/?cid=10413829625136439682&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "https://www.khammaghanirestaurant.com/"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge",
+            "restaurant_name": "1559 AD",
+            "rating": "4.4",
+            "phone": "073570 41559",
+            "maps_url": "https://maps.google.com/?cid=2422489531384356702&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+            "website_url": "http://www.1559ad.com/"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "premium",
+    "budget": "premium",
+    "trip_style": [
+      "heritage",
+      "romance"
+    ],
+    "start_date": "2026-11-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-20T19:17:57.285758+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 23711,
+    "tier": "static",
+    "season": null
+  }
+}

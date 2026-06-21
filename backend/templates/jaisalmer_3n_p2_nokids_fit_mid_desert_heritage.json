@@ -1,0 +1,283 @@
+{
+  "key": "jaisalmer_3n_p2_nokids_fit_mid_desert_heritage",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Jaisalmer",
+        "activities": [
+          {
+            "name": "Evening stroll around Gadisar Lake — gentle walk with lake views, perfect for a relaxed first evening",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — simple Indian breakfast (poha or upma) served with tea",
+          "lunch": {
+            "description": "Light thali with dal, roti, and seasonal sabzi; enjoy near Gadisar Lake — approx 1 km from hotel",
+            "location_note": "near Gadisar Lake — approx 1 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Local highlight – dal baati churma served in a traditional courtyard restaurant",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly spot – plain dal, soft roti and mixed vegetable sabzi in a clean sit‑down eatery",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium experience – rooftop dining with sunset view, offering saffron‑infused biryani and gourmet desserts",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrival via private car from Jodhpur; check‑in early, unwind. Evening walk is low‑impact, suitable for a moderate pace."
+      },
+      {
+        "day_number": 2,
+        "location": "Jaisalmer",
+        "activities": [
+          {
+            "name": "Guided heritage tour of Jaisalmer Fort (Sonar Quila) — expert guide, includes entry fee and audio commentary",
+            "bookable": true,
+            "approx_cost": 1000
+          },
+          {
+            "name": "Visit Patwon ki Haveli — free entry, explore the ornate courtyards and frescoes at your own speed",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — warm masala chai with vegetable paratha",
+          "lunch": {
+            "description": "Thali with ker sangri, bajra roti and cucumber raita; eat near the Fort entrance — approx 0.5 km walk",
+            "location_note": "near Jaisalmer Fort — approx 0.5 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Local highlight – ker sangri tadka with bajra roti in a heritage‑styled dhaba",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly spot – plain dal, soft rice and a mild vegetable curry in a comfortable sit‑down venue",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium experience – candlelit courtyard dinner featuring mushroom masala, saffron pulao and artisanal desserts",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Morning tour is moderate walking (≤20 min continuous). Afternoon free for shopping or relaxing at the hotel."
+      },
+      {
+        "day_number": 3,
+        "location": "Sam Sand Dunes",
+        "activities": [
+          {
+            "name": "Camel safari + sunset desert camp (4‑hour package) — includes camel ride, cultural performance, dinner and overnight stay in a semi‑luxury tent",
+            "bookable": true,
+            "approx_cost": 6000
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — fresh fruit, yogurt, and toasted bread with jam",
+          "lunch": {
+            "description": "Simple vegetarian thali with dal, rice, and seasonal veggies; enjoy at a dhaba on the road to Sam dunes",
+            "location_note": "on the highway to Sam dunes — approx 10 km from Jaisalmer"
+          },
+          "dinner": [
+            {
+              "description": "Local highlight – desert‑style dal baati churma served around a campfire",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly spot – mild paneer butter masala with soft naan in the camp’s communal kitchen",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium experience – private tent dinner with thandai‑flavored dessert and live Rajasthani folk music",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Leave Jaisalmer by 10 AM, arrive at camp for camel ride by 2 PM. Night temperatures drop to ~5 °C; bring warm layers. Camp provides basic bathroom facilities."
+      },
+      {
+        "day_number": 4,
+        "location": "Jaisalmer – departure",
+        "activities": [
+          {
+            "name": "Morning visit to Khuri Dunes (optional) — quieter dunes, short sand walk and photo session",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Return transfer to Jodhpur airport/train station",
+            "bookable": true,
+            "approx_cost": 3000
+          }
+        ],
+        "meals": {
+          "breakfast": "Camp breakfast — warm milk, biscuits, and boiled eggs",
+          "lunch": {
+            "description": "Veg pulao with raita and a side of fresh salad; stop near Jaisalmer city outskirts",
+            "location_note": "on the return route to Jaisalmer — approx 15 km from camp"
+          },
+          "dinner": [
+            {
+              "description": "Local highlight – simple khichdi with ghee and papad in a city café (if flight is late)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly spot – plain dal, soft rice and gentle carrot sabzi at a clean restaurant near the bus stand",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium experience – rooftop lounge offering grilled vegetables, paneer tikka and a glass of fine Rajasthani wine",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "If departure is later in the evening, you may stay another night in Jaisalmer; otherwise head straight to the airport. Keep travel documents handy for the 4‑hour drive back."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 12000,
+      "transport": 8000,
+      "activities": 7000,
+      "food": 6400,
+      "total": 33400
+    },
+    "warnings": [
+      "Camel‑ride scams near fort gates: only book rides through your hotel or RTDC‑registered operators; refuse unsolicited offers.",
+      "Desert‑camp bait‑and‑switch: verify camp photos via video call, read recent reviews, and confirm bathroom facilities before paying.",
+      "Transport price inflation: agree on fares in advance, use hotel‑recommended drivers, and avoid unmarked vehicles.",
+      "Medical facilities are basic; for serious issues you may need evacuation to Jodhpur (≈290 km). Carry a travel‑first‑aid kit.",
+      "Camel ride scam near fort gates: offers of 'free' or ₹50 rides that escalate to ₹500–1,500; mitigation – book only through your hotel or an RTDC‑registered operator at Sam and refuse all unsolicited camel/horse approaches in fort lanes.",
+      "Luxury desert camp bait‑and‑switch: packages ₹3,000–8,000/person using polished stock photos deliver basic canvas tents with shared bathrooms; mitigation – book camps with recent verified Google/TripAdvisor reviews showing actual guest photos, call directly for a WhatsApp video of the tent interior, avoid aggregator packages that do not name the specific camp.",
+      "Transport price inflation: auto‑rickshaws within town ₹60–100, railway station to fort ~₹80–100, private cab to Sam (full day, dunes + sunset + return) ₹1,200–1,800, shared jeep to Sam ₹80–100/seat; mitigation – agree on fare before starting, use hotel‑recommended drivers, avoid unmarked vehicles.",
+      "Medical facilities are basic; Jaisalmer District Government Hospital handles only minor emergencies. For serious cardiac, trauma or paediatric cases, plan stabilization and transfer to Jodhpur (~290 km, 4 h). Carry a basic travel first‑aid kit for desert stays.",
+      "Desert cuisine relies on dried, preserved ingredients; fresh produce is limited outside the city core and spice levels are high by default. Request 'kam mirch' (less chilli) for milder taste.",
+      "Vegetarian food is widely available; the fort area is predominantly vegetarian. Plain dal and roti can be requested at fort restaurants and camp kitchens for simple meals.",
+      "Avoid unsolicited 'free' camel or horse offers near fort gates – they are a known trust issue that leads to price escalation."
+    ],
+    "personalization_notes": [
+      "Heritage focus – guided tour of Jaisalmer Fort and Patwon ki Haveli matches your interest in historic sites.",
+      "Desert experience – camel safari and overnight camp at Sam dunes fulfill the ‘desert’ theme you requested.",
+      "Mid‑range budget – activities, meals and transport are selected to stay within a medium budget while still offering a few premium touches."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Jaisalmer experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Jaisalmer experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Jaisalmer experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Jaisalmer experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "desert",
+      "heritage"
+    ],
+    "start_date": "2026-12-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:21:28.565536+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 26462,
+    "tier": "dynamic",
+    "season": "winter"
+  }
+}

@@ -1,0 +1,341 @@
+{
+  "key": "dharamsala_4n_p1_nokids_fit_budget_nature_spiritual",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Dharamshala (arrival & settle)",
+        "activities": [
+          {
+            "name": "Check‑in and unwind at the hotel — short walk to the nearby tea stall for a gentle introduction to the town",
+            "bookable": true,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — simple continental spread (toast, boiled egg, fruit)",
+          "lunch": {
+            "description": "Light veg thali with dal, rice, and seasonal sabzi – enjoyed near the main market square",
+            "location_note": "near Dharamshala bus stand — approx 0.3 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Kangra style rajma chawal (kidney beans curry with rice) – fragrant and comforting",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Vegetable pulao with raita – a reliable solo‑friendly spot offering hearty comfort",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Organic mushroom & spinach risotto at a boutique cafe with mountain views",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Arrive by late afternoon; keep the evening relaxed to recover from travel. No heavy walking on day 1."
+      },
+      {
+        "day_number": 2,
+        "location": "McLeod Ganj (spiritual sites)",
+        "activities": [
+          {
+            "name": "Visit Dalai Lama Temple (Tsuglagkhang Complex) — peaceful meditation centre; free entry",
+            "bookable": false,
+            "approx_cost": 0
+          },
+          {
+            "name": "Explore Bhagsunag Temple & Waterfall — short steep climb; visit early to avoid crowds",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — warm porridge with honey and nuts",
+          "lunch": {
+            "description": "Paneer butter masala with naan – served at a modest dhaba near Bhagsunag",
+            "location_note": "near Bhagsunag Waterfall — approx 2 km from McLeod Ganj"
+          },
+          "dinner": [
+            {
+              "description": "Aloo paratha with curd and pickle – classic Himachali comfort",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg biryani with side salad – reliable solo dining with clean ambience",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Herb‑infused Tibetan thukpa in a garden terrace restaurant",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Early start (7:00 am) to beat the crowds and possible drizzle. Carry a rain jacket; the climb can be slippery after rain."
+      },
+      {
+        "day_number": 3,
+        "location": "Triund (nature trek)",
+        "activities": [
+          {
+            "name": "Guided trek to Triund (3 hrs up, 2 hrs down) — panoramic Himalayan views; moderate difficulty",
+            "bookable": true,
+            "approx_cost": 30
+          },
+          {
+            "name": "Sunset viewpoint at Triund — relax with tea and light snacks",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — fresh fruit bowl and toast with jam",
+          "lunch": {
+            "description": "Packaged vegetable sandwich and fruit juice – eaten on the trail",
+            "location_note": "mid‑way on the Triund trail — approx 6 km from base"
+          },
+          "dinner": [
+            {
+              "description": "Dal tadka with steamed rice – soothing after a day on the hills",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Mushroom & corn pulao with raita – comforting solo dinner",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Chef’s tasting menu featuring Himachal cheese and local herbs at a hilltop restaurant",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Carry water, rain gear, and sturdy shoes. The trek is doable in moderate pace; return before dark to avoid monsoon rains."
+      },
+      {
+        "day_number": 4,
+        "location": "Kangra Fort day‑trip (history & nature)",
+        "activities": [
+          {
+            "name": "Taxi to Kangra Fort — explore the historic citadel and enjoy panoramic valley views",
+            "bookable": true,
+            "approx_cost": 15
+          },
+          {
+            "name": "Leisure walk along the River Beas banks – gentle stroll for photography",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — boiled egg, toast, and masala chai",
+          "lunch": {
+            "description": "Chana masala with bhaturas – hearty meal near the fort entrance",
+            "location_note": "near Kangra Fort gate — approx 45 km from Dharamshala"
+          },
+          "dinner": [
+            {
+              "description": "Kangri chicken curry with basmati rice – local specialty (if non‑veg acceptable; otherwise veg version available)",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Veg khichdi with papad – easy solo-friendly dinner",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Fine‑dining experience with a live folk‑music ambience at a heritage hotel restaurant",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Start early to allow time for possible traffic delays. The fort area can be windy; keep a light jacket."
+      },
+      {
+        "day_number": 5,
+        "location": "Departure (Dharamshala → Chandigarh)",
+        "activities": [
+          {
+            "name": "Check‑out and transfer to Chandigarh bus terminal — relaxed travel back",
+            "bookable": true,
+            "approx_cost": 7
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — simple yogurt with honey and toasted bread",
+          "lunch": {
+            "description": "Vegetable fried rice with soy sauce – enjoyed on the bus en‑route",
+            "location_note": "on the highway near Palampur — approx 70 km from Dharamshala"
+          },
+          "dinner": [
+            {
+              "description": "N/A – travel day; dinner optional on arrival in Chandigarh",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "N/A – travel day",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "N/A – travel day",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Allow extra 30 minutes for possible monsoon‑related road checks. No strenuous activities on the final day."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 80,
+      "transport": 34,
+      "activities": 45,
+      "food": 75,
+      "total": 234
+    },
+    "warnings": [
+      "Early June still marks the start of the monsoon; rain can make trails slippery and some sites (Bhagsunag Temple/Waterfall) may close temporarily.",
+      "Taxi fares to McLeod Ganj are often inflated – insist on meter rates (₹12‑₹15 per km) or book via a reputable app.",
+      "Unlicensed guides at Bhagsu may overcharge; use official guides from the Dharamshala Tourist Information Centre (₹200‑₹300).",
+      "Road to Kangra Fort can experience landslide alerts in heavy rain; check local updates before departure.",
+      "Overpriced McLeod Ganj taxi rides – drivers often quote flat rates of ₹1,200‑₹1,500 for the 5 km stretch, inflating the fare up to 3× the metered price. Mitigation: Insist on the meter (₹12‑₹15 per km) or book via a reputable app such as “Himachal Taxi” that shows the estimated fare before booking.",
+      "Unlicensed guide fees at Bhagsu – scammers pose as official trekking guides and charge ₹1,000‑₹1,500 for a 30‑minute walk. Mitigation: Hire guides only from the Dharamsala Tourist Information Centre (official fee ₹200‑₹300) or use verified app‑based guides.",
+      "Monsoon‑related closures – Bhagsunag Temple and Bhagsu Waterfall are typically closed during heavy monsoon (July‑August) due to flash‑flood risk; Kangra Fort is also closed during monsoon‑induced landslide alerts (usually July). Mitigation: Visit these sites early in June before the heaviest rains, and check local alerts before setting out.",
+      "Dalai Lama Temple entry is free (donations optional) but early mornings (7:00‑9:00 am) attract large crowds; arrive early to avoid long queues.",
+      "Bhagsunag Temple involves a short steep climb of ~200 m; not recommended for travellers with limited mobility and may be hazardous on wet monsoon days.",
+      "Local taxis and auto‑rickshaws charge ₹30‑₹40 per km for auto‑rickshaws and ₹12‑₹15 per km for taxis; always ask for a meter or agree on a fare beforehand to avoid inflation.",
+      "Road to McLeod Ganj can be congested near the bus depot; plan to travel after the main town has settled to avoid traffic bottlenecks."
+    ],
+    "personalization_notes": [
+      "Spiritual focus – Dalai Lama Temple and Bhagsunag Temple were prioritized to match your meditation interest.",
+      "Nature‑oriented day (Triund trek) aligns with the ‘nature’ travel style while keeping the hike moderate for a solo traveller.",
+      "Budget‑friendly meals and transport keep the overall cost within a modest budget without compromising local flavor."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Dharamsala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Dharamsala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Dharamsala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Dharamsala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 5,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Dharamsala experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 4,
+    "duration_days": 5,
+    "party_size": 1,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "budget",
+    "budget": "budget",
+    "trip_style": [
+      "spiritual",
+      "nature"
+    ],
+    "start_date": "2026-06-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:02:34.564821+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 28781,
+    "tier": "dynamic",
+    "season": "summer"
+  }
+}

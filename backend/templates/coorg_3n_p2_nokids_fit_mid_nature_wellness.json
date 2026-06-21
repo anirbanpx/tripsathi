@@ -1,0 +1,294 @@
+{
+  "key": "coorg_3n_p2_nokids_fit_mid_nature_wellness",
+  "plan": {
+    "days": [
+      {
+        "day_number": 1,
+        "location": "Madikeri",
+        "activities": [
+          {
+            "name": "Raja's Seat – sunset viewpoint with gentle walk, perfect intro to Coorg’s landscape",
+            "bookable": false,
+            "approx_cost": 20
+          },
+          {
+            "name": "Omkareshwara Temple – short visit to the historic mosque‑temple blend (flat grounds, no walking strain)",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — South Indian buffet with idli, dosa, upma, chutney and fresh fruit",
+          "lunch": {
+            "description": "Masala dosa with coconut chutney and a side of vegetable sambar, enjoyed near Raja's Seat viewpoint",
+            "location_note": "near Raja's Seat — approx 2 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Karnataka-style veg thali featuring rice, sambar, rasam, bhindi fry and curd",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly restaurant serving paneer butter masala, naan and cucumber raita",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium dinner at a garden‑view venue with Coorgi chicken (or veg) curry, wild mushroom risotto and live acoustic music",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Gentle start after arrival from Bengaluru; keep an umbrella handy – July rain can be sudden. Early sunset view avoids heavy monsoon downpours."
+      },
+      {
+        "day_number": 2,
+        "location": "Coffee Estate (Madikeri outskirts)",
+        "activities": [
+          {
+            "name": "Guided coffee‑estate walk – flat, gentle paths, learn about bean processing; includes a short coffee‑tasting session",
+            "bookable": true,
+            "approx_cost": 0
+          },
+          {
+            "name": "Wellness spa – 60 min aromatic oil massage using local coffee‑bean oil",
+            "bookable": true,
+            "approx_cost": 1500
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — fresh fruit, poha, banana chips and masala tea",
+          "lunch": {
+            "description": "Steamed rice with mild vegetable dal, cucumber raita and banana slices (soft, easy on the stomach)",
+            "location_note": "served at the estate’s open‑air cafeteria — approx 0 km from activity site"
+          },
+          "dinner": [
+            {
+              "description": "Traditional Kodava style pork (or veg) roast with millet roti and tangy chutney",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Casual dining spot offering paneer tikka, butter naan and mixed veg pulao",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Upscale dinner on the estate terrace with grilled fish (or grilled tofu), saffron rice and a glass of local coffee liqueur",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Monsoon rains may make the walk slick – wear closed shoes and carry a raincoat. Spa session scheduled early evening to avoid late‑night rain."
+      },
+      {
+        "day_number": 3,
+        "location": "Dubare & Abbey Falls area",
+        "activities": [
+          {
+            "name": "Dubare Elephant Camp – interactive elephant bath & feeding (9‑11 AM session, bookable)",
+            "bookable": true,
+            "approx_cost": 250
+          },
+          {
+            "name": "Abbey Falls – short, scenic viewpoint walk (well‑maintained boardwalk, ~15 min walk)",
+            "bookable": false,
+            "approx_cost": 30
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — warm appam with vegetable stew and filter coffee",
+          "lunch": {
+            "description": "Puttu with ripe banana and a side of coconut milk, eaten near Abbey Falls",
+            "location_note": "near Abbey Falls — approx 3 km from Dubare camp"
+          },
+          "dinner": [
+            {
+              "description": "Coorgi fish curry (or mushroom curry) with steamed rice and beetroot pachadi",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Family‑friendly place serving veg biryani, raita and papad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium riverside restaurant offering a six‑course tasting menu with local ingredients and live classical music",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Start early to catch the 9 AM elephant session; afternoon showers are common, so keep waterproof bags for electronics. Abbey Falls boardwalk is safe but can be slippery – use grip shoes."
+      },
+      {
+        "day_number": 4,
+        "location": "Madikeri",
+        "activities": [
+          {
+            "name": "Madikeri Fort & museum – easy flat walk, glimpse of Kodava history",
+            "bookable": false,
+            "approx_cost": 0
+          }
+        ],
+        "meals": {
+          "breakfast": "At hotel — plain rice with dal, soft boiled eggs and fresh coconut water",
+          "lunch": {
+            "description": "Veg thali with rice, sambar, avial, curd and a sweet jaggery dessert",
+            "location_note": "near Madikeri Fort — approx 1 km from hotel"
+          },
+          "dinner": [
+            {
+              "description": "Light dinner of millets, rasam, stir‑fried beans and buttermilk",
+              "cuisine_tag": "local"
+            },
+            {
+              "description": "Casual eatery serving cheese quesadilla, tomato soup and fresh salad",
+              "cuisine_tag": "family"
+            },
+            {
+              "description": "Premium farewell dinner with a private garden setting, serving Coorg coffee‑infused dessert and wine pairing",
+              "cuisine_tag": "premium"
+            }
+          ]
+        },
+        "notes": "Wrap up with a relaxed fort visit before the late‑afternoon drive back to Bengaluru. Keep an eye on rain forecasts; the road can become foggy after 5 PM in monsoon."
+      }
+    ],
+    "hotels": [],
+    "budget_breakdown": {
+      "accommodation": 12000,
+      "transport": 8000,
+      "activities": 1240,
+      "food": 12000,
+      "total": 33240
+    },
+    "warnings": [
+      "July is peak monsoon in Coorg – expect heavy rain, slippery paths and occasional road flooding; carry rain gear and waterproof footwear.",
+      "Local taxis are union‑regulated with fixed rates; confirm fare (e.g., Bengaluru‑Madikeri one‑way ~₹3,500) before boarding.",
+      "Vegetarian options can be limited in traditional Kodava restaurants – always ask for veg preparations in advance.",
+      "Leech‑infested trails are common; avoid deep jungle treks and stick to boardwalks or estate walks.",
+      "Mobile network (especially Jio) may be patchy in remote estates; keep a backup SIM or offline maps.",
+      "Monsoon trekking hazards: heavy rain, leeches on all trails, slippery paths and possible road flooding – mitigation: wear full closed shoes, tuck socks over trousers, apply salt/tobacco deterrent, avoid trekking if possible, focus on estate stays and waterfall viewing.",
+      "Estate stay authenticity risk: some listings show generic resorts with only a few coffee plants – mitigation: verify property is on an actual working estate by asking for estate photos before booking.",
+      "Transport limitation: no app-based cabs (Ola/Uber) in Coorg; rely on local taxis with fixed union rates – mitigation: agree on fare upfront (Madikeri sightseeing full day ₹2,000–2,500; Bengaluru→Madikeri one-way ₹3,000–4,000) or use pre‑arranged hotel taxis.",
+      "Connectivity issue: Jio network patchy at remote estates; BSNL/Airtel better in main areas – mitigation: check coverage with accommodation beforehand and carry a secondary SIM if needed.",
+      "Vegetarian food scarcity in local Kodava restaurants – mitigation: confirm vegetarian meal availability when booking estate stays or resorts; most will provide on request.",
+      "Souvenir price inflation: Coorg honey and coffee are standard‑priced at estate shops but often inflated at tourist shops in Madikeri town – mitigation: buy directly from estate shops or verified outlets.",
+      "Confirm vegetarian meal options at your chosen estate stay or resort, as local Kodava restaurants offer limited vegetarian fare.",
+      "Book Dubare Elephant Camp well in advance (programme fills quickly on weekends and holidays); arrive by 8:30 AM for the 9–11 AM session.",
+      "Carry personal medications; the nearest multi‑specialty hospital is in Mysuru (~2.5 h away), with only basic care available at Madikeri District Hospital.",
+      "Avoid open footwear (sandals) during monsoon outings; use closed shoes and leech deterrents on all outdoor activities.",
+      "Keep cash handy for small vendors and taxi payments, as card acceptance may be limited in remote estates.",
+      "Check mobile network reliability with your accommodation if constant connectivity is needed; Jio may be unreliable at remote estates."
+    ],
+    "personalization_notes": [
+      "Focused on nature‑rich experiences (coffee estate, waterfalls, elephant camp) matching your ‘nature’ trip style.",
+      "Included a wellness spa session to satisfy the ‘wellness’ element while keeping a moderate, relaxed pace for a couple.",
+      "Activities limited to two per day with short walks, respecting your moderate pacing preference."
+    ]
+  },
+  "places_fallback": {
+    "hotels": [],
+    "days": [
+      {
+        "day_number": 1,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Coorg experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 2,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Coorg experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 3,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Coorg experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      },
+      {
+        "day_number": 4,
+        "lunch": {
+          "why_chosen": "On your route — no detour needed"
+        },
+        "dinner": [
+          {
+            "cuisine_tag": "local",
+            "why_chosen": "The unmissable Coorg experience — eat what locals eat"
+          },
+          {
+            "cuisine_tag": "family",
+            "why_chosen": "Safe bet for the group"
+          },
+          {
+            "cuisine_tag": "premium",
+            "why_chosen": "For a special evening — worth the splurge"
+          }
+        ]
+      }
+    ]
+  },
+  "trip_parameters": {
+    "duration_nights": 3,
+    "duration_days": 4,
+    "party_size": 2,
+    "kid_ages": [],
+    "elderly": false,
+    "budget_bracket": "mid",
+    "budget": "mid",
+    "trip_style": [
+      "nature",
+      "wellness"
+    ],
+    "start_date": "2026-07-10",
+    "dietary_restrictions": [],
+    "user_id": ""
+  },
+  "meta": {
+    "generated_at": "2026-06-21T06:07:11.261999+00:00",
+    "pipeline_version": "1.0",
+    "session_tokens": 23083,
+    "tier": "dynamic",
+    "season": "monsoon"
+  }
+}
