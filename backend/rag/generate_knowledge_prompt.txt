@@ -60,6 +60,27 @@ Driving times:
 - Vegetarian options: [honest statement]
 
 **Medical:** [Nearest quality hospital from main tourist area, what to carry]
+
+## Getting There
+
+**By train:** [Nearest railway station name + distance to town; 1–2 key train names with numbers from Delhi or Mumbai]
+**By air:** [Nearest airport + distance; airlines that fly there; approximate one-way fare range]
+**By road:** [Key highway name; nearest state bus depot; inter-city bus frequency and typical fare]
+
+## Hidden Gems
+
+**<Spot Name>:**
+- [Why it's special — uncrowded, local experience, not in mainstream guidebooks]
+- [Entry/cost if any; how to reach; best time]
+- [Toddler/elderly suitability note]
+
+(2–3 spots minimum)
+
+## Practical Tips
+
+**Connectivity:** [Jio/Airtel/Vi coverage quality in this area; note any dead zones or patchy coverage]
+**ATMs:** [Nearest reliable ATM locations; SBI/HDFC/ATM availability in tourist zones; cash vs card acceptance norm]
+**SIM cards:** [Where to buy (airport vs town); which network has best coverage in this specific region]
 ```
 
 ---
@@ -73,7 +94,9 @@ Driving times:
 5. **Driving times must use real highway names or route descriptions** — not just "a few hours."
 6. **Best time section must be month-by-month** with concrete implications (monsoon closures, seasonal restrictions, festival crowds).
 7. **No generic filler.** Every sentence must be actionable. Do not write "Destination X is a beautiful hill station known for its scenic views."
-8. **File length:** aim for 600–900 words. No shorter (too thin for RAG retrieval), no longer (padding dilutes retrieval quality).
+8. **File length:** aim for 1,000–1,500 words. Shorter files miss attractions that matter to the itinerary; stay under 1,500 to keep chunks focused.
+9. **Minimum 12 named attractions** must appear across all sub-region sections — not just "key places" list items, but fully detailed entries with entry fee, suitability, and best time.
+10. **Getting There, Hidden Gems, and Practical Tips sections are mandatory.** Every file must include all three. Hidden Gems must name at least 2 specific spots not already covered in the main sub-region sections.
 
 ---
 
@@ -139,3 +162,7 @@ Then run: cd backend && venv\Scripts\python.exe reindex.py
 [ ] Best time section with month ranges
 [ ] Medical note
 [ ] All prices in ₹
+[ ] Minimum 12 named attractions with full detail entries
+[ ] Getting There section (train + air + road)
+[ ] Hidden Gems section (2+ specific spots not in main sections)
+[ ] Practical Tips section (connectivity + ATM + SIM)
