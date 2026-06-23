@@ -6,10 +6,12 @@ with the enhanced generate_knowledge_prompt.txt + research context to produce ri
 (15-20 attractions, 2025 pricing, Getting There / Hidden Gems / Practical Tips sections).
 
 Run from backend/ directory:
-    python enrich_knowledge.py --destination shimla --force   # test on one destination first
-    python enrich_knowledge.py --force                        # regenerate all destinations
+    python enrich_knowledge.py --destination shimla --force   # single destination
+    python enrich_knowledge.py --batch 1 --force              # run batch 1 of 5 (~11 destinations)
+    python enrich_knowledge.py --batch 2 --force              # run batch 2 of 5
+    python enrich_knowledge.py --force                        # regenerate all 54 destinations
     python enrich_knowledge.py --dry-run                      # list targets without running
-    python enrich_knowledge.py --force --reindex              # regenerate + push to Qdrant
+    python enrich_knowledge.py --batch 3 --force --reindex    # batch + push to Qdrant after
 """
 
 import argparse
@@ -51,6 +53,15 @@ REQUIRED_SECTIONS = [
 ]
 
 MIN_WORDS = 800
+
+# 54 destinations split into 5 roughly equal batches (~10-11 each, ~20-25 min per batch).
+BATCHES: dict[int, list[str]] = {
+    1: ["kerala", "kochi", "alleppey", "munnar", "kovalam", "thekkady", "varkala", "wayanad", "kumarakom", "goa", "panaji"],
+    2: ["jaipur", "udaipur", "jodhpur", "jaisalmer", "pushkar", "ranthambore", "mount_abu", "delhi", "agra", "varanasi", "amritsar"],
+    3: ["rishikesh", "haridwar", "khajuraho", "manali", "shimla", "dharamsala", "leh", "nainital", "mussoorie", "spiti", "mysore"],
+    4: ["hampi", "coorg", "ooty", "kodaikanal", "pondicherry", "mahabalipuram", "madurai", "mumbai", "bangalore", "chennai", "hyderabad"],
+    5: ["kolkata", "darjeeling", "puri", "bhubaneswar", "andaman", "havelock", "ahmedabad", "kutch", "jim_corbett", "kaziranga"],
+}
 
 SEARCH_TEMPLATES = [
     "{dest} India top tourist attractions complete guide 2025",
@@ -179,6 +190,8 @@ def main() -> None:
         description="Enrich destination knowledge files with web-grounded research."
     )
     parser.add_argument("--destination", help="Single destination slug (e.g. shimla)")
+    parser.add_argument("--batch", type=int, choices=[1, 2, 3, 4, 5],
+                        help="Run a predefined batch of ~10-11 destinations (1-5)")
     parser.add_argument("--dry-run", action="store_true",
                         help="List targets without running searches or LLM calls")
     parser.add_argument("--force", action="store_true",
@@ -199,6 +212,11 @@ def main() -> None:
         if args.destination not in all_dests:
             print(f"WARNING: '{args.destination}' not in destinations.json — running anyway.")
         targets = [args.destination]
+    elif args.batch:
+        targets = BATCHES[args.batch]
+        if not args.force:
+            existing = {f.stem for f in KNOWLEDGE_DIR.glob("*.md")}
+            targets = [d for d in targets if d not in existing]
     else:
         if args.force:
             targets = all_dests
