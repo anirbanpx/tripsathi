@@ -2,89 +2,203 @@
 
 ## Routing
 
-**Standard routing: Kozhikode → Kalpetta → Sultan Bathery → Mananthavady**
+**Standard routing: Kozhikode (Calicut) → Kalpetta → Sulthan Bathery → Meppadi**
 
-This sequence follows the main NH 766 corridor, which climbs gradually from the coastal plains, allowing travelers to acclimatize to altitude before tackling the steeper sections toward Mananthavady. It also minimizes back‑tracking, keeps daily drive times under 4 hours, and aligns with the location of major tourist services (fuel, food, accommodation).
+The sequence follows the main NH 766 corridor, allowing travelers to clear the steep ghat climbs early (Kozhikode → Kalpetta) when the road is dry, then move southward to Sulthan Bathery (gateway to the southern waterfalls) and finally to Meppadi for Chembra Peak. This order minimises back‑tracking, reduces fatigue on the winding mountain roads, and keeps fuel stops at major towns where petrol pumps and eateries are reliable.
 
-Driving times:
-- Kozhikode → Kalpetta: 3.5 hours (NH 766, Kozhikode–Wayanad Road)
-- Kalpetta → Sultan Bathery: 1.5 hours (NH 766, continues south‑west)
-- Sultan Bathery → Mananthavady: 1 hour (State Highway 30)
+Driving times:  
+- Kozhikode → Kalpetta: 2.5 hours (NH 766, ghat section)  
+- Kalpetta → Sulthan Bathery: 1.0 hour (NH 766)  
+- Sulthan Bathery → Meppadi: 0.8 hour (state highway SH‑29)
 
-**Alternative routing:** Enter from Mysore → Gundlupet → Mananthavady → Sultan Bathery → Kalpetta, useful for those coming from Karnataka and wishing to avoid monsoon‑prone stretches of NH 766 between Kozhikode and Kalpetta.
+**Alternative routing:** Arrive via Mysore (NH 275) → Gundlupet → Sultan Bathery → Kalpetta. This circuit is useful for South‑Indian travellers coming from Karnataka, as the road is wider and less prone to monsoon landslides than the coastal ghat.
 
-## Kalpetta
+---
 
-**Key places:** Pookode Lake, Wayanad Heritage Museum, Soochipara Falls
+## North Wayanad
 
-**Pookode Lake:**
-- Entry: ₹20 adult, ₹10 child (3–12 years)
-- Suitability: Flat 1 km boardwalk, wheelchair‑friendly, stroller allowed; safe for toddlers.
-- Best time of day: 7 am–9 am for misty reflections and cooler temperatures.
-- Seasonal closure: None; water level may dip in peak summer but lake remains accessible.
+**Key places:** Edakkal Caves, Kuruva Island, Banasura Sagar Dam, Jain Temple (Sulthan Bathery)
 
-**Trust issue or pricing trap for this area:**
-- Unlicensed boat operators often quote ₹300–₹500 per hour, far above the official rate.
-- Recommended approach: Hire boats only from the government‑run kiosk (₹150 per hour) and confirm price before boarding.
+**Edakkal Caves:**  
+- Entry: ₹150 adult, ₹75 child (aged 6–12); camera surcharge ₹53.  
+- Suitability: 1 km uneven rocky path, steep steps; **not suitable for toddlers (<3 yr) or travellers with limited mobility**.  
+- Best time of day: Early morning (8 am–10 am) to avoid midday heat and crowds.  
+- Seasonal closure: Closed during heavy monsoon (July – September) due to slippery rocks.
 
-**Kalpetta food:**
-- Signature dishes: Kerala Sadya (banana‑leaf feast), Appam with vegetable stew, Puttu with Kadala curry.
-- For toddlers and young kids: Soft Idli, plain rice with dal, mashed banana.
-- Vegetarian availability: Most dishes are vegetarian by default; meat is optional, so specify “veg” when ordering.
+**Kuruva Island:**  
+- Entry: ₹30 adult, ₹15 child (3–12 yr).  
+- Suitability: Flat boardwalks, but occasional wooden planks can be slippery; **suitable for toddlers if carried, and for elderly with a walking stick**.  
+- Best time: Mid‑morning (9 am–11 am) when the river flow is moderate.  
+- Seasonal closure: Fully closed in July–September (high monsoon) for safety.
 
-## Sultan Bathery
+**Banasura Sagar Dam (including the world’s longest suspension bridge):**  
+- Entry: ₹20 adult, ₹10 child (under 12).  
+- Suitability: Paved promenade; **fully suitable for toddlers (stroller‑friendly) and elderly**. Boating is optional and requires a separate ₹150 per boat (max 4 persons).  
+- Best time: Late afternoon (4 pm–6 pm) for sunset reflections.  
+- Seasonal closure: No closure; water level may drop in December–January, limiting boat rides.
 
-**Key places:** Banasura Sagar Dam, Kuruva Island, Jain Temple
+**Trust issue – “Guide‑only” entry fee at Edakkal:**  
+- Some unofficial guides demand an extra “guide fee” of ₹300 per person, claiming it’s mandatory.  
+- Recommended approach: Pay only the official entry fee at the ticket counter; if you need a guide, hire one from the authorized kiosk inside the site for ₹200 per hour.
 
-**Banasura Sagar Dam:**
-- Entry: Free (dam perimeter); boat ride ₹250 adult, ₹150 child.
-- Suitability: Gentle boat ride suitable for toddlers; however, surrounding pathways are uneven and steep, making it difficult for elderly travellers with mobility constraints.
-- Best time of day: 4 pm–6 pm for sunset hues over the reservoir.
-- Seasonal closure: Boat services limited when water level falls below 15 ft (typically late May–early June).
+**North Wayanad food:**  
+- Signature dishes: *Kerala Sadya* (banana leaf feast), *Puttu* with *Kadala Curry*, *Appam* with *Vegetable Stew*.  
+- For toddlers and young kids: Soft *Idli* with plain *Coconut Chutney* (mild), *Plain rice with Dal* (moist), *Mashed banana* (fresh).  
+- Vegetarian availability: Excellent; most stalls serve pure vegetarian fare, though some fish fry stalls exist near the dam.
 
-**Trust issue or pricing trap for this area:**
-- Unofficial “shortcut” guides sell “express” tours at ₹1,200 per person, promising faster access to Kuruva Island.
-- Recommended approach: Purchase tickets only at the official Kerala Tourism office; verify guide ID and request a written receipt.
+---
 
-**Sultan Bathery food:**
-- Signature dishes: Fish curry (non‑veg), Avial, Thoran (vegetable stir‑fry).
-- For toddlers and young kids: Soft boiled eggs, plain rice porridge (Kanji), mashed potatoes.
-- Vegetarian availability: Good veg options exist, but many stalls prioritize meat; always ask for “veg” to avoid hidden fish or meat.
+## South Wayanad
 
-## Mananthavady
+**Key places:** Meenmutty Waterfalls, Soochipara Falls, Chembra Peak, Wayanad Heritage Museum
 
-**Key places:** Edakkal Caves, Tholpetty Wildlife Sanctuary, Pazhassi Raja Fort
+**Meenmutty Waterfalls:**  
+- Entry: ₹100 adult, ₹50 child (5–12 yr).  
+- Suitability: 2 km trek with steep descents; **not suitable for toddlers or elderly with joint issues**.  
+- Best time: Early morning (7 am–9 am) before the sun intensifies.  
+- Seasonal closure: Closed during monsoon (June – September) due to flash‑flood risk.
 
-**Edakkal Caves:**
-- Entry: ₹30 adult, ₹15 child (3–12 years)
-- Suitability: 3 km steep climb with uneven stone steps; not suitable for toddlers or elderly travellers with limited mobility.
-- Best time of day: Early morning (6 am–9 am) to avoid heat and crowds.
-- Seasonal closure: Closed during monsoon months (June – September) due to slippery rocks and safety concerns.
+**Soochipara (Sentinel) Falls:**  
+- Entry: ₹120 adult, ₹60 child.  
+- Suitability: 1.5 km rocky path, moderate steps; **suitable for children aged 5+ and fit seniors**. No swimming allowed in monsoon.  
+- Best time: Late morning (10 am–12 pm) when water flow is steady but not too forceful.  
+- Seasonal closure: Same as Meenmutty (June – September).
 
-**Trust issue or pricing trap for this area:**
-- Unauthorized vendors sell “cave lighting” kits at ₹500 each, claiming they are required for entry.
-- Recommended approach: Carry a personal torch or join an official guided trek (₹200 per person) where lighting is provided.
+**Chembra Peak (Trekking to the heart‑shaped lake):**  
+- Entry: ₹100 adult, ₹50 child (5–12 yr).  
+- Suitability: 3 km ascent with steep gradients; **unsuitable for toddlers, and challenging for elderly or those with respiratory issues**.  
+- Best time: Early sunrise (5 am–7 am) to avoid midday heat and fog.  
+- Seasonal closure: Closed during heavy rains (July – August) and after 5 pm for safety.
 
-**Mananthavady food:**
-- Signature dishes: Malabar Parotta with Kerala beef fry (non‑veg), veg Parotta with vegetable kurma.
-- For toddlers and young kids: Soft Idiyappam (string hoppers) with plain coconut milk, mashed potatoes.
-- Vegetarian availability: Plenty of veg dishes; ensure you request “veg” as many eateries default to meat‑based preparations.
+**Wayanad Heritage Museum (Kalpetta):**  
+- Entry: ₹20 adult, ₹10 child (under 12).  
+- Suitability: Small indoor gallery, wheelchair‑accessible ramp; **fully suitable for toddlers (carried) and elderly**.  
+- Best time: Mid‑afternoon (2 pm–4 pm) when crowds thin.  
+- Seasonal closure: Open year‑round; closed on government holidays.
+
+**Trust issue – “Waterfall parking overcharge” at Meenmutty:**  
+- Private operators sometimes demand ₹200 per vehicle for “parking”.  
+- Recommended approach: Use the official government parking lot (₹50 per car) located near the ticket office; keep the receipt.
+
+**South Wayanad food:**  
+- Signature dishes: *Kerala Fish Curry* (for non‑veg), *Thalassery Biryani*, *Pazham Pori* (banana fritters).  
+- For toddlers and young kids: Soft *Mashed rice* with *Mild lentil soup*, *Plain dosa* with *Coconut chutney* (light), *Steamed carrot sticks*.  
+- Vegetarian availability: Good; most eateries offer a full vegetarian menu, though fish dishes dominate the main street.
+
+---
+
+## Central Wayanad
+
+**Key places:** Pookode Lake, Tholpetty Wildlife Sanctuary, Wayanad Spice Plantation, Sulthan Bathery Jain Temple
+
+**Pookode Lake:**  
+- Entry: ₹25 adult, ₹15 child (under 12).  
+- Suitability: 0.5 km paved promenade, paddle‑boat hire; **suitable for toddlers (stroller‑friendly) and elderly**.  
+- Best time: Late afternoon (4 pm–5:30 pm) for calm waters and birdwatching.  
+- Seasonal closure: None; boat rides may be suspended in heavy rain.
+
+**Tholpetty Wildlife Sanctuary:**  
+- Entry: ₹200 adult, ₹100 child (5–12 yr).  
+- Suitability: Safari jeep (₹500 per vehicle, 2 hrs). The road is uneven; **not recommended for toddlers without a child‑seat, but manageable for fit seniors**.  
+- Best time: Early morning (6 am–9 am) for animal activity.  
+- Seasonal closure: Closed during monsoon (July – September) for road safety.
+
+**Wayanad Spice Plantation (near Vythiri):**  
+- Entry: ₹30 adult, ₹15 child.  
+- Suitability: Guided walk through spice gardens; **suitable for all ages, including toddlers (carried) and elderly**.  
+- Best time: Mid‑morning (9 am–11 am) when aromas are strongest.  
+- Seasonal closure: None; some sections may be inaccessible during heavy rains.
+
+**Jain Temple (Sulthan Bathery):**  
+- Entry: Free (donations optional).  
+- Suitability: Flat stone‑paved courtyard, no steps; **fully suitable for toddlers and elderly**.  
+- Best time: Early afternoon (1 pm–3 pm) when the temple is quiet.  
+- Seasonal closure: None.
+
+**Trust issue – “Spice tour upsell” at plantation:**  
+- Some operators bundle a “herbal tea” at ₹250, claiming it’s mandatory.  
+- Recommended approach: Decline the optional tea; negotiate a plain guided walk for the listed entry fee.
+
+**Central Wayanad food:**  
+- Signature dishes: *Kerala Sadya* (vegetarian banquet), *Puttu* with *Banana*, *Avial* (mixed veg coconut stew).  
+- For toddlers and young kids: *Soft idli* with *Mild sambar* (no lentils), *Plain rice* with *Ghee* and *Dal* (well‑cooked), *Steamed pumpkin mash*.  
+- Vegetarian availability: Very high; most restaurants are pure vegetarian or offer a vegetarian thali.
+
+---
 
 ## General Wayanad Notes
 
-**Best time to visit:**
-- **October – March:** Cool (15‑25 °C), all attractions fully operational, ideal for trekking, wildlife spotting, and festivals such as Vishu.
-- **April – May:** Warm (28‑35 °C); water bodies recede, early‑morning visits recommended; moderate tourist crowd.
-- **June – September:** Heavy monsoon; landslides frequent on NH 766, many outdoor spots (Banasura boat, Kuruva Island) closed; waterfalls at peak flow for those comfortable with rain.
+**Best time to visit:**  
+- **October – February:** Cool (15‑25 °C), all attractions open, wildlife active, festivals (Vishu, Onam) add cultural colour.  
+- **March – May:** Warm (25‑35 °C), ideal for trekking and lake activities; early summer crowds are modest.  
+- **June – September:** Heavy monsoon; waterfalls at peak flow but many trekking routes (Chembra, Meenmutty) are closed; road landslides possible.
 
-**Transport pricing:**
-- **Taxi:** Metered at ₹12 per km after the first ₹50; out‑station trips often negotiated, typical Kalpetta airport‑to‑hotel fare ≈₹1,500.
-- **Auto‑rickshaw:** Fixed ₹30 per km within towns; night surcharge of ₹10 extra per km.
-- **App‑based options:** Uber and Ola operate in Kalpetta and Sultan Bathery; base fare ₹80, with surge pricing during peak tourist season.
+**Transport pricing:**  
+- **Taxi/cab:** Metered fares start at ₹12 per km; typical 60 km city‑to‑city ride costs ₹720. Negotiated flat rates are common for airport transfers – ₹1,200 (airport → Kalpetta).  
+- **Auto/rickshaw:** ₹12 per km base, night surcharge 20 %. For short hops (e.g., Kalpetta → Pookode, 12 km) expect ₹150.  
+- **App‑based options:** Ola and Uber operate in Kalpetta and Sultan Bathery; surge pricing rarely exceeds 1.5× standard rates.
 
-**Dietary notes:**
-- Dominant cuisine: Kerala coastal style, heavy use of coconut oil, tamarind, and red chili.
-- Allergy risks: Coconut, mustard seeds, and seafood (especially shrimp and fish) are common allergens.
-- Vegetarian options: Sadya, Avial, Thoran, and vegetable kurma are widely available, but many restaurants default to non‑veg; explicitly state “veg please” to avoid hidden meat.
+**Dietary notes:**  
+- Dominant cuisine: Kerala (coconut‑rich, liberal use of mustard seeds, tamarind).  
+- Allergy risks: Coconut oil, red chilies, and occasional groundnut oil.  
+- Vegetarian options: Excellent; most establishments serve a full *Sadya* thali, and many have *Uttapam*, *Puttu*, and *Idiyappam*.
 
-**Medical:** Nearest quality hospitals are Government Medical College, Mananthavady (≈15 km from town centre) offering 24‑hour emergency and cardiac care, and Wayanad District Hospital in Kalpetta (≈5 km). Travelers should carry a basic medical kit (pain relievers, antihistamines, oral rehydration salts), insect repellent, and a copy of children’s vaccination records.
+**Medical:**  
+- Nearest quality hospital: **District Hospital, Kalpetta** (≈ 5 km from town centre). 24‑hour emergency, basic ICU, and a pharmacy with generic medicines.  
+- Carry: Personal prescription meds, anti‑malaria tablets (if visiting forest areas), mosquito repellent, basic wound kit, and a copy of health insurance.
+
+---
+
+## Getting There
+
+**By train:**  
+- Nearest railway station: **Kozhikode (CLT)**, 100 km away.  
+- Key trains from Delhi: *Kochuveli Express (12613)* and *Nagercoil‑Delhi Express (12617)*, both stop at Kozhikode. Approx. fare ₹1,200 – ₹2,000 (2‑AC).  
+- From Mumbai: *Mysore‑Mumbai Express (16531)* via Kozhikode, fare ₹1,000 – ₹1,800 (2‑AC).
+
+**By air:**  
+- Nearest airport: **Calicut International Airport (CCJ)**, 65 km from Kalpetta.  
+- Airlines: IndiGo, Air India, SpiceJet, GoAir.  
+- One‑way fare (Delhi ↔ CCJ): ₹3,500 – ₹7,000; (Mumbai ↔ CCJ): ₹2,500 – ₹5,500.  
+- From the airport, hire a prepaid taxi (₹1,200 – ₹1,500) or board a KSRTC bus (₹300).
+
+**By road:**  
+- Highway: **NH 766** (Kozhikode → Wayanad) and **NH 275** (Mysore → Sultan Bathery).  
+- Nearest state bus depot: **Kalpetta Bus Stand** (major KSRTC & private operators).  
+- Inter‑city bus frequency: Every 30 minutes to Kozhikode, every hour to Mysore.  
+- Typical fare: ₹300 – ₹500 for a 2‑hour ride from Kozhikode.
+
+---
+
+## Hidden Gems
+
+**Thirunelli Temple (Brahmagiri Hills):**  
+- Why special: Ancient Shiva temple nestled in a forested valley, often missed by mainstream itineraries.  
+- Entry: Free (donation ₹20 adult). No formal ticket; parking ₹30. Reachable via a 30 km forest road from Sultan Bathery (state‑run bus to Pulpally, then local taxi). Best time: Early morning (6 am–8 am) for misty ambience.  
+- Suitability: Flat stone steps, well‑maintained path – **suitable for toddlers (carried) and elderly**.
+
+**Karapuzha Dam (Vythiri):**  
+- Why special: Lesser‑known backwater reservoir offering quiet boat rides and birdwatching; minimal crowds.  
+- Entry: ₹15 adult, ₹10 child. Boat hire ₹120 per 30 minutes (max 4 persons). Reach via a 15 km road from Vythiri (auto‑rickshaw). Best time: Late afternoon (4 pm–6 pm) when water is calm.  
+- Suitability: Flat dock, shallow water – **fully toddler‑friendly and elderly‑friendly**.
+
+**Jain Temple, Sulthan Bathery (already listed but highlighted as hidden gem):**  
+- Why special: 13th‑century architecture with intricate stone carvings, rarely crowded.  
+- Entry: Free; optional donation ₹10. Access via a short walk from Sulthan Bathery bus stand. Best time: Mid‑day (12 pm–2 pm) when the sun lights the interior.  
+- Suitability: Level ground, no steps – **ideal for all ages**.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jio and Airtel provide strong 4G coverage in Kalpetta, Sultan Bathery, and major tourist spots.  
+- Vodafone Idea (Vi) signal weakens in deep forest areas (Kuruva Island, Thirunelli). Carry an offline map backup for remote treks.
+
+**ATMs:**  
+- Reliable ATMs: SBI (Kalpetta Main Street), HDFC (Vythiri), Federal Bank (Sulthan Bathery).  
+- Cash vs. card: Small shops and market stalls often prefer cash; larger hotels and restaurants accept cards. Keep ₹2,000‑₹3,000 in small denominations for minor purchases.
+
+**SIM cards:**  
+- Purchase at Calicut Airport (Jio, Airtel kiosks) or at the KSRTC bus depot in Kalpetta.  
+- Best coverage in Wayanad: **Jio** (covers most valleys), followed by Airtel. Activate within 24 hours to avoid verification delays.
