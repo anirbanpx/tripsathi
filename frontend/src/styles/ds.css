@@ -1857,3 +1857,95 @@ body {
   .hotel-card-grid { grid-template-columns: 1fr; }
   .dinner-option-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Day accordion ───────────────────────────────────────────────── */
+
+.day-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0 12px;
+}
+
+.day-acc-item {
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: border-color 200ms var(--ease-out);
+  box-shadow: 0 2px 0 0 rgba(62,47,35,.07);
+}
+
+.day-acc-item.open { border-color: var(--accent); }
+
+.day-acc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  cursor: pointer;
+  background: var(--surface);
+  user-select: none;
+}
+
+.day-acc-item.open .day-acc-header {
+  background: var(--paper-2);
+  border-bottom: 1.5px solid var(--border);
+}
+
+.day-acc-num {
+  font-family: var(--font-script);
+  font-size: 26px;
+  color: var(--bark-2);
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+  line-height: 1;
+}
+
+.day-acc-item.open .day-acc-num { color: var(--accent); }
+
+.day-acc-meta { flex: 1; min-width: 0; }
+
+.day-acc-loc {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.1;
+  color: var(--fg);
+}
+
+.day-acc-item.open .day-acc-loc { color: var(--accent); }
+
+.day-acc-preview {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--fg-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.day-acc-chevron {
+  color: var(--fg-3);
+  transition: transform 220ms var(--ease-out);
+  flex-shrink: 0;
+}
+
+.day-acc-item.open .day-acc-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Strip inner card chrome when nested inside accordion body */
+.day-acc-body .day-swipe-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+@media (min-width: 768px) {
+  .day-acc-header { padding: 14px 16px; }
+  .day-acc-loc { font-size: 18px; }
+  .day-acc-num { font-size: 28px; width: 36px; }
+}

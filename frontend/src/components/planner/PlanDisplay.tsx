@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Share2, Bookmark, BookmarkCheck, AlertTriangle, Check,
   Loader2, AlertCircle, Bed, Car, Utensils, Sparkles, ArrowUp, Shuffle,
-  GalleryHorizontal, LayoutList, Map,
+  ChevronDown, LayoutList, Map,
 } from "lucide-react";
 import MapView, { haversineDist, driveTime } from "./MapView";
 import DayJournalCard, { cleanName } from "./DayJournalCard";
@@ -26,8 +26,8 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
   const plan = ctx.plan!;
   const [feedback, setFeedback] = useState("");
   const [refining, setRefining] = useState(false);
-  const [activeDay, setActiveDay] = useState(0);
-  const [dayView, setDayView] = useState<"swipe" | "list" | "map">("swipe");
+  const [dayView, setDayView] = useState<"accordion" | "map">("accordion");
+  const [expandedDay, setExpandedDay] = useState(1);
   const [viewMode, setViewMode] = useState<"plan" | "journal">(() => {
     try { return (localStorage.getItem("ts_plan_view") as "plan" | "journal") ?? "plan"; }
     catch { return "plan"; }
@@ -35,7 +35,6 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
   const [mapDay, setMapDay] = useState(0); // 0 = all stops, 1-N = specific day
   const [saveFlash, setSaveFlash] = useState(false);
   const [tasteToast, setTasteToast] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [tasteProfile, setTasteProfile] = useState<Record<string, unknown> | null>(null);
   const [loginDismissed, setLoginDismissed] = useState(() => {
     try { return localStorage.getItem("ts_login_dismiss") === "1"; } catch { return false; }
@@ -113,22 +112,6 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
     } catch { /* clipboard blocked */ }
   }
 
-  function onScroll() {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    const maxScroll = scrollWidth - clientWidth;
-    const index = maxScroll > 0
-      ? Math.round((scrollLeft / maxScroll) * (plan.days.length - 1))
-      : 0;
-    setActiveDay(Math.max(0, Math.min(plan.days.length - 1, index)));
-  }
-
-  function scrollToDay(i: number) {
-    if (!scrollRef.current) return;
-    const { scrollWidth, clientWidth } = scrollRef.current;
-    const perCard = (scrollWidth - clientWidth) / Math.max(plan.days.length - 1, 1);
-    scrollRef.current.scrollTo({ left: i * perCard, behavior: "smooth" });
-  }
 
   async function handleRefine() {
     if (!feedback.trim() || !ctx.thread_id) return;
@@ -267,7 +250,7 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
             </div>
           ) : null;
         })()}
-        <div className="sub">↓ swipe through days, change anything, then book.</div>
+        <div className="sub">↓ tap a day to explore, change anything, then book.</div>
       </div>
       )}
 
@@ -336,44 +319,52 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
           <div style={{ marginTop: 22 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
               <div className="days-swiper-label">
-                {dayView === "swipe"
-                  ? <>{`Day ${activeDay + 1}`} <span style={{ opacity: 0.45 }}>/ {plan.days.length}</span></>
-                  : <>{plan.days.length} <span style={{ opacity: 0.45 }}>days</span></>}
+                {plan.days.length} <span style={{ opacity: 0.45 }}>days</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {dayView === "swipe" && (
-                  <div className="days-dot-row">
-                    {plan.days.map((_, i) => (
-                      <div key={i} className={`day-dot ${i === activeDay ? "active" : ""}`} onClick={() => scrollToDay(i)} />
-                    ))}
-                  </div>
-                )}
-                <div className="view-toggle">
-                  <button className={dayView === "swipe" ? "active" : ""} onClick={() => setDayView("swipe")} title="Swipe view">
-                    <GalleryHorizontal size={14} strokeWidth={2} />
-                  </button>
-                  <button className={dayView === "list" ? "active" : ""} onClick={() => setDayView("list")} title="List view">
-                    <LayoutList size={14} strokeWidth={2} />
-                  </button>
-                  <button className={dayView === "map" ? "active" : ""} onClick={() => setDayView("map")} title="Map view">
-                    <Map size={14} strokeWidth={2} />
-                  </button>
-                </div>
+              <div className="view-toggle">
+                <button className={dayView === "accordion" ? "active" : ""} onClick={() => setDayView("accordion")} title="Day list">
+                  <LayoutList size={14} strokeWidth={2} />
+                </button>
+                <button className={dayView === "map" ? "active" : ""} onClick={() => setDayView("map")} title="Map view">
+                  <Map size={14} strokeWidth={2} />
+                </button>
               </div>
             </div>
 
-            {dayView === "swipe" && (
-              <div className="days-swiper" ref={scrollRef} onScroll={onScroll}>
-                {plan.days.map((day) => (
-                  <DayJournalCard key={day.day_number} day={day} />
-                ))}
-              </div>
-            )}
-            {dayView === "list" && (
-              <div style={{ padding: "4px 0 8px", display: "flex", flexDirection: "column", gap: 12 }}>
-                {plan.days.map((day) => (
-                  <DayJournalCard key={day.day_number} day={day} listMode />
-                ))}
+            {dayView === "accordion" && (
+              <div className="day-accordion">
+                {plan.days.map((day) => {
+                  const isOpen = expandedDay === day.day_number;
+                  const preview = day.activities.length > 0
+                    ? `${day.activities.length} activities · ${cleanName(day.activities[0].name)}`
+                    : `${day.activities.length} activities`;
+                  return (
+                    <div key={day.day_number} className={`day-acc-item${isOpen ? " open" : ""}`}>
+                      <div className="day-acc-header" onClick={() => setExpandedDay(isOpen ? 0 : day.day_number)}>
+                        <div className="day-acc-num">{day.day_number}</div>
+                        <div className="day-acc-meta">
+                          <div className="day-acc-loc">{day.location.split(",")[0]}</div>
+                          <div className="day-acc-preview">{preview}</div>
+                        </div>
+                        {day.updated_in_refinement && (
+                          <span style={{
+                            fontSize: 9, fontWeight: 800, letterSpacing: "0.1em",
+                            textTransform: "uppercase", color: "var(--rust)",
+                            whiteSpace: "nowrap", flexShrink: 0,
+                          }}>↻ updated</span>
+                        )}
+                        <div className="day-acc-chevron">
+                          <ChevronDown size={16} strokeWidth={2} />
+                        </div>
+                      </div>
+                      {isOpen && (
+                        <div className="day-acc-body">
+                          <DayJournalCard day={day} listMode />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
             {dayView === "map" && (
