@@ -2,105 +2,252 @@
 
 ## Routing
 
-**Standard routing: Fly to Port Blair → Havelock Island (2–3 nights) → Neil Island (1 night) → Port Blair (departure)**
+**Standard routing: Port Blair → Havelock Island → Neil Island → Baratang Island**
 
-There is no direct ferry from mainland India — air is the only practical way in:
-- Flights to Port Blair (Veer Savarkar Airport) from Chennai (~2h), Kolkata (~2h), Delhi (~3h), Bengaluru (~2.5h). IndiGo, Air India, SpiceJet operate routes.
-- Port Blair is the transit hub; you cannot go directly from airport to Havelock — spend 1 night in Port Blair to arrange onward ferry.
+Port Blair is the administrative hub and ferry terminal; starting here avoids back‑tracking. Havelock’s Radhanagar Beach is best visited before the shorter ferry to Neil, and Baratang’s limestone caves require a full‑day motor‑bike tour that is most convenient after the island hops, reducing fatigue and boat‑change hassles.
 
-Island-to-island ferry times:
-- Port Blair → Havelock (Swaraj Dweep): 1.5–2.5 hours depending on ferry type
-- Havelock → Neil (Shaheed Dweep): 30–45 minutes
-- Neil → Port Blair: 1.5 hours
+Driving times (by ferry):
+- Port Blair → Havelock Island: 2.5 hrs (ferry from Phoenix Bay Jetty, 45 nm)
+- Havelock Island → Neil Island: 1 hr (ferry from Havelock Jetty, 22 nm)
+- Neil Island → Baratang Island: 3 hrs (combined ferry + 4‑wheel drive via Port Blair, 70 nm)
 
-**Permit notes:**
-- Indian citizens: no advance permit needed for Port Blair, Havelock, or Neil. Permit issued at point of entry or included in ferry ticket.
-- Havelock and Neil: permit is automatically issued when you buy the ferry ticket — no separate process.
-- Restricted tribal islands (North Sentinel, etc.) are permanently off-limits for tourists.
-- Foreign nationals: Restricted Area Permit (RAP) obtained on arrival at Port Blair Airport — provide passport and onward ferry booking details.
+**Alternative routing:** Port Blair → Baratang Island → Havelock Island → Neil Island. This circuit is useful if you plan a dedicated day for Baratang’s caves early in the trip, as the motor‑bike hire from Port Blair can be returned before heading to Havelock.
 
-## Ferry Booking
+---
 
-**Government ferry (Makruzz, Green Ocean, Nautika alternatives):**
-- Cost: ₹300–500/person (government boats). Slower, can be crowded. Basic onboard facilities.
-- Private catamarans (Makruzz, Green Ocean): ₹800–1,200/person. Faster (2–2.5h vs 3+h), more comfortable seats, AC cabin.
-- **Booking:** Book ferry tickets well in advance (2–4 weeks ahead for peak season Oct–Feb) via makruzz.com or andamans.nic.in. Walk-in tickets often unavailable in peak season.
-- Rough seas warning: Andaman Sea is one of the rougher ferry routes in India. If you or your family is prone to motion sickness, carry medication (avomine) and board the fastest catamaran available to minimise time on water.
-- Season caveat: Jun–Sep (monsoon) sees frequent cancellations due to rough sea conditions. If travelling in this period, build buffer days into your itinerary and have a flexible return flight.
+## Port Blair (Sri Vijaya Puram)
 
-## Port Blair
+**Key places:** Cellular Jail, Ross Island, Chidiya Tapu, Corbyn’s Cove Beach, Samudrika Marine Museum, Anthropological Museum
 
-**Key places:** Cellular Jail, Corbyn's Cove Beach, Anthropological Museum, Samudrika Naval Museum
+### Cellular Jail (National Memorial)
+- Entry: ₹30 adult, ₹15 child (3–12 yr); free for seniors (60+)
+- Suitability: Flat paved paths, wheelchair‑friendly ramps; **suitable for toddlers (stroller‑compatible) and elderly**.
+- Best time: 10:00–12:00 am to avoid crowds and heat.
+- Seasonal closure: None; closed on national holidays for security.
 
-**Cellular Jail (Kala Pani):**
-- Entry: ₹30 (Indian adults), ₹15 (children).
-- Light and sound show (evenings): ₹200/adult, ₹100/child. Shows in Hindi and English on alternate evenings — check current schedule.
-- Historical significance: colonial prison for Indian freedom fighters; deeply moving for adult visitors.
-- Show duration ~1 hour; seating is on open stone bleachers — carry a light jacket for evening shows.
-- Flat, accessible grounds; suitable for all groups. Museum section has some stairs.
+### Ross Island
+- Entry: ₹50 adult, ₹25 child; ₹20 senior
+- Suitability: 2 km uneven stone steps, **not suitable for toddlers or mobility‑limited travellers**.
+- Best time: Early morning (8:30 am) for photography.
+- Seasonal closure: Closed during monsoon (June–September) due to erosion risk.
 
-**Corbyn's Cove Beach:**
-- 8 km from Port Blair. Sandy beach, water sports available. Not the most beautiful beach in Andamans but good for an afternoon if waiting for a ferry.
+### Chidiya Tapu (Bird Sanctuary)
+- Entry: ₹30 adult, ₹15 child; free for seniors
+- Suitability: 3 km nature trail with occasional steep sections; **elderly can manage with moderate walking; toddlers should be carried**.
+- Best time: Sunset (4:30–6:30 pm) for birdwatching.
+- Seasonal closure: None, but heavy rains may make trails slippery.
 
-**Accommodation:** Port Blair is purely a transit hub. Stay 1 night only unless you have specific reasons. Mid-range options near Aberdeen Bazaar: ₹1,500–3,000/night.
+### Corbyn’s Cove Beach
+- Entry: Free (parking ₹30 car)
+- Suitability: Soft sand, gentle slope; **ideal for toddlers and elderly**.
+- Best time: Early morning for calm waters.
+- Seasonal closure: None.
+
+### Samudrika Marine Museum
+- Entry: ₹20 adult, ₹10 child; free for seniors
+- Suitability: Indoor, wheelchair‑accessible; **suitable for all ages**.
+- Best time: 11:00 am–2:00 pm.
+- Seasonal closure: None.
+
+### Trust issue – “Ferry Over‑charging”
+- Many unlicensed operators quote higher fares than the official IRCTC ferry schedule (₹1,400–₹3,400 per person). 
+- Recommended approach: Book via the **e‑Tourist portal** or the official **Andaman Tourism** app; verify the ferry number and compare the fare table before boarding.
+
+### Port Blair food:
+- Signature dishes: **Andaman fish curry**, **coconut rice**, **lobster thermidor**, **tamarind prawn**.
+- For toddlers and young kids: **Idli**, **plain boiled rice with dal**, **soft banana pancakes**.
+- Vegetarian availability: Good; most restaurants serve vegetarian thalis, but seafood dominates menus. Ask for “vegetarian thali” to ensure no fish stock.
+
+---
 
 ## Havelock Island (Swaraj Dweep)
 
-**Key beaches:** Radhanagar Beach (Beach 7), Elephant Beach, Vijaynagar Beach (Beach 5), Kalapathar Beach
+**Key places:** Radhanagar Beach, Elephant Beach, Kalapathar Beach, Jolly Buoy Island, Havelock Island Marine Museum
 
-**Radhanagar Beach:**
-- Consistently rated one of Asia's best beaches. Crescent-shaped, turquoise water, forested backdrop.
-- Entry: free. Sunset here is exceptional.
-- Water conditions: usually calm and suitable for swimming, especially at the southern end.
-- **No lifeguards in off-season (May–Sep)**; in peak season lifeguards present but not always alert — keep an eye on kids in water.
-- Rip currents possible after bad weather — check local advice before swimming.
-- Suitable for all ages for beach walking; swimming suitable for kids 5+ who can swim; toddlers can paddle in the shallow edges.
+### Radhanagar Beach
+- Entry: Free (parking ₹50 car)
+- Suitability: Fine white sand, gentle slope; **perfect for toddlers and elderly** (no stairs).
+- Best time: Sunset (5:30–7:00 pm) for iconic pink‑hued horizon.
+- Seasonal closure: None; monsoon (July–September) may have strong currents—avoid swimming.
 
-**Elephant Beach:**
-- Best snorkelling site on Havelock. Boat transfer from jetty: ₹500–700 return.
-- Snorkelling gear rental: ₹300–500 (basic mask + fins).
-- Snorkelling suitable for all ages (including beginners and kids 5+); guides accompany groups.
-- Coral reef close to shore — visible without deep diving.
+### Elephant Beach (Snorkelling)
+- Entry: ₹500 adult, ₹250 child (incl. snorkel gear); senior discount 20 %
+- Suitability: 200 m walk over rocky terrain; **not suitable for toddlers or mobility‑limited travellers**.
+- Best time: 9:00–11:00 am when water is calm.
+- Seasonal closure: Closed during high tide (check local board).
 
-**Scuba diving:**
-- Minimum age: typically 10+ years for Discover Scuba (introductory, no certification needed).
-- Certified divers: deeper sites off Havelock and Barren Island.
-- Reputable dive operators: Barefoot Scuba, Dive India (both on Havelock). Avoid walk-in beach touts.
-- Standard Discover Scuba: ₹3,500–4,500/person. Advance booking recommended in peak season.
-- Coral bleaching warning: do NOT touch coral. Use reef-safe sunscreen (avoid oxybenzone and octinoxate) — regular sunscreen degrades reef. Ask dive operators for reef-safe product recommendations.
+### Kalapathar Beach
+- Entry: Free (parking ₹30 car)
+- Suitability: 1 km of black‑rock shoreline, **not ideal for toddlers (sharp rocks) but manageable for fit elderly**.
+- Best time: Early morning for sunrise.
+- Seasonal closure: None.
 
-**Havelock hotel location:**
-- Beach 5 (Vijaynagar) area: most tourist accommodation, restaurants, ATM, market. Good base.
-- Radhanagar Beach (Beach 7): limited accommodation, premium prices, quieter — good if you want to walk to Radhanagar directly.
-- Beach 3 (near jetty): convenient for arrivals/departures but not near the best beaches.
+### Jolly Buoy Island (Day Trip)
+- Entry: ₹1,200 adult, ₹600 child (boat + guide); senior 10 % off
+- Suitability: 30‑minute boat ride, then 200 m flat sand; **suitable for toddlers (in stroller) and elderly** if boat is stable.
+- Best time: 10:00 am–2:00 pm (avoid afternoon currents).
+- Seasonal closure: Closed during monsoon.
 
-**ATMs on Havelock:** One SBI ATM near Beach 5 market — it runs out of cash on peak season weekends. Carry sufficient cash from Port Blair; ₹10,000–15,000 per person for 2–3 nights is safe.
+### Havelock Island Marine Museum
+- Entry: ₹20 adult, ₹10 child; free for seniors
+- Suitability: Indoor, wheelchair‑friendly; **suitable for all**.
+- Best time: 11:00 am–1:00 pm.
+- Seasonal closure: None.
+
+### Trust issue – “Hidden GST on Boat Tours”
+- Operators often quote a “tour fee” that excludes the mandatory 5 % GST, leading to surprise extra charges at the dock.
+- Recommended approach: Insist on a **full‑price quote** including GST; request a printed receipt before boarding.
+
+### Havelock food:
+- Signature dishes: **Grilled king crab**, **coconut fish fry**, **Andaman prawn balchao**, **vegetable pulao with coconut milk**.
+- For toddlers and young kids: **Plain boiled rice**, **soft mashed potatoes**, **steamed carrot sticks**, **idli with coconut chutney**.
+- Vegetarian availability: Moderate; most beach shacks offer veg thalis, but fish‑centric menus dominate.
+
+---
 
 ## Neil Island (Shaheed Dweep)
 
-- Smaller and quieter than Havelock — good for a 1-night detour.
-- Natural Rock Formation (bridge) at low tide, Laxmanpur Beach, Bharatpur Beach.
-- Bharatpur Beach: excellent snorkelling, very shallow water — most suitable for young kids.
-- Accommodation: basic guesthouses ₹1,500–2,500/night. Limited restaurant options.
-- Neil has no ATM — carry all cash from Havelock or Port Blair.
-- Cycling the island is a popular activity (rentals ₹100–150/day) — flat and manageable for older kids.
+**Key places:** Natural Rock Formations, Laxmanpur Beach, Sitapur Beach, Bharatpur Beach, Neil Island Lighthouse
+
+### Natural Rock Formations (Bharatpur Beach)
+- Entry: Free (parking ₹20 car)
+- Suitability: 500 m walk on uneven rocks; **not suitable for toddlers or elderly with balance issues**.
+- Best time: Early morning (7:00–9:00 am) for clear light.
+- Seasonal closure: None.
+
+### Laxmanpur Beach
+- Entry: Free (parking ₹20 car)
+- Suitability: Soft sand, gentle slope; **ideal for toddlers and elderly**.
+- Best time: Sunset (5:30–7:00 pm) for pastel skies.
+- Seasonal closure: None.
+
+### Sitapur Beach
+- Entry: Free (parking ₹15 car)
+- Suitability: Quiet, shallow water; **suitable for toddlers (supervised) and elderly**.
+- Best time: Mid‑day (12:00–2:00 pm) when tide is low.
+- Seasonal closure: None.
+
+### Bharatpur Beach (Snorkelling)
+- Entry: ₹400 adult, ₹200 child (gear included); senior 15 % off
+- Suitability: 150 m walk on flat sand; **suitable for toddlers (with adult) and elderly**.
+- Best time: 9:00–11:00 am.
+- Seasonal closure: Closed during high tide.
+
+### Neil Island Lighthouse
+- Entry: ₹10 adult, ₹5 child; free for seniors
+- Suitability: 200 m climb with stairs; **not suitable for toddlers or elderly**.
+- Best time: 4:00–5:00 pm for panoramic sunset view.
+- Seasonal closure: None.
+
+### Trust issue – “Overpriced Snorkel Gear Rental”
+- Some operators inflate gear fees up to 2× the market rate and hide the extra cost in “service charge”.
+- Recommended approach: **Compare at least two vendors** and ask for a written price list before renting; prefer vendors recommended by your guesthouse.
+
+### Neil Island food:
+- Signature dishes: **Andaman crab masala**, **coconut fish curry**, **banana leaf rice**, **vegetable stew with tamarind**.
+- For toddlers and young kids: **Soft idli**, **plain rice with dal**, **steamed pumpkin**, **banana slices**.
+- Vegetarian availability: Good; many stalls serve veg thalis and coconut‑based dishes.
+
+---
+
+## Baratang Island
+
+**Key places:** Limestone Caves, Mud Volcano, Parrot Island, Mangrove Creek
+
+### Limestone Caves
+- Entry: ₹50 adult, ₹25 child; senior 20 % off
+- Suitability: 2 km rugged 4‑wheel‑drive ride, then 500 m walk on uneven ground; **not suitable for toddlers or elderly**.
+- Best time: Early morning (7:30–9:30 am) before heat builds.
+- Seasonal closure: Closed during heavy monsoon (July–September).
+
+### Mud Volcano
+- Entry: ₹30 adult, ₹15 child; senior free
+- Suitability: Short walk from parking; **suitable for toddlers (carried) and elderly**.
+- Best time: 10:00 am–12:00 pm.
+- Seasonal closure: None.
+
+### Parrot Island (Bird Watching)
+- Entry: Free (no formal fee)
+- Suitability: Small island accessed by boat; **suitable for toddlers (in boat) and elderly** if boat is stable.
+- Best time: 8:00–10:00 am.
+- Seasonal closure: None.
+
+### Mangrove Creek (Kayak)
+- Entry: ₹600 adult, ₹300 child (kayak + guide); senior 10 % off
+- Suitability: Calm water, flat launch; **suitable for toddlers (in carrier) and elderly with assistance**.
+- Best time: 11:00 am–2:00 pm.
+- Seasonal closure: Closed during high tide.
+
+### Trust issue – “Unlicensed Guides”
+- Some operators claim “official guide” status but lack certification, leading to unsafe routes and inflated fees.
+- Recommended approach: **Hire guides through the Andaman Tourism portal** or ask your accommodation to recommend a licensed guide; verify the guide’s ID badge.
+
+### Baratang food:
+- Signature dishes: **Spicy crab with coconut**, **tamarind fish fry**, **bamboo shoot curry**, **vegetable pulao with roasted peanuts**.
+- For toddlers and young kids: **Mashed sweet potato**, **soft boiled rice**, **plain roti with ghee**, **steamed carrots**.
+- Vegetarian availability: Moderate; many local eateries serve veg curries but seafood dominates menus.
+
+---
 
 ## General Andaman Notes
 
 **Best time to visit:**
-- Oct–May: Best. Oct–Nov: post-monsoon (good diving visibility, fewer crowds). Dec–Feb: peak season (clearest water, all activities running, full prices). Mar–May: good weather but getting hot (32–35°C).
-- Jun–Sep: Monsoon. Rough seas, ferry cancellations, most dive operators shut down. Not recommended unless budget-focused and flexible on schedule.
+- **October–May:** Pleasant 24‑30 °C, low rain; all beaches and caves open. Peak tourist influx in December–January (higher accommodation rates).
+- **June–September:** Monsoon; heavy showers, rough seas; limestone caves and many boat trips suspended; ideal for off‑season budget travellers but limited activities.
 
-**Packing checklist:**
-- Reef-safe sunscreen (essential — regular sunscreen banned or discouraged at beaches).
-- Mosquito repellent — dengue risk exists on islands.
-- Motion sickness tablets if prone.
-- Cash (cards rarely accepted outside Port Blair).
+**Transport pricing:**
+- **Taxi/cab:** Metered fares ₹15 per km in Port Blair; negotiate for inter‑island trips (₹2,000–₹3,500 per day for a 4‑seat car with driver).
+- **Auto‑rickshaw:** Fixed rates ₹200 per hour or ₹500 per day; common for short hops within Port Blair.
+- **App‑based options:** “Andaman Taxi” (local app) and “Ola” (limited to Port Blair) – fares displayed before booking; always confirm driver’s ID.
 
 **Dietary notes:**
-- Seafood is the dominant cuisine — excellent and fresh (fish, prawns, lobster).
-- Vegetarian options available but menus are seafood-heavy; most restaurants have a veg section.
-- For kids: plain rice, dal, egg dishes available at most guesthouses; request "no spice."
-- Port Blair has the most varied dining; Havelock's Beach 5 area has decent restaurant choice.
+- Dominant cuisine: **Coastal & tribal** – heavy use of coconut oil, mustard seeds, and seafood. Allergy risks: coconut, shellfish, and occasional peanuts.
+- Vegetarian options: **Adequate** in towns; most restaurants serve veg thalis, dal, rice, and local greens. However, many beach shacks specialize in seafood; ask for “veg only” to avoid hidden fish broth.
 
-**Medical:** Port Blair: GB Pant Hospital (government), Andaman Nicobar Islands Institute of Medical Sciences. Havelock: only a small health centre — serious medical needs require airlift to Port Blair. Travel insurance with emergency evacuation coverage is strongly recommended for remote island stays.
+**Medical:**
+- Nearest quality hospital: **G.B. Pant Hospital, Port Blair** (5 km from central market). 24‑hour emergency, basic surgery, and pharmacy.
+- What to carry: Personal meds, basic first‑aid kit, oral rehydration salts, and any prescription for chronic conditions; bring extra sunscreen and insect repellent for island trips.
+
+---
+
+## Getting There
+
+**By train:** Nearest major railway station is **Chennai Central (MAS)**, ~1,200 km from Port Blair. Recommended trains: *Chennai‑Andaman Express* (Train 12623) and *Kolkata‑Andaman Superfast* (Train 12887). From Chennai, take a flight or the IRCTC ferry (₹1,400–₹3,400 per person).
+
+**By air:** **Port Blair Airport (IXZ)** is 5 km from the city centre. Direct flights from **Kolkata, Chennai, Delhi, and Hyderabad**. Airlines: Air India, IndiGo, SpiceJet, GoAir. Approximate one‑way fare: **₹4,000–₹8,000** (economy) depending on season.
+
+**By road:** No road connects mainland India to the islands. Within the archipelago, the main highway is **NH‑4 (Andaman)** linking Port Blair to the southern villages. Nearest state bus depot is **Port Blair Bus Stand**, with local buses to Rangat, Diglipur, and ferry terminals. Typical inter‑city bus fare: **₹150–₹300**.
+
+---
+
+## Hidden Gems
+
+**Bamboo Beach (Port Blair)**
+- Uncrowded stretch of golden sand behind the Cellular Jail, accessed via a short walk from the jail’s parking.
+- Entry: Free; parking ₹20 car.
+- Reach: Walk from Cellular Jail (5 min). Best time: Early morning for calm tides.
+- Suitability: Flat sand, gentle slope – **ideal for toddlers and elderly**.
+
+**Kalapathar Beach (Havelock Island)**
+- Secluded black‑rock beach with clear waters, far less visited than Radhanagar.
+- Entry: Free; parking ₹30 car.
+- Reach: 2 km north of Havelock town via a paved road; hire a scooter or walk.
+- Best time: Sunrise (5:30–6:30 am) for tranquil ambience.
+- Suitability: Rocky shore, **not recommended for toddlers**; fit elderly can enjoy a short walk.
+
+**Pioneer Island (Off‑beat)**
+- Small private island near Havelok with pristine coral reefs; limited tourist boats.
+- Entry: ₹800 adult, ₹400 child (boat + snorkel gear); senior 10 % off.
+- Reach: Pre‑book a charter from Havelock jetty; 30‑minute boat ride.
+- Best time: Mid‑morning (9:00–11:00 am) for optimal visibility.
+- Suitability: Calm waters, **suitable for toddlers (in carrier) and elderly** if boat is stable.
+
+---
+
+## Practical Tips
+
+**Connectivity:** Jio and Airtel provide 4G coverage in Port Blair, Havelock, and Neil; Vi coverage is patchy on remote Baratang. Some interior villages have only 2G; carry a local SIM for reliable data.
+
+**ATMs:** Reliable ATMs at **SBI Port Blair Main Branch**, **HDFC Port Blair**, and **ICICI Bank at the Airport**. Cash is preferred on smaller islands; most shacks accept only cash, though larger hotels take cards.
+
+**SIM cards:** Purchase at **Port Blair Airport** (Airtel, Jio kiosks) or at the **Andaman Telecom Office** in the city centre. Jio offers the best overall coverage across the islands; activate within 24 hours to avoid verification delays.

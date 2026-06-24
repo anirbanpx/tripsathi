@@ -2,134 +2,188 @@
 
 ## Routing
 
-**Standard routing: Mumbai → Surat → Ahmedabad**
+**Standard routing: Sardar Vallabhbhai Patel International Airport → Old City (Heritage Zone) → New Ahmedabad (Kankaria & Science City)**  
 
-Starting from Mumbai, the drive to Surat on NH 48 (the Mumbai‑Ahmedabad Expressway) is smooth and offers frequent fuel stations and rest stops, reducing fatigue before the second leg. Surat lies directly on the highway, so stopping there breaks the long journey, lets travellers stretch, and provides a chance to refill water supplies before the final stretch to Ahmedabad.
+The airport sits on the western fringe; heading east first lets you soak the historic Pols before fatigue sets in. The Old City streets are narrow and best explored on foot or by auto‑rickshaw, while the New Ahmedabad attractions are spread along the eastern shoreline of Kankaria Lake and require a short drive. This sequence minimises back‑tracking and keeps the day‑long walking distance under 8 km.
 
 Driving times:  
-- Mumbai → Surat: 4.5 hours (NH 48, Mumbai‑Surat Expressway)  
-- Surat → Ahmedabad: 5 hours (NH 48, Surat‑Ahmedabad stretch)
+- Sardar Vallabhbhai Patel International Airport → Old City (Jama Masjid): 30 min (NH 48 → Sardar Patel Ring Road)  
+- Old City → New Ahmedabad (Kankaria Lake): 25 min (Ahmedabad‑Gandhinagar Bypass, NH 48)
 
-**Alternative routing:** Enter Gujarat via Vadodara (Mumbai → Vadodara → Ahmedabad). This bypasses Surat, shortens the total distance by ~30 km, and is useful if you prefer fewer city traffic zones or need to visit Vadodara’s heritage sites en route.
+**Alternative routing:** Arrive via Ahmedabad Junction railway station, start with New Ahmedabad (Science City) and finish with the Old City heritage walk; this works well for travellers whose train arrival time is after noon.
 
----
+## Old City (Heritage Zone)
 
-## Old City (Heritage Core)
+**Key places:** Sabarmati Ashram, Sidi Saiyyed Mosque, Jama Masjid, Bhadra Fort, Heritage Walk (Pols), Calico Museum of Textiles, Adalaj Step‑well, Manek Chowk night market
 
-**Key places:** Jama Masjid, Bhadra Fort, Swaminarayan Temple, Manek Chowk, Pol Sarkhej‑Gandhinagar heritage walk.
+### Sabarmati Ashram (Gandhi Ashram)  
+- Entry: ₹0 (donations welcome)  
+- Suitability: **Toddler‑friendly** – flat lawns, shaded verandas; **Elderly‑friendly** – benches every 50 m, wheelchair‑accessible paths.  
+- Best time of day: Early morning (07:00‑09:00) for the quiet meditation garden.  
+- Seasonal closure: None; open daily except major national holidays (e.g., Republic Day).
 
-**Jama Masjid:**  
-- Entry: Free (donations optional)  
-- Suitability: Flat courtyard, minimal steps – **suitable for toddlers (stroller can be used) and elderly (no steep climb).**  
-- Best time: Early morning (7 am–9 am) to avoid heat and crowds.  
-- Seasonal closure: None, but prayer times may restrict interior access for non‑muslim visitors.
+### Sidi Saiyyed Mosque  
+- Entry: ₹0 (no ticket)  
+- Suitability: **Not suitable for toddlers** – intricate stone latticework (Jali) can be a tripping hazard; **Elderly** can view from the courtyard, but steps to the inner sanctum are steep.  
+- Best time: Late afternoon (16:00‑18:00) when light highlights the famous “Tree of Life” lattice.  
+- Seasonal closure: None.
 
-**Swaminarayan Temple (Kalupur):**  
-- Entry: Free (guided tours ₹150/adult, ₹80/child 3–12)  
-- Suitability: Marble flooring, narrow aisles – **not ideal for toddlers in strollers; elderly may need assistance on the few low steps.**  
-- Best time: Late afternoon (4 pm–6 pm) when the sanctum is illuminated.  
-- Seasonal closure: Closed on major Hindu festivals for worship.
+### Jama Masjid (Shahi Masjid)  
+- Entry: ₹0  
+- Suitability: **Not toddler‑friendly** – marble floor is slippery when wet; **Elderly** can use the side entrance with a ramp.  
+- Best time: Mid‑day (12:00‑13:30) to avoid prayer crowds.  
+- Seasonal closure: None.
 
-**Manek Chowk Night Market:**  
-- Entry: Free (food purchases ₹50‑₹300 per plate)  
-- Suitability: Crowded narrow lanes – **not recommended for toddlers or elderly travelers who need easy navigation.**  
-- Best time: 9 pm–11 pm for the full street‑food experience.  
-- Seasonal closure: None, but monsoon evenings can be slippery.
+### Bhadra Fort & Teen Darwaza  
+- Entry: ₹20 adult, ₹10 child (under 12) – includes museum access.  
+- Suitability: **Toddler‑friendly** – open courtyard, but watch for stray dogs; **Elderly** – uneven stone steps, recommend a walking stick.  
+- Best time: Early evening (17:00‑19:00) for sunset silhouettes.  
+- Seasonal closure: Museum closed on Fridays.
+
+### Heritage Walk (Pols)  
+- Entry: ₹50 per person (guided) – includes a map and audio guide.  
+- Suitability: **Not suitable for toddlers** – narrow lanes (≈1 m) and uneven cobbles; **Elderly** – moderate walking, optional electric cart available for ₹150.  
+- Best time: Morning (09:00‑11:00) before heat peaks.  
+- Seasonal closure: None; monsoon (July‑September) may cause waterlogging in low‑lying lanes.
+
+### Calico Museum of Textiles  
+- Entry: ₹200 adult, ₹100 student, ₹50 child (6‑12). Advance reservation required (online or at the museum desk).  
+- Suitability: **Not toddler‑friendly** – delicate exhibits, no stroller access; **Elderly** – air‑conditioned galleries, benches every 20 m.  
+- Best time: Weekday mornings (10:00‑12:00) for quieter visits.  
+- Seasonal closure: Closed on Mondays and major Gujarati festivals (Navratri, Uttarayan).
+
+### Adalaj Step‑well (outside city, 18 km south)  
+- Entry: ₹20 adult, ₹10 child (under 12)  
+- Suitability: **Not toddler‑friendly** – steep descent of 30 m, narrow passages; **Elderly** – steep climb back, recommend a short visit only.  
+- Best time: Early morning (06:00‑09:00) to avoid heat and crowds.  
+- Seasonal closure: None; however, monsoon rain can make steps slippery.
+
+### Manek Chowk Night Market  
+- Entry: ₹0 (food stalls) – parking ₹30 car.  
+- Suitability: **Toddler‑friendly** – open‑air stalls, but busy; **Elderly** – easy navigation, but recommend visiting after 20:00 to avoid peak heat.  
+- Best time: 20:00‑22:30 for the famous “Khaati” (sweet) stalls.  
+- Seasonal closure: None; peak during Navratri fairs.
 
 **Trust issue or pricing trap for this area:**  
-- Unlicensed “heritage guides” often charge ₹500‑₹800 per person for a 30‑minute walk, quoting inflated “entry fees.”  
-- Recommended approach: Hire a guide through the Gujarat Tourism office (₹150‑₹200 per adult) or use the official Gujarat Tourism app for self‑guided audio tours.
+- *“Guided Heritage Walk overcharging”* – Unlicensed guides often quote ₹300‑₹500 per person and add hidden “entry” fees for Pols that are actually free.  
+- Recommended approach: Hire a guide only through the Gujarat Tourism Development Corporation (GTDC) desk (₹150 per person) or use the official audio guide app (₹50 download).
 
 **Old City food:**  
-- Signature dishes: Gujarati thali, dhokla, khaman, fafda‑jalebi, sev tameta.  
-- For toddlers and young kids: Soft dhokla, plain rice with dal, khichdi, idli (available at many street stalls).  
-- Vegetarian availability: **Excellent – >95 % of stalls serve strictly vegetarian fare; meat options are rare and clearly labeled.**
+- Signature dishes: *Dhokla, Khandvi, Fafda‑Jalebi, Gujarati Thali (dal‑rice‑roti‑shak bhaji)*.  
+- For toddlers and young kids: *Soft idli, plain rice with dal, khichu (soft rice‑gram flour porridge)*.  
+- Vegetarian availability: **Excellent** – >90 % of eateries are pure‑vegetarian; meat dishes are rare and clearly labelled.
 
----
+## New Ahmedabad (Kankaria & Science City)
 
-## Kankaria Lake & Adjacent Recreation Zone
+**Key places:** Kankaria Lake, Kankaria Zoo, Kankaria Toy Train, Science City (Gujarat Science City), Akshardham Temple, Gujarat National Law University Campus (for architecture), Vechaar Garden (hidden gem)
 
-**Key places:** Kankaria Lake, Kankaria Zoo, Nagin‑Sagar Lakefront, Amusement Park rides, Toy Train.
+### Kankaria Lake  
+- Entry: ₹0 (boat ride ₹30 adult, ₹15 child) – parking ₹20 car.  
+- Suitability: **Toddler‑friendly** – wide promenade, stroller‑friendly paths; **Elderly** – benches every 200 m, gentle slope.  
+- Best time: Late afternoon (16:00‑18:30) for sunset boat rides.  
+- Seasonal closure: None; water‑sports suspended during monsoon (July‑September).
 
-**Kankaria Lake (boat ride):**  
-- Entry: ₹30/adult, ₹15/child 3–12 (boat ticket)  
-- Suitability: Stable boat, rail‑mounted, **suitable for toddlers (with adult supervision) and elderly (no steep steps).**  
-- Best time: Sunset (5 pm–7 pm) for cooler breeze and photo‑ops.  
-- Seasonal closure: Boat rides pause during heavy monsoon (June‑July) for safety.
+### Kankaria Zoo (Zoo & Safari)  
+- Entry: ₹50 adult, ₹30 child (3‑12), free for under 3.  
+- Suitability: **Toddler‑friendly** – fenced enclosures, but watch for stray animals; **Elderly** – wheelchair‑friendly routes, but some bridges have steps.  
+- Best time: Early morning (09:00‑11:00) before heat drives animals to hide.  
+- Seasonal closure: Closed on Tuesdays.
 
-**Kankaria Zoo:**  
-- Entry: ₹100/adult, ₹50/child 3–12  
-- Suitability: Flat pathways, wheelchair‑friendly ramps – **suitable for toddlers (stroller can be used) and elderly.**  
-- Best time: Early morning (8 am–10 am) before heat peaks.  
-- Seasonal closure: None, but some animal enclosures may be closed for maintenance in summer.
+### Kankaria Toy Train (Mini‑Rail)  
+- Entry: ₹20 adult, ₹10 child (under 12).  
+- Suitability: **Ideal for toddlers** – short 15‑minute loop, low‑floor carriages; **Elderly** – easy boarding, but avoid peak hours (12:00‑14:00).  
+- Best time: Any time; less crowded after 15:00.  
+- Seasonal closure: None.
 
-**Amusement Park (roller‑coaster, water rides):**  
-- Entry: ₹150/adult, ₹80/child 3–12 (all‑ride pass)  
-- Suitability: Mixed terrain; steep drops and high‑speed rides – **not suitable for toddlers; elderly with mobility issues should avoid high‑intensity rides.**  
-- Best time: Mid‑day (12 pm–2 pm) when rides are fully operational.  
-- Seasonal closure: Water rides shut during monsoon (June‑September).
+### Gujarat Science City (GSC)  
+- Entry: ₹30 adult, ₹15 child (5‑12), free for under 5.  
+- Suitability: **Toddler‑friendly** – interactive science pods at low height; **Elderly** – air‑conditioned galleries, but some exhibits require bending.  
+- Best time: Weekday mornings (10:00‑12:00) for guided demo sessions.  
+- Seasonal closure: Closed on Mondays.
 
-**Trust issue or pricing trap for this area:**  
-- “Fast‑track” tickets sold by unofficial vendors at the lake entrance often cost double the official price and may be invalid.  
-- Recommended approach: Purchase tickets at the official kiosk or via the Gujarat Tourism mobile app (₹10‑₹20 discount).
+### Akshardham Temple (Swaminarayan Akshardham)  
+- Entry: ₹150 adult (includes cultural show), ₹75 child (5‑12). No entry for under 5.  
+- Suitability: **Not toddler‑friendly** – marble steps, no stroller access; **Elderly** – ramp available at main entrance, but interior has steep stairs.  
+- Best time: Evening (18:30‑20:30) for the “Cultural Light & Sound Show”.  
+- Seasonal closure: None; the show is cancelled on major Hindu fasting days (e.g., Ekadashi).
 
-**Kankaria food:**  
-- Signature dishes: Khandvi, hand‑rolled dhokla, methi‑thepla, corn chat.  
-- For toddlers and young kids: Soft khandvi strips, plain boiled corn, plain rice with ghee.  
-- Vegetarian availability: **Very high; most stalls are vegetarian; non‑veg items like kebabs are limited and clearly marked.**
-
----
-
-## Sabarmati Riverfront & Science City
-
-**Key places:** Sabarmati Riverfront promenade, Sabarmati Ashram (Gandhi Nagar), Gujarat Science City, Riverfront gardens.
-
-**Sabarmati Ashram (Gandhi Nagar):**  
-- Entry: Free (guided tour ₹200/adult, ₹120/child 5–12)  
-- Suitability: Flat museum floors, a few short steps – **suitable for toddlers (carrier preferred) and elderly (no steep climbs).**  
-- Best time: Early morning (8 am–10 am) for cooler weather and quieter galleries.  
-- Seasonal closure: None, but the museum may close on national holidays.
-
-**Gujarat Science City (interactive exhibits):**  
-- Entry: ₹120/adult, ₹80/child 5–12 (full access)  
-- Suitability: Ramps and elevators present – **suitable for toddlers (carrier) and elderly (wheelchair‑friendly).**  
-- Best time: Late afternoon (3 pm–5 pm) when indoor exhibits are less crowded.  
-- Seasonal closure: Indoor sections open year‑round; outdoor planetarium may close during heavy rain.
-
-**Sabarmati Riverfront promenade (walking/jogging):**  
-- Entry: Free  
-- Suitability: Wide, paved walkway, gentle slope – **ideal for toddlers in stroller and elderly walkers.**  
-- Best time: Evening (6 pm–8 pm) for pleasant breeze and city lights.  
-- Seasonal closure: None, but monsoon evenings can be slippery.
+### Vechaar Garden (Hidden Gem – see later) – listed here for completeness.
 
 **Trust issue or pricing trap for this area:**  
-- Unauthorized “photo‑shoot” operators near the Ashram charge ₹2,000‑₹3,000 for a 5‑minute session, claiming “official permission.”  
-- Recommended approach: Use the official museum photo‑service (₹200 per print) or take personal photos; no permission needed.
+- *“Kankaria Lake parking over‑charging”* – Private vendors often demand ₹100‑₹150 for a car, quoting “premium” rates.  
+- Recommended approach: Use the official municipal parking lot (₹20 car) located at the north‑west corner; keep the ticket receipt.
 
-**Sabarmati food:**  
-- Signature dishes: Undhiyu, rang raita, bharela bhindi, Gujarati puri‑bhaji.  
-- For toddlers and young kids: Soft undhiyu (mildly spiced), plain roti with ghee, boiled potatoes.  
-- Vegetarian availability: **Predominantly vegetarian; meat dishes like chicken curry are limited to a few upscale eateries, not street stalls.**
-
----
+**New Ahmedabad food:**  
+- Signature dishes: *Handvo, Undhiyu (seasonal mixed veg casserole), Gujarati Kadhi, Sev Tameta*; street snacks include *Pani Puri (Gujarat style), Bhaji‑Pav*.  
+- For toddlers and young kids: *Plain rice with ghee, soft dhokla, boiled potatoes with a pinch of salt*.  
+- Vegetarian availability: **Very high** – most stalls are vegetarian; vegan options are limited but can be requested (no onion/garlic).
 
 ## General Ahmedabad Notes
 
 **Best time to visit:**  
-- **October – February:** Pleasant 20‑30 °C weather; all attractions fully open; festivals like Navratri bring crowds but vibrant cultural shows.  
-- **March – May:** Hot 35‑45 °C; early‑morning visits recommended; water‑based rides at Kankaria may be closed for safety.  
-- **June – September:** Monsoon with 70‑120 mm monthly rainfall; boat rides at Kankaria paused, some outdoor festivals shifted indoors; roads can be slippery, so plan extra travel time.
+- **October – February:** Pleasant winter (15‑28 °C), all attractions open, festivals like Navratri (Oct) add cultural shows.  
+- **March – June:** Hot summer (30‑42 °C); early‑morning visits recommended; Kankaria Lake water‑sports limited.  
+- **July – September:** Monsoon (heavy rain, 120‑250 mm). Science City indoor exhibits remain open; outdoor heritage walks may be waterlogged; Adalaj Step‑well can be slippery.  
+- **November (Uttarayan) & December (Christmas):** Crowded due to kite festival and holiday shoppers; book tickets for museums at least 48 h in advance.
 
 **Transport pricing:**  
-- **Taxi/cab:** Metered fares start at ₹25 for the first km, then ₹12‑₹15 per km; negotiate only for out‑station trips; airport‑to‑city average ₹600‑₹800.  
-- **Auto/rickshaw:** Fixed‑rate for short hops (≤5 km) at ₹40‑₹60; for longer trips, ask for “meter” or agree on ₹12 per km; always carry small change.  
-- **App‑based options:** Ola and Uber operate city‑wide; surge pricing peaks during festival evenings; typical city ride ₹150‑₹250.
+- **Taxi/cab:** Metered fares start at ₹40; typical city‑wide trips (≈10 km) cost ₹250‑₹300. Negotiate for airport‑city trips; fixed‑rate often ₹300‑₹350.  
+- **Auto‑rickshaw:** Base fare ₹15 for first 2 km, then ₹8 per km; always confirm before boarding.  
+- **App‑based options:** Uber, Ola, and Rapido (bike) operate city‑wide; surge pricing peaks during festivals (₹500‑₹800 for airport).  
 
 **Dietary notes:**  
-- Dominant cuisine: Gujarati, characterized by a slight sweet‑savory balance, mustard oil, and generous use of chickpea flour.  
-- Allergy risks: Coconut oil is rare, but many dishes contain gram (besan) flour; those with legume allergies should ask for “no besan.”  
-- Vegetarian options: **Virtually universal; >90 % of street food and eateries serve vegetarian plates.** Non‑veg (primarily chicken and mutton) is confined to specific “non‑veg” sections and clearly labeled.
+- Dominant cuisine: Gujarati, characterised by **gram‑flour (besan)**, **yogurt**, **coconut oil**, and a mild sweet‑sour palate.  
+- Allergy risks: Coconut oil and sesame seeds appear in many snacks; nut‑based sweets (e.g., kaju barfi) may trigger allergies.  
+- Vegetarian options: **Excellent** – most restaurants are pure‑vegetarian; meat dishes are rare and clearly labelled “non‑veg”.
 
 **Medical:**  
-- Nearest quality hospital: **Apollo Hospital, Sola (≈12 km from city centre) – 24‑hour emergency, cardiology, and pediatric care.**  
-- Recommended to carry: basic first‑aid kit, any regular medication, a copy of vaccination records (especially for children), and a small pack of oral rehydration salts for monsoon‑related stomach upset.
+- Nearest quality hospital: **Apollo Hospital, Sola** (≈12 km from city centre, 24‑hour emergency, English‑speaking staff).  
+- Recommended to carry: basic first‑aid kit, any chronic medication, a copy of health insurance, and a small pack of oral rehydration salts for toddlers.
+
+## Getting There
+
+**By train:**  
+- Nearest railway station: **Ahmedabad Junction (ADI)**, 2 km from the city centre.  
+- Key trains from Delhi: *Rajdhani Express (12431/12432)* – 12 h, *Shatabdi Express (12001/12002)* – 11 h.  
+- From Mumbai: *Duronto Express (12901/12902)* – 7 h.  
+
+**By air:**  
+- Nearest airport: **Sardar Vallabhbhai Patel International Airport (AMD)**, 9 km from central Ahmedabad.  
+- Airlines: IndiGo, Air India, SpiceJet, Vistara, GoAir.  
+- Approximate one‑way domestic fare: **₹3,000‑₹7,000** (Delhi‑Ahmedabad), **₹2,000‑₹4,500** (Mumbai‑Ahmedabad).  
+
+**By road:**  
+- Key highway: **NH 48 (Ahmedabad–Mumbai)** and **NH 8 (Ahmedabad–Delhi)**.  
+- Nearest state bus depot: **GSRTC Central Bus Stand (Kasturba Road)**, 1 km from the Old City.  
+- Inter‑city bus frequency: Every 30 min to major Gujarat cities; typical fare to Surat **₹350‑₹500**, to Rajkot **₹400‑₹600**.
+
+## Hidden Gems
+
+**Amdavad Ni Gufa**  
+- Why it’s special: Underground art gallery designed by architect B. V. Doshi, featuring mirrored interiors and surreal sculptures; rarely crowded.  
+- Entry: ₹100 adult, ₹50 child (6‑12).  
+- How to reach: Auto‑rickshaw from Kankaria Lake (≈5 km) or a short taxi ride (₹120).  
+- Best time: Early afternoon (13:00‑15:00) when natural light filters through the skylight.  
+- Suitability: **Not toddler‑friendly** – low ceiling and glass floors; **Elderly** – easy walking, but avoid if you have vertigo.
+
+**Aranya Park**  
+- Why it’s special: Urban forest created by architect B. V. Doshi, with walking trails, bird‑watching towers, and a small lake; perfect for a quiet escape.  
+- Entry: Free (donation ₹20 optional).  
+- How to reach: Auto‑rickshaw from the Old City (≈3 km) or city bus route 12.  
+- Best time: Morning (07:00‑10:00) for bird activity and cool air.  
+- Suitability: **Toddler‑friendly** – flat paths, plenty of shade; **Elderly** – gentle slopes, benches every 100 m.
+
+**Vechaar Garden**  
+- Why it’s special: A community‑run garden showcasing local flora, seasonal art installations, and a small amphitheatre for folk performances; largely unknown to tourists.  
+- Entry: ₹30 adult, ₹15 child (under 12).  
+- How to reach: Walk from the Gujarat Science City campus (≈800 m) or take a local rickshaw.  
+- Best time: Evening (18:00‑20:00) when the garden lights up with LED installations.  
+- Suitability: **Toddler‑friendly** – open lawns, low‑height flower beds; **Elderly** – easy walking, shaded benches.
+
+## Practical Tips
+
+**Connectivity:** Jio and Airtel provide strong 4G coverage across Ahmedabad; Vi has spotty service in the Old City’s narrow lanes. Expect occasional dead zones near the Sabarmati River bridge during heavy rain.
+
+**ATMs:** Reliable ATMs at SBI, HDFC, and ICICI branches near the railway station and in the CG Road commercial district. Cash is preferred at street food stalls; most mid‑range restaurants accept cards, but a small cash reserve (₹500‑₹1,000) is advisable.
+
+**SIM cards:** Purchase at the airport arrival hall (Airtel, Jio, Vi kiosks) – you’ll need passport, 2 × 2 cm photo, and a prepaid balance of at least ₹500. Jio offers the best post‑airport coverage in Gujarat; Vi’s network improves after you cross the Sabarmati River.

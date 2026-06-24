@@ -2,95 +2,224 @@
 
 ## Routing
 
-**Standard routing: Delhi → Ramnagar → Jim Corbett National Park**
+**Standard routing: Delhi → Ramnagar → Jim Corbett National Park (Dhikala Gate)**  
 
-Starting from Delhi, the highway NH 9 (GT Road) leads directly to Ramnagar, the official gateway town for the park. This order minimizes back‑tracking, avoids the steep, winding roads of the Kumaon hills that would cause fatigue for families with toddlers or elderly travellers, and places the bulk of the drive on a well‑maintained national highway.
+The circuit starts from Delhi on NH 9 (Delhi–Haridwar Highway) because it is a four‑lane, well‑maintained road with frequent fuel stations and rest stops, reducing driver fatigue. Reaching Ramnagar first lets you stay overnight in the town, which has reliable electricity, medical facilities, and banking, before entering the park early the next morning when wildlife is most active.
 
 Driving times:  
-- Delhi → Ramnagar: 5.5 hours (NH 9, Delhi‑Haridwar stretch)  
-- Ramnagar → Jim Corbett (entry gate at Dhikala): 1 hour (NH 309, forest‑border road)
+- Delhi → Ramnagar: ≈ 5 hours (≈ 260 km via NH 9)  
+- Ramnagar → Dhikala Gate (inside the park): ≈ 1 hour (≈ 30 km on the Ramnagar‑Corbett Road, a single‑lane forest road)
 
-**Alternative routing:** Arrive via Nainital (NH 109) and then descend the Nainital‑Ramnagar road (≈2 hours). This circuit is useful for travellers already touring the Kumaon hill stations and who prefer a scenic descent rather than a straight highway drive.
+**Alternative routing:** Arrive via Lucknow → Bareilly → Ramnagar on NH 27 and NH 309A. This adds ~30 km but avoids occasional traffic jams on NH 9 during peak holiday weeks.
 
-## Ramnagar (Gateway Town)
+---
 
-**Key places:** Corbett Museum, Garjia Temple, Kosi River Picnic Spot, Ramnagar Bazaar
+## Ramnagar & Dhikala Zone
 
-**Corbett Museum:**  
-- Entry: ₹30 adult, ₹10 child (3–12 years) – free for toddlers under 3.  
-- Suitability: Small indoor galleries; no steep steps, wheelchair‑friendly entrance. Not suitable for toddlers who cannot stay seated for 30 minutes.  
-- Best time of day: 10:00 – 12:00 hrs (cooler, less crowd).  
-- Seasonal closure: Closed on major Hindu festivals (e.g., Diwali) when staff are on leave.
+**Key places:** Ramnagar town, Dhikala Safari, Corbett Museum, Garjia Temple, Kosi River Walk
 
-**Garjia Temple (dedicated to Goddess Garji):**  
-- Entry: No formal fee; optional donation ₹20 adult.  
-- Suitability: Flat platform, easy access; however, the surrounding steps can be slippery during monsoon – avoid with toddlers or elderly travellers during July–September.  
-- Best time of day: Early morning (7:00 – 9:00 hrs) for peaceful ambience.  
-- Seasonal closure: None, but temple may be locked during heavy rains.
+### Dhikala Safari  
+- Entry: ₹3,350 per jeep (up to 6 Indian nationals) + ₹400 park entry per adult Indian (₹2,000 for foreigner)  
+- Suitability: 12 km jeep ride, no walking; seats are comfortable for toddlers (in a child‑seat) and elderly travellers, but the vehicle can be noisy for very young children.  
+- Best time of day: Early morning (5:30 am–9:30 am) – wildlife is most active and temperature is cooler.  
+- Seasonal closure: Closed during the monsoon months (July – September) for safety.
 
-**Trust issue or pricing trap for this area:**  
-- **Unauthorized guide scam:** Some street vendors pose as “official wildlife guides” and charge ₹2,000 – ₹3,000 for a day‑long safari without proper permits.  
-- Recommended approach: Book safaris only through the official Uttarakhand Forest Department website or via a licensed tour operator; verify guide IDs (green badge) before accepting any assistance.
+### Corbett Museum  
+- Entry: ₹30 adult, ₹15 child (under 12)  
+- Suitability: Flat indoor galleries; wheelchair‑friendly ramps; toddlers can sit on parents’ laps.  
+- Best time of day: Mid‑morning (10 am–12 pm) – less crowd, natural light for photographs.  
+- Seasonal closure: Open year‑round.
+
+### Garjia Temple (Shiva)  
+- Entry: Free (small donation optional)  
+- Suitability: Steps of moderate rise (≈ 5 m); not ideal for toddlers who cannot walk unaided, but elderly with limited mobility can manage with a walking stick.  
+- Best time of day: Late afternoon (4 pm–6 pm) – cooler and the temple is illuminated.  
+- Seasonal closure: Open year‑round; may be closed during heavy rains.
+
+### Kosi River Walk  
+- Entry: Free (guided walk from park office)  
+- Suitability: Flat, well‑maintained path along the riverbank; stroller‑friendly for toddlers; elderly can walk at a gentle pace.  
+- Best time of day: Sunset (6 pm–7 pm) – pleasant breeze and bird activity.  
+- Seasonal closure: Closed in monsoon when river banks are slippery.
+
+**Trust issue for Dhikala Zone:**  
+- Over‑booking of jeeps by private agents and hidden “guide” fees of ₹700 per person are common.  
+- Recommended approach: Book directly through the official Jim Corbett website or a government‑approved kiosk in Ramnagar; verify the jeep number plate and request a written receipt for any guide fee.
 
 **Ramnagar food:**  
-- Signature dishes: Kumaoni *bhatt ki kehte* (black bean curry), *aloo ke gutke* (spiced potatoes), *kumaoni kebab* (mutton kebab).  
-- For toddlers and young kids: Soft *idli*, plain boiled rice with *dal* (lentils), mashed potatoes with a pinch of cumin.  
-- Vegetarian availability: Good; most eateries serve *bhatt ki kehte* (vegetarian version) and *gahat ki dal*; however, meat‑based kebabs dominate the menu, so ask for “vegetarian only” to avoid surprise.
+- Signature dishes: Bhatt ki Churkani (black soybean curry), Aloo ke Gutke (spiced potatoes), Kumaoni Raita (yogurt with mustard greens).  
+- For toddlers and young kids: Plain boiled rice with gahat dal, idli with a dash of ghee, soft boiled potatoes.  
+- Vegetarian availability: Strong – most restaurants serve pure vegetarian Kumaoni meals; only a few outlets offer meat dishes.
 
-## Dhikala Zone (Core Safari Area)
+---
 
-**Key places:** Dhikala Safari Camp, Elephant Safari, Corbett Waterfall, Jungle Lodge (government‑run)
+## Bijrani, Jhirna & Sitabani Zones
 
-**Dhikala Safari (Jeep):**  
-- Entry: ₹2,500 adult, ₹1,250 child (3–12 years) – toddlers under 3 ride free but must be held by an adult.  
-- Suitability: Jeep seats are low‑floor; toddlers can sit on laps but the vehicle may bounce on rough tracks – not ideal for infants or elderly with back problems.  
-- Best time of day: Early morning (6:00 – 9:00 hrs) – higher chance of tiger sightings and cooler temperatures.  
-- Seasonal closure: Closed during heavy monsoon (July – mid‑September) due to road washouts.
+**Key places:** Bijrani Safari, Jhirna Safari, Sitabani Forest Reserve, Corbett Waterfall, Pangot Bird‑Watching Spot
 
-**Elephant Safari (Elephant Back):**  
-- Entry: ₹3,200 adult, ₹1,600 child (5–12 years); toddlers not permitted for safety.  
-- Suitability: Not suitable for toddlers, elderly with limited mobility, or people with heart conditions. Requires a minimum height of 1.2 m for safety harness.  
-- Best time of day: Mid‑morning (9:30 – 11:30 hrs) when forest floor is dry.  
-- Seasonal closure: Same as jeep safari – July – mid‑September.
+### Bijrani Safari  
+- Entry: ₹3,350 per jeep (up to 6 Indians) + ₹400 park entry per adult.  
+- Suitability: Flat jeep ride of ≈ 8 km; suitable for toddlers (use child‑seat) and elderly (no walking).  
+- Best time of day: Late morning (9 am–12 pm) – good visibility for spotting leopards.  
+- Seasonal closure: Closed July – September.
 
-**Corbett Waterfall (near Dhikala):**  
-- Entry: ₹20 adult, free for children.  
-- Suitability: 1.5 km trek with uneven stones; not recommended for toddlers or elderly travellers with joint issues.  
-- Best time of day: Late afternoon (15:00 – 17:00 hrs) when water flow is strongest.  
-- Seasonal closure: Closed during monsoon floods (July – early September).
+### Jhirna Safari  
+- Entry: ₹3,350 per jeep (up to 6 Indians) + ₹400 park entry per adult.  
+- Suitability: Jhirna is a grassland zone; the jeep ride is smooth, making it comfortable for toddlers and seniors.  
+- Best time of day: Mid‑afternoon (1 pm–4 pm) – chances of seeing herbivores.  
+- Seasonal closure: Closed July – September.
 
-**Trust issue or pricing trap for this area:**  
-- **“Hidden night‑stay surcharge”:** Some private operators quote a base price for a night at Dhikala Camp and later add “forest levy,” “service tax,” and “guide fee” without prior disclosure, inflating the bill by up to 40 %.  
-- Recommended approach: Insist on a written, itemised quotation before confirming; compare with the official park rates posted on the Uttarakhand Forest Department portal.
+### Sitabani Forest Reserve  
+- Entry: ₹200 per adult Indian, ₹100 child (under 12)  
+- Suitability: Walking trails of 2–3 km; uneven terrain with occasional steep sections – **not suitable for toddlers** and **caution for elderly with knee problems**.  
+- Best time of day: Early morning (6 am–9 am) – bird activity peaks.  
+- Seasonal closure: Partial closure in monsoon due to landslide risk.
 
-**Dhikala food:**  
-- Signature dishes: *bhatt ki roti* (black bean flatbread), *gahat ki sabzi* (horse gram curry), *kumaoni raita* (yogurt with cucumber).  
-- For toddlers and young kids: Soft *poha* (flattened rice), plain boiled rice with a spoonful of *ghee* and *dal*, mild *khichdi*.  
-- Vegetarian availability: Excellent; the government‑run canteen serves only vegetarian fare, with clearly marked non‑veg items for those who prefer meat.
+### Corbett Waterfall (Kalyani)  
+- Entry: ₹50 per person (free for children under 5)  
+- Suitability: Short 500 m trek from parking; rocky steps – **not suitable for toddlers**; elderly can use handrails but need assistance.  
+- Best time of day: Post‑rainy (early October) – water flow is strongest.  
+- Seasonal closure: Closed July – September.
+
+### Pangot Bird‑Watching Spot  
+- Entry: ₹100 per person (guided trek)  
+- Suitability: Gentle 1 km trail; stroller‑compatible, making it toddler‑friendly; elderly can walk at a leisurely pace.  
+- Best time of day: Dawn (5 am–7 am) – over 200 bird species visible.  
+- Seasonal closure: Closed during heavy monsoon (July – September).
+
+**Trust issue for Bijrani & Jhirna Zones:**  
+- Unlicensed private safari operators often charge extra for “camera permits” (₹500 per camera) and for “photo‑stop” fees.  
+- Recommended approach: Insist on the official park permit only; refuse any additional camera fee; if a driver asks, ask for the official park ID and verify at the entry gate.
+
+**Bijrani food:**  
+- Signature dishes: Kumaoni Kadhi (yogurt‑based curry), Gahat Ki Dal (horse gram lentils), Kumaoni Masa (spiced pork – optional for non‑vegetarians).  
+- For toddlers and young kids: Plain rice with gahat dal, soft boiled carrots, small idli pieces.  
+- Vegetarian availability: Very good; most eateries serve pure veg meals; pork is limited to a few specialty stalls.
+
+---
+
+## Off‑beat & Surrounding Areas
+
+**Key places:** Tumaria Dam, Kotabagh Valley, Marchula Hanging Bridge, Kyari Village
+
+### Tumaria Dam  
+- Entry: Free (parking ₹20)  
+- Suitability: Flat promenade around the reservoir; stroller‑friendly, excellent for toddlers; elderly can enjoy the shaded benches.  
+- Best time of day: Late afternoon (4 pm–6 pm) – sunset reflections.  
+- Seasonal closure: Open year‑round; water level may be low in summer.
+
+### Kotabagh Valley (Hidden Gem)  
+- Entry: ₹150 entry fee (includes guide)  
+- Suitability: Gentle valley walk of 2 km; **not suitable for toddlers** due to occasional stream crossing; elderly can manage with walking stick.  
+- Best time of day: Early morning (7 am–10 am) – misty atmosphere and bird calls.  
+- Seasonal closure: Closed July – September because of flash‑flood risk.
+
+### Marchula Hanging Bridge  
+- Entry: ₹50 per person  
+- Suitability: Metal bridge over the Kosi; narrow but stable – **not recommended for toddlers**; elderly can cross slowly with support.  
+- Best time of day: Mid‑day (11 am–2 pm) – bridge is less slippery.  
+- Seasonal closure: Closed during monsoon (July – September) due to high water flow.
+
+### Kyari Village (Cultural Spot)  
+- Entry: Free (guided walk optional ₹200)  
+- Suitability: Flat village lanes; stroller‑compatible; elderly can explore at leisure.  
+- Best time of day: Evening (5 pm–7 pm) – villagers often perform traditional Kumaoni folk songs.  
+- Seasonal closure: Open year‑round; some houses may be closed during festivals.
+
+**Trust issue for Off‑beat Areas:**  
+- Some local “tour operators” inflate guide fees and sell “mandatory” souvenir packages at ₹1,200 per person.  
+- Recommended approach: Hire a certified guide from the park office (₹200 per person) or explore independently; decline any unsolicited souvenir offers.
+
+**Off‑beat food:**  
+- Signature dishes: Kumaoni Masa (spiced pork), Kumaoni Raita with mustard greens, Bhang Ki Chutney (herbal).  
+- For toddlers and young kids: Plain boiled rice, gahat dal, soft boiled potatoes, small pieces of roti.  
+- Vegetarian availability: Excellent – most villages serve vegetarian meals; meat dishes are optional.
+
+---
 
 ## General Jim Corbett National Park Notes
 
 **Best time to visit:**  
-- **October – June:** Pleasant weather (15‑30 °C); all safari zones open, wildlife active.  
-- **July – mid‑September:** Heavy monsoon; many interior roads washed out, safari permits limited to buffer zones only.  
-- **December – January:** Cold nights (down to 5 °C); early mornings may have fog – bring warm layers for toddlers and elderly.  
-- **March – May:** Pre‑summer heat; water sources dry, animals congregate near riverbanks – good for birdwatching but carry ample water.
+- **November – February:** Cool (5‑15 °C), full wildlife activity, all zones open.  
+- **March – June:** Warm (20‑35 °C), good safari visibility; early summer sees occasional water‑scarcity in some zones.  
+- **July – September:** Monsoon; many interior zones (Dhikala, Kotabagh) closed due to landslides; heavy rain limits jeep safaris.  
+- **October:** Post‑monsoon; some zones reopen, but occasional road closures still possible.
 
 **Transport pricing:**  
-- **Taxi/cab (Ramnagar to park entry):** Metered rates start at ₹1,200 for the first 10 km, then ₹12 per km; negotiate only for out‑station trips beyond 30 km.  
-- **Auto‑rickshaw:** Fixed fare of ₹300 – ₹400 for the 15 km stretch to the Dhikala gate; confirm price before boarding.  
-- **App‑based options:** Uber and Ola operate in Ramnagar; typical fare ₹1,500 for a 30‑minute ride to the park gate. Use the “share” option for families to split cost.
+- **Taxi/Cab (Delhi → Ramnagar):** ₹12‑₹15 per km; typical 5‑hour ride costs ₹7,000‑₹9,000.  
+- **Auto‑rickshaw:** Not common inside the park; limited to Ramnagar town for short hops (₹15‑₹30 per km).  
+- **App‑based cabs (Uber/Ola):** Available up to Ramnagar; fare similar to metered taxis; no service beyond park gate.
 
 **Dietary notes:**  
-- Dominant cuisine: Kumaoni – heavy use of *ghee*, *mustard oil*, and *coconut* in some desserts.  
-- Allergy risks: Coconut oil in sweets, mustard seeds in pickles; ask for “no coconut” if sensitive.  
-- Vegetarian options: Generally abundant in town eateries and all park‑run canteens; however, many roadside stalls serve meat‑based kebabs, so specify “vegetarian only” to avoid cross‑contamination.
+- Dominant cuisine is Kumaoni, featuring mustard oil, wheat‑based rotis, and dairy.  
+- Allergy risks: mustard oil (strong flavor), dairy (yogurt, paneer), occasional pork in non‑veg eateries.  
+- Vegetarian options: Very good; most restaurants and dhabas serve pure veg meals; meat dishes are clearly labeled.
 
 **Medical:**  
-- Nearest quality hospital: **Ramnagar Government Hospital** (≈5 km from the park gate) – 24‑hour emergency, basic imaging, and a pharmacy stocked with common antibiotics and antimalarial tablets.  
-- Additional facility: **Corbett Hospital, Haldwani** (≈45 km) for advanced care, cardiac monitoring, and pediatric services.  
-- What to carry: Personal first‑aid kit (band‑aids, antiseptic, oral rehydration salts), any regular medication, a copy of vaccination records (especially for tetanus), and a list of nearest pharmacies.  
+- **Nearest quality hospital:** Ramnagar Government Hospital (≈ 5 km from Dhikala Gate) – 24 hr emergency, basic surgery, and pharmacy.  
+- **Secondary facility:** Sushruta Hospital, Haldwani (≈ 30 km) – larger ICU and specialist services.  
+- **What to carry:** Basic first‑aid kit, insect repellent (DEET), water purification tablets, any personal prescription meds, and a copy of travel insurance.
 
----  
+---
 
-*All prices reflect 2024‑25 market rates and are subject to seasonal adjustments.*
+## Getting There
+
+**By train:**  
+- **Nearest railway station:** Ramnagar (RMR) – 5 km from park entrance.  
+- **Key trains:**  
+  - *12471 Ranikhet Express* (Delhi → Ramnagar) – departs Delhi NR at 6:30 am, arrives 12:30 pm.  
+  - *14061 Kathgodam Express* (Lucknow → Ramnagar) – departs Lucknow at 8:00 am, arrives 13:30 pm.  
+- **Fare range:** ₹350‑₹800 (second class) from Delhi.
+
+**By air:**  
+- **Nearest domestic airport:** Pantnagar Airport (PGH) – 70 km; also Dehradun Jolly Grant Airport (DED) – 180 km.  
+- **Airlines:** IndiGo, Air India, SpiceJet operate daily flights from Delhi, Mumbai, and Kolkata to Pantnagar.  
+- **One‑way fare:** ₹3,000‑₹6,000 from Delhi; ₹5,000‑₹9,000 from Mumbai.  
+- **From airport to park:** Hire a pre‑booked taxi (≈ ₹2,500) or take a shared Volvo bus to Ramnagar (₹300‑₹500).
+
+**By road:**  
+- **Key highway:** NH 9 (Delhi → Ramnagar) – well‑maintained, with regular fuel stations.  
+- **Nearest state bus depot:** Ramnagar Bus Stand – services from Delhi, Lucknow, Haridwar, and Dehradun.  
+- **Inter‑city bus frequency:** Every 2 hours; **fare:** ₹500‑₹800 (Delhi → Ramnagar).  
+
+---
+
+## Hidden Gems
+
+**Kotabagh Valley:**  
+- Uncrowded alpine valley with fragrant pine forests and occasional sightings of Himalayan pheasants.  
+- **Entry:** ₹150 (includes guide).  
+- **How to reach:** Drive from Ramnagar via the Kotabagh Road (state highway), 45 km, taking about 1.5 hours.  
+- **Best time:** Early morning (7 am–10 am) for misty views.  
+- **Suitability:** Not suitable for toddlers (stream crossing), moderate for elderly with a walking stick.
+
+**Marchula Hanging Bridge:**  
+- A 120‑meter steel suspension bridge over the Kosi River, offering panoramic river views.  
+- **Entry:** ₹50 per person.  
+- **How to reach:** From Ramnagar, take the Marchula Road (≈ 30 km, 45 min).  
+- **Best time:** Mid‑day (11 am–2 pm) when the bridge is dry.  
+- **Suitability:** Not recommended for toddlers; elderly can cross with assistance.
+
+**Kyari Village:**  
+- A traditional Kumaoni hamlet where locals still practice terraced farming and folk music.  
+- **Entry:** Free; optional guided walk ₹200.  
+- **How to reach:** 20 km from Ramnagar via the Kyari‑Bhimtal road, 30 min drive.  
+- **Best time:** Evening (5 pm–7 pm) for cultural performances.  
+- **Suitability:** Stroller‑friendly; elderly can explore at a comfortable pace.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jio and Airtel provide strong 4G coverage in Ramnagar and along NH 9; inside core zones (Dhikala, Kotabagh) signal drops to 2G or no service. Vi offers moderate coverage but may be spotty near the riverbanks. Carry an offline map and a portable power bank.
+
+**ATMs:**  
+- Reliable SBI ATM at Ramnagar Market (near the bus stand).  
+- HDFC ATM in Kathgodam (≈ 70 km) for larger withdrawals.  
+- Cash is preferred for park entry fees and local vendors; most restaurants accept card, but small stalls may be cash‑only.
+
+**SIM cards:**  
+- Purchase a fresh Jio or Airtel SIM at Delhi IGI airport (best rates) or at authorized dealers in Ramnagar town.  
+- Jio has the widest coverage across the park and surrounding villages; Airtel is a close second.  
+- Activate the SIM within 24 hours to avoid roaming charges.

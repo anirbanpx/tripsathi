@@ -2,87 +2,228 @@
 
 ## Routing
 
-**Standard routing: Guwahati → Jorhat → Kaziranga National Park**
+**Standard routing: Guwahati → Jorhat → Kohora (Kaziranga Entrance)**  
 
-Starting from Guwahati (the state capital) you travel east on NH‑27 to Jorhat, a major rail and road hub. From Jorhat you join NH‑715 (the Jorhat‑Kaziranga Road) which runs straight to the park’s main entry at Bagori. This sequence avoids the congested Brahmaputra floodplain roads near Goalpara and reduces fatigue by breaking the 190 km journey into two manageable legs.
+The journey starts from Guwahati, the state capital with an international airport and major rail hub. From Guwahati, NH‑37 runs eastward to Jorhat (≈210 km, 4‑5 hrs). Jorhat is the closest town with reliable lodging and a bus depot; the final 70 km stretch to Kohora (the main park gate) is on a well‑maintained state highway (NH‑715) with frequent auto‑rickshaws and shared taxis. This order minimizes back‑tracking, avoids the monsoon‑prone low‑lying sections near Nagaon, and lets travellers acclimatise in Jorhat before the early‑morning safari start.
 
 Driving times:  
-- Guwahati → Jorhat: 4.5 hours (NH‑27, well‑maintained four‑lane)  
-- Jorhat → Kaziranga (Bagori Gate): 2.0 hours (NH‑715, occasional potholes after monsoon)
+- Guwahati → Jorhat: 4 hrs (NH‑37)  
+- Jorhat → Kohora: 1.5 hrs (NH‑715)
 
-**Alternative routing:** Arrive via the western side by flying into Tezpur Airport, then take the 90 km NH‑715A to the park’s eastern entry at Kohora. This cuts the road distance by ~30 km but requires a short domestic flight and may involve extra luggage handling.
+**Alternative routing:** Enter from the north via Nagaon (NH‑37) → Tezpur → Kohora. This avoids the congested Guwahati‑Jorhat stretch during peak holiday weeks but adds 30 km of rural roads that may be water‑logged in July‑August.
 
-## Bagori (Western Entrance)
+---
 
-**Key places:** Bagori Gate, Elephant Safari Base, Kaziranga Visitor Centre, Kaziranga Museum
+## Central Zone (Kaziranga Core)
 
-**Elephant Safari – Bagori:**  
-- Entry: ₹2,500/adult, ₹1,200/child (3–12 years) – no separate toddler rate; infants under 3 ride free but must be held.  
-- Suitability: 2 km of uneven forest track; not suitable for toddlers or travellers with limited mobility. Elderly can join if they have good balance and no joint issues.  
-- Best time of day: Early morning (6:00–9:00 am) for cooler temperatures and higher wildlife activity.  
-- Seasonal closure: Closed during heavy monsoon (July–mid‑August) due to track erosion.
+**Key places:** Central Safari Zone, Kaziranga Visitor Centre, Elephant Safari Base, Kaziranga Orchid & Botanic Garden, Burapahar Tea Estate
 
-**Trust issue – Elephant‑Safari Overpricing:** Unauthorized agents near the gate often quote inflated rates (up to 40 % higher) and promise “private” rides that are actually shared.  
-- Recommended approach: Book directly at the official Elephant Safari office or through the Assam Tourism Development Corporation (ATDC) website; carry a printed confirmation and verify the vehicle registration number.
+**Central Safari Zone (Jeep Safari):**  
+- Entry: ₹115 /adult Indian, ₹700 /foreign adult (park entry). Safari permit: ₹2,000 per jeep (incl. driver) for Indians, ₹4,500 for foreigners.  
+- Suitability: Jeep seats have a small gap; toddlers under 3 should be secured with a child‑seat (not provided). Elderly travellers with limited mobility may find the 2‑hour ride uncomfortable due to uneven bumps.  
+- Best time of day: Dawn (5:30‑7:30 am) for active rhinos; dusk (4:30‑6:30 pm) for birdwatching.  
+- Seasonal closure: Closed during heavy monsoon (July mid‑to‑mid‑August) when roads become slippery.
 
-**Bagori food:**  
-- Signature dishes: *Masor Tenga* (sour fish curry), *Khar* (alkaline preparation of raw papaya), *Pitha* (steamed rice cake).  
-- For toddlers and young kids: plain steamed rice idli, boiled rice with a spoonful of dal, ripe banana mash.  
-- Vegetarian availability: Good; most stalls serve *Khar* (vegetarian version) and *Aloo Pitika* (mashed potatoes) alongside the fish dishes.
+**Elephant Safari Base (Elephant Ride):**  
+- Entry: ₹1,500 per person Indian, ₹3,000 per foreigner (includes mahout).  
+- Suitability: Not recommended for toddlers (risk of falling) or elderly with back problems; the ride lasts 1 hour over gentle terrain.  
+- Best time: Early morning (6‑7 am) when elephants are calm.  
+- Seasonal closure: Same monsoon window as jeep safaris.
 
-## Central Range (Kavano)
+**Kaziranga Orchid & Botanic Garden:**  
+- Entry: ₹30 /adult Indian, ₹150 /foreign.  
+- Suitability: Flat, well‑marked paths; fully wheelchair‑accessible, making it ideal for seniors and toddlers in a stroller.  
+- Best time: Mid‑morning (9‑11 am) when orchids are fully open.  
+- Seasonal closure: None; open year‑round.
 
-**Key places:** Kavano Safari Lodge, Kaziranga Orchid & Bamboo Garden, Elephant Breeding Centre
+**Burapahar Tea Estate (Tea Garden Walk):**  
+- Entry: Free (guided walk optional ₹200 per group).  
+- Suitability: Gentle 1 km trail; suitable for toddlers (stroller friendly) and elderly.  
+- Best time: Late afternoon (4‑5 pm) for tea‑plucking demonstrations.  
+- Seasonal closure: None, but heavy rains may make paths muddy.
 
-**Jeep Safari – Kavano:**  
-- Entry: ₹2,200/adult, ₹1,000/child (3–12 years). Infants under 3 ride free but must be seated on a parent’s lap.  
-- Suitability: 3 km of paved but bumpy road; not recommended for toddlers who cannot stay seated, and for elderly with severe back problems.  
-- Best time of day: Late afternoon (3:00–5:30 pm) when rhinos come to waterholes.  
-- Seasonal closure: No safari during the peak monsoon (July–mid‑August) because roads become slippery.
+**Kaziranga Visitor Centre (Museum & Information Hall):**  
+- Entry: ₹20 /adult Indian, ₹100 /foreign.  
+- Suitability: Indoor, wheelchair‑friendly; perfect for toddlers to rest and for seniors to avoid heat.  
+- Best time: Any time outside safari hours; quieter after 2 pm.  
+- Seasonal closure: None.
 
-**Trust issue – “Hidden” Jeep Fees:** Some local operators add “forest entry” surcharges after the ride, inflating the total cost.  
-- Recommended approach: Insist on a full‑breakdown receipt before boarding; the official park rate includes all forest fees. Use the park’s sanctioned list of operators displayed at the entrance.
+**Trust issue or pricing trap for this area:**  
+- Unofficial “quick‑safari” operators at the Visitor Centre often claim lower jeep fees but provide unlicensed vehicles that lack insurance.  
+- Recommended approach: Book safaris only through the official Kaziranga Forest Department website or accredited operators; verify the vehicle registration plate and ask for a printed permit before boarding.
 
-**Kavono food:**  
-- Signature dishes: *Bamboo Shoot Curry*, *Soybean (Soy) Tenga*, *Assamese Sweet Laru* (jaggery balls).  
-- For toddlers and young kids: soft *steamed rice dumplings* (Pitha) with a drizzle of ghee, plain boiled potatoes, and plain curd.  
-- Vegetarian availability: Excellent; the majority of dishes are plant‑based, and most eateries label vegetarian items clearly.
+**Central Zone food:**  
+- Signature dishes: **Masor Tenga** (sour fish curry), **Khar** (alkaline pork/vegetable stew), **Assam Laksa** (spicy noodle soup).  
+- For toddlers and young kids: **Plain rice with dal**, **steamed idli**, **soft boiled potatoes with a pinch of salt**.  
+- Vegetarian availability: Good; most stalls serve **Aloo Pitika**, **Paneer bhaji**, and **vegetable pulao**, but fish dishes dominate the menu.
 
-## Eastern Range (Agortoli)
+---
 
-**Key places:** Agortoli Gate, Rhino Breeding Centre, Kaziranga Elephant Camp, Bird‑watching Tower
+## Western Range (Bagori & Surroundings)
 
-**Boat Ride – Brahmaputra (Agortoli):**  
-- Entry: ₹1,200/adult, ₹600/child (3–12 years). No separate toddler fare; infants must be held.  
-- Suitability: Calm river stretch; safe for toddlers if they remain seated, but not for elderly with severe motion‑sickness.  
-- Best time of day: Sunrise (5:30–7:00 am) for mist‑covered wetlands and active birdlife.  
-- Seasonal closure: No boat service during high flood (July–early August) when water levels rise >2 m above normal.
+**Key places:** Bagori Range Safari, Kaziranga Railway Station (KZRG), Bagori Elephant Camp, Deopahar Archaeological Site, Kaziranga Waterfall (Sukhram)
 
-**Trust issue – “Unlicensed” Boat Operators:** Some operators pitch “private” boats at higher rates and lack safety gear.  
-- Recommended approach: Use boats booked through the park’s official office at Agortoli Gate; verify that life jackets are provided for each passenger.
+**Bagori Range Safari (Jeep):**  
+- Entry: Same park entry fee; safari permit ₹2,500 per jeep (Indians), ₹4,800 foreigners (Bagori’s terrain is slightly rougher).  
+- Suitability: Rougher roads cause jostling; not ideal for toddlers without a secure seat or for seniors with joint pain.  
+- Best time: Mid‑morning (8‑10 am) when wildlife moves from waterholes.  
+- Seasonal closure: Monsoon (July‑mid‑August) due to road erosion.
 
-**Agortoli food:**  
-- Signature dishes: *Duck Curry* (locally called *Murgi*), *Pithas* (sweet rice cakes), *Bora Saul* (sticky rice).  
-- For toddlers and young kids: plain *steamed rice* with a spoonful of *plain lentil dal*, soft *banana slices*, and *plain curd*.  
-- Vegetarian availability: Very good; most stalls serve *Khar* and *Aloo Pitika* alongside the meat dishes.
+**Kaziranga Railway Station (KZRG) – Heritage Stop:**  
+- Entry: Free (public station).  
+- Suitability: Platform is level; wheelchair ramps available, suitable for seniors and toddlers (with adult assistance).  
+- Best time: Early afternoon when local trains halt for a brief stop.  
+- Seasonal closure: None.
+
+**Bagori Elephant Camp (Elephant Ride):**  
+- Entry: ₹1,600 per Indian, ₹3,200 per foreigner.  
+- Suitability: Same constraints as the central elephant ride; not for toddlers or seniors with back issues.  
+- Best time: Sunrise (5:30‑6:30 am) for cooler temperatures.  
+- Seasonal closure: Monsoon period.
+
+**Deopahar Archaeological Site:**  
+- Entry: ₹25 /adult Indian, ₹120 foreign.  
+- Suitability: Flat stone steps; accessible for wheelchairs and strollers, though some steps may be steep for very elderly.  
+- Best time: Late afternoon (4‑5 pm) for soft lighting on the carvings.  
+- Seasonal closure: None.
+
+**Kaziranga Waterfall (Sukhram):**  
+- Entry: Free (nature spot).  
+- Suitability: Small, rocky descent; not safe for toddlers (slippery rocks) and may be difficult for seniors with limited balance.  
+- Best time: Post‑monsoon (September‑October) when water flow is strongest.  
+- Seasonal closure: None, but during heavy rains the path can be hazardous.
+
+**Trust issue or pricing trap for this area:**  
+- Some private guides at Bagori charge extra “guide fees” that are not included in the official permit price, often inflating costs by 30‑40 %.  
+- Recommended approach: Insist on a written receipt for the official permit; if a guide is needed, hire one through the park’s authorized guide list (₹300 per hour).
+
+**Western Range food:**  
+- Signature dishes: **Bhoot Jolokia (ghost pepper) chutney**, **Kharoli (bamboo shoot curry)**, **Pitha (steamed rice cake)**.  
+- For toddlers and young kids: **Plain rice with ghee**, **soft boiled carrots**, **steamed rice idli**.  
+- Vegetarian availability: Excellent; most dishes can be ordered vegetarian, though the ghost pepper chutney is very spicy—ask for mild version.
+
+---
+
+## Eastern Range (Kohora & Peripheral Areas)
+
+**Key places:** Kohora Safari Lodge, Kohora Elephant Camp, Kaziranga Orchid & Botanic Garden (Eastern Extension), Kaziranga Bird Watching Tower, Kaziranga Community Museum
+
+**Kohora Safari Lodge (Jeep Safari):**  
+- Entry: Same park fee; safari permit ₹2,200 per jeep (Indians), ₹4,600 foreigners (lodge‑based operators).  
+- Suitability: Jeep seats are cushioned; toddlers need a child‑seat, seniors may find the 2‑hour ride tolerable if they have mild joint issues.  
+- Best time: Dawn (5:30‑7:30 am) for rhino sightings; dusk for water‑bird activity.  
+- Seasonal closure: Monsoon (July‑mid‑August).
+
+**Kohora Elephant Camp (Elephant Ride):**  
+- Entry: ₹1,550 per Indian, ₹3,100 per foreigner.  
+- Suitability: Same as other elephant rides; not for toddlers or seniors with back problems.  
+- Best time: Early afternoon (12‑1 pm) when temperatures are moderate.  
+- Seasonal closure: Monsoon period.
+
+**Kaziranga Bird Watching Tower:**  
+- Entry: ₹40 /adult Indian, ₹200 foreign.  
+- Suitability: Staircase access; not wheelchair‑friendly, making it unsuitable for seniors with mobility limits and unsafe for toddlers unsupervised.  
+- Best time: Early morning (6‑8 am) for migratory bird activity.  
+- Seasonal closure: None, but visibility drops during heavy rains.
+
+**Kaziranga Community Museum:**  
+- Entry: ₹15 /adult Indian, ₹80 foreign.  
+- Suitability: Small indoor space, fully accessible; ideal for toddlers (interactive displays) and seniors (seating available).  
+- Best time: Mid‑day (11 am‑2 pm) when crowds are low.  
+- Seasonal closure: None.
+
+**Kaziranga Orchid & Botanic Garden (Eastern Extension):**  
+- Entry: Same as central garden (₹30 Indian, ₹150 foreign).  
+- Suitability: Wheelchair‑friendly; perfect for seniors and toddlers.  
+- Best time: Late morning (10‑12 am) when orchids are fully open.  
+- Seasonal closure: None.
+
+**Trust issue or pricing trap for this area:**  
+- Some “combined” packages claim “all‑inclusive” safari, entry, and meals but hide extra charges for camera permits (₹200 per camera) and night‑stay fees.  
+- Recommended approach: Clarify the itemised cost before payment; purchase camera permits separately at the park office to avoid inflated bundle pricing.
+
+**Eastern Range food:**  
+- Signature dishes: **Bamboo shoot pickle**, **Silkworm larva fry (locally known as “Eri”)**, **Jolpan (traditional snack)**.  
+- For toddlers and young kids: **Soft rice porridge (khichdi)**, **plain boiled egg**, **steamed rice idli**.  
+- Vegetarian availability: Moderate; most stalls offer **vegetable pulao**, **paneer bhaja**, but some local specialties are meat‑based.
+
+---
 
 ## General Kaziranga National Park Notes
 
 **Best time to visit:**  
-- **October–March:** Cool, dry weather (10‑20 °C). All safaris operational; wildlife sightings peak.  
-- **April–June:** Warm (25‑35 °C). Early‑morning safaris preferred; afternoon heat can reduce animal activity.  
-- **July–mid‑August:** Monsoon; most roads and boat services closed due to flooding. Limited wildlife viewing.  
-- **September:** Post‑monsoon; roads reopen but may be muddy; good bird‑watching as migratory species arrive.
+- **October – April:** Cool, dry season; wildlife is active, roads are firm. All safaris operate; birdwatching peaks.  
+- **May – June:** Pre‑monsoon heat (30‑35 °C); early mornings still pleasant, but afternoon heat can be intense; park remains open.  
+- **July mid‑to mid‑August:** Heavy monsoon; many roads water‑logged; central and western safaris closed; only limited elephant rides in eastern range (subject to road conditions).  
+- **September – October:** Post‑monsoon; lush scenery, high water levels attract migratory birds; all zones reopen.
 
 **Transport pricing:**  
-- **Taxi/cab (metered):** Guwahati → Kaziranga ≈ ₹2,500 for a 190 km trip; negotiate a flat rate of ₹2,200 if hiring a private car for a day.  
-- **Auto/rickshaw:** Not common for long haul; short trips within the park area cost ₹150‑₹250 per ride. Always ask for a meter or confirm the fare before starting.  
-- **App‑based options:** Ola and Uber operate in Guwahati; you can book a “Outstation” ride to Jorhat (≈₹1,800) and then switch to a local taxi for the final leg.  
+- **Taxi/cab:** Metered fares from Guwahati to Jorhat ≈ ₹2,500 (4 hrs). Negotiated rates for longer trips to Kohora: ₹3,500‑₹4,000 one‑way. Always ask for a receipt.  
+- **Auto‑rickshaw:** Common in Jorhat; ₹15 per km; negotiate before boarding. Not recommended for luggage‑heavy trips.  
+- **App‑based options:** Ola and Uber operate in Guwahati and Jorhat; fare estimate for Guwahati‑Jorhat ≈ ₹2,800. No app services inside the park; rely on pre‑booked taxis or park‑authorized vehicles.
 
 **Dietary notes:**  
-- Dominant cuisine is Assamese, featuring mustard oil, bamboo shoots, and fermented fish (*doi‑maas*). Coconut oil is rarely used, reducing allergy risk for coconut‑sensitive travellers.  
-- Pork is not a staple; most meat dishes are chicken, duck, or fish, which eases halal considerations.  
-- Vegetarian options are abundant; most restaurants label dishes as “veg” and offer *Khar*, *Aloo Pitika*, and *Pitha* without hidden animal broth.
+- Dominant cuisine: Assamese, heavy on fish, pork, and mustard oil; coconut oil is widely used.  
+- Allergy risks: Coconut, mustard, and chili can be intense; ask for “mild” preparation if sensitive.  
+- Vegetarian options: Good; most restaurants serve **Aloo Pitika**, **vegetable pulao**, **paneer bhaji**, and **steamed rice**. Pure vegan dishes are less common but can be requested.
 
 **Medical:**  
-- Nearest quality hospital: **Assam Medical College, Guwahati** (≈4 hours drive). For emergencies within the park, the **Kaziranga Forest Department Hospital** (located near Kohora Gate) provides basic trauma care and a 24‑hour ambulance service. Carry a personal first‑aid kit, any prescribed medication, and a copy of your health insurance card.
+- Nearest quality hospital: **Guwahati Medical College & Hospital (GMCH)**, ≈ 80 km from Kohora; 24‑hour emergency, good ICU.  
+- What to carry: Basic first‑aid kit, any chronic medication, oral rehydration salts, insect repellent, and a copy of health insurance. For seniors, bring any prescribed cardiac or diabetic meds and a list of allergies.
+
+---
+
+## Getting There
+
+**By train:**  
+- **Kaziranga Railway Station (KZRG):** 5 km from Kohora gate; limited local trains.  
+- **Jorhat Junction (JRH):** 20 km away; major stop for long‑distance trains.  
+- Key trains: **Rajdhani Express (Guwahati‑Delhi, train 12306)**, **Shatabdi Express (Guwahati‑Jorhat, train 12055)**, **Brahmaputra Express (Kolkata‑Guwahati, train 15645)**. Approx. fare from Delhi to Jorhat: ₹2,500 – ₹3,200 (2‑AC).
+
+**By air:**  
+- **Guwahati International Airport (GAU):** 200 km (≈ 4.5 hrs road). Airlines: Air India, IndiGo, SpiceJet; one‑way fare from Delhi ≈ ₹4,500 – ₹7,000.  
+- **Jorhat Airport (JRH):** 70 km (≈ 1.5 hrs road). Airlines: Air India Regional, GoAir; one‑way fare from Kolkata ≈ ₹3,000 – ₹5,000.  
+- **Dibrugarh Airport (DIB):** 250 km (≈ 5 hrs road) – alternative for those coming from the east.
+
+**By road:**  
+- **Key highway:** NH‑37 (Guwahati‑Jorhat) → NH‑715 (Jorhat‑Kohora).  
+- **State bus depot:** Jorhat Bus Stand offers hourly buses to Kohora; fare ₹150 – ₹250 per person.  
+- **Inter‑city bus frequency:** Every 30 minutes from Guwahati to Jorhat; 6‑8 am to 9 pm. Typical fare Guwahati‑Jorhat: ₹300 – ₹500 (non‑AC) or ₹800 – ₹1,200 (AC).
+
+---
+
+## Hidden Gems
+
+**Panbari Reserve Forest:**  
+- A lesser‑known wetland adjacent to the park, home to rare orchids and migratory birds.  
+- Entry: Free; guided walk optional ₹200 per group.  
+- How to reach: From Kohora, take a local jeep eastward (≈ 30 km).  
+- Best time: Early winter (December‑January) for birdwatching.  
+- Suitability: Flat trails, wheelchair‑friendly; ideal for toddlers (stroller) and seniors.
+
+**Kaziranga Orchid & Botanic Garden (Panpur Range):**  
+- The “6th Edition” garden showcases endemic orchids not displayed in the main garden.  
+- Entry: ₹30 Indian, ₹150 foreign.  
+- How to reach: Short 10 km drive north from the Visitor Centre; local auto‑rickshaw available.  
+- Best time: Post‑monsoon (September‑October) when orchids bloom profusely.  
+- Suitability: Fully accessible paths; perfect for families with toddlers and elderly travellers.
+
+**Deopahar Archaeological Site (Near Bagori):**  
+- Ancient stone carvings dating to the 9th‑century, often missed by mainstream itineraries.  
+- Entry: ₹25 Indian, ₹120 foreign.  
+- How to reach: 12 km from Bagori Range; local taxi or shared jeep.  
+- Best time: Late afternoon (4‑5 pm) for soft lighting on the reliefs.  
+- Suitability: Slightly uneven steps; manageable for seniors with moderate mobility and toddlers with adult assistance.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jio, Airtel, and Vi provide 4G coverage in Guwahati, Jorhat, and along NH‑37. Inside the core park zones, signal drops to 2G/3G; Vi has the most consistent coverage near the Visitor Centre. Carry an offline map and a portable power bank.
+
+**ATMs:**  
+- Reliable ATMs in Guwahati (SBI, HDFC, ICICI) and Jorhat (SBI, Axis). Within the park, a single SBI ATM at the Visitor Centre dispenses cash; it may be out of service during monsoon. Carry at least ₹5,000 in cash for safari permits and local purchases.
+
+**SIM cards:**  
+- Purchase prepaid SIMs at Guwahati Airport (Jio, Airtel) or Jorhat railway station. Jio offers the best rural coverage in Assam; Airtel’s network is slightly stronger near the eastern range. Bring passport, photograph, and address proof for registration. Avoid “discounted” SIMs from street vendors—they often lack proper KYC and may be deactivated after a few days.

@@ -2,91 +2,217 @@
 
 ## Routing
 
-**Standard routing: Bhubaneswar → Puri → Konark**
+**Standard routing: Puri → Bhubaneswar → Konark**  
 
-The circuit follows the coastal NH 316, allowing early morning departure from Bhubaneswar, a midday beach break at Puri, and an afternoon heritage finish at Konark before returning. This order minimizes back‑tracking, keeps daily driving under 3 hours, and aligns with typical lunch‑break windows.
+Starting from the coastal town of Puri allows travelers to soak in sunrise at the beach, then move inland to Bhubaneswar where most historic temples and museums are clustered, and finally finish at the iconic Sun Temple in Konark. This sequence avoids back‑tracking, reduces fatigue, and aligns with the typical road network that circles the Bay of Bengal.
 
 Driving times:  
-- Bhubaneswar → Puri: 1.5 hours (NH 316, well‑maintained, flat terrain)  
-- Puri → Konark: 1.5 hours (SH 60, coastal road, occasional sand patches)
+- **Puri → Bhubaneswar:** 1.5 hours (NH 16, well‑maintained four‑lane highway)  
+- **Bhubaneswar → Konark:** 1.5 hours (NH 316, scenic coastal stretch)
 
-**Alternative routing:** Bhubaneswar → Chilika Lake → Puri (via NH 16). This adds a wildlife stop but adds ~1 hour extra driving and is best for bird‑watchers with flexible timing.
+**Alternative routing:** Begin at Bhubaneswar (arrival via Biju Patnaik Airport), then head south to Puri and finish at Konark. This is convenient for travelers flying in first, as Bhubaneswar is the regional hub.
 
-## Old Town (Lingaraj Temple Area)
+---
 
-**Key places:** Lingaraj Temple, Mukteswara Temple, Odisha State Museum, Brahmeswar Temple, Bindusagar Lake
+## Central Bhubaneswar
 
-**Lingaraj Temple:**  
-- Entry: Free (donations optional)  
-- Suitability: Fully suitable for toddlers and elderly; flat courtyard, no steep steps, but crowds can be dense during festivals – keep a close watch on children.  
-- Best time of day: Early morning (6:00‑8:00 am) before the main aarti, when light is soft and crowds are thin.  
-- Seasonal closure: Closed on Tuesdays for maintenance; no monsoon impact.
+**Key places:** Lingaraja Temple, Mukteshwar Temple, Parasurameswara Temple, Rajarani Temple, Odisha State Museum  
 
-**Mukteswara Temple:**  
-- Entry: ₹20 adult, ₹10 child (3–12 yr) – toddlers under 3 free  
-- Suitability: 200 m walk on smooth stone; 3 km uneven terrain around the temple complex, not recommended for toddlers who cannot walk long distances; elderly with mobility issues should use a wheelchair‑friendly side path.  
-- Best time of day: Late afternoon (4:00‑5:30 pm) when the sandstone glows.  
-- Seasonal closure: None, but heavy rain may make steps slippery.
+### Lingaraja Temple  
+- **Entry:** Free (optional donation ₹10–₹50)  
+- **Suitability:** 3 km of stone steps; toddlers must be carried, elderly may find the ascent tiring but manageable with a walking stick. No wheelchair access.  
+- **Best time of day:** 6:00 – 8:00 am for cooler air and minimal crowds.  
+- **Seasonal closure:** Closed on Mahashivratri for special rituals; otherwise open year‑round.  
 
-**Odisha State Museum:**  
-- Entry: ₹20 adult, ₹10 child (3–12 yr) – free for toddlers under 3  
-- Suitability: Air‑conditioned galleries, wheelchair ramp at the main entrance; exhibits are at child‑eye level, making it toddler‑friendly.  
-- Best time of day: Mid‑morning (10:00‑12:00 pm) to avoid heat and to catch guided tours.  
-- Seasonal closure: Closed on Mondays.
+### Mukteshwar Temple  
+- **Entry:** Free (donation box ₹5–₹20)  
+- **Suitability:** Small shrine on a flat platform; fully suitable for toddlers and elderly.  
+- **Best time:** Late afternoon (16:00 – 18:00) when the stone carvings catch the soft light.  
+- **Seasonal closure:** None.  
 
-**Trust issue or pricing trap for this area:**  
-- Unauthorized “guide” agents near Lingaraj Temple often charge ₹500–₹800 for a “fast‑track” entry that is actually a regular ticket.  
-- Recommended approach: Use the official ticket counter or the e‑ticket portal; ignore anyone demanding cash on the spot.
+### Parasurameswara Temple  
+- **Entry:** Free (donation optional)  
+- **Suitability:** Easy access, no steps; ideal for families with toddlers and seniors.  
+- **Best time:** Mid‑morning (10:00 – 11:30) to avoid the heat.  
+- **Seasonal closure:** None.  
 
-**Old Town food:**  
-- Signature dishes: *Dalma* (lentils with vegetables), *Pakhala* (fermented rice water), *Rasagolla*, *Chhena Poda*.  
-- For toddlers and young kids: plain idli, boiled rice with a spoonful of dal, soft *kora* (steamed pumpkin).  
-- Vegetarian availability: Excellent; most Odia dishes are vegetarian, with fish/prawn options clearly labelled on menus.
+### Rajarani Temple  
+- **Entry:** Free (donation box)  
+- **Suitability:** Flat courtyard, wheelchair‑friendly entrance ramp added in 2023; suitable for all ages.  
+- **Best time:** Early evening (17:00 – 18:30) for a golden glow on the red sandstone.  
+- **Seasonal closure:** None.  
 
-## New Town (Khandagiri–Udayagiri Area)
+### Odisha State Museum  
+- **Entry:** ₹20 adult, ₹10 child (3 – 12 yr) – free for toddlers under 3.  
+- **Suitability:** Indoor, air‑conditioned, stroller‑friendly; senior visitors appreciate the seated galleries.  
+- **Best time:** 11:00 – 13:00 before the lunch crowd.  
+- **Seasonal closure:** Closed on Mondays; open all other days.  
 
-**Key places:** Khandagiri–Udayagiri Caves, Nandankanan Zoological Park, Ekamra Haat, Rajarani Temple, Dhauli Peace Pagoda
+**Trust issue in Central Zone – Temple donation scam:** Unauthorised “priests” near the donation box often claim the temple needs extra funds and ask for cash directly.  
+- **Recommended approach:** Donate only through the official donation box inside the temple precinct; keep small change handy and politely decline any solicitation outside the sanctioned area.
 
-**Khandagiri–Udayagiri Caves:**  
-- Entry: ₹30 adult, ₹15 child (3–12 yr) – toddlers under 3 free  
-- Suitability: 2 km of uneven stone steps and narrow passages; not suitable for toddlers or elderly travelers with limited mobility.  
-- Best time of day: Early morning (7:00‑9:00 am) to avoid heat and to catch the sunrise light on the cave openings.  
-- Seasonal closure: Closed during heavy monsoon (July‑August) due to water seepage.
+**Central Bhubaneswar food:**  
+- **Signature dishes:** *Rasgulla*, *Chhena Poda*, *Pakhala Bhata* (fermented rice water), *Dalma* (lentil‑vegetable stew).  
+- **For toddlers and young kids:** *Idli* with coconut chutney, plain rice with dal, soft *Khichdi* (rice‑lentil porridge).  
+- **Vegetarian availability:** Excellent; most restaurants serve pure‑vegetarian Odia thalis alongside seafood options.
 
-**Nandankanan Zoological Park:**  
-- Entry: ₹150 adult, ₹80 child (3–12 yr); toddlers under 3 free but not allowed inside the aquarium.  
-- Suitability: Large open lawns, wheelchair‑friendly pathways, but the safari ride requires a minimum height of 1 m – not suitable for toddlers. Elderly can use the electric tram for the safari portion.  
-- Best time of day: Late morning (10:30‑12:30 pm) when animals are active and the heat is moderate.  
-- Seasonal closure: The aquarium closes during peak summer (April‑May) for maintenance.
+---
 
-**Trust issue or pricing trap for this area:**  
-- “Package tour” operators near the park often bundle a “VIP” entry at ₹1000 per person, promising private guides; the actual benefit is the same standard entry.  
-- Recommended approach: Purchase tickets directly at the park gate or via the official website; verify guide credentials before hiring.
+## Southern Bhubaneswar
 
-**New Town food:**  
-- Signature dishes: *Kanika* (sweet aromatic rice), *Macha Tarkari* (fish curry), *Khechri* (spiced rice).  
-- For toddlers and young kids: soft *upma*, plain boiled potatoes, *dahi* (yogurt) with a drizzle of jaggery.  
-- Vegetarian availability: Strong; most street stalls serve vegetarian versions of *kanika* and *dalma*; fish dishes are clearly marked.
+**Key places:** Nandankanan Zoological Park, Khandagiri & Udayagiri Caves, Dhauli Peace Pagoda, Ekamra Kanan Park  
+
+### Nandankanan Zoological Park  
+- **Entry:** ₹70 adult, ₹35 child (3 – 12 yr); toddlers under 3 free.  
+- **Safari:** White‑Tiger Safari ₹150 adult, ₹75 child (separate ticket).  
+- **Suitability:** Large, mostly paved pathways; uneven sections near the reptile house – toddlers should be on a stroller, elderly may need assistance on the longer loops. No wheelchair ramps.  
+- **Best time:** 09:00 – 11:30 am for active animal behaviour and cooler weather.  
+- **Seasonal closure:** Closed every Monday; open all other days.  
+
+### Khandagiri & Udayagiri Caves  
+- **Entry:** ₹20 adult, ₹10 child (3 – 12 yr).  
+- **Suitability:** 10–12 stone steps and narrow passages; toddlers must be carried, elderly with joint problems may find it strenuous. No wheelchair access.  
+- **Best time:** Early morning (07:30 – 09:30) to avoid heat and crowds.  
+- **Seasonal closure:** None; monsoon may make steps slippery – wear proper shoes.  
+
+### Dhauli Peace Pagoda  
+- **Entry:** Free (parking ₹10).  
+- **Suitability:** Flat, well‑maintained promenade along the river; fully suitable for toddlers in carriers and seniors.  
+- **Best time:** Sunrise (05:30 – 07:00) for panoramic view of the Dhauligiri hills and the giant Buddha statue.  
+- **Seasonal closure:** None, but the site can be foggy in winter (December‑January).  
+
+### Ekamra Kanan Park  
+- **Entry:** Free; boat ride on the lake ₹30 per person.  
+- **Suitability:** Level walking trails, wheelchair‑friendly; perfect for families with toddlers and elderly visitors.  
+- **Best time:** Late afternoon (16:00 – 18:00) for a gentle breeze and sunset over the lake.  
+- **Seasonal closure:** None.  
+
+**Trust issue in Southern Zone – Zoo auto‑rickshaw overcharging:** Drivers often quote inflated rates for park‑shuttle rides and may add hidden “wildlife fees.”  
+- **Recommended approach:** Purchase the official park shuttle ticket at the entry counter; if you need a rickshaw, negotiate a flat rate of ₹30 for a 2 km ride before boarding.
+
+**Southern Bhubaneswar food:**  
+- **Signature dishes:** *Macha Tarkari* (fish curry), *Kanika* (sweet aromatic rice), *Kakharua* (prawn fry).  
+- **For toddlers and young kids:** Soft *Khichdi*, plain rice with ghee, *Suji Upma* (semolina porridge).  
+- **Vegetarian availability:** Strong; most street stalls and eateries serve veg thalis alongside seafood.
+
+---
+
+## Northern Bhubaneswar
+
+**Key places:** Buddha Park (Utkal University), Biju Patnaik Park, Chandaka Wildlife Sanctuary, Bindu Sarovar  
+
+### Buddha Park (Utkal University)  
+- **Entry:** Free (donation box ₹5–₹20).  
+- **Suitability:** Flat, well‑shaded garden; stroller‑friendly, fully suitable for toddlers and seniors.  
+- **Best time:** Early evening (17:00 – 19:00) when the Buddha statues are illuminated.  
+- **Seasonal closure:** None.  
+
+### Biju Patnaik Park  
+- **Entry:** Free; boat ride ₹25.  
+- **Suitability:** Paved walkways, wheelchair‑accessible ramps; ideal for all ages.  
+- **Best time:** Mid‑morning (10:00 – 12:00) for pleasant weather.  
+- **Seasonal closure:** None.  
+
+### Chandaka Wildlife Sanctuary  
+- **Entry:** ₹30 adult, ₹15 child (3 – 12 yr).  
+- **Safari:** Jeep safari ₹200 adult, ₹100 child (pre‑booked).  
+- **Suitability:** 5 km of natural trails; not recommended for toddlers (no stroller access) and may be taxing for elderly with limited stamina.  
+- **Best time:** Dawn (05:30 – 08:00) for bird‑watching and cooler temperatures.  
+- **Seasonal closure:** Closed during heavy monsoon (July‑August) to protect wildlife.  
+
+### Bindu Sarovar (Lake)  
+- **Entry:** Free; small parking fee ₹5.  
+- **Suitability:** Flat promenade, benches every 200 m; fully suitable for toddlers in carriers and seniors.  
+- **Best time:** Late afternoon (16:30 – 18:00) for calm waters and sunset reflections.  
+- **Seasonal closure:** None.  
+
+**Trust issue in Northern Zone – Unauthorized guide at Buddha Park:** Some individuals pose as official guides and charge high fees for a “quick tour.”  
+- **Recommended approach:** Use the information kiosk at the university entrance or download the official Utkal University app for self‑guided audio tours; decline unsolicited offers.
+
+**Northern Bhubaneswar food:**  
+- **Signature dishes:** *Dahi Pakhala* (fermented rice with curd), *Aloo Potala* (potato‑pumpkin curry), *Manda Pitha* (steamed rice cake).  
+- **For toddlers and young kids:** Soft *Suji Upma*, plain rice with dal, *Idli* with mild chutney.  
+- **Vegetarian availability:** Very high; most local eateries are vegetarian‑friendly.
+
+---
 
 ## General Bhubaneswar Notes
 
 **Best time to visit:**  
-- **October – February:** Pleasant 18‑28 °C, all heritage sites open, festivals (Rath Yatra) increase crowd density but add cultural vibrancy.  
-- **March – May:** Warm 28‑38 °C, water‑intensive attractions (Pakhala) are refreshing; early morning visits recommended to avoid heat.  
-- **June – September:** Southwest monsoon, heavy rain, slippery stone steps at caves, occasional road closures; best for indoor museums and spa retreats.
+- **October – March:** Pleasant 18‑28 °C, temples and museums fully open, festivals like *Rath Yatra* (June) are over, making sightseeing comfortable.  
+- **April – June:** Warm (30‑38 °C); early mornings are best, but heat can be intense for outdoor sites.  
+- **July – September:** Monsoon; heavy rain may close trails at Khandagiri Caves and Chandaka Sanctuary; indoor attractions remain accessible.
 
 **Transport pricing:**  
-- **Taxi/cab:** Metered rate ₹12 per km after the first 2 km (₹30 base). Airport‑to‑city typical fare ₹300‑₹400. Negotiating is common for out‑station trips; insist on meter or pre‑agreed fare.  
-- **Auto/rickshaw:** Base ₹25, then ₹12 per km. Auto‑rickshaws do not have meters; confirm fare before boarding (e.g., “Bhubaneswar Airport to Patia – ₹350”).  
-- **App‑based options:** Ola and Uber operate city‑wide; surge pricing peaks during festival evenings (₹500‑₹800 for airport‑city trips).
+- **Taxi/cab:** Base fare ₹40 for the first 2 km; thereafter ₹15 per km. Night surcharge (22:00 – 05:00) +20 %.  
+- **Auto‑rickshaw:** Base ₹25 for first 2 km; ₹12 per additional km. Short rides within the city centre typically cost ₹30‑₹50.  
+- **App‑based options:** Ola and Uber operate city‑wide; fares are usually 5‑10 % lower than metered taxis and can be booked in advance for airport transfers.
 
 **Dietary notes:**  
-- Dominant cuisine: Odia, characterized by mustard oil, panch phoran (five‑spice blend), and occasional coconut. Allergy risks: mustard seeds, poppy seeds, and occasional shrimp in coastal dishes.  
-- Vegetarian options: Very high; most restaurants label “Veg” clearly; fish and pork are offered only in dedicated non‑veg sections.
+- **Dominant cuisine:** Odia – heavy use of mustard oil, coconut, and fermented rice (*pakhala*).  
+- **Allergy risks:** Coconut oil is ubiquitous; peanuts are common in sweets.  
+- **Vegetarian options:** Excellent; most restaurants serve veg thalis, *dalma*, *pakhala*, and sweets without meat. Seafood (especially fish) is popular but clearly labelled.
 
 **Medical:**  
-- Nearest quality hospital: **Apollo Hospital Bhubaneswar** (Khandagiri), 24‑hour emergency, trauma care, and pediatric services.  
-- Secondary option: **Sanjivani Hospital**, Patia, well‑equipped for routine ailments.  
-- Recommended to carry: basic first‑aid kit, oral rehydration salts, any prescribed chronic medication, and a copy of medical records for seniors.  
+- **Nearest quality hospital:** Apollo Hospitals Bhubaneswar (≈ 5 km from Lingaraja area). 24 hr emergency, well‑equipped ICU, and English‑speaking staff.  
+- **What to carry:** Basic first‑aid kit, any prescribed medication, a copy of health insurance, and a small bottle of oral rehydration salts for children.
 
 ---
+
+## Getting There
+
+**By train:**  
+- **Nearest railway station:** Bhubaneswar Railway Station (BBS), 2 km from city centre.  
+- **Key trains:**  
+  - *Howrah – Bhubaneswar Express* (12345) – departs Howrah 06:30, arrives BBS 12:45; fare ₹550 – ₹1,200.  
+  - *Delhi – Bhubaneswar Rajdhani* (12433) – departs New Delhi 19:00, arrives BBS 07:30 (+1 day); fare ₹2,800 – ₹5,500 (AC‑2 Tier).  
+
+**By air:**  
+- **Nearest airport:** Biju Patnaik International Airport (BBI), 5 km from city centre.  
+- **Airlines:** Air India, IndiGo, SpiceJet, Vistara.  
+- **Approx. one‑way fare (2025):** ₹3,500 – ₹7,500 from Delhi; ₹2,000 – ₹4,500 from Kolkata.  
+
+**By road:**  
+- **Key highway:** NH 16 (Kolkata – Chennai corridor) passes through Bhubaneswar.  
+- **Nearest state bus depot:** Bhatpara Bus Stand (≈ 3 km).  
+- **Inter‑city bus frequency:** Every 60 minutes to Cuttack, Puri, and Kolkata.  
+- **Typical fare:** ₹150 – ₹300 for a 2‑hour trip to Cuttack; ₹250 – ₹400 to Puri.
+
+---
+
+## Hidden Gems
+
+**Sisupalgarh Ancient Fort**  
+- **Why it’s special:** One of the best‑preserved early historic fortified cities in India; offers a glimpse of urban planning from the 3rd century BC.  
+- **Entry/cost:** ₹30 adult, ₹15 child (3 – 12 yr); free for toddlers.  
+- **How to reach:** 12 km north of Bhubaneswar via NH 16; auto‑rickshaw or hired car.  
+- **Best time:** Early morning (07:00 – 09:00) for cooler weather and clear views of the ramparts.  
+- **Suitability:** Uneven stone pathways; not suitable for toddlers (carry only) and may be challenging for elderly with limited mobility.
+
+**Peacock Valley (Madhusudanpur)**  
+- **Why it’s special:** A secluded gorge with seasonal waterfalls, vibrant peacock sightings, and a natural swimming pool – rarely crowded.  
+- **Entry/cost:** No formal entry fee; guided trek ₹200 per person (includes safety gear).  
+- **How to reach:** 25 km south via NH 316; hire a private vehicle from Bhubaneswar.  
+- **Best time:** Post‑monsoon (October – November) when water flow is moderate and foliage is lush.  
+- **Suitability:** Moderate trek (≈ 2 km) with rocky steps; unsuitable for toddlers and for seniors who need a stable walking surface.
+
+**Kedar Gouri Temple (Lesser‑Known)**  
+- **Why it’s special:** A quiet shrine dedicated to Lord Shiva and Parvati, tucked away in a residential lane; offers a peaceful alternative to the crowded Lingaraja complex.  
+- **Entry/cost:** Free; optional donation ₹5 – ₹20.  
+- **How to reach:** 4 km east of the city centre; walkable or short auto‑rickshaw ride.  
+- **Best time:** Late afternoon (16:30 – 18:00) when the temple’s stone carvings catch the soft light.  
+- **Suitability:** Flat entrance, fully accessible for toddlers in carriers and elderly visitors.
+
+---
+
+## Practical Tips
+
+**Connectivity:** Jio provides the strongest 4G coverage across Bhubaneswar, especially in the city centre and tourist zones. Airtel is comparable in most areas; Vi has spotty coverage near forested regions (e.g., Chandaka). Expect occasional dead zones in the dense canopy of Khandagiri Caves and Peacock Valley.
+
+**ATMs:**  
+- SBI ATM at Lingaraja Temple complex (open 24 hrs).  
+- HDFC Bank ATM inside Biju Patnaik Airport terminal (open 06:00 – 22:00).  
+- Axis Bank ATM near Ekamra Kanan Park (open 08:00 – 20:00).  
+Cash is preferred at small eateries and temple donation boxes; most mid‑range hotels accept cards.
+
+**SIM cards:** Purchase a prepaid Jio SIM at the airport’s Jio Store (₹500 for 30 GB 28‑day pack) or at authorized Jio outlets in the city centre. Airtel SIMs are also available but Jio consistently offers the best signal strength in both urban and peripheral areas. Remember to carry a passport copy and a recent photograph for activation.
