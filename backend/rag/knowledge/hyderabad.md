@@ -2,138 +2,184 @@
 
 ## Routing
 
-**Standard routing: Hyderabad Airport → Charminar (Old City) → Hitech City / Gachibowli → Ramoji Film City**
+**Standard routing: Charminar → Salar Jung Museum → Hussain Sagar Lake → Birla Mandir**
 
-Starting with the historic core (Charminar) lets travellers acclimatise to the city’s climate and traffic before moving to the modern tech corridor, which has smoother roads and better parking. The final leg to Ramoji Film City is a longer stretch on a highway, so it’s best tackled after the shorter inner‑city drives to avoid fatigue.
+The sequence starts in the historic Old City (Charminar) where early‑morning crowds are thin, then moves north‑west to the museum (cool indoor environment) before heading to the lakeside for afternoon relaxation, and finishes with an evening visit to Birla Mandir for sunset views. This order minimises back‑tracking, avoids peak traffic on the Inner Ring Road, and spreads out walking fatigue for families with toddlers or elderly members.
 
 Driving times:  
-- Hyderabad Airport → Charminar: ~30 km (NH 44) – 45 min (peak traffic may add 15 min)  
-- Charminar → Hitech City / Gachibowli: ~15 km (Inner Ring Road) – 30 min  
-- Hitech City → Ramoji Film City: ~35 km (NH 65) – 1 hour  
+- Charminar → Salar Jung Museum: ~15 km via Inner Ring Road (NH 65) – 30 min  
+- Salar Jung Museum → Hussain Sagar Lake: ~6 km via NH 44 – 15 min  
+- Hussain Sagar Lake → Birla Mandir: ~8 km via NH 44 – 20 min  
 
-**Alternative routing:** Arrive via Secunderabad Railway Station, head first to Hitech City, then loop west to Charminar and finish at Ramoji Film City; this avoids the airport‑to‑city rush hour.
-
----
+**Alternative routing:** Start at Ramoji Film City (south‑west), then loop through Golconda Fort, Charminar, and finish at Shilparamam Craft Village on the north‑east fringe. This circuit suits travellers with a full‑day car hire and avoids the weekday rush hour on the city’s central corridors.
 
 ## Old City (Charminar Area)
 
-**Key places:** Charchar Charminar, Mecca Masjid, Laad Bazaar, Chowmahalla Palace, Salar Jung Museum (just south)
+**Key places:** Charminar, Mecca Masjid, Laad Bazaar, Qutb Shahi Tombs, Paigah Tombs
 
-**Charminar:**  
-- Entry: ₹30 adult, ₹15 child (3–12 yr), free for toddlers under 3  
-- Suitability: 4‑storey monument with steep stairs; not suitable for toddlers or travellers with mobility limitations. Elderly can manage with a hand‑rail but should avoid peak heat.  
-- Best time of day: 6:00–8:00 am (cool, fewer crowds)  
-- Seasonal closure: None, but the museum on the upper floor closes on Fridays.
+### Charminar  
+- Entry: ₹20 adult, ₹10 child (under 12).  
+- **Toddler/Elderly suitability:** 4 m × 4 m square platform with steep steps; not recommended for toddlers or mobility‑limited elders.  
+- **Best time of day:** Early morning (06:00‑08:00) for soft light and minimal crowd.  
+- **Seasonal closure:** None; open daily.
 
-**Mecca Masjid:**  
-- Entry: Free (no ticket); guided audio guide ₹80 adult, ₹40 child  
-- Suitability: Large prayer hall, flat floor – suitable for toddlers and elderly, but modest dress required.  
-- Best time: Early afternoon after prayers (10:30–12:30 am) when the courtyard is quiet.  
-- Seasonal closure: Closed on Fridays for Friday prayers.
+### Mecca Masjid  
+- Entry: ₹30 adult, ₹15 child (under 12).  
+- **Toddler/Elderly suitability:** Large prayer hall, flat flooring; suitable for toddlers (carry‑on) and elders (no stairs).  
+- **Best time of day:** Mid‑afternoon (14:00‑16:00) when the interior is cooler.  
+- **Seasonal closure:** Closed on Fridays for congregational prayers.
 
-**Laad Bazaar (Bazaars of Charminar):**  
-- Entry: Free; shopping prices vary.  
-- Suitability: Narrow lanes, uneven cobbles – not toddler‑friendly; elderly may need a stroller with good wheels.  
-- Best time: Late evening (7–9 pm) when shops are fully lit and crowds thin.  
-- Seasonal closure: None, but stalls may shut during major festivals.
+### Laad Bazaar (Choodi Market)  
+- Entry: Free (shopping).  
+- **Toddler/Elderly suitability:** Narrow lanes, uneven cobbles; toddlers need a carrier, elders should move slowly.  
+- **Best time of day:** Early evening (17:00‑19:00) when shops are fully stocked.  
+- **Seasonal closure:** None.
 
-**Trust issue or pricing trap for this area:**  
-- **Overpriced “guided tours” by unofficial street guides** – they often charge ₹500–₹800 for a 30‑minute walk, quoting inflated entry fees.  
-- Recommended approach: Hire a licensed guide from the Telangana State Tourism Development Corporation office (₹250 adult) or download the official audio guide app (₹80 adult) for accurate pricing.
+### Qutb Shahi Tombs (Complex)  
+- Entry: ₹50 adult, ₹25 child (under 12).  
+- **Toddler/Elderly suitability:** 1 km of paved pathways with occasional steps; toddlers can be pushed in a stroller, elders may find the steep hill at the entrance challenging.  
+- **Best time of day:** Sunrise (05:30‑07:00) for pastel skies.  
+- **Seasonal closure:** Closed on Mondays for maintenance.
+
+### Paigah Tombs (Hidden Gem)  
+- Entry: ₹30 adult, ₹15 child.  
+- **Toddler/Elderly suitability:** Flat ground, well‑maintained walkways; fully suitable for both groups.  
+- **Best time of day:** Late morning (10:00‑12:00) to avoid the harsh sun.  
+- **Seasonal closure:** None.
+
+**Trust issue in Old City:** Unlicensed “guide” vendors near Charminar often charge ₹500‑₹800 for a 2‑hour tour and may misrepresent historical facts.  
+- Recommended approach: Use the official Hyderabad Tourism Information Centre (near Charminar) or book a guide through the state tourism website (₹250 per person).  
 
 **Old City food:**  
-- Signature dishes: Hyderabadi Biryani, Haleem (Ramadan special), Mirchi Ka Salan, Pathar Ka Gosht.  
-- For toddlers and young kids: plain steamed rice with dal, soft idli, curd rice, small pieces of boiled carrot.  
-- Vegetarian availability: Strong; most stalls offer veg biryani and paneer variants, though many street foods contain hidden meat‑based broth – ask “veg” explicitly.
+- Signature dishes: Hyderabadi Biryani (mutton), Hale — seasonal (Ramadan), Mirchi ka Salan, Bagara Baingan.  
+- For toddlers and young kids: Soft Idli, plain rice with dal, curd rice (Yogurt + rice), and small pieces of boiled carrot.  
+- Vegetarian availability: Excellent; most restaurants serve a full vegetarian menu, though some biryani houses may have meat‑only “specials”.
 
----
+## Central Hyderabad (Secunderabad & Banjara Hills)
 
-## Hitech City / Gachibowli
+**Key places:** Salar Jung Museum, Chowmahalla Palace, Birla Mandir, Hussain Sagar Lake, Numaish Exhibition Grounds, Ramoji Film City, Wonderla Hyderabad, Shilparamam Craft Village
 
-**Key places:** Nehru Zoological Park, Shilparamam (craft village), Durgam Cheruvu (Lake), Inorbit Mall, Cyber Towers
+### Salar Jung Museum  
+- Entry: ₹20 adult, ₹10 child (under 12).  
+- **Toddler/Elderly suitability:** Wheelchair‑friendly ramps; toddlers should be kept close to exhibits.  
+- **Best time of day:** Early morning (09:30‑11:30) to avoid crowds.  
+- **Seasonal closure:** Closed on Fridays.
 
-**Nehru Zoological Park:**  
-- Entry: ₹200 adult, ₹100 child (3–12 yr), ₹50 senior (60+ yr)  
-- Suitability: Large open lawns; wheelchair rentals available at the gate. Some enclosures have uneven gravel – toddlers need constant supervision; elderly can use paved paths but should avoid the Safari ride (bumpy).  
-- Best time of day: 9:00 am–12:00 pm (cooler, animals active).  
-- Seasonal closure: Closed on Mondays (maintenance).
+### Chowmahalla Palace  
+- Entry: ₹30 adult, ₹15 child.  
+- **Toddler/Elderly suitability:** Marble staircases and narrow corridors; not ideal for toddlers unless carried, and elders may need assistance on steps.  
+- **Best time of day:** Late afternoon (15:00‑17:00) when light illuminates the courtyards.  
+- **Seasonal closure:** None.
 
-**Shilparamam (Craft Village):**  
-- Entry: Free; craft workshops ₹150 adult, ₹80 child  
-- Suitability: Flat, paved walkways – fully toddler‑friendly and wheelchair accessible.  
-- Best time: Late afternoon (4–6 pm) when artisans demonstrate hand‑loom work.  
-- Seasonal closure: None, but some workshops pause during monsoon (July).
+### Birla Mandir (Birla Temple)  
+- Entry: Free (donations optional).  
+- **Toddler/Elderly suitability:** Smooth ramps and elevators; fully suitable.  
+- **Best time of day:** Sunset (18:30‑19:30) for panoramic city view.  
+- **Seasonal closure:** None.
 
-**Durgam Cheruvu (Lake):**  
-- Entry: Free; boat ride ₹120 adult, ₹80 child (minimum age 4)  
-- Suitability: Well‑maintained promenade; toddlers can be carried, elderly can use benches. Boat rides have a 4‑year height limit – not for toddlers under 4.  
-- Best time: Sunset (5:30–7:00 pm) for cooler breeze and city lights.  
-- Seasonal closure: Boat rides halted during heavy rain (June–July).
+### Hussain Sagar Lake (including Buddha Statue)  
+- Entry: ₹25 for boat ride to Buddha; lake entry free.  
+- **Toddler/Elderly suitability:** Boat ride has a 2 m step; toddlers need a carrier, elders may find the boat motion uncomfortable.  
+- **Best time of day:** Evening (19:00‑21:00) for illuminated lake and cooler breeze.  
+- **Seasonal closure:** Boat rides halted during heavy monsoon (July‑September).
 
-**Trust issue or pricing trap for this area:**  
-- **Ticket counter “foreign tourist” surcharge** – some counters add an extra ₹200–₹300 to the standard entry fee.  
-- Recommended approach: Purchase tickets online via the official zoo portal (₹200 adult) or use the e‑ticket kiosks at the entrance to avoid inflated cash prices.
+### Numaish Exhibition Grounds (Annual Fair)  
+- Entry: ₹50 cash (single entry).  
+- **Toddler/Elderly suitability:** Wide open grounds, flat; suitable for both groups.  
+- **Best time of day:** Morning (10:00‑13:00) before crowds peak.  
+- **Seasonal closure:** Operates only Jan 1 – Feb 15 2025; closed otherwise.
 
-**Hitech City food:**  
-- Signature dishes: Hyderabadi Chicken Fry, Irani Chai, Osmania Biscuits, Andhra-style Paneer Butter Masala.  
-- For toddlers and young kids: soft upma, plain idli, boiled potatoes with a pinch of ghee, curd rice.  
-- Vegetarian availability: Very good; most cafés have a dedicated veg menu with paneer, dal, and vegetable biryani.
+### Ramoji Film City  
+- Entry: ₹1,200 adult (standard tour), ₹800 child (4‑12 yr).  
+- **Toddler/Elderly suitability:** 3 km of paved pathways; toddlers can be pushed, elders may need occasional rests on benches.  
+- **Best time of day:** Early entry (09:00) to avoid long queues.  
+- **Seasonal closure:** Closed on Tuesdays for maintenance.
 
----
+### Wonderla Hyderabad (Amusement & Water Park)  
+- Entry: ₹1,592 adult, ₹510 child (3‑12 yr).  
+- **Toddler/Elderly suitability:** Water rides have 1.2 m steps; toddlers under 3 not permitted. Elderly can enjoy gentle rides (e.g., “Merry‑Go‑Round”) but should avoid high‑thrill attractions.  
+- **Best time of day:** Mid‑day (12:00‑15:00) when water slides are coolest.  
+- **Seasonal closure:** Closed during peak monsoon (July‑early August).
 
-## Ramoji Film City
+### Shilparamam Craft Village  
+- Entry: Free; craft stalls may charge ₹20‑₹200 per item.  
+- **Toddler/Elderly suitability:** Flat open‑air layout, shaded pavilions; fully suitable.  
+- **Best time of day:** Late afternoon (16:00‑18:00) for cultural performances.  
+- **Seasonal closure:** Closed on Mondays.
 
-**Key places:** Film City Guided Tour, Emerald Gardens, Adventure Park, Ramoji Studios, Bawarchi Restaurant (in‑park)
+**Trust issue in Central Hyderabad:** Ticket scalping at Numaish and Ramoji Film City—unauthorised sellers quote inflated prices (up to 2×).  
+- Recommended approach: Purchase tickets only at official counters or via the Hyderabad Tourism app (official QR code).  
 
-**Ramoji Film City Guided Tour (Standard 5‑hour):**  
-- Entry: ₹500 adult, ₹300 child (3–12 yr), ₹250 senior (60+ yr)  
-- Suitability: 5 km of paved walkways; wheelchair‑friendly routes available. Some adventure rides have a minimum height of 4 ft – not suitable for toddlers under 4. Elderly can take the slower “heritage” circuit.  
-- Best time of day: 10:00 am–2:00 pm (shows and live sets are scheduled then).  
-- Seasonal closure: Closed on major Hindu festivals (e.g., Dussehra) and during heavy monsoon bursts (late July–early August).
-
-**Emerald Gardens (Botanical section):**  
-- Entry: Included in tour; separate entry ₹150 adult, ₹80 child  
-- Suitability: Flat lawns, shaded benches – ideal for toddlers in strollers and elderly visitors.  
-- Best time: Early evening (4–6 pm) when temperatures drop.  
-- Seasonal closure: None, but some flower beds are replanted in March.
-
-**Adventure Park (Rides & Zip‑line):**  
-- Entry: ₹200 adult, ₹120 child (5–12 yr) – height minimum 4 ft.  
-- Suitability: Not for toddlers; elderly may find the zip‑line physically demanding.  
-- Best time: Mid‑day (12–2 pm) when rides operate at full capacity.  
-- Seasonal closure: Closed during intense rain (June–July).
-
-**Trust issue or pricing trap for this area:**  
-- **On‑site “premium package” upsell** – staff at the gate push a ₹1,200 “VIP” tour that bundles extra shows at inflated rates.  
-- Recommended approach: Pre‑book the standard tour online via the official Ramoji website (₹500 adult) and decline any on‑spot upgrades unless you truly want the extra attractions.
-
-**Ramoji Film City food:**  
-- Signature dishes: Ramoji Biryani, Mutton Curry, Veg Thali (served on banana leaf).  
-- For toddlers and young kids: plain steamed rice, boiled potatoes, soft chapati, curd, plain boiled egg.  
-- Vegetarian availability: Dedicated veg restaurant offers paneer tikka, veg biryani, and dal‑rice; however, many stalls serve meat‑based gravies – ask for “veg only”.
-
----
+**Central Hyderabad food:**  
+- Signature dishes: Hyderabadi Dum Ka Khichdi, Andhra‑style Chicken Curry, Double‑Roasted Peanut Chutney, Irani Chai.  
+- For toddlers and young kids: Soft Dosa with plain potato filling, plain rice with ghee, boiled egg (if non‑vegetarian), and sweet‑lime sherbet.  
+- Vegetarian availability: Very high; most eateries offer a “pure veg” menu, though some street stalls may serve meat‑based snacks.
 
 ## General Hyderabad Notes
 
 **Best time to visit:**  
-- **October – February:** Pleasant 15‑28 °C, all attractions open, festivals (Diwali, Sankranti) bring cultural events.  
-- **March – April:** Temperatures rise to 35 °C; Charminar area can be hot, but early mornings remain comfortable.  
-- **May – June:** Peak summer (40 °C+); outdoor sites like Zoo and Film City can be exhausting – carry water and sun protection.  
-- **July – August:** Monsoon showers; occasional water‑logging on Charminar lanes, some boat rides at Durgam Cheruvu paused.  
-- **September – October:** Post‑monsoon, humidity drops, gardens are lush; festivals (Ganesh Chaturthi) increase crowd density.
+- **Oct – Feb:** Pleasant 15‑28 °C; all attractions open; Numaish (Jan‑Feb) adds festive market vibe.  
+- **Mar – May:** Warm 30‑38 °C; early mornings are comfortable; outdoor sites (Hussain Sagar, Golconda) best visited before 11:00.  
+- **Jun – Sep:** Monsoon (heavy showers); boat rides on Hussain Sagar often suspended; indoor museums preferred.  
+- **Oct – Nov (post‑monsoon):** Clear skies, ideal for photography at Charminar and lake.
 
 **Transport pricing:**  
-- **Taxi / cab:** Base ₹20, then ₹12 per km; airport‑to‑city trips typically ₹800‑₹1,200. Metered fares are standard; negotiate only for out‑station trips.  
-- **Auto‑rickshaw:** Usually ₹25 for first 2 km, then ₹12 per km; most drivers do not use meters – agree on fare before boarding (e.g., ₹120 for a 6 km ride).  
-- **App‑based options:** Uber and Ola operate city‑wide; expect surge pricing (+30 %–50 %) during peak hours or festivals.
+- **Taxi/cab:** Metered fares start at ₹40 for the first 2 km, then ₹12 per km; negotiate only for out‑station trips.  
+- **Auto‑rickshaw:** Fixed‑rate for 5 km is ₹80; always ask for “meter” or confirm price before boarding.  
+- **App‑based:** Ola and Uber operate city‑wide; surge pricing peaks during festival evenings (₹150‑₹250 for 5 km).  
 
 **Dietary notes:**  
-- Dominant cuisine: Hyderabadi (Mughlai‑Andhra) featuring biryani, haleem, and spicy gravies.  
-- Allergy risks: Frequent use of coconut oil, peanuts, and heavy chilies; ask for “no coconut” or “mild” if sensitive.  
-- Vegetarian options: Very strong; most restaurants have a pure‑veg menu (paneer, dal, veg biryani). Street food may contain hidden meat broth – request “veg” explicitly.
+- Dominant cuisine: Hyderabadi (rich in ghee, nuts, coconut oil).  
+- Allergy risks: Groundnut oil in many fry‑ups; coconut oil in many curries; be cautious if nut‑allergic.  
+- Vegetarian options: Extensive; most restaurants label “Pure Veg” clearly. Pork is rarely served except in Christian‑run eateries (e.g., around Secunderabad).  
 
 **Medical:**  
-- Nearest quality hospital: **Apollo Hospitals, Gachibowli** (≈10 km from Old City, 24‑hour emergency, English‑speaking staff).  
-- Additional major facility: **Care Hospital, Secunderabad** (≈8 km from Charminar).  
-- Recommended to carry: basic first‑aid kit, oral rehydration salts, any personal prescription meds, and a copy of health insurance.
+- Nearest high‑quality hospital: **Apollo Hospitals, Banjara Hills** (≈ 5 km from Charminar).  
+- Carry: basic first‑aid kit, any chronic medication, and a copy of health insurance.  
+
+## Getting There
+
+**By train:**  
+- Main station: **Hyderabad Deccan (Nampally) – 2 km from Charminar**.  
+- Key trains: **Hyderabad Rajdhani Express (12433/12434) from New Delhi**, **Duronto Express (12263/12264) from Mumbai**, and **Kacheguda–Secunderabad Intercity (12703)**.  
+
+**By air:**  
+- **Rajiv Gandhi International Airport (RGIA)** – 24 km south of the city centre.  
+- Airlines: IndiGo, Air India, SpiceJet, Vistara, GoAir.  
+- Approximate one‑way fare (Delhi‑Hyderabad): **₹3,500 – ₹9,000** (economy).  
+
+**By road:**  
+- Major highways: **NH 65 (Hyderabad–Vijayawada)**, **NH 44 (Hyderabad–Nagpur)**, and **NH 163 (Hyderabad–Warangal)**.  
+- Nearest state bus depot: **MGBS (Mahatma Gandhi Bus Station)** – 12 km from Charminar.  
+- Inter‑city bus fare (e.g., Hyderabad‑Vijayawada): **₹300 – ₹500**; buses run every 30 min during peak hours.
+
+## Hidden Gems
+
+**Durgam Cheruvu (Secret Lake)**  
+- Why special: Tranquil rocky lake surrounded by walking trails; rarely crowded.  
+- Entry: Free; boat ride ₹150 per adult, ₹80 per child.  
+- How to reach: 15 km north via NH 44, park at Durgam Cheruvu Resort and walk 200 m.  
+- Best time: Early evening (17:00‑19:00) for sunset reflections.  
+- **Toddler/Elderly suitability:** Flat promenade; toddlers can be pushed; elders may need a seat on the boat.
+
+**Shamirpet Lake**  
+- Why special: 20 km north‑east, pine‑grove picnic spot with bird‑watching.  
+- Entry: ₹20 adult, ₹10 child (gate fee).  
+- How to reach: Take NH 44 to Shamirpet; parking available near the lake.  
+- Best time: Weekday mornings (08:00‑11:00) to avoid weekend crowds.  
+- **Toddler/Elderly suitability:** Gentle slopes, shaded benches; fully suitable.
+
+**Ananthagiri Hills (Vikarabad)**  
+- Why special: 80 km west, coffee plantations, trekking trails, and a small waterfall.  
+- Entry: ₹30 adult, ₹15 child (forest entry).  
+- How to reach: Drive via NH 44 → Vikarabad → Ananthagiri; parking at hilltop.  
+- Best time: Post‑monsoon (Oct‑Nov) when waterfalls flow.  
+- **Toddler/Elderly suitability:** Steep sections; not recommended for toddlers; elders should use a vehicle to the base and walk only short stretches.
+
+## Practical Tips
+
+**Connectivity:** Jio and Airtel provide strong 4G coverage across the city; Vi has patchy spots in the Old City’s narrow lanes. Expect occasional dead zones near the lake’s far‑shore.
+
+**ATMs:** Reliable ATMs at **State Bank of India (SBH‑Nampally), HDFC (Banjara Hills), and ICICI (Secunderabad)**. Most tourist zones accept cards, but small street stalls prefer cash.
+
+**SIM cards:** Purchase at RGIA arrivals hall (Airtel, Jio, Vi kiosks) or at any major mobile shop in Charminar market. Jio offers the best post‑activation coverage in Hyderabad; carry a passport copy and a 2 × 2 cm photo for registration.

@@ -2,87 +2,194 @@
 
 ## Routing
 
-**Standard routing: Hosapete → Hampi**
+**Standard routing: Bangalore → Hospet → Hampi → Anegundi**
 
-Hosapete (Hosapete Junction) is the transit hub — 13 km from Hampi and the base for most accommodation outside the heritage zone. All road and rail travellers arrive via Hosapete.
+The circuit starts in Bangalore because NH75 (Bangalore‑Hospet) is a well‑maintained four‑lane highway, allowing a comfortable drive before the terrain becomes undulating near the Tungabhadra basin. Reaching Hampi from Hospet on NH50 avoids the steep climbs of the Western Ghats, reducing fatigue for families and senior travellers. The final leg to Anegundi follows the rural SH20, a scenic but slower road that lets you soak in the boulder‑strewn landscape before the day ends.
 
-Driving times:
-- Bangalore → Hampi: 6–7 hours via NH48 to Chitradurga, then NH150A to Hosapete (350 km)
-- Hubli → Hampi: 2.5–3 hours via NH67/NH150A (140 km)
-- Hyderabad → Hampi: 6–7 hours via NH65 through Kurnool (380 km)
-- Goa (Panaji) → Hampi: 6–7 hours via NH748/NH48 (350 km)
+Driving times:  
+- Bangalore → Hospet: 6 hours 30 min (NH75)  
+- Hospet → Hampi: 30 min (NH50)  
+- Hampi → Anegundi: 45 min (SH20, narrow sections, occasional cattle crossing)
 
-**Alternative routing:** Hampi Express from Bangalore (overnight, departs ~10 PM, arrives Hosapete ~7 AM, ₹350–1,200 by class) — most practical option for families and elderly; overnight travel maximises site time.
-
----
-
-## Hampi Bazaar & Royal Enclosure
-
-**Key places:** Virupaksha Temple, Hemakuta Hill, Royal Enclosure (Lotus Mahal, Elephant Stables, Zenana Enclosure), Queen's Bath
-
-**Virupaksha Temple:**
-- Entry: Free for Indians; ₹500 foreigners; ₹50 camera fee
-- Active temple with paved inner courts — flat for elderly; toddlers must be in arms in the inner sanctum; strollers usable in outer courtyard only.
-- Best time: 6–8 AM (morning puja) or 5–7 PM (evening aarti); shoes removed at gate
-
-**Royal Enclosure:**
-- Entry: ₹40/Indians, ₹600/foreigners (combined ticket covers most Royal Enclosure sites)
-- Most accessible part of Hampi — graded gravel paths between monuments. Elderly can cover Lotus Mahal and Elephant Stables comfortably; strollers impractical on gravel; toddlers in a carrier manageable.
-- Best time: 8–10 AM or 4–6 PM; midday unviable (granite surfaces exceed 55°C in summer). Closed Fridays.
-
-**Hemakuta Hill:**
-- Entry: Free; moderate boulder climb
-- Not suitable for toddlers being carried or elderly with limited mobility. Uneven granite throughout. Sunset views over Virupaksha Temple are the draw — arrive by 5:30 PM.
-
-**Trust issue — "ASI certified guide" touts at Hampi Bazaar:**
-- Men at the bus stand and Virupaksha Temple gate claim to be government guides and quote ₹1,500–3,000 for a half-day tour. Legitimate ASI guides are hired at the Kamalapura Archaeological Museum (~8 km) for ₹750–1,000.
-- Recommended approach: Hire from Kamalapura Museum if a guide is needed. On-site boards and the Karnataka Tourism app are adequate for self-guided visits.
-
-**Hampi Bazaar food:**
-- Local dishes: Bisi Bele Bath (spiced rice-lentil-vegetable one-pot, ₹80–120), Jolada Rotti (jowar flatbread with dal or chutney — Hyderabad-Karnataka staple), South Indian thali (₹80–150)
-- For toddlers and young kids: Plain rice with dal at all bazaar restaurants; Bisi Bele Bath is mildly spiced and suitable for 2+ if requested without extra chilli
-- Vegetarian availability: Hampi Bazaar is almost entirely vegetarian. Non-vegetarian options are on Hippie Island and near Hosapete.
+**Alternative routing:** Arrive via Hubli (NH48) and drive south on NH50 to Hospet, then follow the same sequence. This avoids Bangalore traffic and is preferable during monsoon‑season roadwork on NH75.
 
 ---
 
-## Vittala Temple & Hippie Island
+## South Hampi (Main Ruins Cluster)
 
-**Key places:** Vittala Temple and Stone Chariot, Matanga Hill (sunrise), Tungabhadra river crossing, Hippie Island (Virupapur Gaddi)
+**Key places:** Virupaksha Temple, Vittala Temple, Stone Chariot, Hemakuta Hill, Lotus Mahal, Elephant Stables, Hazara Rama Temple, Queen’s Bath, Matanga Hill
 
-**Vittala Temple:**
-- Entry: ₹40/Indians, ₹600/foreigners (same combined ticket); electric cart from entry gate to temple ₹50/person — mandatory, no walking on the 1.5 km access road
-- Uneven stone paving — strollers cannot navigate; elderly can reach the Stone Chariot courtyard but outer terraced areas have steps; toddlers must be carried. Musical Pillars are protected by ASI mesh — children must not attempt to tap them; strictly enforced.
-- Best time: 7–9 AM; closed Fridays
+### Virupaksha Temple
+- Entry: ₹30 adult (Indian), ₹500 foreign
+- **Suitability:** Flat stone‑paved courtyard; wheelchair‑friendly ramps; no steep steps – suitable for toddlers (stroller can be used) and elderly (provided they avoid the inner sanctum’s narrow passage).
+- **Best time:** Early morning (6:30‑8:00 am) for soft light and fewer crowds.
+- **Seasonal closure:** Closed on full moon days for special rituals; entry denied after 7 pm.
 
-**Matanga Hill:**
-- Entry: Free; 20-min steep boulder climb
-- Not suitable for elderly with mobility issues or for carrying toddlers — final sections are near-vertical granite. Proper footwear essential; base by 5:45 AM for sunrise.
+### Vittala Temple & Stone Chariot
+- Entry: ₹30 adult, ₹500 foreign
+- **Suitability:** Large open courtyard; the iconic Stone Chariot is on a flat platform, but the surrounding stone steps are uneven (≈3 km of uneven terrain). Not recommended for toddlers who cannot walk long distances; elderly may need a walking stick.
+- **Best time:** Late afternoon (4‑6 pm) for golden hour photography.
+- **Seasonal closure:** Monsoon (June‑September) – waterlogged steps may be slippery.
 
-**Trust issue — coracle fare inflation on Tungabhadra:**
-- Operators at the Hampi–Virupapur Gaddi crossing quote ₹200–500/person for the 5-minute coracle ride. Government-fixed rate is ₹30–50/person one-way.
-- Recommended approach: Cross at the main ghat near Virupaksha Temple where competition holds fares closer to the official rate. Agree per-person before boarding. Road access to Hippie Island via Anegundi is an alternative for toddlers or elderly who cannot step safely into a coracle.
+### Hemakuta Hill
+- Entry: Free (no ASI fee)
+- **Suitability:** Gentle slope; 2 km walk with occasional steep patches. Suitable for young kids who can handle short walks; seniors should avoid during peak heat (above 35 °C).
+- **Best time:** Sunrise (5:30‑6:30 am) for panoramic views over the boulder landscape.
+- **Seasonal closure:** None, but rain can make paths slick.
 
-**Hippie Island food:**
-- Riverside cafés (Virupapur Gaddi): Israeli-influenced menus, pasta, smoothie bowls alongside South Indian dishes (₹120–300/item) — most varied food in the Hampi area
-- For toddlers and young kids: Plain rice, banana pancakes, and mild dal available — more adaptable than Hampi Bazaar side
-- Vegetarian availability: Most cafés are vegetarian-leaning; select spots serve non-vegetarian. No alcohol on the Hampi Bazaar (heritage) side; available on Hippie Island.
+### Lotus Mahal
+- Entry: ₹30 adult, ₹500 foreign (combined ticket with nearby monuments)
+- **Suitability:** Flat interior with marble flooring; narrow doorways but no stairs. Ideal for toddlers (stroller can be turned sideways) and seniors (handrails present).
+- **Best time:** Mid‑morning (10‑11 am) when interior light is diffused.
+- **Seasonal closure:** Closed on Tuesdays for maintenance.
+
+### Elephant Stables
+- Entry: ₹30 adult, ₹500 foreign (part of the combined ticket)
+- **Suitability:** Flat roofed structure; low ceilings may feel cramped for strollers. Elderly can navigate with assistance; toddlers should be carried.
+- **Best time:** Early afternoon (1‑2 pm) when crowds thin.
+- **Seasonal closure:** None.
+
+### Hazara Rama Temple
+- Entry: ₹30 adult, ₹500 foreign (combined ticket)
+- **Suitability:** Interior walls covered with frescoes; narrow aisles but level floor. Suitable for toddlers (must be carried) and seniors (handrails at entrance).
+- **Best time:** Late morning (11‑12 pm) for optimal fresco illumination.
+- **Seasonal closure:** Closed on Fridays for worship.
+
+### Queen’s Bath
+- Entry: ₹30 adult, ₹500 foreign (combined ticket)
+- **Suitability:** Steps down to a water‑filled pool; slippery stones. Not recommended for toddlers or seniors with mobility issues.
+- **Best time:** Mid‑afternoon (2‑3 pm) when sunlight highlights the stonework.
+- **Seasonal closure:** Monsoon (June‑September) – water level rises and safety concerns.
+
+### Matanga Hill
+- Entry: Free (no ASI fee)
+- **Suitability:** Steep climb (≈1 km) with uneven rocks; 30‑minute ascent. Unsuitable for toddlers and seniors unless they have strong fitness and proper footwear.
+- **Best time:** Sunset (6‑7 pm) for spectacular vistas.
+- **Seasonal closure:** None, but avoid during heavy rain.
+
+### Trust issue or pricing trap for South Hampi:
+- **Scam:** Unofficial “guided tour” agents near the main entrance often charge ₹500‑₹800 per person for a “full‑day” package, promising entry to all monuments. The official combined ticket (₹30 Indian) already covers most sites, making the extra fee a rip‑off.
+- **Recommended approach:** Purchase the ASI combined ticket at the ticket counter (₹30) and hire a licensed guide at the ASI office (₹200‑₹300 per group). Verify the guide’s badge before starting.
+
+### South Hampi food:
+- **Signature dishes:** Bisi Bele Bath (spiced rice‑lentil stew), Ragi Malt (nutritious millet drink), Jowar Roti with Hampi‑style chicken curry.
+- **For toddlers and young kids:** Soft idli, plain rice with dal, ragi malt (unsweetened) – all readily available at local eateries.
+- **Vegetarian availability:** Excellent; most stalls serve vegetarian versions of Bisi Bele Bath and Jowar Roti. Meat dishes are clearly labelled.
+
+---
+
+## North Hampi (Rural Outskirts)
+
+**Key places:** Sanapur Lake, Anegundi (Pattabhirama Temple), Sugriva’s Cave, Hirebenkal Prehistoric Site, Anegundi Market
+
+### Sanapur Lake
+- Entry: Free (no fee)
+- **Suitability:** Flat lakeside promenade; boat rides on coracles are available. Ideal for toddlers (stroller on paved path) and seniors (shaded benches).
+- **Best time:** Early morning (6‑8 am) for misty reflections; also during the full moon for night‑boat experience.
+- **Seasonal closure:** None, but water level drops sharply in peak summer (May‑June).
+
+### Pattabhirama Temple (Anegundi)
+- Entry: ₹30 adult, ₹500 foreign
+- **Suitability:** Small temple on a gentle hill; 500 m walk with a few steps. Suitable for toddlers (carried) and seniors (handrails at entrance).
+- **Best time:** Late afternoon (4‑5 pm) when the setting sun illuminates the carvings.
+- **Seasonal closure:** Closed on full moon days for local rituals.
+
+### Sugriva’s Cave
+- Entry: Free (no fee)
+- **Suitability:** Narrow opening (≈1 m) leading to a shallow chamber; no stairs. Suitable for toddlers (must be carried) and seniors (easy access).
+- **Best time:** Early evening (5‑6 pm) for cooler temperatures.
+- **Seasonal closure:** None.
+
+### Hirebenkal Prehistoric Site
+- Entry: ₹30 adult, ₹500 foreign (combined ticket with nearby monuments)
+- **Suitability:** Open‑air rock art spread over 2 km; uneven terrain with occasional steep climbs. Not recommended for toddlers; seniors should only attempt with a guide and proper shoes.
+- **Best time:** Mid‑morning (10‑11 am) when sunlight reveals the petroglyphs.
+- **Seasonal closure:** Monsoon (June‑September) – paths become slippery.
+
+### Trust issue or pricing trap for North Hampi:
+- **Scam:** “Lake‑boat” operators often quote a “fixed price” for a coracle ride but later demand extra “fuel surcharge” after the ride. The standard rate is ₹150 per boat for a 30‑minute ride (₹250 for private hire).
+- **Recommended approach:** Agree on the exact price before boarding; carry small change (₹50‑₹100 notes) to avoid over‑charging. Use the official boat operator’s kiosk near the lake entrance.
+
+### North Hampi food:
+- **Signature dishes:** Jowar Roti with spicy beetroot chutney, Akki Rotti (rice pancake) with coconut‑curry, fresh mango pickle.
+- **For toddlers and young kids:** Soft idli, plain boiled rice with ghee, ragi malt (lightly sweetened).
+- **Vegetarian availability:** Predominantly vegetarian; meat dishes are limited to a few guesthouses and are clearly labelled.
 
 ---
 
 ## General Hampi Notes
 
 **Best time to visit:**
-- October–February: Best overall. Temperatures 18–30°C; all sites accessible all day. December–January optimal for families and elderly.
-- March–April: Heats quickly (38–40°C by April). All outdoor visits must finish before 10 AM and resume after 4 PM.
-- May–June: Deccan Plateau peak heat — granite surfaces reach 55°C+. Not recommended for families with toddlers or elderly.
-- July–September: Monsoon. Tungabhadra rises; coracle crossings may suspend. Boulder paths become slippery. Not suitable for first visits.
+- **October – February:** Cool, dry weather (15‑28 °C); all monuments open; ideal for sunrise/sunset photography.
+- **March – May:** Warm (30‑38 °C); early mornings pleasant, afternoons very hot – carry water; some outdoor activities (boat rides) still fine.
+- **June – September:** Monsoon; heavy showers cause water‑logging at Vittala and Matanga Hill; many stone steps become slippery – advisable to postpone major sightseeing.
 
 **Transport pricing:**
-- Auto-rickshaws: ₹15–20/km; half-day heritage tour (Vittala + Royal Enclosure) ₹600–900
-- Bicycle rental: ₹100–150/day from Hampi Bazaar — practical for flat zones; not on boulder terrain
-- Electric carts operate at Vittala Temple access road and within the Royal Enclosure — use them, especially in summer
+- **Taxi/cab:** Metered fares from Hospet to Hampi start at ₹600 for the first 12 km, then ₹12 per km. Negotiated flat rates (₹800‑₹1,000) are common; always ask for a meter or confirm the total before starting.
+- **Auto‑rickshaw:** Fixed rate ₹250 for Hospet ↔ Hampi (12 km). For short hops within Hampi, auto rides cost ₹30‑₹50 per km; drivers may over‑charge tourists, so confirm price upfront.
+- **App‑based options:** Ola and Uber operate in Hospet; rides to Hampi cost ₹700‑₹900. In North Hampi, only local auto‑rickshaws are available.
 
 **Dietary notes:**
-- Hyderabad-Karnataka food culture; jowar (sorghum) replaces wheat as the bread staple. Heritage zone restaurants are almost entirely vegetarian. No alcohol on the Hampi Bazaar side.
+- **Dominant cuisine:** Karnataka‑style vegetarian and millet‑based dishes; frequent use of tamarind, coconut oil, and mustard seeds.
+- **Allergy risks:** Coconut oil is ubiquitous; peanuts are common in chutneys. Pork is rarely served, but some guesthouses may offer non‑vegetarian kebabs – always ask for ingredients.
+- **Vegetarian options:** Abundant; most restaurants label “Veg” clearly. However, some “special” dishes may contain hidden meat broth – verify with staff.
 
-**Medical:** Vijayanagar Institute of Medical Sciences (VIMS), Ballari Road, Hosapete — 14 km, nearest hospital with specialist capacity. Serious trauma or cardiac cases require transfer to Hubli (140 km) or Bangalore (350 km). Carry ORS and sun protection — heat exhaustion on exposed granite is a genuine risk for toddlers and elderly even in cooler months.
+**Medical:**
+- **Nearest quality hospital:** Kalyana Hospital, Hospet (≈12 km, 24‑hour emergency, good ICU). For minor ailments, the Govt. Primary Health Centre in Hampi (≈2 km) offers basic medicines.
+- **What to carry:** Personal first‑aid kit, any prescription meds, oral rehydration salts, insect repellent, and a copy of your health insurance card.
+
+---
+
+## Getting There
+
+**By train:**  
+- **Hospet Junction (HPT):** 12 km from Hampi town.  
+- **Key trains:** Karnataka Express (12627) from Bangalore (6 h 30 m), Goa Express (12779) from Mumbai (12 h 30 m). Both stop at Hospet; ticket prices ₹250‑₹500 Indian, ₹2,000‑₹3,000 foreign.
+
+**By air:**  
+- **Nearest airport:** Hubli‑Kannur Airport (HBX), 166 km; airlines: IndiGo, Air India, SpiceJet. One‑way fares ₹3,500‑₹6,000 from major metros.  
+- **Secondary airport:** Bellary Airport (VBL), 60 km; limited flights (mainly from Bangalore). Fares ₹2,500‑₹4,000.
+
+**By road:**  
+- **Highway:** NH75 (Bangalore‑Hospet) and NH50 (Hospet‑Hampi).  
+- **State bus depot:** Hospet KSRTC depot; frequent buses to Hampi (₹150‑₹250).  
+- **Inter‑city bus frequency:** Every 30 min from Bangalore (6 am‑10 pm). Typical fare ₹500‑₹700 Indian.
+
+---
+
+## Hidden Gems
+
+**Pattabhirama Temple (Anegundi)**
+- **Why special:** Lesser‑visited 15th‑century temple dedicated to Lord Rama, set amidst quiet village lanes; offers quiet contemplation away from crowds.
+- **Entry/cost:** ₹30 adult, ₹500 foreign (combined with Anegundi entry).  
+- **How to reach:** From Hampi, take a local bus or auto to Anegundi (≈30 km). Walk the 500 m path up the hill.  
+- **Best time:** Late afternoon (4‑5 pm) for golden lighting.  
+- **Suitability:** Gentle slope; suitable for seniors with a walking stick; toddlers must be carried.
+
+**Sugriva’s Cave**
+- **Why special:** Small natural cave linked to the Ramayana legend; often missed by mainstream itineraries.  
+- **Entry/cost:** Free.  
+- **How to reach:** A short 10‑minute walk from the Pattabhirama Temple; signage available.  
+- **Best time:** Early evening (5‑6 pm) when the cave is cool.  
+- **Suitability:** Narrow entrance (≈1 m); toddlers need to be carried; seniors can enter with assistance.
+
+**Hirebenkal Prehistoric Site**
+- **Why special:** One of Karnataka’s largest rock‑art complexes, featuring 2 km of petroglyphs dating back 3,000 years; very few tourists venture here.  
+- **Entry/cost:** ₹30 adult, ₹500 foreign (combined ticket with nearby monuments).  
+- **How to reach:** Hire a scooter in Hampi (₹300 per day) and follow the signposted road northwards; parking available at the site.  
+- **Best time:** Mid‑morning (10‑11 am) when sunlight reveals the carvings.  
+- **Suitability:** Uneven terrain; not recommended for toddlers; seniors should go with a guide and sturdy shoes.
+
+---
+
+## Practical Tips
+
+**Connectivity:** Jio and Airtel provide strong 4G coverage throughout South and North Hampi; Vodafone‑Idea (Vi) is patchy, especially near the boulder fields and during monsoon. Download offline maps before arrival.
+
+**ATMs:**  
+- SBI ATM at Hospet Bus Stand (reliable, 24 h).  
+- HDFC ATM near Hospet Railway Station.  
+- Axis Bank ATM in Hampi market (open 9 am‑6 pm).  
+Cash is preferred for small eateries; most restaurants accept card, but tip the server in cash.
+
+**SIM cards:** Purchase a fresh Jio prepaid SIM at the Hospet railway station (₹500 for ₹1,000 talk & data) – you’ll need passport copy, 2×2 photo, and a short address proof. Jio offers the best coverage in the Hampi region; Airtel is a close second. Avoid “tourist SIM” offers from street vendors as they often lack proper registration and may be deactivated after a few days.
