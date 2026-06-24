@@ -2,223 +2,227 @@
 
 ## Routing
 
-**Standard routing: Delhi → Chandigarh → Shimla → Kufri**
+**Standard routing: Delhi → Chandigarh → Shimla → Kufri → Naldehra**
 
-The sequence follows the most travelled highway corridor, minimizing altitude changes and allowing a comfortable acclimatization break in Chandigarh before the steep ascent to Shimla. From Shimla, a short detour to Kufri adds mountain‑sport experiences without back‑tracking.
+The sequence follows the most travelled highway corridor. Delhi‑Chandigarh on NH 44 is a straight, four‑lane stretch with ample services, reducing fatigue before the winding mountain ascent from Chandigarh to Shimla on NH 5. Shimla sits at the junction for the two popular hill‑side loops: the 1‑hour drive to Kufri (ski‑and‑horse‑ride hub) and the 30‑minute onward stretch to Naldehra (golf‑course and nature‑trail). This order avoids back‑tracking and lets travellers acclimatise at Shimla’s lower altitude (≈2,200 m) before heading higher to Kufri (≈2,700 m) and Naldehra (≈2,400 m).
 
 Driving times:  
-- Delhi → Chandigarh: 4 h (NH 44, well‑maintained four‑lane)  
-- Chandigarh → Shimla: 4 h (NH 5, winding but scenic; frequent tea‑stops help with altitude acclimation)  
-- Shimla → Kufri: 1 h (NH 5, gentle climb, good mobile coverage)
+- **Delhi → Chandigarh:** 4.5 hrs (NH 44, Delhi‑Kalka‑Chandigarh Expressway)  
+- **Chandigarh → Shimla:** 3.2 hrs (NH 5, “Himachal Highway”) – steep climbs, frequent hairpin bends, so start early.  
+- **Shimla → Kufri:** 1 hr (NH 5, Shimla‑Kufri Road) – narrow, but well‑maintained.  
+- **Kufri → Naldehra:** 0.5 hr (NH 5) – short descent to the golf‑course plateau.
 
-**Alternative routing:** Delhi → Dehradun → Shimla via NH 7 and NH 5. This adds about 1 h but avoids the heavy traffic on the Chandigarh‑Shimla stretch during peak weekend holidays.
+**Alternative routing:** Enter via Dehradun (NH 7) and take the 14‑hour mountain drive through Mussoorie to Shimla. This scenic but longer route is useful when Delhi‑Chandigarh traffic is heavy or when travellers wish to combine a Uttarakhand leg.
 
 ---
 
-## Shimla (Town Core)
+## Shimla Town
 
-**Key places:** Mall Road, The Ridge, Christ Church, Jakhu Temple, Viceregal Lodge (Indian Institute of Advanced Study), Gaiety Theatre, State Museum, Lakkar Bazaar  
+**Key places:** The Ridge, Mall Road, Christ Church, Viceregal Lodge, Shimla State Museum, Jakhu Temple, Tara Devi Temple, Chadwick Falls
 
-### Christ Church  
-- Entry: ₹0 (free entry, donation optional)  
-- **Suitability:** Flat ground, wheelchair‑accessible entrance; toddlers can sit on parents’ laps.  
-- **Best time:** Early morning (7:00–9:00 am) for soft light on the stained glass.  
-- **Seasonal closure:** None; open year‑round.
+### The Ridge  
+- **Entry:** Free  
+- **Suitability:** Flat, paved promenade – fully suitable for toddlers (stroller‑friendly) and elderly travellers.  
+- **Best time:** Early morning (07:00‑09:00) for clear views and cooler air.  
+- **Seasonal closure:** None.
 
-### Jakhu Temple (Hanuman)  
-- Entry: ₹20 adult, ₹10 child (3–12 yr)  
-- **Suitability:** 3 km steep, uneven steps; **not suitable for toddlers** or travelers with limited mobility. Elderly can use the rope‑assisted path at the midway point.  
-- **Best time:** Sunset (18:00–19:30 pm) for panoramic views of the valley.  
-- **Seasonal closure:** Closed during heavy snowfall (December–January).
+### Mall Road  
+- **Entry:** Free (shopping & cafés)  
+- **Suitability:** Pedestrian‑only stretch, smooth surface – ideal for families with toddlers; crowded on weekends, so keep an eye on kids.  
+- **Best time:** Late afternoon (16:00‑18:00) for sunset shopping and street‑food stalls.  
+- **Seasonal closure:** None.
+
+### Christ Church (1844)  
+- **Entry:** Free (donations optional)  
+- **Suitability:** Small steps at entrance; not wheelchair‑accessible but manageable for toddlers with assistance.  
+- **Best time:** Mid‑day (11:00‑13:00) when interior light is brightest for photography.  
+- **Seasonal closure:** None.
 
 ### Viceregal Lodge (Indian Institute of Advanced Study)  
-- Entry: ₹150 adult, ₹80 child (5–12 yr) – guided tour fee.  
-- **Suitability:** Well‑maintained lawns, but interior has narrow corridors; **elderly may find it cramped**. No stairs for toddlers.  
-- **Best time:** Mid‑day (11:00–13:00 pm) when the guided tour is most informative.  
-- **Seasonal closure:** Closed on Indian holidays and during monsoon‑related maintenance (July).
+- **Entry:** ₹40 / adult Indian, ₹600 / foreigner (guided tours only)  
+- **Suitability:** 3 km of uneven stone pathways; not suitable for toddlers or mobility‑limited elders without a guide.  
+- **Best time:** Guided tours 10:30‑17:00; book 2 days in advance.  
+- **Seasonal closure:** Closed on Indian public holidays.
 
-### Gaiety Theatre  
-- Entry: ₹50 adult, ₹30 child (5–12 yr) – ticket for a cultural show.  
-- **Suitability:** Seating is on a single level; **suitable for toddlers** if the show is short (≤45 min). Elderly can enjoy comfortably.  
-- **Best time:** Evening (19:00–20:30 pm) for live performances.  
-- **Seasonal closure:** No shows in the peak monsoon weeks (mid‑July to early August).
+### Shimla State Museum  
+- **Entry:** ₹30 / adult Indian, ₹500 / foreigner  
+- **Suitability:** Indoor, wheelchair‑ramp present – suitable for all ages, though some exhibits have low glass that toddlers may touch.  
+- **Best time:** Early afternoon (13:00‑15:00) to avoid school‑group crowds.  
+- **Seasonal closure:** Closed on Mondays.
 
-### Lakkar Bazaar (Handicraft Market)  
-- Entry: ₹0 (free to browse)  
-- **Trust issue:** Vendors often quote inflated “hand‑made” prices and may add hidden “service charges” on the spot.  
-- Recommended approach: **Ask for a written price list** before purchasing; compare at least three stalls; carry small change for bargaining.  
+### Jakhu Temple & Ropeway  
+- **Entry (Ropeway):** ₹150 / adult, ₹80 / child (3‑12 yr). Walk up is free.  
+- **Suitability:** Ropeway cabins are spacious; however, the final 1 km trek to the temple includes steep steps and uneven ground – **not suitable for toddlers**. Elderly travellers can use the ropeway and then rest at the temple’s shaded benches.  
+- **Best time:** Sunset (17:30‑19:00) for panoramic views and the evening “Aarti” ceremony.  
+- **Seasonal closure:** Ropeway closed during heavy snowfall (December‑January).
 
-**Shimla food:**  
-- Signature dishes: **Siddu** (steamed wheat dumpling), **Chana Madra** (spiced chickpea curry), **Babru** (deep‑fried stuffed bread), **Trout fry** (non‑veg).  
-- For toddlers and young kids: **Idli**, plain boiled rice with dal, soft boiled potatoes, **Mithai‑free** sweet‑lime juice.  
-- Vegetarian availability: **Good** – most street stalls serve vegetarian versions; confirm no meat broth in the curry.
+### Tara Devi Temple  
+- **Entry:** Free (parking ₹20)  
+- **Suitability:** 1 km steep ascent with stone steps – **unsuitable for toddlers**; elderly travellers should use a local taxi to the parking lot and walk the last 200 m.  
+- **Best time:** Early morning (06:30‑08:00) for mist‑filled vistas.  
+- **Seasonal closure:** None.
+
+### Chadwick Falls (≈7 km from town)  
+- **Entry:** ₹20 / adult Indian, ₹300 / foreigner (guided trek)  
+- **Suitability:** 2 km trek through pine forest with moderate inclines – **not recommended for toddlers**; elderly travellers with trekking poles can manage the path.  
+- **Best time:** Post‑monsoon (July‑September) when water flow is strongest.  
+- **Seasonal closure:** Closed during heavy snowfall (December‑February).
+
+#### Trust issue in Shimla Town  
+- **Scam:** Unauthorized “free” city guides who later demand exorbitant fees for a “guided tour.”  
+- **Recommended approach:** Insist on official IIAST‑approved guides at Viceregal Lodge; for Mall Road, use the tourist information desk at the Shimla Tourist Office (₹10 / map).
+
+#### Shimla Town food  
+- **Signature dishes:** *Chana Madra* (slow‑cooked chickpeas in yogurt gravy), *Siddu* (steamed wheat dumplings), *Babru* (deep‑fried lentil‑filled pastry), *Trout fry* (fresh Himachal trout).  
+- **For toddlers and young kids:** Soft *idli* with plain dal, boiled potatoes with a pinch of salt, plain rice with ghee.  
+- **Vegetarian availability:** Excellent; most restaurants serve a full vegetarian menu, though some trout‑specialty places may lack veg options.
 
 ---
 
-## Kufri (Mountain‑Sport Hub)
+## Kufri (Hill‑side Adventure Zone)
 
-**Key places:** Kufri Fun World, Himalayan Nature Park, Mahasu Peak, Kufri Zoo, Ski Slope  
+**Key places:** Kufri Ski Resort, Kufri Fun World, Himalayan Nature Park, Horse‑Ride Stables
+
+### Kufri Ski Resort  
+- **Entry (Cable Car):** ₹350 / adult, ₹200 / child (5‑12 yr) – equipment rental extra ₹150 / hour.  
+- **Suitability:** Cable car is wheelchair‑accessible; ski slopes have graded runs – **not suitable for toddlers**. Elderly travellers can enjoy the scenic gondola and a gentle “snow‑play” zone.  
+- **Best time:** Early morning (08:00‑11:00) for fresh snow; avoid late afternoon when slopes become icy.  
+- **Seasonal closure:** Closed after the first heavy snowfall (late January) until March.
 
 ### Kufri Fun World (Amusement Park)  
-- Entry: ₹250 adult, ₹150 child (4–12 yr) – includes rides.  
-- **Suitability:** Rides are moderate; **not suitable for toddlers** (<4 yr) due to safety harnesses. Elderly can enjoy the gentle carousel.  
-- **Best time:** Late morning (10:00–12:00 pm) before crowds peak.  
-- **Seasonal closure:** Closed during heavy snowfall (December–February).  
+- **Entry:** ₹120 / adult, ₹80 / child (3‑12 yr).  
+- **Suitability:** Rides are low‑height; the “Mini‑Carousel” and “Kids’ Train” are toddler‑friendly, but the “Roller‑Coaster” has a minimum height of 120 cm. Elderly travellers can enjoy the garden walk.  
+- **Best time:** Late afternoon (15:00‑18:00) when queues thin.  
+- **Seasonal closure:** Closed during monsoon (July‑August) due to water‑logging.
 
 ### Himalayan Nature Park  
-- Entry: ₹30 adult, ₹15 child (3–12 yr)  
-- **Suitability:** Flat walking trails, wheelchair‑friendly boardwalks; **suitable for toddlers** on a stroller. Elderly can stroll at a relaxed pace.  
-- **Best time:** Early afternoon (13:00–15:00 pm) when wildlife is most active.  
-- **Seasonal closure:** None; open year‑round.
+- **Entry:** ₹30 / adult Indian, ₹400 / foreigner (guided trek)  
+- **Suitability:** Flat, well‑marked trails – suitable for toddlers on a carrier and elderly walkers.  
+- **Best time:** Early morning (07:00‑10:00) for bird‑watching.  
+- **Seasonal closure:** None, but snow may block higher paths in winter.
 
-### Mahasu Peak (Trek)  
-- Entry: ₹0 (self‑guided) – local guide optional (₹500 per group).  
-- **Suitability:** 2 km steep ascent, rocky; **not suitable for toddlers** or elderly with knee problems. Fit young adults and families with older children.  
-- **Best time:** Sunrise (5:30–7:00 am) for breathtaking vistas.  
-- **Seasonal closure:** Closed during heavy snow (December–January).
+### Horse‑Ride Stables  
+- **Entry:** ₹250 / hour (single horse), ₹400 / hour (tandem) – helmets provided.  
+- **Suitability:** Not suitable for toddlers; elderly travellers should avoid if balance is an issue.  
+- **Best time:** Mid‑day (12:00‑14:00) when horses are rested.  
+- **Seasonal closure:** Closed during heavy snowfall (December‑February).
 
-### Kufri Zoo  
-- Entry: ₹40 adult, ₹20 child (3–12 yr)  
-- **Suitability:** Small enclosures, paved paths; **suitable for toddlers** (they can view animals from a safe distance). Elderly can rest on benches placed throughout.  
-- **Best time:** Mid‑day (12:00–14:00 pm) when animals are most visible.  
-- **Seasonal closure:** Closed for renovations in July (first two weeks).
+#### Trust issue in Kufri  
+- **Scam:** Rope‑way ticket scalpers selling “discounted” tickets at ₹500 / instead of the official ₹350 / rate.  
+- **Recommended approach:** Purchase tickets only at the official Kufri Ski Resort kiosk; verify the printed price board before paying.
 
-**Trust issue (Kufri):** Unlicensed vendors sell “ski‑pass” vouchers at inflated rates near the slope.  
-- Recommended approach: **Buy passes only at the official ski‑club office** (₹800 per day) and keep the receipt.
-
-**Kufri food:**  
-- Signature dishes: **Aloo Ke Parathe**, **Pahadi Kadhi** (yogurt‑based curry), **Mushroom Soup**, **Kufri Apple Jalebi** (sweet apple fritters).  
-- For toddlers and young kids: Soft **Aloo‑mash**, plain **khichdi**, boiled carrots, **plain roti** with ghee.  
-- Vegetarian availability: **Excellent** – most dishes are plant‑based; confirm no meat broth in the kadhi.
+#### Kufri food  
+- **Signature dishes:** *Kufri Trout Curry*, *Pattoo* (spiced corn fritters), *Aloo Ke Gutke* (fried potatoes).  
+- **For toddlers and young kids:** Soft *poha* with a dash of ghee, plain boiled carrots, *dahi* (sweet yogurt).  
+- **Vegetarian availability:** Good; most eateries serve *Aloo Ke Gutke* and *Pattoo* as veg options.
 
 ---
 
-## Naldehra (Golf & Picnic Zone)
+## Naldehra (Nature & Golf Hub)
 
-**Key places:** Naldehra Golf Course, Naldehra Picnic Spot, Tattapani Hot Springs  
+**Key places:** Naldehra Golf Course, Naldehra Nature Trail, Himachal Pradesh University Campus (heritage walk)
 
-### Naldehra Golf Course (9‑hole)  
-- Entry: ₹200 adult, ₹100 child (under 12 yr) – includes cart.  
-- **Suitability:** Well‑maintained greens, gentle slopes; **suitable for elderly** (cart available) but **not for toddlers** (no play area).  
-- **Best time:** Early morning (7:00–9:00 am) for cool weather and less wind.  
-- **Seasonal closure:** Closed during monsoon (July–August) for course maintenance.
+### Naldehra Golf Course  
+- **Entry (Walking):** ₹50 / adult Indian, ₹600 / foreigner (guided walk).  
+- **Suitability:** Well‑paved 18‑hole perimeter path – stroller‑friendly; however, the central greens are restricted. Elderly travellers can enjoy the gentle slopes.  
+- **Best time:** Early morning (06:30‑09:00) for cool breezes and bird song.  
+- **Seasonal closure:** Closed during heavy snowfall (December‑January).
 
-### Naldehra Picnic Spot (Lake & Meadow)  
-- Entry: ₹30 adult, ₹15 child (3–12 yr) – entry to lake area.  
-- **Suitability:** Flat, grassy lawns, shaded pavilions; **ideal for toddlers** (space to crawl) and **elderly** (benches).  
-- **Best time:** Late afternoon (16:00–18:00 pm) for gentle breezes.  
-- **Seasonal closure:** None; open year‑round.
+### Naldehra Nature Trail (Pine‑forest loop)  
+- **Entry:** Free (guided by local forest department on weekends)  
+- **Suitability:** Flat, shaded trail – fully suitable for toddlers (carrier) and elderly walkers.  
+- **Best time:** Late afternoon (16:00‑18:00) for dappled light.  
+- **Seasonal closure:** None.
 
-### Tattapani Hot Springs (nearby, 30 km)  
-- Entry: ₹50 adult, ₹25 child (5–12 yr) – bathing area.  
-- **Suitability:** Natural hot water pools with steps; **not suitable for toddlers** (water temperature > 42 °C) and **elderly with heart conditions** should avoid prolonged soak.  
-- **Best time:** Evening (19:00–21:00 pm) when the steam creates a mystical ambience.  
-- **Seasonal closure:** Closed during heavy snowfall (December–January).
+### Himachal Pradesh University Campus (Heritage Walk)  
+- **Entry:** Free (self‑guided)  
+- **Suitability:** Brick‑laid walkways with occasional steps – manageable for toddlers with a carrier; elderly travellers may need a short rest at campus benches.  
+- **Best time:** Mid‑day (11:00‑13:00) when campus is quiet.  
+- **Seasonal closure:** None.
 
-**Trust issue (Naldehra):** Some “golf‑course entry” agents charge extra for “equipment rental” that is already included.  
-- Recommended approach: **Ask for a detailed fee breakdown** at the reception; decline any “extra” fees not listed.
+#### Trust issue in Naldehra  
+- **Scam:** “Golf‑course entry” agents who charge ₹1,200 / for a “full‑day pass” that only grants access to the clubhouse, not the walking trail.  
+- **Recommended approach:** Use the official Naldehra Golf Club office for entry; the ₹50 / walk fee is all‑inclusive.
 
-**Naldehra food:**  
-- Signature dishes: **Sidu** (steamed wheat rolls), **Patande** (sweet flatbread), **Mushroom Thukpa** (noodle soup).  
-- For toddlers and young kids: Soft **Sidu** with ghee, plain **curd**, boiled **sweet potatoes**.  
-- Vegetarian availability: **Very good** – most eateries serve only vegetarian fare; confirm no meat stock in the broth.
-
----
-
-## Offbeat Villages (Sainj, Kotkhai, Cheog, Fagu)
-
-**Key places:** Sainj Apple Orchards, Kotkhai Apple Festival, Cheog Monastery, Fagu Trek Trail  
-
-### Sainj Apple Orchards  
-- Entry: ₹0 (free to view) – guided walk optional (₹200 per group).  
-- **Suitability:** Gentle paths, well‑marked; **suitable for toddlers** (stroller‑friendly) and **elderly** (rest spots).  
-- **Best time:** Autumn (September–October) when apples are ripe.  
-- **Seasonal closure:** None; orchards are accessible year‑round.
-
-### Kotkhai Apple Festival (annual)  
-- Entry: ₹50 adult, ₹20 child (5–12 yr) – entry to festival grounds.  
-- **Suitability:** Flat festival grounds with seating; **suitable for all ages**.  
-- **Best time:** First weekend of October (peak harvest).  
-- **Seasonal closure:** Festival runs only for three days in October.
-
-### Cheog Monastery (Buddhist)  
-- Entry: ₹10 adult, ₹5 child (under 12 yr)  
-- **Suitability:** Small steps, no wheelchair ramp; **not suitable for elderly with severe mobility issues**. Toddlers can be carried.  
-- **Best time:** Early morning (6:30–8:00 am) for prayer chants.  
-- **Seasonal closure:** None; open all year.
-
-### Fagu Trek Trail (moderate)  
-- Entry: ₹0 (self‑guided) – guide optional (₹400 per group).  
-- **Suitability:** 4 km moderate trek with rocky sections; **not suitable for toddlers** or elderly with joint problems. Fit families with children above 10 yr.  
-- **Best time:** Late spring (April–May) for clear skies.  
-- **Seasonal closure:** Closed during monsoon (July–August) due to landslide risk.
-
-**Trust issue (Offbeat Villages):** Homestay owners sometimes quote “all‑inclusive” rates but add hidden charges for meals and electricity.  
-- Recommended approach: **Get a written breakdown** before booking; verify the total with at least two other hosts.
-
-**Offbeat village food:**  
-- Signature dishes: **Apple Kheer**, **Pahadi Honey Roti**, **Local Mutton Curry** (non‑veg).  
-- For toddlers and young kids: **Apple puree**, plain **rice porridge**, boiled **green beans**.  
-- Vegetarian availability: **Strong** – apple‑based sweets and lentil dishes dominate; most homes serve vegetarian meals by default.
+#### Naldehra food  
+- **Signature dishes:** *Mithun (Musk Deer) Stew* (rare, served at specialty restaurants), *Sidu* (steamed wheat rolls), *Kadhi Pakora* (gram‑flour dumplings in yogurt gravy).  
+- **For toddlers and young kids:** Soft *upma* with vegetables, plain *roti* with ghee, boiled sweet potatoes.  
+- **Vegetarian availability:** Very high; most stalls serve *Sidu* and *Kadhi Pakora*.
 
 ---
 
 ## General Shimla Notes
 
 **Best time to visit:**  
-- **March – June:** Pleasant weather (15‑25 °C), all attractions open; ideal for trekking and festivals.  
-- **July – August:** Monsoon; landslides possible, some hill‑road closures, limited outdoor activities.  
-- **September – November:** Clear skies, autumn colors, apple harvest; crowds moderate.  
-- **December – February:** Snowfall; ski season in Kufri, but many higher‑altitude sites (Jakhu Temple, Mahasu Peak) may be inaccessible.
+- **March‑June:** Pleasant spring, temperatures 15‑25 °C, all attractions open; occasional pre‑monsoon showers in late May.  
+- **July‑September:** Monsoon – lush greenery, waterfalls (e.g., Chadwick) at peak flow; some high‑altitude roads (to Kufri) may be slippery; evenings cooler (10‑15 °C).  
+- **October‑November:** Autumn festivals, clear skies, low humidity; ideal for photography and trekking.  
+- **December‑February:** Winter – snow in Kufri and Naldehra; ski season active; many outdoor attractions (Ridge, Mall) still accessible, but ropeways may close; higher accommodation rates.
 
 **Transport pricing:**  
-- **Taxi/cab:** Metered fares typical; ₹15 per km from Shimla town centre; negotiate for out‑station trips (e.g., Shimla → Kufri ~₹800).  
-- **Auto‑rickshaw:** Fixed rates within town (₹30 for 2 km); longer trips require advance agreement (e.g., Shimla → Naldehra ~₹600).  
-- **App‑based options:** Uber and Ola operate in Shimla; surge pricing may apply during peak tourist weeks.
+- **Taxi/cab:** Metered fares start at ₹25 for the first km, then ₹12 / km; airport‑to‑town trips average ₹1,200‑₹1,500. Negotiate night rates (≈ 20 % higher).  
+- **Auto‑rickshaw:** Fixed‑rate for Shimla‑Mall stretch: ₹30 / km; for longer trips (e.g., Shimla‑Kufri) expect ₹500‑₹600 total.  
+- **App‑based options:** Uber and Ola operate in Shimla town; surge pricing common during festivals (up to 2×).  
 
 **Dietary notes:**  
-- Dominant cuisine: **Himachali** (pulses, wheat, dairy). Common allergens: **coconut oil** and **mustard seeds**.  
-- Vegetarian options: **Very good**; most restaurants have a separate veg menu. Non‑veg dishes (trout, mutton) are clearly labeled.
+- Predominant Himachali cuisine uses *ghee*, *yogurt*, and *coconut oil* (especially in trout dishes).  
+- Pork is rarely served; most eateries are vegetarian‑friendly.  
+- Allergy risk: *mustard seeds* and *poppy seeds* appear in many gravies; ask for “no‑mustard” if sensitive.  
 
 **Medical:**  
-- Nearest quality hospital: **Indira Gandhi Government Medical College & Hospital**, Shimla (≈ 2 km from Mall Road).  
-- Carry: basic first‑aid kit, any personal medications, a copy of health insurance, and a small stock of oral rehydration salts (common for altitude‑related dehydration).
+- **Nearest quality hospital:** Dr. Rajendra Prasad Government Medical College, Shimla (≈ 3 km from Mall Road). 24‑hour emergency, basic ICU, and a pharmacy with generic medicines.  
+- **What to carry:** Personal medication, basic first‑aid kit, water‑purification tablets, and a copy of any chronic‑illness prescriptions.
 
 ---
 
 ## Getting There
 
-**By train:** Nearest railway station is **Kalka** (96 km). Main trains from Delhi: Kalka‑Shimla Toy Train (Narrow‑Gauge) – departure 06:15 am, arrival 12:30 pm; ticket ₹250 adult, ₹150 child (Vistadome seat). Book via IRCTC; seats fill up months in advance.
+**By train:**  
+- **Nearest railway station:** Kalka (≈ 90 km from Shimla).  
+- **Key trains:** Kalka‑Shimla Shatabdi Express (12031, daily) – ₹350 / adult; Kalka‑Shimla Heritage Express (12033, Mon‑Fri) – ₹300 / adult. Both terminate at Shimla Railway Station (≈ 2 km from Mall Road).  
 
-**By air:** Nearest airport is **Chandigarh International Airport** (≈ 120 km). Airlines: Air India, IndiGo, SpiceJet; one‑way fares ₹3,500 – ₹5,500. From Chandigarh, hire a taxi or take a state‑run bus to Shimla.
+**By air:**  
+- **Nearest airport:** Shimla Airport (Gaggal) – 22 km south of town.  
+- **Airlines:** Air India, IndiGo, SpiceJet operate daily flights from Delhi (≈ 1 hr 15 min).  
+- **Fare range:** ₹3,500‑₹7,000 one‑way (economy).  
 
-**By road:** Connected via **NH 5** (Chandigarh‑Shimla). Nearest state bus depot: **Shimla Bus Stand** (central). Inter‑city buses (Himachal Road Transport Corporation) run hourly; fare ₹500 – ₹800 depending on AC/Non‑AC.
+**By road:**  
+- **Key highway:** NH 5 (Chandigarh‑Shimla).  
+- **Nearest state bus depot:** Shimla Bus Stand (near Mall Road).  
+- **Inter‑city bus frequency:** Every 30 minutes from Chandigarh; fare ₹600‑₹800.  
+- **Typical fare to Kufri:** ₹150 / person (state‑run bus) or ₹300 / taxi.
 
 ---
 
 ## Hidden Gems
 
-**Kasar Devi Temple (near Naldehra)**  
-- Why special: Small shrine perched on a ridge, rarely crowded, offers sunrise views over the valley.  
-- Entry: ₹10 adult, ₹5 child (3–12 yr). Reachable by a 30‑minute hike from Naldehra Picnic Spot; best at **pre‑dawn (5:30 am)**.  
-- Suitability: **Flat trail**, suitable for toddlers on a carrier and elderly with moderate fitness.
+**Kotkhai (≈ 45 km east of Shimla)**  
+- **Why special:** Apple‑orchard village famous for organic fruit and traditional Himachali homestays; rarely visited by day‑tourists.  
+- **Entry/cost:** Free; optional guided orchard walk ₹100 / person.  
+- **How to reach:** Private taxi from Shimla (≈ 1.5 hr) or local bus (route 12).  
+- **Best time:** Autumn (September‑October) for apple‑picking festivals.  
+- **Suitability:** Gentle village lanes – suitable for toddlers (stroller) and elderly (slow pace).
 
-**Shoghi (Village on the Shimla‑Kinnaur road)**  
-- Why special: Authentic Himachali lifestyle, apple orchards, and a community‑run tea shop; no tourist buses.  
-- Entry: Free; optional guide ₹150 per group. Best visited **late afternoon (16:00–18:00 pm)** for golden light.  
-- Suitability: **Easy walking paths**, stroller‑friendly; ideal for families with toddlers and seniors.
+**Cheog (≈ 30 km north of Shimla)**  
+- **Why special:** Small hamlet with a historic *Baba Ji Temple* perched on a ridge, offering panoramic views of the Sutlej valley; no entry fee.  
+- **Entry/cost:** Free; local guide optional ₹150 / hour.  
+- **How to reach:** Shared jeep from Shimla market (hourly).  
+- **Best time:** Early morning (06:00‑08:00) for sunrise.  
+- **Suitability:** Steep short climb (200 m) – **not suitable for toddlers**; elderly travellers can use a local porter service.
 
-**Chail Palace (30 km from Shimla)**  
-- Why special: Former summer residence of the Maharaja of Patiala, now a heritage hotel with sprawling gardens; limited public access makes it peaceful.  
-- Entry: ₹50 adult, ₹25 child (5–12 yr) for garden tour. Reachable by taxi via NH 22; best at **mid‑day (12:00–14:00 pm)** when gardens are in full bloom.  
-- Suitability: **Well‑maintained lawns**, wheelchair‑accessible pathways; toddlers can roam safely under supervision.
+**Sainj (≈ 24 km east, Theog tehsil)**  
+- **Why special:** Quiet lakeside spot with a *Baba Budha* shrine; perfect for picnics and bird‑watching away from crowds.  
+- **Entry/cost:** Free; picnic‑area fee ₹20 / family.  
+- **How to reach:** Auto‑rickshaw from Theog (≈ 30 min).  
+- **Best time:** Late summer (July‑August) when waterbirds arrive.  
+- **Suitability:** Flat lakeshore – fully toddler and elderly friendly.
 
 ---
 
 ## Practical Tips
 
-**Connectivity:** Jio and Airtel provide **4G coverage** across Shimla town and major tourist spots; Vi signal drops in remote villages (e.g., Sainj). Expect patchy reception on steep mountain roads after 8 km from Shimla.
+**Connectivity:** Jio and Airtel provide 4G coverage across Shimla town and along NH 5; Vi signal drops in dense pine forests (e.g., Naldehra). Expect occasional dead zones near Chadwick Falls during monsoon.
 
-**ATMs:** Reliable ATMs at **State Bank of India (Mall Road)**, **HDFC (The Ridge)**, and **Punjab National Bank (Lakkar Bazaar)**. Cash‑only transactions dominate in small markets; most restaurants accept cards, but keep **₹1,000–₹2,000** in small notes for tips and minor purchases.
+**ATMs:** SBI and HDFC ATMs at Mall Road (near Christ Church) and at the Shimla Bus Stand; limited cash‑only shops in Kufri – carry at least ₹2,000 for emergencies.
 
-**SIM cards:** Purchase at **Chandigarh Airport** (Jio, Airtel, Vi kiosks) for immediate activation; in Shimla, the **Jio store on Mall Road** offers the best coverage for the hill region. Carry passport copy and a passport‑size photo for verification.
+**SIM cards:** Purchase at Shimla Airport (Jai Shri Ram Airport) or at the Shimla Tourist Office (₹250 / prepaid pack, 30 GB data). Jio offers the most reliable network in the hill stations; Vi’s coverage improves after the 2024 tower upgrades but remains spotty in remote villages.

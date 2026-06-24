@@ -1,100 +1,269 @@
-# Leh / Ladakh Travel Knowledge
+# Leh Travel Knowledge
 
 ## Routing
 
-**Standard routing: Delhi → Manali → Leh**
+**Standard routing: Delhi → Manali → Leh → Nubra Valley → Pangong Lake → Leh**
 
-Starting from Delhi, the Delhi‑Manali leg follows NH 44 (the historic Grand Trunk Road) through the foothills of Himachal Pradesh. This route avoids high‑altitude passes early in the journey, allowing travelers to acclimatise gradually before tackling the Manali‑Leh Highway (NH 3). The Manali‑Leh stretch climbs steeply through Rohtang Pass (3,978 m) and Baralacha Pass (4,890 m); completing it in one long drive risks altitude sickness, so a night‑stop at Keylong or Jispa is recommended.
+- Starting from Delhi, most travellers fly to Leh (≈2 h) or take the iconic Manali‑Leh road. The Manali‑Leh segment (NH3) is tackled first because the high‑altitude passes (Rohtang, Baralacha) are easier to cross after an acclimatisation night in Manali.  
+- From Leh, heading north to Nubra Valley via Khardung La (NH3) avoids back‑tracking and lets you descend into the valley before the road to Pangong Lake (via Changla Pass) is opened later in the season.  
+- Returning to Leh after Pangong Lake keeps the final day short, ideal for catching a flight or a bus to Delhi.
 
 Driving times:  
-- Delhi → Manali: 12 hours (≈570 km, NH 44)  
-- Manali → Leh: 14 hours (≈480 km, NH 3, Rohtang & Baralacha Passes)
+- Delhi → Manali (NH3): **12 h** (Manali‑Leh Highway, partial toll road)  
+- Manali → Leh: **14 h** (NH3, passes >5,000 m; best started early morning)  
+- Leh → Nubra Valley (Khardung La): **4 h** (NH3)  
+- Nubra Valley → Pangong Lake (via Changla Pass): **6 h** (NH3, seasonal)  
 
-**Alternative routing:** Delhi → Srinagar → Leh via NH 1D and NH 3. This longer circuit (≈1,200 km) bypasses Rohtang Pass but adds Kargil‑Leh (Zojila Pass, 3,528 m). It is preferred for travelers who wish to experience Kashmir’s lakes before entering Ladakh, and for those who need an extra day of acclimatisation at Kargil.
+**Alternative routing:** Delhi → Srinagar → Kargil → Leh (NH1). This inland route avoids the Manali‑Leh snowbound sections in early winter but adds extra mileage and requires a night in Kargil for altitude acclimation.
 
 ---
 
-## Leh (Town)
+## Leh City
 
-**Key places:** Leh Palace, Shanti Stupa, Hall of Fame, Basgo Monastery, Leh Market
+**Key places:** Hall of Fame Museum, Leh Palace, Shanti Stupa, Namgyal Tsemo Monastery, Shey Palace, Stok Palace
 
-**Leh Palace:**  
-- Entry: ₹30 adult, ₹15 child (under 12)  
-- Suitability: 1 km of uneven stone steps; not recommended for toddlers (<3) or elderly travellers with limited mobility.  
-- Best time of day: Early morning (7 – 9 am) for soft light on the façade.  
-- Seasonal closure: Open year‑round, but winter evenings can be icy; wear non‑slip footwear.
+### Hall of Fame Museum
+- **Entry:** ₹25 adult, ₹12 child (3–12 y); free for children < 3.  
+- **Suitability:** Small indoor space, smooth floors – **suitable for toddlers and elderly**; no steep steps.  
+- **Best time:** 10:00 – 12:00 am (less crowd, natural light for photographs).  
+- **Seasonal closure:** Closed on Mondays and during heavy snowfall (late Dec–Feb).  
 
-**Trust issue or pricing trap for this area:**  
-- Overpriced souvenir stalls near the palace gate often quote ₹500 for a simple brass keychain that costs ₹80 at the official market.  
-- Recommended approach: Purchase souvenirs at the designated Leh Market stalls where prices are displayed; bargain politely and ask for a receipt.
+### Leh Palace
+- **Entry:** ₹20 adult, ₹10 child; ₹5 senior (≥ 60 y).  
+- **Suitability:** 2 km of uneven stone steps; **not suitable for toddlers** or mobility‑limited elders. Use the lower‑level courtyard for a quick view.  
+- **Best time:** Late afternoon (15:00–17:00) for golden lighting.  
+- **Seasonal closure:** Open year‑round, but interior may be locked during extreme winter storms.  
 
-**Leh food:**  
-- Signature dishes: Skyu (wheat dumplings in broth), Thukpa (yak‑meat noodle soup), Momos (steamed dumplings).  
-- For toddlers and young kids: Soft idli, plain rice with dal, boiled potatoes with a drizzle of ghee.  
-- Vegetarian availability: Good; most eateries offer vegetable‑only thukpa and skyu, but confirm that no meat broth is used.
+### Shanti Stupa
+- **Entry:** Free (parking ₹10).  
+- **Suitability:** Paved path, gentle slope – **suitable for toddlers (push‑chair) and elderly**; wheelchair access available at base.  
+- **Best time:** Sunrise (5:30–6:30 am) for panoramic vistas.  
+- **Seasonal closure:** Closed during severe snow (Dec–Feb).  
+
+### Namgyal Tsemo Monastery
+- **Entry:** ₹30 adult, ₹15 child; ₹10 senior.  
+- **Suitability:** 1 km steep climb; **not suitable for toddlers**; elderly can manage with rest stops.  
+- **Best time:** Mid‑morning (09:00–11:00) when prayer chants are audible.  
+- **Seasonal closure:** Closed on Tuesdays (monastic day).  
+
+### Shey Palace (Shey Monastery)
+- **Entry:** ₹40 adult, ₹20 child, ₹15 senior.  
+- **Suitability:** Flat courtyard, well‑maintained pathways – **suitable for toddlers and elderly**.  
+- **Best time:** Early afternoon (13:00–15:00) to avoid wind chill.  
+- **Seasonal closure:** None; but high winds may restrict outer terraces.  
+
+### Stok Palace
+- **Entry:** ₹150 adult (guided tour), ₹80 child (5–12 y), ₹70 senior.  
+- **Suitability:** Multi‑level palace with narrow staircases – **not recommended for toddlers**; elderly should limit visit to ground floor.  
+- **Best time:** 11:00 am (guided tours start).  
+- **Seasonal closure:** Closed on Mondays.  
+
+**Trust issue in Leh City:**  
+- *Scam:* Unlicensed “photo guides” near Shanti Stupa charge ₹500 – ₹800 for a 10‑minute photo session and often take a cut from your camera roll.  
+- **Recommended approach:** Hire a certified guide through the All Ladakh Tour Operator Association (ALTOA) office in Leh or use reputable app‑based guides; negotiate a fixed fee (₹300) beforehand.
+
+**Leh City food:**  
+- Signature dishes: **Thukpa**, **Skyu**, **Momos**, **Chutagi** (Ladakhi dumpling), **Butter tea**.  
+- For toddlers & young kids: **Plain boiled rice**, **soft khichdi**, **steamed idli**, **plain boiled potatoes** (served with a dab of ghee).  
+- Vegetarian availability: **High** – most dishes can be ordered without meat; however, butter tea contains yak butter (non‑vegan).  
 
 ---
 
 ## Nubra Valley
 
-**Key places:** Diskit Monastery, Hunder Sand Dunes, Panamik Hot Springs, Samstanling Village
+**Key places:** Diskit Monastery, Hunder Sand Dunes, Panamik Hot Springs, Samstanling Monastery
 
-**Diskit Monastery:**  
-- Entry: ₹20 adult, free for children under 12.  
-- Suitability: 2 km of paved walk from the main road; the monastery courtyard is level, making it suitable for toddlers (on a carrier) and elderly travellers.  
-- Best time of day: Late afternoon (4 – 6 pm) when the giant Maitreya Buddha statue is illuminated.  
-- Seasonal closure: Closed on major Buddhist festivals (Losar) – check local calendars.
+### Diskit Monastery
+- **Entry:** ₹20 adult, ₹10 child, free for toddlers < 3.  
+- **Suitability:** Flat courtyard, paved walkways – **suitable for toddlers and elderly**; wheelchair ramp at entrance.  
+- **Best time:** Sunset (18:00–19:00) when the giant Maitreya statue is illuminated.  
+- **Seasonal closure:** Closed during heavy snow (Nov–Mar).  
 
-**Trust issue or pricing trap for this area:**  
-- Unlicensed camel‑ride operators often quote a “fixed” rate of ₹1,200 for a 30‑minute ride, then add hidden “sand‑fee” charges.  
-- Recommended approach: Use only operators displaying a government‑issued permit; agree on total cost before mounting the camel and pay in cash.
+### Hunder Sand Dunes (Camel Safari)
+- **Entry:** ₹300 per camel (1‑hour ride), ₹150 for pony ride (children).  
+- **Suitability:** Camel rides are **not recommended for toddlers (< 3 y)**; elderly can ride a pony with assistance.  
+- **Best time:** Early morning (07:00–09:00) to avoid midday heat.  
+- **Seasonal closure:** Dunes are inaccessible when snow covers the sand (Dec–Feb).  
 
-**Nubra food:**  
-- Signature dishes: Apricot jam (locally made from high‑altitude apricots), butter tea, yak‑meat stew.  
-- For toddlers and young kids: Boiled noodles with a mild vegetable broth, plain roti with ghee, soft boiled carrots.  
-- Vegetarian availability: Excellent; apricot jam and butter tea are vegetarian, and most dhabas serve vegetable pulao.
+### Panamik Hot Springs
+- **Entry:** ₹50 adult, ₹30 child, free for toddlers < 3.  
+- **Suitability:** Natural pools with shallow steps – **suitable for toddlers (accompanying adult) and elderly**; water temperature is moderate (≈ 38 °C).  
+- **Best time:** Late afternoon (16:00–18:00) for a relaxing soak before sunset.  
+- **Seasonal closure:** Closed during extreme winter freeze (Dec–Jan).  
 
----
+### Samstanling Monastery
+- **Entry:** ₹15 adult, ₹8 child; free for toddlers.  
+- **Suitability:** Small stone steps; **not suitable for toddlers**; elderly can manage with a walking stick.  
+- **Best time:** 11:00 am (prayer session).  
+- **Seasonal closure:** None; open year‑round.  
 
-## Pangong Lake
+**Trust issue in Nubra Valley:**  
+- *Scam:* “All‑inclusive” camel‑safari packages quoted at ₹2,500 – ₹3,000 often hide extra charges for “sand‑bag” rides and photo fees.  
+- **Recommended approach:** Agree on a per‑hour rate (₹300) and confirm no hidden photo fees; pay at the base camp before mounting.  
 
-**Key places:** Changtang Plateau, Phunduk Village, Camp Site 2, Lake Viewpoint (Sangam)
-
-**Pangong Lake Viewpoint:**  
-- Entry: ₹50 adult, ₹25 child (3–12).  
-- Suitability: The main viewpoint is a short 200 m walk on a flat, gravel‑covered path; suitable for toddlers in a stroller (use a sturdy stroller) and elderly travellers who can manage a gentle incline.  
-- Best time of day: Sunrise (5 – 7 am) for pastel reflections; also at sunset for pink‑hued water.  
-- Seasonal closure: The lake is accessible year‑round, but the road can be blocked by snow from late December to early March; check local weather reports.
-
-**Trust issue or pricing trap for this area:**  
-- Unlicensed “guide” services charge ₹2,500 for a simple photo‑stop, claiming they are the only ones allowed to escort tourists.  
-- Recommended approach: Hire a guide through the official Ladakh Tourism office in Leh or use a reputable tour operator; verify the guide’s ID badge.
-
-**Pangong food:**  
-- Signature dishes: Yak cheese (chhurpi), tsampa (roasted barley flour), dried apricot.  
-- For toddlers and young kids: Plain boiled rice, curd (dahi), soft boiled carrots; these are often available at the small canteen near the viewpoint.  
-- Vegetarian availability: Moderate; yak cheese is vegetarian, but most hot dishes contain meat broth; request vegetable broth where possible.
+**Nubra Valley food:**  
+- Signature dishes: **Gur Gur (Ladakhi barley porridge)**, **Chutagi**, **Yak cheese**, **Apricot jam** (local specialty).  
+- For toddlers & young kids: **Soft barley porridge**, **plain boiled rice**, **steamed carrots**, **plain idli**.  
+- Vegetarian availability: **Very high** – most dishes are plant‑based; yak cheese is optional.  
 
 ---
 
-## General Leh / Ladakh Notes
+## Pangong Lake Region
+
+**Key places:** Pangong Tso (Lake), Changla Pass Viewpoint, Phyang Monastery (near lake), Khangsar Village
+
+### Pangong Tso (Lake)
+- **Entry:** Free (parking ₹30 per vehicle).  
+- **Suitability:** Flat lakeshore with gravel; **suitable for toddlers (carrier) and elderly** but wind can be strong; keep blankets.  
+- **Best time:** Dawn (05:30–07:00) for mirror‑like water; also sunset for pink hues.  
+- **Seasonal closure:** Closed when lake freezes (Dec–Feb).  
+
+### Changla Pass Viewpoint
+- **Entry:** Free (parking ₹20).  
+- **Suitability:** Short steep walk (200 m) – **not suitable for toddlers**; elderly can use a sturdy walking stick.  
+- **Best time:** Mid‑morning (09:00–11:00) for clear visibility.  
+- **Seasonal closure:** Snow blocks the pass from late November to early May.  
+
+### Phyang Monastery (Lake‑side)
+- **Entry:** ₹25 adult, ₹12 child; free for toddlers.  
+- **Suitability:** Flat courtyard, shaded benches – **suitable for toddlers and elderly**.  
+- **Best time:** 14:00 – 16:00 (after prayer, quieter).  
+- **Seasonal closure:** Closed on Mondays.  
+
+### Khangsar Village (Cultural Walk)
+- **Entry:** Free (guided walk ₹200 per group).  
+- **Suitability:** Gentle 1 km trail; **suitable for toddlers (carrier) and elderly**.  
+- **Best time:** Early afternoon (13:00–15:00) to avoid wind.  
+- **Seasonal closure:** None; but road may be washed out during heavy rains (July).  
+
+**Trust issue in Pangong Lake region:**  
+- *Scam:* “Lake‑side parking” operators demand “security deposits” of ₹2,000 – ₹3,000 without issuing receipts; many later claim the money is for “maintenance.”  
+- **Recommended approach:** Park at the official government‑run lot (₹30) and keep the receipt; avoid private “security” agents.  
+
+**Pangong Lake food:**  
+- Signature dishes: **Momo with yak meat**, **Thukpa**, **Apricot tea**, **Barley roti**.  
+- For toddlers & young kids: **Plain boiled rice**, **soft barley roti with ghee**, **steamed carrots**, **plain idli**.  
+- Vegetarian availability: **Good** – most stalls serve veg thukpa and barley roti; yak meat can be omitted.  
+
+---
+
+## Zanskar Valley (Padum Area)
+
+**Key places:** Padum Town, Zanskar River (rafting), Stongdey Monastery, Rangdum Monastery
+
+### Padum Town (Main Square)
+- **Entry:** Free (parking ₹10).  
+- **Suitability:** Paved streets, low altitude (3,500 m) – **suitable for toddlers and elderly**; benches available.  
+- **Best time:** Late afternoon (16:00–18:00) for cooler air.  
+- **Seasonal closure:** None; but roads may be blocked by snow in winter.  
+
+### Zanskar River (Rafting – Grade II)
+- **Entry:** ₹1,200 per person (full day), ₹600 child (5–12 y).  
+- **Suitability:** **Not suitable for toddlers**; elderly can join if health‑cleared and use a stable inflatable boat.  
+- **Best time:** Mid‑morning (09:00–12:00) when water flow is moderate.  
+- **Seasonal closure:** Closed during high‑water spring melt (April–May) and winter freeze (Nov–Feb).  
+
+### Stongdey Monastery
+- **Entry:** ₹20 adult, ₹10 child; free for toddlers.  
+- **Suitability:** Flat courtyard, wheelchair ramp – **suitable for toddlers and elderly**.  
+- **Best time:** 10:00 am (chanting).  
+- **Seasonal closure:** Closed on Wednesdays.  
+
+### Rangdum Monastery (High‑altitude)
+- **Entry:** ₹30 adult, ₹15 child; free for toddlers.  
+- **Suitability:** Steep stone steps (≈ 150 m); **not suitable for toddlers**; elderly may need assistance.  
+- **Best time:** Early afternoon (13:00–15:00) for sunlight.  
+- **Seasonal closure:** Closed during heavy snowfall (Dec–Feb).  
+
+**Trust issue in Zanskar Valley:**  
+- *Scam:* “Permit agents” claim you need a special trekking permit for Padum, charging ₹2,000 – ₹3,000; the permit is actually free from the district office.  
+- **Recommended approach:** Obtain the permit directly at the Zanskar District Office (open 9 am‑5 pm) and keep the stamped copy.  
+
+**Zanskar food:**  
+- Signature dishes: **Gyarmo (barley soup)**, **Chutagi**, **Yak butter tea**, **Apricot jam**.  
+- For toddlers & young kids: **Soft barley porridge**, **plain boiled rice**, **steamed carrots**, **soft idli**.  
+- Vegetarian availability: **Excellent** – most dishes are plant‑based; yak butter is optional.  
+
+---
+
+## General Leh Notes
 
 **Best time to visit:**  
-- **March – May:** Pleasant daytime temperatures (10 – 20 °C), roads to Nubra and Zanskar opening; high‑altitude lakes are still clear.  
-- **June – September:** Peak tourist season; warm days (15 – 30 °C), full access to all passes, festivals (Hemis, Ladakh Festival) increase crowd density.  
-- **October – November:** Early winter; reduced crowds, but Zojila Pass may close after early November; ideal for photography with fewer tourists.  
-- **December – February:** Winter; most high passes (Khardung La, Zojila) closed; only Leh town and nearby attractions remain accessible; cold nights (‑10 °C to ‑20 °C).
+- **April – June:** Pleasant days (10‑25 °C), roads to Nubra and Pangong open; high‑altitude passes clear.  
+- **July – August:** Monsoon is minimal; occasional landslides on NH3; crowds increase (festival season).  
+- **September – October:** Clear skies, ideal for photography; Ladakh Festival (early Sep) draws crowds but offers cultural shows.  
+- **November – March:** Severe cold, many passes (Khardung La, Changla) closed; only Leh town accessible; suitable for winter sports but requires full gear.
 
 **Transport pricing:**  
-- **Taxi/cab:** Most drivers operate on a meter in Leh town; outside town, negotiate a flat fare. Typical rate: ₹15 per km for a 4‑seater SUV; night surcharge of 20 % after 9 pm.  
-- **Auto/rickshaw:** Not common in Leh; only in larger towns like Kargil. If used, expect ₹12 per km and a minimum charge of ₹50.  
-- **App‑based options:** No Uber/Olx; local app “LehRide” and nationwide “Savaari” offer pre‑booked rides; rates are quoted upfront and include driver’s accommodation for long trips.
+- **Taxi/cab:** Metered taxis are rare; most drivers quote a flat rate. Typical Leh‑Nubra (120 km) = ₹2,500 – ₹3,000; Leh‑Pangong (150 km) = ₹3,000 – ₹3,500. Always confirm price before boarding.  
+- **Auto/rickshaw:** Small auto‑rickshaws operate within Leh; ₹15 per km; negotiate for longer trips.  
+- **App‑based options:** Uber and Ola operate in Leh with limited fleet; fares are 10‑15 % higher than local hires but provide GPS tracking.
 
 **Dietary notes:**  
-- Dominant cuisine: Ladakhi (yak meat, barley, apricot, butter tea). Coconut oil is rarely used, but many dishes contain yak butter, which can be rich for sensitive stomachs.  
-- Allergy risks: High altitude can exacerbate dairy intolerance; some travellers react to apricot seeds (contain amygdalin).  
-- Vegetarian options: Widely available in dhabas and hotel kitchens; ask for “vegetarian thukpa” or “vegetable skyu” to avoid meat broth.
+- Dominant cuisine: **Ladakhi (high‑altitude Tibetan‑influenced)** – heavy on barley, yak cheese, and butter.  
+- Allergy risks: **Coconut oil** is rarely used; **pork** is uncommon (mostly avoided by locals).  
+- Vegetarian options: **Very good** – most restaurants serve veg thukpa, barley roti, and lentil dishes. Vegan travellers should ask for “no butter” in tea.
 
 **Medical:**  
-- Nearest quality hospital: Indira Gandhi Government Medical College, Leh (government‑run, 24 hr emergency, basic imaging). A private clinic “Leh Care Hospital” offers better facilities for minor surgeries.  
-- Recommended to carry: Altitude‑sickness medication (acetazolamide), basic first‑aid kit, personal prescription medicines, water‑purification tablets, and a copy of your medical records. In case of severe altitude illness, descend immediately and seek care in Leh.
+- Nearest quality hospital: **Indira Gandhi Memorial Hospital**, Leh (≈ 3 km from town centre). 24‑hour emergency, basic imaging, and a pharmacy stocked with common antibiotics.  
+- Carry: Personal medication, basic first‑aid kit, altitude sickness tablets (acetazolamide), and a portable oxygen cylinder for emergencies.
+
+---
+
+## Getting There
+
+**By train:**  
+- Nearest railway station: **Jammu Tawi** (≈ 420 km).  
+- Key trains: **Jammu – Delhi Rajdhani (12455)**, **Jammu – Kolkata Express (15631)** – both stop at Jammu Tawi. From there, hire a shared taxi to Kargil (≈ 200 km) and then a private vehicle to Leh (≈ 250 km).  
+
+**By air:**  
+- **Leh Kushok Bakula Rimpochee Airport** (IXL), 2 km from Leh town.  
+- Airlines: Air India, GoAir, IndiGo, SpiceJet (seasonal).  
+- Approximate one‑way fare from Delhi: **₹5,000 – ₹12,000** (economy).  
+
+**By road:**  
+- **NH3 (Manali‑Leh Highway)** – the most travelled route; passes: Rohtang, Baralacha, and Khardung La.  
+- Nearest state bus depot: **Leh Bus Stand**; regular Volvo and deluxe buses from Manali (₹1,200 – ₹1,800) and Srinagar (₹1,500 – ₹2,200).  
+- Frequency: 2‑3 buses daily during summer; weekly in early winter (subject to weather).
+
+---
+
+## Hidden Gems
+
+**Khaltsi Village (Leh District)**
+- **Why special:** Remote agrarian hamlet perched on a terrace; offers authentic Ladakhi homestays and a chance to see traditional mud‑brick houses.  
+- **Entry/cost:** No entry fee; homestay rooms ₹1,200 – ₹1,800 per night.  
+- **How to reach:** Drive 30 km north of Leh on the Leh‑Khardung La road; turn off at the “Khaltsi” sign.  
+- **Best time:** Late spring (May‑June) when fields are green.  
+- **Suitability:** Flat paths – **suitable for toddlers (carrier) and elderly**; no steep climbs.
+
+**Maitri Bagh (Nubra Valley)**
+- **Why special:** Small garden maintained by a local NGO; hosts rare Himalayan herbs and a quiet picnic spot away from the dunes.  
+- **Entry/cost:** Free; optional donation ₹50.  
+- **How to reach:** 5 km east of Diskit, via a gravel road; hire a local jeep.  
+- **Best time:** Early morning (07:00–09:00) for cool air and herb fragrance.  
+- **Suitability:** Gentle walking trail – **suitable for toddlers (push‑chair) and elderly**; benches available.
+
+**Stok Ice‑Climbing Wall (Stok Village)**
+- **Why special:** Natural frozen waterfall used by adventure groups; off the beaten path, offering a quiet adrenaline experience.  
+- **Entry/cost:** Guided climb ₹1,500 – ₹2,000 per person (gear included).  
+- **How to reach:** 15 km east of Leh on the Leh‑Nubra road; park at the village entrance.  
+- **Best time:** Late winter (Jan‑Feb) when ice is thick.  
+- **Suitability:** **Not suitable for toddlers**; elderly participants should have prior climbing experience and be medically cleared.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jio, Airtel, and Vi provide 4G coverage in Leh town and along NH3; signal weak in deep valleys (e.g., Panamik) – carry an offline map and a satellite messenger for emergencies.  
+
+**ATMs:**  
+- Reliable ATMs at **Leh Main Market (SBI, HDFC)** and **Khardung La Toll Plaza**.  
+- Cash is king in remote villages; most shops accept only cash, and card terminals often fail due to low bandwidth.  
+
+**SIM cards:**  
+- Buy a fresh SIM at **Leh Airport** (Jio or Airtel kiosks) – activation within 30 minutes.  
+- For better coverage in Nubra and Zanskar, Jio’s “Rural” plan (₹199 / 30 days) offers extended tower reach.  
+
+---
