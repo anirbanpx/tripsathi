@@ -2,87 +2,221 @@
 
 ## Routing
 
-**Standard routing: Jaipur → Chittorgarh → Udaipur**
+**Standard routing: Jaipur → Udaipur → Jaisamand Lake**  
 
-Chittorgarh Fort (~115 km northeast of Udaipur) is a natural day-stop that breaks the Jaipur–Udaipur leg into two manageable drives, most circuits include it without a separate overnight.
+Jaipur lies on NH48, a well‑maintained four‑lane highway that reaches Udaipur after crossing the Aravalli foothills. Continuing north on NH58 brings you to Jaisamand Lake, allowing a relaxed drive after the city‑center sightseeing and avoiding back‑tracking on hilly roads.
 
-Driving times:
-- Jaipur → Chittorgarh: 3.5–4 hours via NH48 (190 km)
-- Chittorgarh → Udaipur: 2 hours via NH76 (115 km)
-- Jodhpur → Udaipur: 4–5 hours via NH62 through Pali (250 km)
-- Maharana Pratap Airport → city centre: 30 min (22 km via NH8)
+Driving times:  
+- Jaipur → Udaipur: ≈ 6 hours (NH48, toll‑plaza at Ajmer)  
+- Udaipur → Jaisamand Lake: ≈ 1.5 hours (NH58, scenic hill stretch)
 
-**Alternative routing:** Fly into Maharana Pratap Airport from Delhi (~1.5 hours, ₹4,000–9,000) or Mumbai (~1.5 hours) — strongly preferred for elderly and toddler families; Udaipur's road approaches are long regardless of origin city.
+**Alternative routing:** Delhi → Udaipur → Ranakpur (for travellers heading to the nearby Ranakpur Jain temples; the Delhi‑Udaipur leg follows NH48 via Jaipur, saving ~30 min compared with the Jaipur‑Udaipur route).
 
 ---
 
-## City Palace & Lake Pichola
+## Udaipur City (Palaces & Lakes)
 
-**Key places:** City Palace, Jagdish Temple, Lake Pichola boat jetty, Bagore ki Haveli, Lal Ghat area
+**Key places:** City Palace, Lake Pichola, Jag Mandir, Bagore Ki Haveli, Saheliyon Ki Bari, Fateh Sagar Lake  
 
-**City Palace:**
-- Entry: ₹300/Indian adults, ₹700/foreigners; audio guide ₹200
-- The palace spans ~2.5 km of galleries across multiple levels — significant walking on stone steps and uneven marble. Strollers cannot navigate most sections; use a baby carrier. Elderly need 2–3 hours with planned rest stops. Wheelchair access limited to lower courtyards.
-- Best time: 9:30 AM at opening, before tour groups arrive by 11 AM
-- Open daily; Solar Gallery (rooftop section) closes by 5 PM
+### City Palace  
+- Entry: ₹300 adult / ₹100 child (5‑18 yr). Foreign tourists: ₹600 adult / ₹150 child.  
+- Suitability: 3 km of uneven stone steps; not recommended for toddlers (<3 yr) or elderly with mobility issues unless a wheelchair is arranged in advance.  
+- Best time: 10:00 am–12:00 pm (cooler, fewer crowds).  
+- Seasonal closure: None; open daily 9:30 am–5:30 pm.
 
-**Lake Pichola Boat Ride:**
-- RTDC government jetty (near City Palace): ₹400/person shared 1-hour ride; private boat ₹1,500–2,000/hour; Jag Mandir island entry ₹500/person additional
-- Flat-bottomed, stable boats — suitable for all ages including toddlers and elderly. Children under 5 must sit in a parent's lap.
-- Best time: 5–7 PM for sunset; 8–10 AM for calm lake and photography
-- July–September: Rising lake levels can suspend boat rides temporarily — confirm at jetty on arrival
+### Lake Pichola Boat Ride (Standard)  
+- Entry (boat ticket): ₹200 adult / ₹100 child (5‑12 yr).  
+- Suitability: Open‑deck boats have railings; toddlers can sit on a caregiver’s lap, but the ride can be bumpy in windy conditions—avoid if the elderly have balance concerns.  
+- Best time: Early morning (7:00–9:00 am) for misty reflections.  
+- Seasonal closure: None; services pause during monsoon‑heavy storms (July‑August).
 
-**Trust issue — private boat price-switching near Lal Ghat:**
-- Agents on lanes near Lal Ghat quote ₹200–300 per ride. On boarding they reveal this was a "deposit" and the actual fare is ₹2,000–3,000. "Sunset dinner cruises" are quoted at ₹500, revised to ₹1,500 once seated.
-- Recommended approach: Use only the official RTDC counter at the City Palace jetty — rates are displayed on a board. If hiring a private boat, agree on the full trip price (not per-person) before boarding.
+### Lake Pichola Sunset Boat Ride  
+- Entry: ₹700 adult / ₹400 child (5‑12 yr).  
+- Suitability: Same as standard ride; extra lighting makes the deck slightly brighter—still safe for toddlers if held.  
+- Best time: 5:30 pm–7:00 pm (sunset).  
+- Seasonal closure: Same as standard ride.
 
-**City Palace area food:**
-- Local dishes: Dal Baati Churma (hard wheat balls with dal and sweet churma — Rajasthani staple, ₹150–250 at local thali restaurants), Gatte ki Sabzi (gram flour dumplings in yoghurt gravy), Mawa Kachori (sweet mawa-filled fried pastry, Udaipur specialty)
-- For toddlers and young kids: Plain chapati with dal available at any thali restaurant on request; Gatte ki Sabzi tends to be spicy — request mild
-- Vegetarian availability: Strong throughout the old city and Lal Ghat area; most tourist-facing restaurants are vegetarian by default
+### Jag Mandir Palace (Island palace on Lake Pichola)  
+- Entry: ₹150 adult / ₹50 child (5‑18 yr).  
+- Suitability: Gentle 200‑m walk from the dock; smooth pathways, suitable for toddlers in a stroller and for elderly travellers.  
+- Best time: Mid‑day (12:00–2:00 pm) when interior lighting is optimal for photography.  
+- Seasonal closure: None.
+
+### Bagore Ki Haveli (Museum on the lakeshore)  
+- Entry: ₹100 adult / ₹30 child (5‑18 yr).  
+- Suitability: 2‑storey building with steep stairs; not toddler‑friendly unless carried, and may be tiring for seniors.  
+- Best time: 4:00 pm–5:30 pm (pre‑sunset, cooler).  
+- Seasonal closure: Closed on Mondays.
+
+### Saheliyon Ki Bari (Garden of the Maidens)  
+- Entry: ₹20 adult / ₹10 child (5‑18 yr).  
+- Suitability: Flat, well‑maintained paths; fully stroller‑compatible and easy for elderly visitors.  
+- Best time: Early morning (6:30–9:00 am) for fragrant roses and fewer insects.  
+- Seasonal closure: None.
+
+### Fateh Sagar Lake (Circular promenade)  
+- Entry: Free (boat ride optional: ₹150 adult / ₹80 child).  
+- Suitability: 3 km walkway is level; ideal for toddlers in a stroller and for seniors who prefer a gentle stroll.  
+- Best time: Evening (6:00–8:00 pm) when the lake lights create a calm ambience.  
+- Seasonal closure: Boat rides stop during heavy monsoon; promenade remains open year‑round.
+
+**Trust issue for Udaipur City:**  
+- *Overpriced “private” boat tickets*: Vendors often quote inflated rates for “exclusive” rides.  
+- Recommended approach: Insist on the official dock ticket price (₹200 adult) and verify the boat’s registration number before boarding.
+
+**Udaipur City food:**  
+- Signature dishes: Dal Bati Churma, Gatte Ki Sabzi, Laal Maas (spicy mutton), Rajasthani Thali.  
+- For toddlers and young kids: Soft idli, plain boiled rice with dal, khichdi, and butter‑roasted roti.  
+- Vegetarian availability: Excellent; most restaurants serve a full veg menu, though some specialty items (e.g., Laal Maas) are meat‑only.
 
 ---
 
-## Fateh Sagar & Sajjangarh
+## Lake Pichola & Surroundings
 
-**Key places:** Fateh Sagar Lake, Saheliyon ki Bari, Sajjangarh Monsoon Palace, Shilpgram craft village
+**Key places:** Lake Pichola, Jag Mandir, Shilpgram (cultural village), Badi Lake (nearby), Sunset Point (Monsoon Palace hill)
 
-**Saheliyon ki Bari:**
-- Entry: ₹50/person
-- Flat shaded gardens with marble fountains and pavilions — one of Udaipur's most accessible heritage sites. Suitable for strollers, elderly, and toddlers without assistance.
-- Best time: 8–10 AM or 4–6 PM (cooler; fountains operational)
-- No seasonal closure
+### Shilpgram (Rural Arts Village)  
+- Entry: ₹50 adult / ₹20 child (5‑18 yr).  
+- Suitability: Flat exhibition grounds; stroller‑friendly, and benches for elderly rest.  
+- Best time: Weekdays 10:00 am–2:00 pm (less crowd, artisans available).  
+- Seasonal closure: Closed on Tuesdays.
 
-**Sajjangarh Monsoon Palace:**
-- Entry: ₹80/Indians; vehicle entry into the wildlife sanctuary zone ₹130 extra — driving is mandatory, no walking permitted on the forest road
-- Hilltop is flat and fenced — manageable for toddlers and elderly once there. Do not drive up after 6 PM; road is narrow and unlit.
-- Best time: 4–6 PM for Aravalli sunset views
+### Badi Lake (Lake near Shilpgram)  
+- Entry: Free; pedal‑boat rental ₹150 adult / ₹80 child (5‑12 yr).  
+- Suitability: Gentle water; pedal boats have low decks—safe for toddlers under supervision, easy for seniors.  
+- Best time: Late morning (10:00 am–12:00 pm) when wind is minimal.  
+- Seasonal closure: Boat rentals pause in July‑August due to monsoon.
 
-**Trust issue — "government approved" craft shops via auto/taxi detour:**
-- Drivers routinely detour to private handicraft emporiums — miniature paintings, marble inlay — claiming these are "government fixed-price stores." Prices inside run 3–5× market rate on commission arrangements.
-- Recommended approach: For verified pricing on Rajasthani handicrafts, go to Rajasthali (Rajasthan government emporium, near Chetak Circle). Firmly decline any driver who proposes a "quick stop" between attractions.
+**Trust issue for Lake Pichola area:**  
+- *“Guided tour” price inflation*: Some agents quote ₹2,000 per person for a “full‑day” tour that includes only a few attractions.  
+- Recommended approach: Book a reputable local guide through the Rajasthan Tourism office (₹500 per person) or use self‑guided audio apps.
 
-**Fateh Sagar area food:**
-- Lakeside promenade stalls and cafés: light snacks and chaats (₹60–150/item) — adequate for a break, not for a meal
-- For toddlers: Plain paratha with curd available at promenade stalls; carry toddler-specific food from the old city for longer outings
-- Vegetarian availability: All promenade stalls are vegetarian
+**Lake Pichola food:**  
+- Signature lakeside snacks: Kachori, Mirchi Bada, Ghevar (sweet).  
+- Toddler‑friendly: Soft poha, plain curd rice, boiled potatoes with a pinch of salt.  
+- Vegetarian availability: 90 % of stalls are pure veg; confirm before ordering meat‑based items.
+
+---
+
+## Outskirts (Nature & Heritage)
+
+**Key places:** Monsoon Palace (Sajjangarh), Sajjangarh Wildlife Sanctuary, Jaisamand Lake, Ahar Cenotaphs, Badi Lake (re‑listed for context)
+
+### Monsoon Palace (Sajjangarh)  
+- Entry: ₹150 adult / ₹50 child (5‑18 yr).  
+- Suitability: 2 km steep climb from parking; not suitable for toddlers or seniors without a vehicle‑to‑gate taxi (available locally for ₹300).  
+- Best time: Sunset (5:30–7:00 pm) for panoramic city view.  
+- Seasonal closure: Closed on Mondays and during heavy fog (Dec‑Jan).
+
+### Sajjangarh Wildlife Sanctuary  
+- Entry: ₹100 adult / ₹30 child (5‑18 yr).  
+- Suitability: Well‑marked trails of 1–3 km; easy for elderly with moderate fitness, but toddlers should be carried.  
+- Best time: Early morning (6:00–9:00 am) for birdwatching.  
+- Seasonal closure: Core area closed during monsoon (July‑August) to protect wildlife.
+
+### Jaisamand Lake (Jaisamand)  
+- Entry: Free; boat ride ₹250 adult / ₹120 child (5‑12 yr).  
+- Suitability: Large lake with gentle waves; boat decks have railings, safe for toddlers on caregiver laps, and comfortable for seniors.  
+- Best time: Winter (Nov‑Feb) when water is calm.  
+- Seasonal closure: Boat rides stop in monsoon months.
+
+### Ahar Cenotaphs (Ancient memorial complex)  
+- Entry: ₹30 adult / ₹10 child (5‑18 yr).  
+- Suitability: Flat stone platforms; fully accessible for strollers and seniors.  
+- Best time: Mid‑day (12:00–2:00 pm) for optimal lighting on inscriptions.  
+- Seasonal closure: None.
+
+**Trust issue for Outskirts:**  
+- *“Hidden entry fee” at wildlife sanctuary*: Some gatekeepers demand extra “conservation” fees not listed officially.  
+- Recommended approach: Pay only the posted fee (₹100 adult) and ask for an official receipt; refuse unofficial cash demands.
+
+**Outskirts food:**  
+- Signature Rajasthani dishes: Ker Sangri, Bajra Roti, Gatte Ki Sabzi.  
+- Toddler‑friendly: Soft bajra rotis torn into small pieces, plain boiled carrots, and sweet lassi.  
+- Vegetarian availability: Very high; most local eateries are pure veg, though meat dishes are offered in a few tourist‑focused restaurants.
 
 ---
 
 ## General Udaipur Notes
 
-**Best time to visit:**
-- October–March: Best overall. Temperatures 12–28°C; lake levels full post-monsoon — ideal for boat rides. December–January mornings cold (8–12°C); carry layers.
-- April–June: Harsh heat (38–42°C). All outdoor activity before 9 AM and after 5 PM only. Lake Pichola can look depleted.
-- July–September: Monsoon. Pichola fills — visually the most striking the lake looks all year. Most attractions open; boat rides may suspend in heavy rain. Sajjangarh road can flood briefly.
+**Best time to visit:**  
+- **October – March:** Pleasant 15‑28 °C, all attractions open, festivals (Diwali, Desert Festival) increase crowd but add cultural vibrancy.  
+- **April – June:** Warm 30‑40 °C; early‑morning visits recommended; some outdoor shows reduce frequency.  
+- **July – September:** Monsoon (heavy rain, occasional landslides); boat rides on Pichola and Jaisamand may be suspended; wildlife sanctuary closed.
 
-**Transport pricing:**
-- Auto-rickshaws: ₹60–100 within city; no meters, negotiate before boarding.
-- Ola and Uber both operate in Udaipur — more reliable for point-to-point trips than haggling.
-- City Palace to Fateh Sagar: ₹80–120 by auto; ₹200–250 by app cab
+**Transport pricing:**  
+- **Taxi/cab:** Metered rates start at ₹15 km; typical city‑center round‑trip (≈10 km) costs ₹150‑₹200. Negotiated flat rates for airport‑city trips are ₹300‑₹350.  
+- **Auto‑rickshaw:** Fixed‑rate for 1 km ≈ ₹15; for 5 km ≈ ₹80. Always confirm before boarding.  
+- **App‑based options:** Ola and Uber operate in Udaipur; UberX average fare ₹120 for 5 km; Ola Mini similar.  
 
-**Dietary notes:**
-- Rajasthani cuisine uses significant ghee and dairy — relevant for fat-restricted or lactose-intolerant travellers. Laal Maas (mutton) is common in non-vegetarian menus but default mode near tourist areas is vegetarian.
-- Vegetarian options: Excellent at all price points; Udaipur's rooftop restaurants are among Rajasthan's better vegetarian dining options.
+**Dietary notes:**  
+- Dominant cuisine: Rajasthani with liberal use of ghee, mustard oil, and dried fenugreek. Coconut oil is rare but present in some South‑Indian eateries.  
+- Allergy risks: Peanuts are common in sweets (e.g., Ghevar); dairy is prevalent.  
+- Vegetarian options: Abundant; most restaurants serve a full veg thali. Non‑veg dishes (Laal Maas, chicken tikka) are clearly labeled.
 
-**Medical:** GBH American Hospital (private, 24-hour emergency, Kothi Bagh) is the best-equipped private facility in Udaipur. Government option: RNT Medical College Hospital, Chetak Circle. Carry ORS sachets — heat dehydration risk is significant for toddlers and elderly April–June.
+**Medical:**  
+- Nearest quality hospital: **Mewar Hospital**, 5 km north of City Palace, 24‑hour emergency, cardiac care, and a pharmacy.  
+- Recommended to carry: basic first‑aid kit, any chronic medication, a copy of health insurance, and a list of nearby pharmacies (SBI Medical Store, HDFC Med‑Care).
+
+---
+
+## Getting There
+
+**By train:**  
+- **Udaipur City Railway Station (UDR)** – 3 km from city centre.  
+- Key trains: *Mewar Express* (12463) Delhi → Udaipur (≈ 12 h); *Chetak Express* (12981) Jaipur → Udaipur (≈ 6 h).  
+- Ticket fare (Indian): ₹500‑₹900 adult (second class); foreign tourists: ₹1,200‑₹1,800.
+
+**By air:**  
+- **Maharana Pratap Airport (UDR)** – 2 km from city centre.  
+- Airlines: Air India, IndiGo, SpiceJet, Vistara.  
+- Approximate one‑way fare: ₹3,000‑₹7,000 (Delhi/Udaipur), ₹2,500‑₹5,500 (Jaipur/Udaipur).  
+- Airport facilities: ATM (SBI), prepaid taxi stand, car‑rental desk.
+
+**By road:**  
+- **NH48** (Delhi–Jaipur–Udaipur) and **NH58** (Udaipur–Jaisamand).  
+- Nearest state bus depot: **Udaipur Bus Stand** (Rajasthan State Road Transport).  
+- Inter‑city bus frequency: Every 30 min from Jaipur, 1‑hour from Jodhpur.  
+- Typical fare: Jaipur → Udaipur ≈ ₹500; Jodhpur → Udaipur ≈ ₹450.
+
+---
+
+## Hidden Gems
+
+**Shilpgram (Rural Arts Village)**  
+- Why special: Live artisan workshops, weekly folk‑dance performances, and a market for handcrafted souvenirs rarely visited by day‑tour groups.  
+- Entry: ₹50 adult / ₹20 child; no additional cost.  
+- Reach: 5 km from City Palace; auto‑rickshaw (₹150) or shared taxi.  
+- Best time: Saturday mornings (crafts market).  
+- Suitability: Flat terrain, stroller‑friendly; elderly can rest on shaded benches.
+
+**Badi Lake (Lake near Shilpgram)**  
+- Why special: Tranquil lake with a 2‑km walking path, bird‑watching spots, and a small temple on the shore; minimal tourist footfall.  
+- Entry: Free; pedal‑boat ₹150 adult / ₹80 child.  
+- Reach: 6 km from City Palace; local rickshaw (₹200).  
+- Best time: Early winter (Nov‑Dec) for clear skies.  
+- Suitability: Easy walk, suitable for toddlers (on caregiver’s lap) and seniors (benches every 500 m).
+
+**Ahar Cenotaphs (Ancient Memorial Complex)**  
+- Why special: 17 centuries‑old stone cenotaphs of the Mewar rulers, offering a quiet historic perspective away from the crowded palace precincts.  
+- Entry: ₹30 adult / ₹10 child.  
+- Reach: 2 km north of City Palace; auto‑rickshaw (₹120).  
+- Best time: Mid‑day (12:00‑2:00 pm) for optimal lighting on carvings.  
+- Suitability: Flat, fully accessible; toddlers can be carried, seniors can rest on stone benches.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jio, Airtel, and Vi provide 4G coverage throughout the city and major tourist sites. Patchy signal near Badi Lake and Sajjangarh Wildlife Sanctuary; consider offline maps for those stretches.
+
+**ATMs:**  
+- Reliable ATMs: SBI (near City Palace), HDFC (near Fateh Sagar), ICICI (near Udaipur Bus Stand).  
+- Cash is preferred in small markets and street food stalls; most restaurants accept cards, but keep ₹2,000‑₹3,000 in small notes for tips and entry fees.
+
+**SIM cards:**  
+- Purchase at Maharana Pratap Airport (Airtel and Jio kiosks) or at any major mobile shop in the city centre.  
+- Airtel offers the best coverage in the outskirts and wildlife sanctuary; Jio is strongest within the city core.  
+
+---

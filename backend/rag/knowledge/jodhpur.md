@@ -2,116 +2,232 @@
 
 ## Routing
 
-**Standard routing: Delhi → Jaipur → Jodhpur**
+**Standard routing: Delhi → Jodhpur → Osian**
 
-The Delhi‑Jaipur leg follows the well‑maintained NH 48 (formerly NH 8) with multiple rest stops, allowing a comfortable first day of travel. Continuing on NH 48 through Ajmer to Jodhpur avoids the steep climbs of the Aravalli foothills and spreads the total distance (≈ 800 km) over two days, reducing driver fatigue and giving families time to rest before entering the hotter Rajasthan interior.
+The sequence starts with Delhi, the major rail‑air hub, then moves south on NH 48 (part of the Delhi‑Mumbai corridor) to Jodhpur. From Jodhpur, a short 65 km stretch on NH 125 reaches Osian, the gateway to the Thar desert excursions. This order minimises back‑tracking, lets you settle in Jodhpur’s cooler evenings, and avoids the desert’s midday heat.
 
 Driving times:  
-- Delhi → Jaipur: 5 hours (NH 48, toll‑free sections)  
-- Jaipur → Jodhpur: 6 hours (NH 48 via Ajmer, passing the Kishangarh‑Bhilwara stretch)
+- Delhi → Jodhpur: ≈ 10 hours (NH 48, 560 km)  
+- Jodhpur → Osian: ≈ 1.5 hours (NH 125, 65 km)
 
-**Alternative routing:** Enter Rajasthan from Udaipur via NH 58 (Udaipur‑Jodhpur). This scenic circuit adds about 1 hour but offers lake views and a chance to break the journey at the historic city of Udaipur.
+**Alternative routing:** Delhi → Jaipur → Jodhpur. This adds ~2 hours but lets you break the long drive with a stop at Jaipur’s heritage sites, useful for families needing a rest.
 
-## Jodhpur Old City (Mithapur)
+---
 
-**Key places:** Mehrangarh Fort, Jaswant Thada, Umaid Bhawan Palace Museum, Clock Tower Market, Rao Jodha Desert Rock Park
+## Jodhpur City Core
 
-**Mehrangarh Fort:**  
-- Entry: ₹300 adult, ₹150 child (3‑12 yr)  
-- Suitability: 3 km of steep, uneven steps and narrow galleries; **not suitable for toddlers (< 3 yr) or travellers with limited mobility**. Elderly visitors should use the internal shuttle (₹50) and avoid the highest towers.  
-- Best time: Early morning (8 am–10 am) to avoid crowds and heat.  
-- Seasonal closure: None, but the uppermost watchtowers close during extreme summer (June) for safety.
+**Key places:** Mehrangarh Fort, Jaswant Thada, Umaid Bhawan Palace (Museum), Clock Tower (Ghanta Ghar), Chamunda Temple, Balsamand Lake, Mandore Gardens (south‑west fringe)
 
-**Jaswant Thada:**  
-- Entry: ₹100 adult, ₹50 child (3‑12 yr)  
-- Suitability: Well‑paved marble pathways, gentle slopes; **suitable for toddlers (with caregiver) and elderly**.  
-- Best time: Late afternoon (4 pm–6 pm) when the marble glows pink.  
+### Mehrangarh Fort  
+- Entry: ₹100 adult, ₹50 child (under 12)  
+- Suitability: 3 km of steep, uneven stairs and narrow corridors; **not suitable for toddlers (<3 yr) or mobility‑limited elderly** without a wheelchair‑friendly guide.  
+- Best time: Early morning (08:00‑10:00) to avoid crowds and heat.  
+- Seasonal closure: Closed on major Hindu festivals (e.g., Navratri) for security.
+
+### Jaswant Thada  
+- Entry: ₹20 adult, free child (under 12)  
+- Suitability: Marble steps are smooth; **suitable for toddlers with supervision** and elderly travellers (handrails available).  
+- Best time: Late afternoon (16:00‑18:00) when the marble glows in sunset.  
+- Seasonal closure: None; open year‑round.
+
+### Umaid Bhawan Palace – Museum  
+- Entry: ₹200 adult, ₹100 child (under 12)  
+- Suitability: Fully wheelchair‑accessible, elevators, and gentle ramps; **suitable for elderly and toddlers** (lifts to all floors).  
+- Best time: Mid‑day (11:00‑13:00) to catch the guided audio tour.  
+- Seasonal closure: Museum closed on 1 Jan and 15 Aug (maintenance).
+
+### Clock Tower (Ghanta Ghar)  
+- Entry: Free (no ticket)  
+- Suitability: Flat ground, no stairs; **ideal for toddlers and elderly**.  
+- Best time: Evening (19:00‑21:00) when the tower is illuminated.  
 - Seasonal closure: None.
 
-**Umaid Bhawan Palace Museum:**  
-- Entry: ₹200 adult, ₹100 child (3‑12 yr)  
-- Suitability: Elevator access; **suitable for all ages**, though the upstairs gallery has narrow staircases that may challenge very young children.  
-- Best time: Mid‑day (11 am–1 pm) to catch the natural light on the art pieces.  
-- Seasonal closure: Museum closed on Fridays for private events.
+### Chamunda Temple (Jodhpur)  
+- Entry: Free (donations welcome)  
+- Suitability: Small steps (≈0.5 m); **not recommended for toddlers** without a carrier; elderly can manage with a hand‑rail.  
+- Best time: Early morning (07:00‑09:00) for cooler air and fewer pilgrims.  
+- Seasonal closure: Closed on Tuesdays (temple rituals).
 
-**Clock Tower Market:**  
-- Entry: Free (shopping costs vary)  
-- Suitability: Crowded narrow lanes; **not ideal for toddlers unaccompanied** and can be tiring for elderly walkers. Use a stroller with a protective cover.  
-- Best time: Early evening (5 pm–7 pm) when vendors display lanterns.  
+### Balsamand Lake  
+- Entry: Free (boat ride ₹30 adult, ₹15 child)  
+- Suitability: Calm waters, shallow boat drafts; **suitable for toddlers (in a stroller‑compatible boat) and elderly**.  
+- Best time: Late morning (10:00‑12:00) for clear visibility.  
+- Seasonal closure: Boat rides halted during heavy monsoon (July‑September).
+
+### Mandore Gardens (south‑west fringe of city)  
+- Entry: ₹20 adult, free child (under 12)  
+- Suitability: Mostly paved pathways, occasional uneven stones; **generally suitable for toddlers and elderly**, but watch for slippery patches after rain.  
+- Best time: Early evening (17:00‑19:00) for cooler breeze and birdwatching.  
 - Seasonal closure: None.
 
-**Rao Jodha Desert Rock Park:**  
-- Entry: ₹50 adult, ₹25 child (3‑12 yr)  
-- Suitability: 2 km of level trails with benches; **suitable for toddlers (carrier recommended) and elderly**.  
-- Best time: Sunrise (5 am–7 am) for birdwatching.  
-- Seasonal closure: Closed during monsoon (July–September) due to slippery rocks.
+**Trust issue for City Core:**  
+- **Fake ticket kiosks at Mehrangarh Fort** – Unofficial vendors sell “express” tickets at inflated rates (₹250‑₹300).  
+  Recommended approach: Purchase tickets only at the official counter or via the Rajasthan Tourism e‑portal; keep the receipt for verification.
 
-**Pricing trap for Old City:**  
-- **Scam:** Unofficial “guide” agents at the Mehrangarh gate often quote inflated fees (₹800‑₹1,000) for a short 30‑minute tour.  
-- Recommended approach: Hire a licensed guide from the official ticket counter (₹300 for a 1‑hour tour) or use the audio guide (₹150) to avoid overcharging.
+**Jodhpur City food:**  
+- Signature dishes: **Dal Baati Churma**, **Gatte ki Sabzi**, **Laal Maas** (spicy mutton), **Makhaniya Lassi**, **Mirchi Bada**.  
+- For toddlers and young kids: **Plain rice with dal**, **soft roti with ghee**, **idli**, **khichdi**, **sweet lassi (no chili)**.  
+- Vegetarian availability: Strong; most restaurants serve a full vegetarian thali. Non‑veg dishes are clearly labelled; ask for “vegetarian only” to avoid accidental meat.
 
-**Old City food:**  
-- Signature dishes: Dal Baati Churma, Gatte ki Sabzi, Laal Maas (spicy mutton), Makhaniya Lassi.  
-- For toddlers and young kids: Soft khichdi, plain roti with ghee and dal, boiled carrots, and plain curd.  
-- Vegetarian availability: Excellent; most Rajasthani thalis are veg‑friendly, though some items contain paneer or heavy ghee—ask for “no ghee” if needed.
+---
 
-## Jodhpur Outskirts (Bishnoi Village & Lakes)
+## Mandore & Surroundings
 
-**Key places:** Bishnoi Village (eco‑tourism), Kaylana Lake, Balsamand Lake, Mandore Gardens
+**Key places:** Mandore Gardens, Rao Jodha Desert Park, Bishnoi Village, Kuldhara Abandoned Village, Bhandari Lake
 
-**Bishnoi Village (Eco‑tour):**  
-- Entry: Free; Guided tour ₹200 adult, ₹100 child (3‑12 yr)  
-- Suitability: Flat, paved paths; **ideal for toddlers (carrier) and elderly**. No steep climbs.  
-- Best time: Early morning (6 am–9 am) for wildlife spotting.  
-- Seasonal closure: None, but monsoon may make some mud tracks slippery.
+### Rao Jodha Desert Park  
+- Entry: ₹150 adult, ₹75 child (under 12)  
+- Suitability: 2 km of walking trails with rocky sections; **not suitable for toddlers** (uneven ground) and elderly with joint issues unless using a wheelchair‑friendly shuttle (available on request).  
+- Best time: Early morning (06:00‑09:00) for wildlife spotting.  
+- Seasonal closure: Closed on full moon nights for night‑safari safety.
 
-**Kaylana Lake:**  
-- Entry: Free (parking ₹30)  
-- Suitability: 2 km walking loop with benches; **suitable for all ages**; toddlers should be on a stroller.  
-- Best time: Sunset (6 pm–7 pm) for photography.  
-- Seasonal closure: Closed for swimming during monsoon (July–September).
+### Bishnoi Village Safari (Half‑Day)  
+- Entry: ₹500 per person (includes guide, transport, and lunch)  
+- Suitability: Short 30‑minute walk through the village; **suitable for toddlers in a carrier** and elderly (flat terrain).  
+- Best time: Late afternoon (15:00‑17:00) when the village is lively.  
+- Seasonal closure: None; but monsoon may make dirt roads slippery.
 
-**Balsamand Lake:**  
-- Entry: Free (boat ride ₹150 adult, ₹80 child)  
-- Suitability: Gentle boat ride; **suitable for toddlers (in a carrier) and elderly**.  
-- Best time: Mid‑morning (9 am–11 am) when water is calm.  
+### Kuldhara Abandoned Village (off‑beat)  
+- Entry: Free (donation ₹20 optional)  
+- Suitability: Rough stone pathways, steep steps; **not suitable for toddlers** and **elderly with mobility issues**.  
+- Best time: Early sunrise (05:30‑07:00) for dramatic light and cooler temperatures.  
+- Seasonal closure: None; occasional local festivals may restrict access.
+
+### Bhandari Lake (quiet lakeside spot)  
+- Entry: Free (boat ride ₹25 adult, ₹12 child)  
+- Suitability: Calm water, shallow boats; **suitable for toddlers (in a stroller‑compatible boat) and elderly**.  
+- Best time: Mid‑day (12:00‑14:00) when wind is minimal.  
+- Seasonal closure: Boat rides stopped during heavy rain (July‑September).
+
+### Mandore Gardens (re‑highlight) – see City Core section for details.
+
+**Trust issue for Mandore & Surroundings:**  
+- **Overpriced guide fees for Bishnoi Village** – Some unregistered guides charge ₹1,200 per person.  
+  Recommended approach: Book the safari through the official Rajasthan Tourism website or ask your hotel to arrange a certified guide; verify the guide’s ID badge.
+
+**Mandore food:**  
+- Signature dishes: **Ker Sangri**, **Mohan Maas**, **Bajre ki Roti**, **Ghevar** (sweet).  
+- Toddler‑friendly: **Soft bajra roti with ghee**, **plain boiled potatoes**, **sweet lassi**.  
+- Vegetarian availability: Excellent; most local eateries are vegetarian‑friendly, but ask for “no onion, no garlic” if you follow Jain diet.
+
+---
+
+## Desert Edge (Osian & Nearby)
+
+**Key places:** Osian Temple Complex, Desert Camel Safari, Osian Handicraft Market, Half‑Day Osian Village Tour
+
+### Osian Temple Complex  
+- Entry: ₹30 adult, free child (under 12)  
+- Suitability: Flat courtyard, some steps to inner sanctum; **suitable for toddlers (carried) and elderly**.  
+- Best time: Late afternoon (16:00‑18:00) when the sandstone glows.  
+- Seasonal closure: None; open year‑round.
+
+### Desert Camel Safari (Day Tour)  
+- Entry: ₹800 per person (includes camel, guide, lunch)  
+- Suitability: Camels are tall and the ride can be bumpy; **not recommended for toddlers (<4 yr) and elderly with back problems**.  
+- Best time: Sunset (17:00‑19:00) for cooler sand and photography.  
+- Seasonal closure: Closed during extreme heat (>45 °C) in May‑June.
+
+### Osian Handicraft Market (guided walk)  
+- Entry: Free (optional guide ₹300 per group)  
+- Suitability: Flat, narrow lanes; **suitable for toddlers (in stroller) and elderly**.  
+- Best time: Morning (09:00‑11:00) before the market gets crowded.  
 - Seasonal closure: None.
 
-**Mandore Gardens:**  
-- Entry: ₹50 adult, ₹25 child (3‑12 yr)  
-- Suitability: Well‑maintained lawns, wheelchair‑friendly paths; **suitable for toddlers and elderly**.  
-- Best time: Late afternoon (4 pm–5 pm) for cooler temperatures.  
-- Seasonal closure: None.
+### Half‑Day Osian Village Tour (including a meal)  
+- Entry: ₹600 per person (includes transport, guide, traditional Rajasthani thali)  
+- Suitability: Short walk on sand‑packed paths; **suitable for toddlers (carrier) and elderly**.  
+- Best time: Mid‑day (12:00‑14:00) to enjoy the village’s shade.  
+- Seasonal closure: None; monsoon may make some roads muddy.
 
-**Pricing trap for Outskirts:**  
-- **Scam:** Unlicensed “village tour” operators often charge extra for “photo‑permission” fees (₹500‑₹800) that are not required.  
-- Recommended approach: Book the official Bishnoi Eco‑Tour at the Jodhpur Tourism Office (₹200) and take your own photos; no extra charge.
+**Trust issue for Desert Edge:**  
+- **Camel ride “extra‑charge” for photo‑sessions** – Operators often demand additional ₹200‑₹500 for photos taken by tourists.  
+  Recommended approach: Agree on a fixed price before boarding; carry a portable charger to take your own photos.
 
-**Outskirts food:**  
-- Signature snacks: Pyaaz Kachori, Mirchi Vada, Mawa Ladoo, Ghevar.  
-- For toddlers and young kids: Soft boiled potatoes, plain rice with dal, curd, and simple roti.  
-- Vegetarian availability: Very high; most stalls are pure veg, though some street snacks contain meat fillings—ask “veg only”.
+**Osian food:**  
+- Signature dishes: **Makhaniya Lassi**, **Rajasthani Thali (dal, baati, churma)**, **Kachori**, **Methi Bajra Poori**.  
+- Toddler‑friendly: **Soft baati mashed with ghee**, **plain rice with dal**, **sweet lassi**.  
+- Vegetarian availability: Very strong; most stalls serve vegetarian thalis. Non‑veg items are clearly marked.
+
+---
 
 ## General Jodhpur Notes
 
 **Best time to visit:**  
-- **October – February:** Pleasant 15‑25 °C, all attractions open, festivals (Dussehra) increase crowd but offer cultural shows.  
-- **March – April:** Temperatures rise to 35‑40 °C; early mornings and evenings are comfortable, but midday heat can be intense—carry water and sunscreen.  
-- **May – June:** Pre‑monsoon dry heat; desert tours may be limited; advisable to schedule indoor activities.  
-- **July – September:** Monsoon (occasional heavy rain); Rao Jodha Desert Rock Park and lake pathways can become slippery; some outdoor markets reduce hours.  
-- **November (peak tourist season):** Higher accommodation rates (+20 %) and longer wait times at popular forts.
+- **October – March:** Pleasant 15‑28 °C, all attractions open, festivals (Desert Festival Jan) increase crowd but add cultural colour.  
+- **April – June:** 30‑45 °C, heat‑related closures of outdoor sites (e.g., desert safari may start late).  
+- **July – September:** Monsoon; occasional heavy rain can block access to Balsamand Lake boat rides and Rao Jodha Desert Park trails.
 
 **Transport pricing:**  
-- **Taxi/cab:** Metered fares from Jodhpur Airport to city centre ₹300‑₹400; intra‑city trips ₹12‑₹15 per km; negotiate night surcharge (₹100).  
-- **Auto‑rickshaw:** Fixed rates: Airport to city ₹250; short hops (e.g., to Clock Tower) ₹30‑₹40. Always ask for meter or confirm fare before boarding.  
-- **App‑based options:** Uber and Ola operate in Jodhpur; typical fare for a 10‑km city ride ₹150‑₹180. Use the “share” option for lower cost.
+- **Taxi/cab:** ₹30 for the first kilometre, then ₹15 per km; meters are mandatory in city, but negotiate for airport trips.  
+- **Auto‑rickshaw:** ₹15 per km; always confirm fare before boarding; night rides may be ₹25 per km.  
+- **App‑based options:** Uber and Ola operate in Jodhpur; fares typically 10‑15 % higher than metered cabs but offer cashless payment and driver rating.
 
 **Dietary notes:**  
-- Dominant cuisine: Rajasthani, heavy on ghee, gram flour, and spices (cumin, coriander). Coconut oil is rare; pork is seldom used.  
-- Allergy risks: Dairy (paneer, ghee) and nuts (almonds in sweets) are common; ask “no dairy” if lactose‑intolerant.  
-- Vegetarian options: Abundant—most thalis, dal‑baati, and street snacks are veg; however, many dishes contain heavy ghee, so request “less ghee” for lighter meals.
+- Dominant cuisine: Rajasthani, heavy on ghee, gram flour, and red chilies.  
+- Allergy risks: Coconut oil is common in sweets; dairy (ghee, lassi) prevalent.  
+- Vegetarian options: Abundant; most restaurants serve a full vegetarian thali. Non‑veg dishes (Laal Maas) are clearly labelled.
 
 **Medical:**  
-- Nearest quality hospital: **Mahatma Gandhi Hospital**, 5 km north of the city centre (well‑equipped emergency, 24‑hour pharmacy).  
-- Private alternative: **Medanta – The Medicity, Jodhpur**, 7 km from the Clock Tower, offering multi‑specialty care.  
-- Recommended to carry: Basic first‑aid kit, any personal medication, a copy of vaccination record, and a small supply of oral rehydration salts for children.
+- Nearest quality hospital: **Mahatma Gandhi Hospital**, 5 km north of the city centre, 24 × 7 emergency, cardiology and orthopaedics.  
+- Recommended to carry: basic first‑aid kit, oral rehydration salts, any personal medication, and a copy of your health insurance card.
+
+---
+
+## Getting There
+
+**By train:**  
+- Nearest station: **Jodhpur Junction (JDH)**, 4 km from city centre.  
+- Key trains: **Delhi‑Jodhpur Express (12459)**, **Mumbai‑Jodhpur Superfast (12984)** – both run daily, departing early morning and arriving late night.  
+
+**By air:**  
+- Nearest airport: **Jodhpur Airport (JDH)**, 5 km from city centre.  
+- Airlines: IndiGo, Air India, SpiceJet, GoAir.  
+- Approximate one‑way fare (Delhi/Jodhpur): ₹3,600 – ₹9,000; (Mumbai/Jodhpur): ₹4,200 – ₹10,500.
+
+**By road:**  
+- Highway: **NH 48** (Delhi‑Mumbai) connects directly to Jodhpur; **NH 125** leads to Osian and the desert circuit.  
+- Nearest state bus depot: **Jodhpur Bus Stand (Mohanpura)**, 2 km from city centre; frequent RSRTC and private buses to Delhi, Jaipur, and Bikaner.  
+- Typical inter‑city bus fare: Delhi‑Jodhpur ≈ ₹550 – ₹1,200; Jaipur‑Jodhpur ≈ ₹300 – ₹600.
+
+---
+
+## Hidden Gems
+
+**Kuldhara Abandoned Village:**  
+- Why special: 18th‑century “ghost village” with eerie stone houses, rarely visited by mainstream tours.  
+- Entry: Free (optional donation ₹20).  
+- How to reach: Hire a local taxi from Jodhpur (≈ 30 km, 45 min).  
+- Best time: Sunrise (05:30‑07:00) for dramatic lighting.  
+- Suitability: **Not suitable for toddlers** (uneven steps) and **elderly with mobility issues**.
+
+**Bhandari Lake (near Jodhpur):**  
+- Why special: Quiet lakeside spot with paddle‑boat rentals, ideal for a peaceful picnic away from the city bustle.  
+- Entry: Free; boat ride ₹25 adult, ₹12 child.  
+- How to reach: Auto‑rickshaw from Jodhpur city centre (≈ 12 km, 20 min).  
+- Best time: Mid‑day (12:00‑14:00) when wind is minimal.  
+- Suitability: **Suitable for toddlers** (stroller‑compatible boats) and **elderly** (flat walkways).
+
+**Dechu Desert Camp (off‑beat desert experience):**  
+- Why special: Small‑scale camp with sand dunes, camel rides, and star‑gazing, far fewer tourists than Jaisalmer.  
+- Entry: Camp fee ₹1,200 per person (includes dinner and bonfire).  
+- How to reach: Private taxi from Jodhpur (≈ 80 km, 2 hrs).  
+- Best time: Late October to early March (cool nights).  
+- Suitability: **Not recommended for toddlers** (camel rides) and **elderly with back problems**; however, the camp’s lounge area is wheelchair‑friendly.
+
+---
+
+## Practical Tips
+
+**Connectivity:**  
+- Jodhpur has strong 4G coverage from **Jio, Airtel, and Vi** across the city and main tourist sites.  
+- Patchy signal in remote desert spots (Osian, Dechu) – carry a portable hotspot or offline maps.
+
+**ATMs:**  
+- Reliable ATMs at **State Bank of India (SBI) – near Clock Tower**, **HDFC Bank – near Umaid Bhawan**, and **ICICI Bank – at Jodhpur Railway Station**.  
+- Cash is preferred in markets and small eateries; most hotels accept cards, but tip cash.
+
+**SIM cards:**  
+- Buy at Jodhpur Airport (JDH) or authorized retail stores in the city centre (e.g., Jio Store on Sardar Market).  
+- **Jio** offers the best coverage in rural desert areas; **Airtel** is slightly better within the city.  
+- Carry passport and a passport‑size photo for registration; activation takes ~30 minutes.
