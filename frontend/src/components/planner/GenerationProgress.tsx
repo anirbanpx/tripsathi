@@ -430,6 +430,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
   const nid = useRef(0);
   const journalEl = useRef<HTMLDivElement>(null);
   const prevStage = useRef("");
+  const openingDone = useRef(false);
 
   useEffect(() => {
     const h = () => setWide(window.innerWidth >= 960);
@@ -477,12 +478,10 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
       if (!typing.current) typeNext();
     }
 
-    // Opening lines
-    const dest = destination.split(",")[0].trim();
-    const nights = tripParams?.duration_days ?? 5;
-    enqueue([`Planning your ${nights}-night ${dest} adventure ✦`, `For ${personaLabel(tripParams)}`]);
-
-    // Expose enqueue for stage updates
+    // Expose enqueue for stage updates. Opening lines are enqueued separately,
+    // once we actually know the destination & group (see effect below) — firing
+    // them here would paint placeholder copy ("Planning your 5-night  adventure",
+    // "For your group") during the brief race before trip data arrives.
     (window as unknown as Record<string, unknown>).__gpEnqueue = enqueue;
 
     return () => {
@@ -495,12 +494,28 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Opening lines — wait until we actually know the destination & group, so we
+  // never paint placeholder copy ("For your group", empty-destination lines).
+  useEffect(() => {
+    if (openingDone.current || !destination.trim() || !tripParams) return;
+    const enqueue = (window as unknown as Record<string, unknown>).__gpEnqueue as ((l: string[]) => void) | undefined;
+    if (!enqueue) return;
+    openingDone.current = true;
+    const d = destination.split(",")[0].trim();
+    const nights = tripParams.duration_days ?? 5;
+    enqueue([`Planning your ${nights}-night ${d} adventure ✦`, `For ${personaLabel(tripParams)}`]);
+  }, [destination, tripParams]);
+
   useEffect(() => {
     if (!stageLabel || stageLabel === prevStage.current) return;
+    // Hold stage narration until real data lands — avoids the un-interpolated
+    // flash ("— 's sweet spot") and partial-group miscount ("2 travellers" for
+    // a group that includes a toddler), both of which fire during the empty race.
+    if (!destination.trim() || !tripParams) return;
     prevStage.current = stageLabel;
     const enqueue = (window as unknown as Record<string, unknown>).__gpEnqueue as ((l: string[]) => void) | undefined;
     enqueue?.(journalLines(stageLabel, tripParams, destination));
-  }, [stageLabel]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [stageLabel, destination, tripParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-scroll journal
   useEffect(() => {
@@ -596,7 +611,7 @@ export default function GenerationProgress({ stageIndex, stageLabel, destination
               fontFamily: "var(--font-body)", letterSpacing: "0.07em",
               textAlign: "center", animation: "fadeSlideUp 1s ease both",
             }}>
-              switching to backup servers — almost there ✦
+              this one's taking a little longer than usual — hang tight ✦
             </div>
           )}
         </div>
