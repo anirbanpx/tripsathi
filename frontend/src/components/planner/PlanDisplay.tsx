@@ -57,6 +57,87 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
     return [archetype, ...top];
   }
 
+  function deriveContextualChips(): string[] {
+    const dest = (ctx.destination || plan.days[0]?.location || "").toLowerCase();
+    const params = ctx.trip_params;
+    const budget = params?.budget_bracket ?? "mid";
+    const styles = (params?.trip_style ?? []).map(s => s.toLowerCase());
+    const hasKids = (ctx.kid_ages?.length ?? 0) > 0;
+    const isElderly = params?.elderly ?? false;
+    const avgActivities = plan.days.length > 0
+      ? plan.days.reduce((sum, d) => sum + d.activities.length, 0) / plan.days.length
+      : 3;
+
+    // Destination-specific chips (1–2 slots)
+    const DEST_CHIPS: Record<string, string[]> = {
+      nainital:     ["add boat ride on Naini Lake", "include Corbett day trip"],
+      mussoorie:    ["add Kempty Falls visit", "include a cable car ride"],
+      shimla:       ["add Kufri snow day", "include Mall Road evening walk"],
+      manali:       ["add Rohtang Pass excursion", "include Solang Valley activities"],
+      dharamsala:   ["add Triund trek", "include a monastery visit"],
+      spiti:        ["add Key Monastery visit", "include a village homestay"],
+      rishikesh:    ["add white-water rafting", "include a yoga morning"],
+      darjeeling:   ["add Tiger Hill sunrise", "include a tea estate tour"],
+      goa:          ["add a beach hopping day", "include water sports"],
+      kerala:       ["add a backwater cruise", "include an Ayurvedic spa day"],
+      munnar:       ["add tea estate tour", "include Eravikulam National Park"],
+      coorg:        ["add a coffee plantation walk", "include Abbey Falls visit"],
+      udaipur:      ["add a lake boat ride", "include City Palace evening tour"],
+      jaisalmer:    ["add a desert safari", "include a camel ride at sunset"],
+      jodhpur:      ["add Mehrangarh Fort deep dive", "include a blue city walk"],
+      jaipur:       ["add Amber Fort elephant ride", "include a block printing workshop"],
+      varanasi:     ["add Ganga Aarti evening", "include a dawn boat ride"],
+      agra:         ["add Fatehpur Sikri day trip", "include a sunrise Taj visit"],
+      hampi:        ["add Virupaksha Temple morning", "include a coracle boat ride"],
+      mysore:       ["add Mysore Palace night view", "include Chamundi Hills trek"],
+      ooty:         ["add Nilgiri Mountain Railway", "include a botanical garden visit"],
+      andaman:      ["add snorkelling at Radhanagar", "include a glass-bottom boat trip"],
+      leh:          ["add Pangong Lake day trip", "include a monastery circuit"],
+      ladakh:       ["add Pangong Lake day trip", "include a monastery circuit"],
+    };
+
+    const chips: string[] = [];
+
+    // 1. Destination-specific (up to 2)
+    const destKey = Object.keys(DEST_CHIPS).find(k => dest.includes(k));
+    if (destKey) chips.push(...DEST_CHIPS[destKey].slice(0, 2));
+
+    // 2. Family chip
+    if (hasKids) chips.push("more kid-friendly activities");
+    else if (isElderly) chips.push("easier walking pace");
+
+    // 3. Budget chip
+    if (budget === "budget") chips.push("find cheaper stays");
+    else if (budget === "mid") chips.push("upgrade one hotel");
+    else chips.push("add a luxury experience");
+
+    // 4. Style gap chip — suggest what they didn't pick
+    const ALL_STYLES = ["adventure", "heritage", "nature", "wellness", "food", "beach"];
+    const missing = ALL_STYLES.filter(s => !styles.some(picked => picked.includes(s)));
+    if (missing.length > 0) {
+      const styleChips: Record<string, string> = {
+        adventure: "add an adventure activity",
+        heritage:  "add a heritage half-day",
+        nature:    "add a nature day",
+        wellness:  "add a wellness morning",
+        food:      "more local street food",
+        beach:     "add a beach day",
+      };
+      chips.push(styleChips[missing[0]]);
+    }
+
+    // 5. Pace chip (from actual plan)
+    if (avgActivities > 4) chips.push("slower pace, fewer stops");
+    else if (avgActivities <= 2 && chips.length < 5) chips.push("add more activities");
+
+    // Fallback if nothing matched
+    if (chips.length === 0) {
+      return ["more local street food", "slower pace", "upgrade one hotel", "add a day trip nearby"];
+    }
+
+    return chips.slice(0, 5);
+  }
+
   const saved = (() => {
     try {
       const s = localStorage.getItem("tripsathi_saved_plan");
@@ -531,7 +612,7 @@ export default function PlanDisplay({ ctx, onSetContext, fetchedHotels, placesRe
           )}
           {!feedback && (
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
-              {["cheaper hotels", "add a beach day", "better for kids", "more local food", "slower pace"].map(s => (
+              {deriveContextualChips().map(s => (
                 <span
                   key={s}
                   onClick={() => setFeedback(s)}
