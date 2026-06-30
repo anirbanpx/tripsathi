@@ -148,9 +148,63 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
+### UC-15: Plan Regenerate
+**What it does:** Produces a substantively different plan when the user taps Regenerate — uses a separate backend prompt with anti-repetition context, resets the refinement counter, and re-runs the fake-progress UI. Distinct from refine (which patches the existing plan).
+**Status:** live
+**Code:** backend/nodes.py (`plan_assembly` regenerate branch), backend/main.py (`/api/regenerate`), frontend/src/lib/fakeProgress.ts
+**Design:** specs/user_experience_spec.md § 3 Regenerate vs Refine
+**Tests:** backend/tests/test_graph.py
+
+---
+
+### UC-16: Demo Mode
+**What it does:** Visitor entry path with no auth required — pre-loads the Kerala family trip scenario, shows a persistent "Demo mode" banner, and routes all booking/memory writes to mock endpoints flagged `is_demo: true`.
+**Status:** live
+**Code:** frontend/src/pages/DemoEntryPage.tsx, frontend/src/services/api.ts (mock flag)
+**Design:** specs/user_experience_spec.md § 0 Decision 1, § 10 Interaction Flow PATH A
+**Tests:** (manual only)
+
+---
+
+### UC-17: India Destinations Map
+**What it does:** Interactive Leaflet map of 54 Indian destinations with dot markers; clicking a destination shows a popup with image, name, and a wishlist heart-toggle that calls the backend wishlist API.
+**Status:** live
+**Code:** frontend/src/components/explore/IndiaDestinationsMap.tsx, frontend/src/lib/destinationCoordinates.ts, frontend/src/services/api.ts (`toggleWishlistItem`)
+**Design:** (not formally specced — built during RAG expansion sprint)
+**Tests:** (manual only)
+
+---
+
+### UC-18: Trip Journal
+**What it does:** Magazine-style flip-book view of the generated plan — cover page with destination hero image, one page per day with activities and meals, closing page. Swipeable on mobile.
+**Status:** live
+**Code:** frontend/src/components/planner/TripJournal.tsx, frontend/src/components/planner/DayJournalCard.tsx
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-19: Profile Page
+**What it does:** Authenticated user's hub — view and delete saved trips, wishlist items, and saved hotels; edit taste preferences (interests, dietary, pace, crowd tolerance).
+**Status:** live
+**Code:** frontend/src/pages/ProfilePage.tsx, frontend/src/services/api.ts (`getProfile`, `getSavedTrips`, `getWishlist`, `getSavedHotels`, `updatePreferences`, `deleteSavedTrip`, `deleteWishlistItem`, `deleteHotel`)
+**Design:** specs/user_experience_spec.md § 4 Agent Memory Construct
+**Tests:** (manual only)
+
+---
+
+### UC-20: Hotel + Dining Selection Flow
+**What it does:** Multi-step booking confirmation flow — user picks one hotel from fetched options and selects per-day dinner choices, then sees a booking confirmation screen with provider links and a trip summary banner.
+**Status:** live (mock)
+**Code:** frontend/src/components/planner/SelectionScreen.tsx, frontend/src/components/planner/BookingScreen.tsx, frontend/src/components/planner/TripSummaryBanner.tsx
+**Design:** specs/user_experience_spec.md § 10 Interaction Flow BookingSection
+**Tests:** (manual only)
+
+---
+
 ## Planned Use Cases
 
-### UC-15: Voice Interface
+### UC-21: Voice Interface
 **What it does:** Voice-first interaction via Whisper STT (input) + ElevenLabs/Deepgram TTS (output); hands-free in-trip mode and WhatsApp voice note input.
 **Status:** planned
 **Code:** (not built)
@@ -159,7 +213,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-16: WhatsApp Channel
+### UC-22: WhatsApp Channel
 **What it does:** Push pre-trip briefings, booking confirmations, and group updates via WhatsApp Business API; voice note input for pilgrimage and older traveler segments.
 **Status:** planned
 **Code:** (not built)
@@ -168,7 +222,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-17: Gmail Personalization
+### UC-23: Gmail Personalization
 **What it does:** Read-only OAuth scan of OTA booking confirmation emails (MakeMyTrip, IRCTC, OYO, airline) to infer travel history, budget tier, group composition, and preferred airlines/hotels — without requiring manual profile fill.
 **Status:** planned
 **Code:** (not built)
@@ -177,7 +231,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-18: Shared Group Planning
+### UC-24: Shared Group Planning
 **What it does:** Admin creates a trip plan and shares a link with participants (view-only + comment/react); admin resolves conflicts and confirms bookings.
 **Status:** planned
 **Code:** (not built)
@@ -186,7 +240,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-19: Post-Trip Memento
+### UC-25: Post-Trip Memento
 **What it does:** After the trip, generates a shareable story — places visited, user photos, highlights — and auto-drafts Instagram captions and a group summary card.
 **Status:** deferred
 **Code:** (not built)
@@ -195,8 +249,8 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-20: Booking Integrations
-**What it does:** Surface hotel options via Booking.com Affiliate API with one-tap deep-link confirm; flight options via Google Flights/MakeMyTrip deep-link. Transactional booking (autonomous spend) is explicitly out of scope until post-MVP.
+### UC-26: Real Booking Integrations
+**What it does:** Replace mock booking with Booking.com Affiliate API for hotels and Google Flights/MakeMyTrip deep-link for flights. Transactional autonomous spend is out of scope until post-MVP.
 **Status:** planned
 **Code:** (not built)
 **Design:** reports/problem_definition.md § Hotels, § Flights
@@ -204,7 +258,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-21: Temple / Spiritual Booking
+### UC-27: Temple / Spiritual Booking
 **What it does:** Surface darshan slot requirements and booking links for major temples (Tirupati, Char Dham, Vaishno Devi, Kamakhya) via BookMyMandir aggregator deep-link; direct partner API in a later sprint.
 **Status:** planned
 **Code:** (not built)
