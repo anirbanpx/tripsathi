@@ -23,7 +23,7 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 ## Live Use Cases
 
 ### UC-01: Persona Onboarding
-**What it does:** Collects 4-step questionnaire answers (destination, trip parameters, group composition, preferences) and classifies them into a `user_profile` (persona type, autonomy mode, constraints).
+**What it does:** Accepts a single natural-language trip description ("5-night Kerala trip, wife + toddler, ₹80k, vegetarian…") and classifies it into a `user_profile` (persona type, autonomy mode, constraints). Input is a free-text field — not a chip stepper or multi-step form.
 **Status:** live
 **Code:** backend/nodes.py (`persona_classification`), backend/graph.py (START → persona_classification)
 **Design:** specs/backend_architecture.md § 2 LangGraph State Machine
@@ -157,10 +157,10 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 
 ---
 
-### UC-16: Demo Mode
-**What it does:** Visitor entry path with no auth required — pre-loads the Kerala family trip scenario, shows a persistent "Demo mode" banner, and routes all booking/memory writes to mock endpoints flagged `is_demo: true`.
+### UC-16: Open-Access Planning (No-Login Fast Path)
+**What it does:** Anyone can type a trip description and click "sketch my plan" without creating an account or providing a card (no demo banner, no pre-loaded scenario). Google Sign In is offered alongside but is not required. Deep planning, memory, and saves require auth (UC-07).
 **Status:** live
-**Code:** frontend/src/pages/DemoEntryPage.tsx, frontend/src/services/api.ts (mock flag)
+**Code:** frontend/src/pages/DemoEntryPage.tsx (the main landing page), frontend/src/services/api.ts
 **Design:** specs/user_experience_spec.md § 0 Decision 1, § 10 Interaction Flow PATH A
 **Tests:** (manual only)
 
@@ -194,18 +194,90 @@ Copy this block, assign the next UC-XX number, fill in the fields:
 ---
 
 ### UC-20: Hotel + Dining Selection Flow
-**What it does:** Multi-step booking confirmation flow — user picks one hotel from fetched options and selects per-day dinner choices, then sees a booking confirmation screen with provider links and a trip summary banner.
-**Status:** live (mock)
+**What it does:** 4-step booking wizard (Itinerary → Choose hotel → Dining → Book): user picks one Google-verified hotel from fetched options, selects per-day dinner choices (Local / Family / Splurge), then reaches a booking confirmation screen with real deep-link URLs ("Book on their website", phone number, Google Maps, MakeMyTrip search) — not a mock. A trip summary banner ("A romantic Munnar escape, personalized for you ✦") shows trip chips at the top of the flow.
+**Status:** live
 **Code:** frontend/src/components/planner/SelectionScreen.tsx, frontend/src/components/planner/BookingScreen.tsx, frontend/src/components/planner/TripSummaryBanner.tsx
 **Design:** specs/user_experience_spec.md § 10 Interaction Flow BookingSection
 **Tests:** (manual only)
 
 ---
 
+### UC-28: Seasonal Destination Cards
+**What it does:** Landing page right column shows a season-aware grid of destination cards (e.g. "SUMMER ESCAPES · APR – JUN") with instant-template badges; tapping a card pre-fills the input and triggers the fast-path explore template (UC-09).
+**Status:** live
+**Code:** frontend/src/pages/DemoEntryPage.tsx (destination card grid), backend/templates_store.py (template lookup)
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-29: Language Toggle (EN · हि)
+**What it does:** Top-right toggle on the landing page switches the UI language between English and Hindi. The UI element is rendered and styled; full Hindi localisation of dynamic content is not yet implemented.
+**Status:** live (UI only — full Hindi localisation planned)
+**Code:** frontend/src/pages/DemoEntryPage.tsx (toggle element)
+**Design:** (not formally specced)
+**Tests:** (not built)
+
+---
+
+### UC-30: "Tailored for You" Plan Personalization Card
+**What it does:** A card on the plan page that explains in human-readable language why the plan matches the user's stated preferences (e.g. "Focus on tea-estate scenery matches your 'nature' style"). Helps users understand and trust the AI's choices.
+**Status:** live
+**Code:** frontend/src/components/planner/ (personalization card component)
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-31: "Heads Up" Local Tips Carousel
+**What it does:** A paginated carousel (1/5 with forward/back arrows) on the plan page showing local warnings, seasonal tips, and travel advisories specific to the destination.
+**Status:** live
+**Code:** frontend/src/components/planner/ (tips carousel component)
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-32: Budget Breakdown Sidebar Panel
+**What it does:** Right sidebar panel on the plan page that shows an itemised budget breakdown — accommodation, transport, food, activities — with a visual bar for each category so users can sense-check total spend against their stated budget.
+**Status:** live
+**Code:** frontend/src/components/planner/ (budget sidebar component)
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-33: Hotels & Dining Sidebar Panels
+**What it does:** Two collapsible right-sidebar panels on the plan page: Hotels ("5 options · ★4.5 avg · Google verified") and Dining ("3 options / evening"), each with a "View & Choose →" link that launches the hotel/dining selection flow (UC-20).
+**Status:** live
+**Code:** frontend/src/components/planner/ (hotels panel, dining panel)
+**Design:** (not formally specced)
+**Tests:** (manual only)
+
+---
+
+### UC-34: Share Plan
+**What it does:** Share icon in the planner nav bar; allows the user to share a link to the generated plan. UI element is rendered; backend share-link generation may be partial or planned.
+**Status:** live (UI button rendered — backend share-link TBD)
+**Code:** frontend/src/components/planner/ (share button in nav)
+**Design:** (not formally specced)
+**Tests:** (not built)
+
+---
+
+### UC-35: Voice Input Button
+**What it does:** Microphone button rendered in the landing page input field — user can tap to indicate voice intent. The UI element is live; the backend STT (Whisper) and TTS (ElevenLabs/Deepgram) pipeline is not yet wired. Full voice pipeline tracked separately (UC-21 backend).
+**Status:** live (UI only — backend pipeline not built)
+**Code:** frontend/src/pages/DemoEntryPage.tsx (mic button)
+**Design:** reports/problem_definition.md § Voice & Language
+**Tests:** (not built)
+
+---
+
 ## Planned Use Cases
 
-### UC-21: Voice Interface
-**What it does:** Voice-first interaction via Whisper STT (input) + ElevenLabs/Deepgram TTS (output); hands-free in-trip mode and WhatsApp voice note input.
+### UC-21: Voice Interface (Backend Pipeline)
+**What it does:** Full voice-first interaction — Whisper STT (input) + ElevenLabs/Deepgram TTS (output); hands-free in-trip mode and WhatsApp voice note input. The UI button is already live (UC-35); this tracks the backend pipeline.
 **Status:** planned
 **Code:** (not built)
 **Design:** reports/problem_definition.md § Voice & Language
