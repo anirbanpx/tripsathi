@@ -87,16 +87,25 @@ Keep this section updated. Before starting any task, check here first to avoid r
 
 ---
 
-## IMPORTANT Principles
+## Change Workflow
 
-Follow KISS and YAGNI at all times:
+**Every feature addition or change must follow this sequence — no skipping steps:**
 
-**KISS (Keep It Simple, Stupid):**
-- Use the simplest solution that solves the problem
-- Avoid over-engineering or complex abstractions
-- Prefer straightforward implementations
+1. **Requirements first** — Open `specs/requirements.md` and add or update the relevant UC-XX entry. If it's a new use case, assign the next number. If it changes an existing one, update Status, Code, Design, and Tests fields.
 
-**YAGNI (You Aren't Gonna Need It):**
-- Do not add features, code, or complexity that isn't required right now
-- Only implement what is explicitly requested
-- Do not anticipate future needs or build "just in case" features
+2. **Design doc second** — Update the relevant design doc to reflect the change:
+   - Backend logic → `specs/backend_architecture.md`
+   - UX or frontend → `specs/user_experience_spec.md`
+   - Both if needed
+
+3. **Code third** — Write or update code in `backend/` (or `frontend/`).
+
+4. **Verify last** — Run the test suite using the venv Python (system Python 3.14 breaks deps):
+   ```
+   backend/venv/Scripts/python.exe -m pytest backend/tests/ -v
+   ```
+   For a focused run on just the affected module:
+   ```
+   backend/venv/Scripts/python.exe -m pytest backend/tests/test_<module>.py -v
+   ```
+   LLM eval (`run_eval.py`) is rate-limited — run it periodically, not on every change.
